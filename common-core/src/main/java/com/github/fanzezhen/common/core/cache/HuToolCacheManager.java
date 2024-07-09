@@ -52,7 +52,7 @@ public class HuToolCacheManager implements CacheManager, InitializingBean {
      * @return the ConcurrentMapCache (or a decorator thereof)
      */
     protected HuToolCache createCache(String name) {
-        return new HuToolCache(true, name, CacheUtil.newTimedCache(timeoutSeconds * 1000L), schedulePruneSeconds);
+        return new HuToolCache(true, name, CacheUtil.newWeakCache(timeoutSeconds * 1000L), schedulePruneSeconds);
     }
 
 }
