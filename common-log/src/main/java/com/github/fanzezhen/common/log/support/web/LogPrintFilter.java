@@ -52,7 +52,6 @@ public class LogPrintFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         if (servletRequest instanceof HttpServletRequest httpServletRequest) {
             HttpServletRequestWrapper requestWrapper = new LoggingHttpServletRequestWrapper(httpServletRequest);
-
             preHandle(requestWrapper, (HttpServletResponse) servletResponse, null);
             filterChain.doFilter(requestWrapper, servletResponse);
             // 打印响应体  

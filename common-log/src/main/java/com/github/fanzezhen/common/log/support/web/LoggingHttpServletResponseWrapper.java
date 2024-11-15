@@ -2,21 +2,33 @@ package com.github.fanzezhen.common.log.support.web;
 
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.WriteListener;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpServletResponseWrapper;
+import lombok.Getter;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoggingHttpServletResponseWrapper extends HttpServletResponseWrapper {
-
+    @Getter
+    private final List<Cookie> cookies = new ArrayList<>();
     private final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
     private ServletOutputStream outputStream;
     private PrintWriter writer;
 
     public LoggingHttpServletResponseWrapper(HttpServletResponse response) {
         super(response);
+    }
+
+    @Override
+    public void addCookie(Cookie cookie) {
+        super.addCookie(cookie);
+        cookies.add(cookie);
     }
 
     @Override

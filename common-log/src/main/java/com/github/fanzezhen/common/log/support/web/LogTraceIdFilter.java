@@ -28,18 +28,18 @@ import java.io.IOException;
 public class LogTraceIdFilter implements Filter {
     @Bean
     @ConditionalOnMissingBean
-    LogSysContextTaskDecorator logSysContextTaskDecorator(){
+    LogSysContextTaskDecorator logSysContextTaskDecorator() {
         return new LogSysContextTaskDecorator();
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         MDC.put(ThreadInstanceHelper.TRACE_ID, UUID.fastUUID().toString(true));
-        filterChain.doFilter(servletRequest, servletResponse);
+        try {
+            filterChain.doFilter(servletRequest, servletResponse);
+        } finally {
+            MDC.clear();
+        }
     }
 
-    @Override
-    public void destroy() {
-        MDC.clear();
-    }
 }
