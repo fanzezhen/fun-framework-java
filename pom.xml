@@ -31,6 +31,7 @@
         <com.baomidou.version>3.5.6</com.baomidou.version>
         <com.fasterxml.jackson.version>2.15.2</com.fasterxml.jackson.version>
         <com.google.code.gson.version>2.8.6</com.google.code.gson.version>
+        <com.github.ulisesbocchio.version>3.0.5</com.github.ulisesbocchio.version>
         <com.google.guava.version>29.0-jre</com.google.guava.version>
         <com.lmax.version>3.4.1</com.lmax.version>
         <com.mysql.version>8.3.0</com.mysql.version>
@@ -58,6 +59,7 @@
         <org.apache.commons.commons-collections4.version>4.4</org.apache.commons.commons-collections4.version>
         <org.apache.logging.log4j.version>2.20.0</org.apache.logging.log4j.version>
         <org.apache.poi.version>5.2.5</org.apache.poi.version>
+        <org.bouncycastle.bcprov-jdk15on.version>1.70</org.bouncycastle.bcprov-jdk15on.version>
         <org.hibernate.validator.version>8.0.1.Final</org.hibernate.validator.version>
         <org.mybatis.spring.boot.version>2.2.0</org.mybatis.spring.boot.version>
         <org.redisson.version>3.23.2</org.redisson.version>
@@ -83,6 +85,7 @@
         <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
         <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
         <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
+        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-scm-plugin.version>2.0.1</maven-scm-plugin.version>
@@ -292,6 +295,11 @@
                 <version>${com.fasterxml.jackson.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.github.ulisesbocchio</groupId>
+                <artifactId>jasypt-spring-boot-starter</artifactId>
+                <version>${com.github.ulisesbocchio.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${com.google.guava.version}</version>
@@ -476,6 +484,11 @@
                 <scope>runtime</scope>
             </dependency>
             <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15on</artifactId>
+                <version>${org.bouncycastle.bcprov-jdk15on.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.hibernate.validator</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version>${org.hibernate.validator.version}</version>
@@ -641,6 +654,7 @@
         <module>common-sentinel</module>
         <module>common-spring-doc</module>
         <module>common-web</module>
+        <module>common-jasypt</module>
     </modules>
 
     <name>${project.groupId}.${project.artifactId}</name>
@@ -728,6 +742,18 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <Main-Class>${main.class}</Main-Class>
+                            </manifest>
+                        </archive>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${maven-resources-plugin.version}</version>
                 </plugin>
@@ -756,7 +782,7 @@
                 </plugin>
 
                 <!-- 生成javadoc文档包的插件 -->
-                
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
@@ -848,7 +874,7 @@
                         <execution>
                             <id>sign-artifacts</id>
                             <phase>deploy</phase>
-<!--                            <phase>verify</phase>-->
+                            <!--                            <phase>verify</phase>-->
                             <goals>
                                 <goal>sign</goal>
                             </goals>
