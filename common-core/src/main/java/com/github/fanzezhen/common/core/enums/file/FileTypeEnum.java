@@ -14,10 +14,14 @@ public enum FileTypeEnum {
     /**
      * xlsx
      */
+    JSON(".json"),
+    /**
+     * xlsx
+     */
     XLSX(".xlsx");
-    private final String code;
+    private final String prefix;
 
-    FileTypeEnum(String code) {
-        this.code = code;
+    FileTypeEnum(String prefix) {
+        this.prefix = prefix;
     }
 }

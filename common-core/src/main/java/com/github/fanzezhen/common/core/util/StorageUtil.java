@@ -1,7 +1,11 @@
 package com.github.fanzezhen.common.core.util;
 
+import cn.hutool.core.util.NumberUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,6 +25,67 @@ public class StorageUtil {
     private static final long MEGABYTE = 1024L * KILOBYTE;
     private static final long GIGABYTE = 1024L * MEGABYTE;
     private static final long TERABYTE = 1024L * GIGABYTE;
+    private static final BigDecimal KILOBYTE_BIG_DECIMAL = BigDecimal.valueOf(KILOBYTE);
+
+    /**
+     * 将单位为字节的值转为合适单位的展示值
+     *
+     * @param sizeObj ex：3072
+     *
+     * @return 3K
+     */
+    public static String displayBytes(Object sizeObj) {
+        if (sizeObj == null) {
+            return null;
+        }
+        long size;
+        if (sizeObj instanceof Number sizeNumber) {
+            size = sizeNumber.longValue();
+        } else {
+            String sizeStr = sizeObj.toString();
+            if (cn.hutool.core.util.NumberUtil.isLong(sizeStr)) {
+                size = NumberUtil.parseLong(sizeStr);
+            } else {
+                return sizeStr;
+            }
+        }
+        if (size < KILOBYTE) {
+            return size + "B";
+        }
+        // 保留3位有效数字，四舍五入
+        BigDecimal figure = BigDecimal.valueOf(size);
+        MathContext mathContext = new MathContext(3, RoundingMode.HALF_UP);
+        figure = figure.divide(KILOBYTE_BIG_DECIMAL, mathContext);
+        if (figure.longValue() < KILOBYTE) {
+            return figure.stripTrailingZeros().toPlainString() + "K";
+        }
+        figure = figure.divide(KILOBYTE_BIG_DECIMAL, mathContext);
+        if (figure.longValue() < KILOBYTE) {
+            return figure.stripTrailingZeros().toPlainString() + "M";
+        }
+        figure = figure.divide(KILOBYTE_BIG_DECIMAL, mathContext);
+        if (figure.longValue() < KILOBYTE) {
+            return figure.stripTrailingZeros().toPlainString() + "G";
+        }
+        figure = figure.divide(KILOBYTE_BIG_DECIMAL, mathContext);
+        if (figure.longValue() < KILOBYTE) {
+            return figure.stripTrailingZeros().toPlainString() + "T";
+        }
+        figure = figure.divide(KILOBYTE_BIG_DECIMAL, mathContext);
+        if (figure.longValue() < KILOBYTE) {
+            return figure.stripTrailingZeros().toPlainString() + "PB";
+        }
+        figure = figure.divide(KILOBYTE_BIG_DECIMAL, mathContext);
+        if (figure.longValue() < KILOBYTE) {
+            return figure.stripTrailingZeros().toPlainString() + "EB";
+        }
+        figure = figure.divide(KILOBYTE_BIG_DECIMAL, mathContext);
+        if (figure.longValue() < KILOBYTE) {
+            return figure.stripTrailingZeros().toPlainString() + "ZB";
+        }
+        figure = figure.divide(KILOBYTE_BIG_DECIMAL, mathContext);
+        return figure.stripTrailingZeros().toPlainString() + "YB";
+    }
 
     // 私有方法，用于根据单位返回乘数  
     private static long getMultiplier(String unit) {
@@ -51,6 +116,11 @@ public class StorageUtil {
         }
     }
 
+    /**
+     * @param input            需要处理的原始字符串
+     * @param maxLengthInBytes 字符串截断后的最大允许字节数
+     * @param isReverse        是否从字符串的末尾开始截取（如果为 true）或者从开头开始截取（如果为 false）
+     */
     public static String truncateStringForBytes(String input, int maxLengthInBytes, boolean isReverse) {
         if (input == null) {
             return null;
@@ -89,6 +159,24 @@ public class StorageUtil {
             }
         }
         return stringBuilder.toString();
+    }
+
+    /**
+     * @param input            需要处理的原始字符串
+     * @param maxLengthInChars 字符串截断后的最大允许字符数
+     * @param filler           填充字符
+     * @param isReverse        是否从字符串的末尾开始截取（如果为 true）或者从开头开始截取（如果为 false）
+     */
+    public static String truncateStringForChars(String input, int maxLengthInChars, char filler, boolean isReverse) {
+        if (input == null) {
+            return null;
+        }
+        if (input.length() <= maxLengthInChars) {
+            return input;
+        }
+        return isReverse ?
+            (filler + input.substring(input.length() - maxLengthInChars + 1)) :
+            (input.substring(0, maxLengthInChars - 1) + filler);
     }
 
 }
