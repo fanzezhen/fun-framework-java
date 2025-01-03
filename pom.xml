@@ -7,17 +7,17 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-parent</artifactId>
-        <version>3.1.7</version>
+        <version>3.4.1</version>
     </parent>
 
-    <artifactId>common</artifactId>
+    <artifactId>fun-framework-java</artifactId>
     <groupId>com.github.fanzezhen</groupId>
     <packaging>pom</packaging>
-    <version>3.1.7-20240303</version>
+    <version>3.4.1</version>
 
     <properties>
         <com.github.fanzezhen.jdk8.version>0.0.3.4</com.github.fanzezhen.jdk8.version>
-        <com.github.fanzezhen.common.version>3.1.7-20240303</com.github.fanzezhen.common.version>
+        <fun-framework.version>3.4.1</fun-framework.version>
         <app.server>-tomcat</app.server>
         <ch.qos.logback.version>1.2.3</ch.qos.logback.version>
         <cn.hutool.version>5.8.28</cn.hutool.version>
@@ -99,53 +99,53 @@
         <dependencies>
             <dependency>
                 <groupId>com.github.fanzezhen</groupId>
-                <artifactId>common-all</artifactId>
-                <version>${com.github.fanzezhen.common.version}</version>
+                <artifactId>fun-framework-all</artifactId>
+                <version>${fun-framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.fanzezhen</groupId>
-                <artifactId>common-core</artifactId>
-                <version>${com.github.fanzezhen.common.version}</version>
+                <artifactId>fun-framework-core</artifactId>
+                <version>${fun-framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.fanzezhen</groupId>
-                <artifactId>common-exception</artifactId>
-                <version>${com.github.fanzezhen.common.version}</version>
+                <artifactId>fun-framework-exception</artifactId>
+                <version>${fun-framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.fanzezhen</groupId>
-                <artifactId>common-mp</artifactId>
-                <version>${com.github.fanzezhen.common.version}</version>
+                <artifactId>fun-framework-mp</artifactId>
+                <version>${fun-framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.fanzezhen</groupId>
-                <artifactId>common-log</artifactId>
-                <version>${com.github.fanzezhen.common.version}</version>
+                <artifactId>fun-framework-log</artifactId>
+                <version>${fun-framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.fanzezhen</groupId>
-                <artifactId>common-redis</artifactId>
-                <version>${com.github.fanzezhen.common.version}</version>
+                <artifactId>fun-framework-redis</artifactId>
+                <version>${fun-framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.fanzezhen</groupId>
                 <artifactId>common-security</artifactId>
-                <version>${com.github.fanzezhen.common.version}</version>
+                <version>${fun-framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.fanzezhen</groupId>
-                <artifactId>common-sentinel</artifactId>
-                <version>${com.github.fanzezhen.common.version}</version>
+                <artifactId>fun-framework-sentinel</artifactId>
+                <version>${fun-framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.fanzezhen</groupId>
-                <artifactId>common-spring-doc</artifactId>
-                <version>${com.github.fanzezhen.common.version}</version>
+                <artifactId>fun-framework-spring-doc</artifactId>
+                <version>${fun-framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.fanzezhen</groupId>
-                <artifactId>common-web</artifactId>
-                <version>${com.github.fanzezhen.common.version}</version>
+                <artifactId>fun-framework-web</artifactId>
+                <version>${fun-framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba.boot</groupId>
@@ -645,16 +645,16 @@
     </dependencyManagement>
 
     <modules>
-        <module>common-all</module>
-        <module>common-core</module>
-        <module>common-exception</module>
-        <module>common-log</module>
-        <module>common-mp</module>
-        <module>common-redis</module>
-        <module>common-sentinel</module>
-        <module>common-spring-doc</module>
-        <module>common-web</module>
-        <module>common-jasypt</module>
+        <module>fun-framework-all</module>
+        <module>fun-framework-core</module>
+        <module>fun-framework-exception</module>
+        <module>fun-framework-log</module>
+        <module>fun-framework-mp</module>
+        <module>fun-framework-redis</module>
+        <module>fun-framework-sentinel</module>
+        <module>fun-framework-spring-doc</module>
+        <module>fun-framework-web</module>
+        <module>fun-framework-jasypt</module>
     </modules>
 
     <name>${project.groupId}.${project.artifactId}</name>
@@ -747,7 +747,7 @@
                     <configuration>
                         <archive>
                             <manifest>
-                                <Main-Class>${main.class}</Main-Class>
+<!--                                <Main-Class>${main.class}</Main-Class>-->
                             </manifest>
                         </archive>
                     </configuration>
