@@ -1,17 +1,19 @@
-package com.github.fanzezhen.fun.framework.mp.config;
+package com.github.fanzezhen.fun.framework.core.context;
 
-import org.springframework.context.annotation.Import;
-
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 请求头校验
+ *
  * @author zezhen.fan
  */
-@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Import({FunMpSpringConfig.class})
-public @interface EnableCommonMpConfig {
+@Target(ElementType.METHOD)
+@Documented
+public @interface ContextCheck {
+    String[] headers() ;
 }

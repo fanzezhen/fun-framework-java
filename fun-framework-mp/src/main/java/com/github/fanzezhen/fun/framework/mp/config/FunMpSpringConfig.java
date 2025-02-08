@@ -8,5 +8,5 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan("com.github.fanzezhen.fun.framework.mp")
-public class CommonMpSpringConfig {
+public class FunMpSpringConfig {
 }

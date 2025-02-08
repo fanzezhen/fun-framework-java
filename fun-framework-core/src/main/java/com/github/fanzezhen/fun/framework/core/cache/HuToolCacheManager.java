@@ -4,11 +4,11 @@ import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
@@ -18,8 +18,8 @@ import java.util.Set;
  * @author fanzezhen
  * @since 3.1.8
  */
-@Component
 @EnableCaching
+@ConditionalOnMissingBean(CacheManager.class)
 public class HuToolCacheManager implements CacheManager, InitializingBean {
     @Value("${com.github.fanzezhen.fun.framework.core.cache.time-out.seconds:600}")
     private Integer timeoutSeconds;

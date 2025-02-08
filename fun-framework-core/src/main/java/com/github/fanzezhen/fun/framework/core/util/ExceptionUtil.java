@@ -3,6 +3,7 @@ package com.github.fanzezhen.fun.framework.core.util;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.CharSequenceUtil;
+import cn.stylefeng.roses.kernel.model.exception.AbstractBaseExceptionEnum;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
 
@@ -14,6 +15,10 @@ import java.util.Map;
  */
 public class ExceptionUtil {
     private ExceptionUtil() {
+    }
+
+    public static ServiceException wrapException(AbstractBaseExceptionEnum exceptionEnum, Object... params) {
+        return new ServiceException(exceptionEnum.getCode(), null != params ? String.format(exceptionEnum.getMessage(), params) : exceptionEnum.getMessage());
     }
 
     public static ServiceException wrapException(String errorMessage) {
