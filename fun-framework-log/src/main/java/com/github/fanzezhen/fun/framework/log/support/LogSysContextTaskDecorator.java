@@ -5,7 +5,9 @@ import com.github.fanzezhen.fun.framework.core.thread.decorator.SysContextTaskDe
 import com.github.fanzezhen.fun.framework.log.config.LogSpringConfig;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
+import org.springframework.lang.NonNull;
 
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,7 +21,7 @@ import java.util.UUID;
 @Order(Integer.MAX_VALUE - 1)
 public class LogSysContextTaskDecorator extends SysContextTaskDecorator {
     @Override
-    public Runnable decorate(Runnable runnable) {
+    public @NonNull Runnable decorate(@NonNull Runnable runnable) {
         Map<String, String> map = MDC.getCopyOfContextMap();
         return () -> {
             try {

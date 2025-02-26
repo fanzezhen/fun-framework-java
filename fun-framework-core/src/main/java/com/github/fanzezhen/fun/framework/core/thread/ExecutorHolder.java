@@ -328,6 +328,24 @@ public class ExecutorHolder<R> {
         return this;
     }
 
+    public ExecutorHolder<R> addTaskWithErrorHandler(Consumer<Throwable> errorHandler, Runnable... runnableArr) {
+        if (runnableArr != null) {
+            for (Runnable runnable : runnableArr) {
+                if (runnable != null) {
+                    Task<R> task = new Task<>(() -> {
+                        runnable.run();
+                        return null;
+                    }, throwable -> {
+                        errorHandler.accept(throwable);
+                        return null;
+                    });
+                    addTask(task);
+                }
+            }
+        }
+        return this;
+    }
+
     /**
      * 忽略所有可能的异常
      *
