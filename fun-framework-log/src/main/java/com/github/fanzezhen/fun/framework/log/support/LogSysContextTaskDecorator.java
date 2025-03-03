@@ -7,7 +7,6 @@ import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.NonNull;
 
-import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.UUID;
 

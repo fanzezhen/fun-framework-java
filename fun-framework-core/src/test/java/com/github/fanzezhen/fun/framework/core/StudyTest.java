@@ -32,8 +32,8 @@ class StudyTest {
      * 32 33
      */
     @Test
-    @Disabled
-    public void testTLV() {
+    @Disabled("学习用")
+     void testTLV() {
         String tag = "31";
         String msg = "32 01 00 AE 90 02 00 01 02 30 03 00 AB 32 31 31 02 00 32 33 33 01 00 CC";
         String[] streams = msg.split(" ");
@@ -66,13 +66,13 @@ class StudyTest {
      * 输出 front furthest
      */
     @Test
-    @Disabled
-    public void testAssociationEnglish() {
+    @Disabled("学习用")
+     void testAssociationEnglish() {
         String msg = "The furthest distance in the world. ls not between life and death, But when I stand in front of you, Yet you don't know that I love you";
         String pre = "f";
         String[] words = msg.split("[^a-zA-Z]");
         TreeSet<String> set = Arrays.stream(words).collect(Collectors.toCollection(TreeSet::new));
-        List<String> list = set.stream().filter(s -> s.startsWith(pre)).collect(Collectors.toList());
+        List<String> list = set.stream().filter(s -> s.startsWith(pre)).toList();
         if (list.isEmpty()) {
             System.out.println(pre);
         } else {
@@ -93,9 +93,8 @@ class StudyTest {
      * 输入xy，输出ya
      */
     @Test
-    @Disabled
-    public void testEncryptOffset() {
-//        String origin = "abcde";
+    @Disabled("学习用")
+     void testEncryptOffset() {
         String origin = "xy";
         int length = origin.length();
         long[] arr = new long[length];
@@ -126,10 +125,8 @@ class StudyTest {
     }
 
     @Test
-    @Disabled
-    public void testIpv4ToLong() {
-//        Scanner scanner = new Scanner(System.in);
-//        String ipv4 = scanner.nextLine();
+    @Disabled("学习用")
+     void testIpv4ToLong() {
         String ipv4 = "128.0.255.255";
         try {
             Integer[] intArr = Arrays.stream(ipv4.split("\\.")).map(Integer::parseInt).toArray(Integer[]::new);
@@ -157,8 +154,8 @@ class StudyTest {
      * 单词接龙
      */
     @Test
-    @Disabled
-    public void testWordsSolitaire() {
+    @Disabled("学习用")
+    void testWordsSolitaire() {
         String[] strings = {"word", "dd", "da", "dc", "dword", "d"};
         System.out.println(wordsSolitaire(strings[0], strings, CollUtil.newArrayList(0)));
         System.out.println(wordsSolitaireCupidity(strings[0], strings, CollUtil.newArrayList(0)));
@@ -212,7 +209,7 @@ class StudyTest {
                 List<Integer> list = new ArrayList<>(alreadyList);
                 list.add(i);
                 String wordsSolitaire = wordsSolitaire(strings[i], strings, list);
-                if (newStr.length() == 0 || wordsSolitaire.length() > newStr.length()) {
+                if (newStr.isEmpty() || wordsSolitaire.length() > newStr.length()) {
                     newStr = wordsSolitaire;
                 } else if (wordsSolitaire.length() == newStr.length()) {
                     for (int j = 0; j < wordsSolitaire.length(); j++) {

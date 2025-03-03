@@ -76,8 +76,6 @@ class QuestionTest {
     @Test
     @Disabled("演示用")
     void testIpv4ToLong() {
-//        Scanner scanner = new Scanner(System.in);
-//        String ipv4 = scanner.nextLine();
         String ipv4 = "128.0.255.255";
         try {
             Integer[] intArr = Arrays.stream(ipv4.split("\\.")).map(Integer::parseInt).toArray(Integer[]::new);

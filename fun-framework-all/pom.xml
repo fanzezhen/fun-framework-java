@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-java</artifactId>
-        <version>3.4.1</version>
+        <groupId>com.github.fanzezhen</groupId>
+        <version>3.4.3</version>
     </parent>
 
     <artifactId>fun-framework-all</artifactId>

@@ -17,7 +17,7 @@ import java.util.List;
 class SubsetTest {
 
     @Test
-    @Disabled
+    @Disabled("学习用")
      void testSubset() {
         List<Integer> nums = new ArrayList<>();
         nums.add(1);

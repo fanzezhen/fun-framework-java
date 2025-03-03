@@ -59,7 +59,7 @@ class SudokuTest {
     static class LongShuDu {
         String inputFilePath;
         List<List<Object>> rowList;
-        List<Set<Coordinate>> COLL = new ArrayList<>();
+        List<Set<Coordinate>> coll = new ArrayList<>();
         Set<Coordinate> addedSet = new HashSet<>();
         FileInputStream fis;
         Workbook workbook;
@@ -109,7 +109,7 @@ class SudokuTest {
                         Set<Coordinate> set = new HashSet<>();
                         set.add(pos);
                         collNeighbor(pos, set, rgb);
-                        COLL.add(set);
+                        coll.add(set);
                     }
                 }
                 fis.close();
@@ -142,7 +142,7 @@ class SudokuTest {
             });
 
         }
-        public static byte[] getRGB(Sheet sheet, int i, int j) {
+        public byte[] getRGB(int i, int j) {
 
             Row row = sheet.getRow(i); // 获取第一行
             Cell cell = row.getCell(j); // 获取第一个单元格
@@ -166,7 +166,7 @@ class SudokuTest {
             }
             return null;
         }
-        public static void collNeighbor(Coordinate pos, Set<Coordinate> set, byte[] rgb) {
+        public void collNeighbor(Coordinate pos, Set<Coordinate> set, byte[] rgb) {
             if (pos.getI() > 0) {
                 Coordinate neighborPos = new Coordinate(pos.getI() - 1, pos.getJ());
                 if (!addedSet.contains(neighborPos)) {
@@ -280,7 +280,6 @@ class SudokuTest {
          */
         private boolean isNoRepeat(int row, int col, int value) {
             if (row < 0 || row >= 9 || col < 0 || col >= 9 || value < 1 || value > 9) {
-//            throw new RuntimeException();
                 return false;
             }
             //行
@@ -338,7 +337,7 @@ class SudokuTest {
          */
         private int getLongCurrentSum(int i, int j){
             Coordinate pos = new Coordinate(i, j);
-            for (Set<Coordinate> set : COLL) {
+            for (Set<Coordinate> set : coll) {
                 if (set.contains(pos)){
                     return set.stream().mapToInt(p -> arr[p.getI()][p.getJ()]).sum();
                 }
@@ -346,6 +345,9 @@ class SudokuTest {
             throw new RuntimeException();
         }
 
+        public LongShuDu(int[][] arr) {
+            this.arr = arr;
+        }
 
         @Data
         @Accessors(chain = true)

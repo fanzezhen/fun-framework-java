@@ -13,7 +13,7 @@ class SortUtilTest {
     int[] arr2 = new int[]{3, 1, 7, 4, 5, 3, 6, 2};
 
     @Test
-    @Disabled
+    @Disabled("学习用")
      void testBubbleSort() {
         SortUtil.bubbleSort(arr);
         System.out.println(Arrays.toString(arr));
@@ -21,7 +21,7 @@ class SortUtilTest {
     }
 
     @Test
-    @Disabled
+    @Disabled("学习用")
      void testQuicksort() {
         SortUtil.quicksort(arr, 0, arr.length - 1);
         System.out.println(Arrays.toString(arr));

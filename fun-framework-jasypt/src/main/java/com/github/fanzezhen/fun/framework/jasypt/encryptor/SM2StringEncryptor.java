@@ -1,5 +1,6 @@
 package com.github.fanzezhen.fun.framework.jasypt.encryptor;
 
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
@@ -9,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jasypt.commons.CommonUtils;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 public class SM2StringEncryptor implements StringEncryptor {
@@ -26,10 +29,10 @@ public class SM2StringEncryptor implements StringEncryptor {
         try {
             log.debug("加密前配置信息:{}", message);
             SM2 sm2 = SmUtil.sm2(privateKey, publicKey);
-            message = sm2.encryptBcd(message, KeyType.PublicKey);
+            message = new String(sm2.encrypt(message, CharsetUtil.CHARSET_UTF_8, KeyType.PublicKey), StandardCharsets.UTF_8);
             log.debug("加密后配置信息:{}", message);
         } catch (Exception e) {
-            log.error("配置信息加密失败,{}", e.getStackTrace());
+            log.error("配置信息加密失败", e);
         }
         return message;
     }

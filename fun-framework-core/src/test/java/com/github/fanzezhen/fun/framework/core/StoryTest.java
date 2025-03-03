@@ -25,7 +25,7 @@ import java.util.concurrent.*;
 class StoryTest {
 
     @Test
-    @Disabled
+    @Disabled("手动调用")
      void testChapters() throws InterruptedException {
         String separator = "、";
         String originFilename = "D:\\Users\\zezhen.fan\\Documents\\Tencent Files\\842618916\\FileRecv\\MobileFile\\会说话的肘子-第一序列.txt";
@@ -34,7 +34,7 @@ class StoryTest {
         FileReader fileReader = new FileReader(originFilename);
         List<String> readLines = fileReader.readLines();
         List<String> writeLines = new ArrayList<>(readLines);
-        ThreadPoolExecutor threadPoolExecutor = PoolExecutors.newThreadPoolCallerRunsPolicyExecutor("testChapters");
+        ThreadPoolExecutor threadPoolExecutor = PoolExecutors.defaultThreadPoolExecutor();
         CountDownLatch countDownLatch = new CountDownLatch(readLines.size());
         for (int i = 0, readLinesSize = readLines.size(); i < readLinesSize; i++) {
             int finalI = i;

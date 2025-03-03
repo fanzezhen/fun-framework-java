@@ -16,26 +16,15 @@
 package com.github.fanzezhen.fun.framework.sentinel;
 
 import cn.hutool.setting.dialect.Props;
-import com.alibaba.csp.sentinel.datasource.FileRefreshableDataSource;
-import com.alibaba.csp.sentinel.datasource.FileWritableDataSource;
 import com.alibaba.csp.sentinel.datasource.ReadableDataSource;
-import com.alibaba.csp.sentinel.datasource.WritableDataSource;
 import com.alibaba.csp.sentinel.datasource.nacos.NacosDataSource;
 import com.alibaba.csp.sentinel.init.InitFunc;
-import com.alibaba.csp.sentinel.slots.block.authority.AuthorityRule;
-import com.alibaba.csp.sentinel.slots.block.authority.AuthorityRuleManager;
-import com.alibaba.csp.sentinel.slots.block.degrade.DegradeRule;
-import com.alibaba.csp.sentinel.slots.block.degrade.DegradeRuleManager;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRule;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRuleManager;
-import com.alibaba.csp.sentinel.slots.system.SystemRule;
-import com.alibaba.csp.sentinel.slots.system.SystemRuleManager;
-import com.alibaba.csp.sentinel.transport.util.WritableDataSourceRegistry;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -58,7 +47,7 @@ public class NacosDataSourceInit implements InitFunc {
         Props props = new Props("sentinel.properties");
         String remoteAddress = props.getStr("com.github.fanzezhen.fun.framework.core.common.sentinel.remote-address", "localhost");
         String groupId = props.getStr("com.github.fanzezhen.fun.framework.core.common.sentinel.groupId");
-        String dataId = props.getStr("com.github.fanzezhen.fun.framework.core.common.sentinel.dataId");;
+        String dataId = props.getStr("com.github.fanzezhen.fun.framework.core.common.sentinel.dataId");
 
         ReadableDataSource<String, List<FlowRule>> flowRuleDataSource = new NacosDataSource<>(remoteAddress, groupId, dataId,
                 source -> JSON.parseObject(source, new TypeReference<List<FlowRule>>() {}));

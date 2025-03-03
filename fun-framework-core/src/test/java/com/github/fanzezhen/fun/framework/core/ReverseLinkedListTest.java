@@ -38,7 +38,7 @@ class ReverseLinkedListTest {
     }
 
     @Test
-    public static void main(String[] args) {
+    void test() {
 
         // 创建一个链表：1 -> 2 -> 3 -> 4 -> 5
         ListNode head = new ListNode(1);

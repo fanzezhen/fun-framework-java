@@ -1,4 +1,4 @@
-common
+fun-framework-java
 ------------------------------------------
 此项目目的是为了将常用的通用功能组件化，减负实际工作中的开发任务。
 此项目仅后端组件，无web页面，具体应用示例可见 https://github.com/fanzezhen/demo

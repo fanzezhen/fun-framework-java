@@ -4,20 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-parent</artifactId>
-        <version>3.4.1</version>
-    </parent>
-
     <artifactId>fun-framework-java</artifactId>
     <groupId>com.github.fanzezhen</groupId>
     <packaging>pom</packaging>
-    <version>3.4.1</version>
+    <version>3.4.3</version>
 
     <properties>
         <com.github.fanzezhen.jdk8.version>0.0.3.4</com.github.fanzezhen.jdk8.version>
-        <fun-framework.version>3.4.1</fun-framework.version>
+        <fun-framework.version>3.4.3</fun-framework.version>
         <app.server>-tomcat</app.server>
         <ch.qos.logback.version>1.2.3</ch.qos.logback.version>
         <cn.hutool.version>5.8.28</cn.hutool.version>
@@ -46,6 +40,7 @@
         <io.projectreactor.version>3.4.7</io.projectreactor.version>
         <io.springfox.version>3.0.0</io.springfox.version>
         <javax.annotation.version>1.3.2</javax.annotation.version>
+        <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
         <javax.servlet.version>4.0.1</javax.servlet.version>
         <javax.persistence.version>2.2</javax.persistence.version>
         <nz.net.ultraq.thymeleaf.version>2.4.1</nz.net.ultraq.thymeleaf.version>
@@ -55,17 +50,21 @@
         <org.freemarker.version>2.3.30</org.freemarker.version>
         <org.apereo.cas.version>6.6.3</org.apereo.cas.version>
         <org.aspectj.version>1.9.6</org.aspectj.version>
+        <org.apache.commons.version>3.17.0</org.apache.commons.version>
         <org.apache.commons.commons-beanutils.version>1.9.4</org.apache.commons.commons-beanutils.version>
         <org.apache.commons.commons-collections4.version>4.4</org.apache.commons.commons-collections4.version>
         <org.apache.logging.log4j.version>2.20.0</org.apache.logging.log4j.version>
         <org.apache.poi.version>5.2.5</org.apache.poi.version>
         <org.bouncycastle.bcprov-jdk15on.version>1.70</org.bouncycastle.bcprov-jdk15on.version>
         <org.hibernate.validator.version>8.0.1.Final</org.hibernate.validator.version>
+        <org.junit.jupiter.version>5.12.0</org.junit.jupiter.version>
         <org.mybatis.spring.boot.version>2.2.0</org.mybatis.spring.boot.version>
+        <org.projectlombok.version>1.18.36</org.projectlombok.version>
         <org.redisson.version>3.23.2</org.redisson.version>
         <org.reflections.version>0.9.12</org.reflections.version>
         <org.springdoc.version>2.1.0</org.springdoc.version>
-        <org.springframework.boot.version>${project.parent.version}</org.springframework.boot.version>
+        <org.springframework.version>6.2.3</org.springframework.version>
+        <org.springframework.boot.version>3.4.3</org.springframework.boot.version>
         <org.springframework.cloud.version>4.0.3</org.springframework.cloud.version>
         <org.springframework.social.version>1.1.6.RELEASE</org.springframework.social.version>
         <org.ssssssss.version>2.1.1</org.ssssssss.version>
@@ -94,9 +93,23 @@
         <maven.plugin.validation>VERBOSE</maven.plugin.validation>
         <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
     </properties>
-
+    
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>3.4.3</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2024.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>com.github.fanzezhen</groupId>
                 <artifactId>fun-framework-all</artifactId>
@@ -315,6 +328,12 @@
                 <version>${org.apache.commons.commons-beanutils.version}</version>
             </dependency>
             <dependency>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>${jakarta.servlet.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
                 <version>${org.apache.commons.commons-collections4.version}</version>
@@ -494,6 +513,12 @@
                 <version>${org.hibernate.validator.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${org.junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson</artifactId>
                 <version>${org.redisson.version}</version>
@@ -503,11 +528,21 @@
                 <artifactId>reflections</artifactId>
                 <version>${org.reflections.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${org.apache.commons.version}</version>
+            </dependency>
             <!--接口文档-->
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
                 <version>${org.springdoc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${org.springframework.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -555,13 +590,6 @@
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>
                 <version>${org.freemarker.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>runtime</scope>
             </dependency>
             <!-- spring cloud Eureka Client 启动器，因为Eureka Server开启了安全校验，
                 所有需要依赖更大范围的jar包资源spring-cloud-starter-eureka-server-->
@@ -719,7 +747,7 @@
                 <gpg.executable>gpg</gpg.executable>
                 <gpg.executable>C:/Program Files (x86)/Gpg4win/../GnuPG/bin/gpg.exe</gpg.executable>
                 <!-- 前面pom.xml中配置了gpg的maven插件，这个目录就是你本地机器存放gpg秘钥的目录 -->
-                <gpg.homedir>C:/Users/andy/AppData/Roaming/gnupg</gpg.homedir>
+                <gpg.homedir>C:\Users\fanzezhen\AppData\Roaming\gnupg</gpg.homedir>
             </properties>
         </profile>
     </profiles>
@@ -773,6 +801,7 @@
                     <executions>
                         <execution>
                             <id>attach-sources</id>
+                            <!--                            <phase>deploy</phase>-->
                             <phase>verify</phase>
                             <goals>
                                 <goal>jar-no-fork</goal>
@@ -873,8 +902,8 @@
                     <executions>
                         <execution>
                             <id>sign-artifacts</id>
-                            <phase>deploy</phase>
-                            <!--                            <phase>verify</phase>-->
+<!--                            <phase>deploy</phase>-->
+                            <phase>verify</phase>
                             <goals>
                                 <goal>sign</goal>
                             </goals>
