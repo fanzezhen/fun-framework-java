@@ -11,7 +11,7 @@
 
     <properties>
         <com.github.fanzezhen.jdk8.version>0.0.3.4</com.github.fanzezhen.jdk8.version>
-        <fun-framework.version>3.4.3</fun-framework.version>
+        <fun-framework.version>${project.version}</fun-framework.version>
         <app.server>-tomcat</app.server>
         <ch.qos.logback.version>1.2.3</ch.qos.logback.version>
         <cn.hutool.version>5.8.28</cn.hutool.version>
@@ -127,7 +127,7 @@
             </dependency>
             <dependency>
                 <groupId>com.github.fanzezhen</groupId>
-                <artifactId>fun-framework-mp</artifactId>
+                <artifactId>fun-framework-jasypt</artifactId>
                 <version>${fun-framework.version}</version>
             </dependency>
             <dependency>
@@ -137,12 +137,12 @@
             </dependency>
             <dependency>
                 <groupId>com.github.fanzezhen</groupId>
-                <artifactId>fun-framework-redis</artifactId>
+                <artifactId>fun-framework-mp</artifactId>
                 <version>${fun-framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.fanzezhen</groupId>
-                <artifactId>common-security</artifactId>
+                <artifactId>fun-framework-redis</artifactId>
                 <version>${fun-framework.version}</version>
             </dependency>
             <dependency>
@@ -735,9 +735,31 @@
     然后，在通过激活配置文件执行部署时，将使用此配置文件。 -->
     <profiles>
         <profile>
-            <id>oss</id>
+            <id>dev</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>none</phase> <!-- 设置为 none 表示不执行 -->
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>oss</id>
+            <activation>
                 <jdk>${java.version}</jdk>
             </activation>
             <properties>
