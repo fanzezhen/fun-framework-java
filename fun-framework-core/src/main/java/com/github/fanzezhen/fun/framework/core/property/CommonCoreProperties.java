@@ -12,7 +12,7 @@ import java.util.Set;
  */
 @Data
 @RefreshScope
-@ConfigurationProperties(prefix = "fun-framework")
+@ConfigurationProperties(prefix = "fun")
 public class CommonCoreProperties {
     private Tenant tenant = new Tenant();
     private boolean responseJson = true;

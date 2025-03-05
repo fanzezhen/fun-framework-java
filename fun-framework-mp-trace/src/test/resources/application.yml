@@ -1,0 +1,18 @@
+fun:
+  trace:
+    rules:
+      es_index:
+        name: 索引
+        name-key: CODE
+        detail:
+          NAME: 索引标题
+          CODE: 索引名称
+      es_index_field:
+        name: 索引字段
+        name-key: CODE
+        parent: es_index
+        parent-key: INDEX_ID
+        detail:
+          NAME: 中文名
+          CODE: 英文名
+          TYPE: 类型

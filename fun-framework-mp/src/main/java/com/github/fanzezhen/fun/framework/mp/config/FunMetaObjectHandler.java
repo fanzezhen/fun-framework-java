@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 public class FunMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
-        log.debug("start insert fill ....");
         String loginUserId = SysContextHolder.getUserId();
         if (CharSequenceUtil.isNotBlank(loginUserId)) {
             this.fillStrategy(metaObject, "createUserId", loginUserId);
@@ -32,7 +31,6 @@ public class FunMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        log.debug("start update fill ....");
         String loginUserId = SysContextHolder.getUserId();
         if (CharSequenceUtil.isNotBlank(loginUserId)) {
             this.fillStrategy(metaObject, "updateUserId", loginUserId);

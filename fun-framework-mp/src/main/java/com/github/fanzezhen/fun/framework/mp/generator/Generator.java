@@ -8,7 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
-import com.github.fanzezhen.fun.framework.mp.base.BaseMapper;
+import com.github.fanzezhen.fun.framework.mp.base.IBaseMapper;
 import com.github.fanzezhen.fun.framework.mp.base.IService;
 import com.github.fanzezhen.fun.framework.mp.base.ServiceImpl;
 import com.github.fanzezhen.fun.framework.mp.base.entity.BaseEntity;
@@ -28,6 +28,9 @@ import java.util.stream.Collectors;
  * @since 3.1.8
  */
 public class Generator {
+    private Generator() {
+    }
+
     public static void fastAutoGenerator(Config config) {
         String pkType = "String";
         Class<?> superEntityClass = BaseGenericEntity.class;
@@ -70,7 +73,7 @@ public class Generator {
                 .superServiceImplClass(ServiceImpl.class)
             )
             .strategyConfig(builder -> builder.mapperBuilder().enableFileOverride()
-                .superClass(BaseMapper.class)
+                .superClass(IBaseMapper.class)
                 .disableMapperXml()
                 .convertXmlFileName(entityName -> null)
             )

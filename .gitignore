@@ -27,10 +27,10 @@ tmp/
 # DataBase
 *.rdb
 *.pdb
-cicd/app/elasticsearch
-cicd/app/mysql/data
-cicd/app/redis-insight/db
-cicd/app/nacos/standalone-logs
+support/docker/app/elasticsearch
+support/docker/app/mysql/data
+support/docker/app/redis-insight/db
+support/docker/app/nacos/standalone-logs
 
 # log
 logs/

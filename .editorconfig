@@ -6,7 +6,7 @@ root = true
 # 缩进风格，可选"space"、"tab"
 indent_style = space
 # 缩进的空格数
-indent_size = 4
+indent_size = 2
 # 设置字符集
 charset = utf-8
 # 结尾换行符，可选"lf"、"cr"、"crlf"
@@ -18,7 +18,7 @@ trim_trailing_whitespace = false
 
 [*.java]
 # 结尾换行符，可选"lf"、"cr"、"crlf"
-end_of_line = lf
+indent_size = 4
 
 [*.{sh,yaml,yml,json,sql}]
 # 缩进的空格数

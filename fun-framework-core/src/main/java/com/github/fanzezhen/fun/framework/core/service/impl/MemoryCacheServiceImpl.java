@@ -4,6 +4,7 @@ import cn.hutool.cache.impl.TimedCache;
 import com.github.fanzezhen.fun.framework.core.constant.CacheConstant;
 import com.github.fanzezhen.fun.framework.core.service.CacheService;
 import com.github.fanzezhen.fun.framework.core.util.ExceptionUtil;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,8 @@ import java.util.concurrent.TimeUnit;
  * @author zezhen.fan
  */
 @Order
-@Service("commonCacheServiceImpl")
+@Service
+@ConditionalOnMissingBean(CacheService.class)
 public class MemoryCacheServiceImpl implements CacheService {
     @Override
     public String get(String k) {

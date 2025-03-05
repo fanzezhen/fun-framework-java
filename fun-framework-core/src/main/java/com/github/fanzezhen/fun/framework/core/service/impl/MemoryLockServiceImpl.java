@@ -6,6 +6,7 @@ import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
 import com.github.fanzezhen.fun.framework.core.service.CacheService;
 import com.github.fanzezhen.fun.framework.core.service.LockService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.function.Supplier;
 @Slf4j
 @Order
 @Service
+@ConditionalOnMissingBean(LockService.class)
 public class MemoryLockServiceImpl implements LockService {
     @Resource
     private CacheService memoryCacheServiceImpl;

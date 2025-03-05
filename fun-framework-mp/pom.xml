@@ -5,7 +5,8 @@
     <parent>
         <artifactId>fun-framework-java</artifactId>
         <groupId>com.github.fanzezhen</groupId>
-        <version>3.4.3</version>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>fun-framework-mp</artifactId>
@@ -37,9 +38,13 @@
             <artifactId>mybatis-plus-generator</artifactId>
             <scope>compile</scope>
         </dependency>
+      <dependency>
+        <groupId>com.baomidou</groupId>
+        <artifactId>mybatis-plus-jsqlparser</artifactId>
+      </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>

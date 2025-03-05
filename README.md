@@ -2,21 +2,31 @@ fun-framework-java
 ------------------------------------------
 此项目目的是为了将常用的通用功能组件化，减负实际工作中的开发任务。
 此项目仅后端组件，无web页面，具体应用示例可见 https://github.com/fanzezhen/demo
-1. 项目采用Maven多模块开发方式，模块介绍如下：
-    * common-core                  ：核心模块
-    * common-exception             ：异常处理模块
-    * fun-framework-log                   ：日志模块
-    * fun-framework-mp                    ：MyBatis-Plus
-    * fun-framework-redis                 ：redis缓存模块
-    * common-security              ：权限模块
-    * common-sentinel              ：sentinel防控模块
-    * common-springdoc               ：swagger接口模块
-    * fun-framework-web                   ：web模块，通用的mvc配置
-   
-2. 项目介绍
-   * 后端主体框架： Springboot 3
-   * 持久层： MyBatis-Plus
-   * 使用java版本： jdk 17+
-   
-3. 运行条件
-   * 每个模块都有启用该模块配置的注解，详见各模块中的 README.md
+
+# 文件说明
+
+|                                                                                                           | 说明                                        |
+|-----------------------------------------------------------------------------------------------------------|-------------------------------------------|
+| fun-framework-*                                                                                           | 子模块                                       |
+| [support](support)/[docker](support%2Fdocker)/[docker-compose.yml](support%2Fdocker%2Fdocker-compose.yml) | docker-compose文件，可以使用docker一键搭建运行环境中所需的服务 |
+| [support](support)/[docker](support%2Fdocker)/[app](support%2Fdocker%2Fapp)/*                             | docker-compose中各个服务的配置文件或数据文件             |
+| [support](support)/[standard](support%2Fstandard)/*                                                       | 标准文件，用作数据参考                               |
+
+# 结构说明
+
+详见各模块中的 README.md
+
+| 模块名                                                    | 描述                   | 手册                                                 |
+|--------------------------------------------------------|----------------------|----------------------------------------------------|
+| [fun-framework-all](fun-framework-all)                 | 用于简化引用所有模块           | [README.md](fun-framework-all%2FREADME.md)         |
+| [fun-framework-core](fun-framework-core)               | 核心基础代码               | [README.md](fun-framework-core%2FREADME.md)        |
+| [fun-framework-cache-redis](fun-framework-cache-redis) | redis缓存模块            | [README.md](fun-framework-cache-redis%2FREADME.md) |
+| [fun-framework-exception](fun-framework-exception)     | 异常处理模块               | [README.md](fun-framework-exception%2FREADME.md)   |
+| [fun-framework-jasypt](fun-framework-jasypt)           | 主要用于对配置文件加密          | [README.md](fun-framework-jasypt%2FREADME.md)      |
+| [fun-framework-log](fun-framework-log)                 | 日志模块                 | [README.md](fun-framework-log%2FREADME.md)         |
+| [fun-framework-mp](fun-framework-mp)                   | MyBatis-Plus         | [README.md](fun-framework-mp%2FREADME.md)          |
+| [fun-framework-sentinel](fun-framework-sentinel)       | sentinel防控模块         | [README.md](fun-framework-sentinel%2FREADME.md)    |
+| [fun-framework-spring-doc](fun-framework-spring-doc)   | 用于生成接口文档-基于springdoc | [README.md](fun-framework-spring-doc%2FREADME.md)  |
+| [fun-framework-web](fun-framework-web)                 | web模块，通用的mvc配置       | [README.md](fun-framework-web%2FREADME.md)         |
+| [support](support)                                     | 非maven模块的文件          | [README.md](support%2FREADME.md)                   |
+

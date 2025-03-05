@@ -50,7 +50,7 @@ public class SM2StringEncryptor implements StringEncryptor {
             message = StrUtil.utf8Str(sm2.decryptFromBcd(message, KeyType.PrivateKey));
             log.debug("解密后配置信息:{}", message);
         } catch (Exception e) {
-            log.error("配置信息解密失败,{}", e.getStackTrace());
+            log.warn("配置信息解密失败", e);
         }
         return message;
     }
