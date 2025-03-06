@@ -93,7 +93,7 @@
     <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
     <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
     <maven.plugin.validation>VERBOSE</maven.plugin.validation>
-    <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
+    <nexus-staging-maven-plugin.version>1.7.0</nexus-staging-maven-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -785,7 +785,6 @@
           <executions>
             <execution>
               <id>attach-sources</id>
-              <!--                            <phase>deploy</phase>-->
               <phase>verify</phase>
               <goals>
                 <goal>jar-no-fork</goal>
@@ -844,6 +843,7 @@
           <configuration>
             <updatePomFile>true</updatePomFile>
             <flattenMode>bom</flattenMode>
+            <outputDirectory>${project.build.directory}/flatten</outputDirectory>
             <pomElements>
               <dependencyManagement>keep</dependencyManagement>
               <pluginManagement>keep</pluginManagement>
@@ -916,7 +916,6 @@
           <executions>
             <execution>
               <id>sign-artifacts</id>
-              <!--                            <phase>deploy</phase>-->
               <phase>verify</phase>
               <goals>
                 <goal>sign</goal>

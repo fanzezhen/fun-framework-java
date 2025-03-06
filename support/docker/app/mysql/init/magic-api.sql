@@ -2,7 +2,7 @@
 # update user set host='%' where account_locked='N';
 # Grant all privileges on *.* to 'root'@'%';
 # FLUSH PRIVILEGES;
-CREATE DATABASE IF NOT EXISTS demo DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS demo DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;
 use demo;
 CREATE TABLE `magic_api_file` (
   `file_path` varchar(512) NOT NULL,

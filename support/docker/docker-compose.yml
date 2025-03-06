@@ -1,7 +1,7 @@
 #版本号
 version: "3"
 networks:
-  common: #网络名称
+  fun: #网络名称
     driver: bridge      #桥接模式
 
 #服务
@@ -21,21 +21,21 @@ services:
       MYSQL_USER: "dev"
       MYSQL_PASSWORD: "dev"
     command:
-      --max_connections=64
+      --max_connections=100
       --character-set-server=utf8mb4
-      --collation-server=utf8mb4_general_ci
+      --collation-server=utf8mb4_unicode_ci
       --innodb_rollback_on_timeout='ON'
       --default-time-zone='+8:00'
-      --default-authentication-plugin=mysql_native_password
+      --default-authentication-plugin=caching_sha2_password
     privileged: true
     volumes:
-      - ./support/docker/app/mysql/conf:/etc/mysql/conf.d:ro
-      - ./support/docker/app/mysql/init:/docker-entrypoint-initdb.d:ro
-      - ./support/docker/app/mysql/data:/var/lib/mysql
+      - ./app/mysql/conf:/etc/mysql/conf.d:ro
+      - ./app/mysql/init:/docker-entrypoint-initdb.d:ro
+      - ./app/mysql/data:/var/lib/mysql
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
       - /etc/hosts:/etc/hosts:ro
     networks:
-      - common
+      - fun
 
 
   elasticsearch:
@@ -47,12 +47,12 @@ services:
       - "discovery.type=single-node" #以单一节点模式启动
       - "ES_JAVA_OPTS=-Xms512m -Xmx1024m" #设置使用jvm内存大小
     volumes:
-      - ./support/docker/app/elasticsearch/plugins:/usr/share/elasticsearch/plugins #插件文件挂载
-      - ./support/docker/app/elasticsearch/data:/usr/share/elasticsearch/data #数据文件挂载
+      - ./app/elasticsearch/plugins:/usr/share/elasticsearch/plugins #插件文件挂载
+      - ./app/elasticsearch/data:/usr/share/elasticsearch/data #数据文件挂载
     ports:
       - "9200:9200"
     networks:
-      - common
+      - fun
 
 
   #服务名称
@@ -66,13 +66,13 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./support/docker/app/redis:/usr/local/etc/redis:ro
+      - ./app/redis:/usr/local/etc/redis:ro
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
       - /etc/hosts:/etc/hosts:ro
     command:
       docker-entrypoint.sh redis-server /usr/local/etc/redis/redis.conf
     networks:
-      - common
+      - fun
 
   #服务名称
   redis-insight:
@@ -85,11 +85,11 @@ services:
     ports:
       - "8001:8001"
     volumes:
-      - ./support/docker/app/redis-insight/db:/db
+      - ./app/redis-insight/db:/db
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
       - /etc/hosts:/etc/hosts:ro
     networks:
-      - common
+      - fun
 
   mongodb:
     image: mongo
@@ -108,13 +108,13 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./support/docker/app/mongodb:/home/mongodb
+      - ./app/mongodb:/home/mongodb
       - ./logs:/var/log
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
       - /etc/hosts:/etc/hosts:ro
     command: mongod --config /home/mongodb/config/mongodb.conf
     networks:
-      - common
+      - fun
 
   mongo-express:
     image: mongo-express
@@ -132,7 +132,7 @@ services:
     depends_on:
       - mongodb
     networks:
-      - common
+      - fun
 
   zookeeper:
     image: zookeeper
@@ -148,7 +148,7 @@ services:
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
       - /etc/hosts:/etc/hosts:ro
     networks:
-      - common
+      - fun
 
   nginx:
     image: nginx
@@ -158,12 +158,12 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./support/docker/app/nginx:/etc/nginx
+      - ./app/nginx:/etc/nginx
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
       - /etc/hosts:/etc/hosts:ro
     command: [ nginx-debug, '-g', 'daemon off;' ]
     networks:
-      - common
+      - fun
 
   consul:
     container_name: consul
@@ -176,7 +176,7 @@ services:
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
       - /etc/hosts:/etc/hosts:ro
     networks:
-      - common
+      - fun
 
   eureka-v1:
     container_name: eureka-v1
@@ -189,7 +189,7 @@ services:
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
       - /etc/hosts:/etc/hosts:ro
     networks:
-      - common
+      - fun
 
   #服务名称
   eureka-server:
@@ -203,7 +203,7 @@ services:
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
       - /etc/hosts:/etc/hosts:ro
     networks:
-      - common
+      - fun
 
   jhipster-registry:
     container_name: jhipster-registry
@@ -213,9 +213,9 @@ services:
     ports:
       - "8761:8761"
     volumes:
-      - ./support/docker/app/jhipster-registry/config:/vault/config
-      - ./support/docker/app/jhipster-registry/data:/vault/file
-      - ./support/docker/app/jhipster-registry/logs:/vault/logs
+      - ./app/jhipster-registry/config:/vault/config
+      - ./app/jhipster-registry/data:/vault/file
+      - ./app/jhipster-registry/logs:/vault/logs
     environment:
       # - _JAVA_OPTIONS=-Xmx512m -Xms256m
       # - JAVA_OPTS=-Dfile.encoding=UTF-8
@@ -229,7 +229,7 @@ services:
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
     networks:
-      - common
+      - fun
 
   nacos:
     image: nacos/nacos-server:latest
@@ -256,14 +256,14 @@ services:
       MYSQL_SERVICE_PASSWORD: root
       MYSQL_SERVICE_DB_PARAM: characterEncoding=utf8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
     volumes:
-      - ./support/docker/app/nacos/standalone-logs:/home/nacos/logs
-      - ./support/docker/app/nacos/init.d:/home/nacos/init.d/
+      - ./app/nacos/standalone-logs:/home/nacos/logs
+      - ./app/nacos/init.d:/home/nacos/init.d/
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
       - /etc/hosts:/etc/hosts:ro
     depends_on:
       - mysql
     networks:
-      - common
+      - fun
 
   #服务名称
   sentinel-dashboard:
@@ -278,7 +278,7 @@ services:
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
       - /etc/hosts:/etc/hosts:ro
     networks:
-      - common
+      - fun
 
 
   xxl-job-admin:
@@ -310,7 +310,7 @@ services:
     depends_on:
       - mysql
     networks:
-      - common
+      - fun
   # http://localhost:8800/xxl-job-admin admin/123456
   xxl-job-executor-sample:
     hostname: xxl-job-executor-sample
@@ -334,7 +334,7 @@ services:
       - mysql
       - xxl-job-admin
     networks:
-      - common
+      - fun
 
   xxl-job-executor-sample-springboot:
     hostname: xxl-job-executor-sample-springboot
@@ -352,4 +352,4 @@ services:
       - mysql
       - xxl-job-admin
     networks:
-      - common
+      - fun

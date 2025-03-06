@@ -4,7 +4,7 @@
 # update user set host='%' where account_locked='N';
 # Grant all privileges on *.* to 'root'@'%';
 # FLUSH PRIVILEGES;
-CREATE DATABASE IF NOT EXISTS nacos DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS nacos DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;
 use nacos;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
