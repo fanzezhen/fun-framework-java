@@ -16,6 +16,7 @@ build
 target
 conf_dev
 *.pyc
+*.flattened-pom.xml
 tmp/
 
 # OSX temp files
