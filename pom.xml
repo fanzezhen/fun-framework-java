@@ -57,7 +57,6 @@
     <org.apache.poi.version>5.2.5</org.apache.poi.version>
     <org.bouncycastle.bcprov-jdk15on.version>1.70</org.bouncycastle.bcprov-jdk15on.version>
     <org.hibernate.validator.version>8.0.1.Final</org.hibernate.validator.version>
-    <org.junit.jupiter.version>5.12.0</org.junit.jupiter.version>
     <org.projectlombok.version>1.18.36</org.projectlombok.version>
     <org.redisson.version>3.23.2</org.redisson.version>
     <org.reflections.version>0.9.12</org.reflections.version>
@@ -529,12 +528,6 @@
         <version>${org.hibernate.validator.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-engine</artifactId>
-        <version>${org.junit.jupiter.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
         <groupId>org.redisson</groupId>
         <artifactId>redisson</artifactId>
         <version>${org.redisson.version}</version>
@@ -554,11 +547,6 @@
         <groupId>org.springdoc</groupId>
         <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         <version>${org.springdoc.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-webmvc</artifactId>
-        <version>${org.springframework.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.velocity</groupId>

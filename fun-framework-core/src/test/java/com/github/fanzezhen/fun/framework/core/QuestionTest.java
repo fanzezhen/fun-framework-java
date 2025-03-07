@@ -1,16 +1,17 @@
 package com.github.fanzezhen.fun.framework.core;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import cn.hutool.setting.dialect.PropsUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * @author zezhen.fan
- * @date 2023/8/7
  */
 @Slf4j
 @Disabled
@@ -40,8 +41,8 @@ class QuestionTest {
         String numStr = in.nextLine();
         String str = in.nextLine();
         int num = Integer.parseInt(numStr);
-        System.out.println(num);
-        System.out.println(str);
+        log.debug("num {}", num);
+        log.debug(str);
         List<String> list = new ArrayList<>();
         int len = str.length();
         StringBuilder stringBuilder = new StringBuilder();
@@ -58,11 +59,11 @@ class QuestionTest {
         }
         int size = list.size();
         if (size <= num) {
-            System.out.println("error");
+            log.debug("error");
             return;
         }
         list.set(num, "******");
-        System.out.println(String.join("_", list));
+        log.debug(String.join("_", list));
         Assertions.assertTrue(true);
     }
 
@@ -84,17 +85,24 @@ class QuestionTest {
             int ip3 = intArr[2];
             int ip4 = intArr[3];
             if (ip1 < 0 || ip1 > 128 || ip2 < 0 || ip2 > 255 || ip3 < 0 || ip3 > 255 || ip4 < 0 || ip4 > 255) {
-                System.out.println("invalid IP");
+                log.debug("invalid IP");
             }
             String ipForHex = getHexStr(ip1) + getHexStr(ip2) + getHexStr(ip3) + getHexStr(ip4);
-            System.out.println(Long.parseLong(ipForHex, 16));
+            long ipLong = Long.parseLong(ipForHex, 16);
+            log.debug("ipForHex parseLong {}", ipLong);
         } catch (Exception e) {
-            System.out.println("invalid IP");
+            log.debug("invalid IP", e);
         }
     }
 
     public static String getHexStr(int i) {
         String hexString = Integer.toHexString(i);
         return hexString.length() < 2 ? ("0" + hexString) : hexString;
+    }
+    @BeforeAll
+    static void setUp() {
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        Logger rootLogger = loggerContext.getLogger(Logger.ROOT_LOGGER_NAME);
+        rootLogger.setLevel(Level.valueOf(PropsUtil.get("application").getStr("logging.level.root")));
     }
 }
