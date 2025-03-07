@@ -23,7 +23,7 @@
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-core</artifactId>
+      <artifactId>fun-framework-core-all</artifactId>
     </dependency>
   </dependencies>
 </project>

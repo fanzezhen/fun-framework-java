@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
-import com.github.fanzezhen.fun.framework.log.config.LogSpringConfig;
+import com.github.fanzezhen.fun.framework.core.log.config.FunCoreLogAutoConfiguration;
 import com.github.fanzezhen.fun.framework.mp.base.IBaseMapper;
 import com.github.fanzezhen.fun.framework.mp.base.entity.BaseEntity;
 import com.github.fanzezhen.fun.framework.trace.model.bo.TraceRuleBO;
@@ -175,50 +175,64 @@ public interface IFunTraceService<A extends BaseEntity, B> {
             traceMap = new HashMap<>();
         }
         String id = entity.getId();
-        if (parentTraceRuleBO != null) {
-            TableInfo parentTableInfo = TableInfoHelper.getTableInfo(tableName);
-            String parentKey = traceRuleBO.getParentKey();
-            Object parentPkObj = columnFieldMap.get(parentKey).get(entity);
-            if (parentTableInfo == null || CharSequenceUtil.isBlank(parentKey)) {
-                String value = columnFieldMap.get(traceRuleBO.getNameKey()).get(entity).toString();
-                A trace = newTrace(SqlCommandType.INSERT, id, traceRuleBO.getName(), tableName, value);
-                traceMap.computeIfAbsent(id, t -> Pair.of(trace, new ArrayList<>()));
-            } else if (parentPkObj instanceof Serializable parentPk) {
-                Object nameValue = columnFieldMap.get(traceRuleBO.getNameKey()).get(entity);
-                String name = nameValue != null ? nameValue.toString() : CharSequenceUtil.EMPTY;
-                String namePrefix = traceRuleBO.getName() + name + "的";
-                for (Map.Entry<String, Field> entry : columnFieldMap.entrySet()) {
-                    String fieldName = traceRuleBO.getDetail().get(entry.getKey());
-                    Object newValue = entry.getValue().get(entity);
-                    if (fieldName == null || newValue == null) {
-                        continue;
-                    }
-                    B traceDetail = newTraceDetail(id, namePrefix + "“" + fieldName + "”", tableName + StrPool.DOT + entry.getKey(), (newValue instanceof JSON json) ? json.toJSONString() : newValue.toString());
-                    traceMap.computeIfAbsent(parentPk, k -> {
-                        String currentNamespace = parentTableInfo.getCurrentNamespace();
-                        A t = getByTraceAndBiz(MDC.get(LogSpringConfig.TRACE_ID), parentPk);
-                        if (t != null) {
-                            return Pair.of(t, new ArrayList<>());
-                        }
-                        BaseEntity parent = getParent(parentPk, currentNamespace);
-                        String parentValue = null;
-                        Optional<TableFieldInfo> parentNameTableFieldInfo =
-                            parentTableInfo.getFieldList().stream().filter(tableFieldInfo ->
-                                    tableFieldInfo.getColumn().equalsIgnoreCase(parentTraceRuleBO.getNameKey()))
-                                .findAny();
-                        if (parentNameTableFieldInfo.isPresent()) {
-                            try {
-                                parentValue = parentNameTableFieldInfo.get().getField().get(parent).toString();
-                            } catch (Exception e) {
-                                StaticLog.warn("", e);
-                            }
-                        }
-                        return Pair.of(newTrace(SqlCommandType.UPDATE, parent.getId(), parentTraceRuleBO.getName(), traceRuleBO.getParent(), parentValue), new ArrayList<>());
-                    }).getValue().add(traceDetail);
+        if (parentTraceRuleBO == null) {
+            String value = columnFieldMap.get(traceRuleBO.getNameKey()).get(entity).toString();
+            A trace = newTrace(SqlCommandType.INSERT, id, traceRuleBO.getName(), tableName, value);
+            traceMap.computeIfAbsent(id, t -> Pair.of(trace, new ArrayList<>()));
+        } else buildTraceWithParent(tableName, traceRuleBO, parentTraceRuleBO, entity, columnFieldMap, traceMap);
+        return traceMap;
+    }
+
+    private void buildTraceWithParent(String tableName,
+                                      TraceRuleBO traceRuleBO,
+                                      TraceRuleBO parentTraceRuleBO,
+                                      BaseEntity entity,
+                                      Map<String, Field> columnFieldMap,
+                                      Map<Serializable, Pair<A, List<B>>> traceMap) throws IllegalAccessException {
+        String id = entity.getId();
+        TableInfo parentTableInfo = TableInfoHelper.getTableInfo(tableName);
+        String parentKey = traceRuleBO.getParentKey();
+        Object parentPkObj = columnFieldMap.get(parentKey).get(entity);
+        if (parentTableInfo == null || CharSequenceUtil.isBlank(parentKey)) {
+            String value = columnFieldMap.get(traceRuleBO.getNameKey()).get(entity).toString();
+            A trace = newTrace(SqlCommandType.INSERT, id, traceRuleBO.getName(), tableName, value);
+            traceMap.computeIfAbsent(id, t -> Pair.of(trace, new ArrayList<>()));
+        } else if (parentPkObj instanceof Serializable parentPk) {
+            Object nameValue = columnFieldMap.get(traceRuleBO.getNameKey()).get(entity);
+            String name = nameValue != null ? nameValue.toString() : CharSequenceUtil.EMPTY;
+            String namePrefix = traceRuleBO.getName() + name + "的";
+            for (Map.Entry<String, Field> entry : columnFieldMap.entrySet()) {
+                String fieldName = traceRuleBO.getDetail().get(entry.getKey());
+                Object newValue = entry.getValue().get(entity);
+                if (fieldName == null || newValue == null) {
+                    continue;
                 }
+                B traceDetail = newTraceDetail(id, namePrefix + "“" + fieldName + "”", tableName + StrPool.DOT + entry.getKey(), (newValue instanceof JSON json) ? json.toJSONString() : newValue.toString());
+                traceMap.computeIfAbsent(parentPk, k -> generateTraceForChild(parentPk, parentTraceRuleBO, parentTableInfo)).getValue().add(traceDetail);
             }
         }
-        return traceMap;
+    }
+
+    private Pair<A, List<B>> generateTraceForChild(Serializable parentPk, TraceRuleBO parentTraceRuleBO, TableInfo parentTableInfo) {
+        A t = getByTraceAndBiz(MDC.get(FunCoreLogAutoConfiguration.TRACE_ID), parentPk);
+        if (t != null) {
+            return Pair.of(t, new ArrayList<>());
+        }
+        String currentNamespace = parentTableInfo.getCurrentNamespace();
+        BaseEntity parent = getParent(parentPk, currentNamespace);
+        String parentValue = null;
+        Optional<TableFieldInfo> parentNameTableFieldInfo =
+            parentTableInfo.getFieldList().stream().filter(tableFieldInfo ->
+                    tableFieldInfo.getColumn().equalsIgnoreCase(parentTraceRuleBO.getNameKey()))
+                .findAny();
+        if (parentNameTableFieldInfo.isPresent()) {
+            try {
+                parentValue = parentNameTableFieldInfo.get().getField().get(parent).toString();
+            } catch (Exception e) {
+                StaticLog.warn("", e);
+            }
+        }
+        return Pair.of(newTrace(SqlCommandType.UPDATE, parent.getId(), parentTraceRuleBO.getName(), parentTableInfo.getTableName(), parentValue), new ArrayList<>());
     }
 
     /**

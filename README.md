@@ -21,9 +21,7 @@ fun-framework-java
 | [fun-framework-all](fun-framework-all)                 | 用于简化引用所有模块           | [README.md](fun-framework-all%2FREADME.md)         |
 | [fun-framework-core](fun-framework-core)               | 核心基础代码               | [README.md](fun-framework-core%2FREADME.md)        |
 | [fun-framework-cache-redis](fun-framework-cache-redis) | redis缓存模块            | [README.md](fun-framework-cache-redis%2FREADME.md) |
-| [fun-framework-exception](fun-framework-exception)     | 异常处理模块               | [README.md](fun-framework-exception%2FREADME.md)   |
 | [fun-framework-jasypt](fun-framework-jasypt)           | 主要用于对配置文件加密          | [README.md](fun-framework-jasypt%2FREADME.md)      |
-| [fun-framework-log](fun-framework-log)                 | 日志模块                 | [README.md](fun-framework-log%2FREADME.md)         |
 | [fun-framework-mp](fun-framework-mp)                   | MyBatis-Plus         | [README.md](fun-framework-mp%2FREADME.md)          |
 | [fun-framework-sentinel](fun-framework-sentinel)       | sentinel防控模块         | [README.md](fun-framework-sentinel%2FREADME.md)    |
 | [fun-framework-spring-doc](fun-framework-spring-doc)   | 用于生成接口文档-基于springdoc | [README.md](fun-framework-spring-doc%2FREADME.md)  |

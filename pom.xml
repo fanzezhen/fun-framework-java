@@ -10,8 +10,7 @@
   <version>${revision}</version>
 
   <properties>
-    <com.github.fanzezhen.jdk8.version>0.0.3.4</com.github.fanzezhen.jdk8.version>
-    <revision>3.4.3.3</revision>
+    <revision>3.4.3.4</revision>
     <app.server>-tomcat</app.server>
     <ch.qos.logback.version>1.2.3</ch.qos.logback.version>
     <cn.hutool.version>5.8.28</cn.hutool.version>
@@ -57,7 +56,6 @@
     <org.apache.poi.version>5.2.5</org.apache.poi.version>
     <org.bouncycastle.bcprov-jdk15on.version>1.70</org.bouncycastle.bcprov-jdk15on.version>
     <org.hibernate.validator.version>8.0.1.Final</org.hibernate.validator.version>
-    <org.junit.jupiter.version>5.12.0</org.junit.jupiter.version>
     <org.projectlombok.version>1.18.36</org.projectlombok.version>
     <org.redisson.version>3.23.2</org.redisson.version>
     <org.reflections.version>0.9.12</org.reflections.version>
@@ -114,27 +112,57 @@
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-all</artifactId>
-        <version>${revision}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-core</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-exception</artifactId>
+        <artifactId>fun-framework-core-all</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-jasypt</artifactId>
+        <artifactId>fun-framework-core-cache</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-log</artifactId>
+        <artifactId>fun-framework-core-context</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-core-data</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-core-exception</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-core-jasypt</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-core-log</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-core-model</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-core-thread</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-core-verify</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
@@ -529,12 +557,6 @@
         <version>${org.hibernate.validator.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-engine</artifactId>
-        <version>${org.junit.jupiter.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
         <groupId>org.redisson</groupId>
         <artifactId>redisson</artifactId>
         <version>${org.redisson.version}</version>
@@ -554,11 +576,6 @@
         <groupId>org.springdoc</groupId>
         <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         <version>${org.springdoc.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-webmvc</artifactId>
-        <version>${org.springframework.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.velocity</groupId>
@@ -640,19 +657,14 @@
   </dependencyManagement>
 
   <modules>
-    <module>fun-framework-all</module>
     <module>fun-framework-core</module>
     <module>fun-framework-api-count-redis</module>
     <module>fun-framework-cache-redis</module>
-    <module>fun-framework-exception</module>
-    <module>fun-framework-log</module>
-    <module>fun-framework-jasypt</module>
     <module>fun-framework-mp</module>
     <module>fun-framework-mp-trace</module>
     <module>fun-framework-mp-trace-impl</module>
     <module>fun-framework-sentinel</module>
     <module>fun-framework-spring-doc</module>
-    <module>fun-framework-web</module>
   </modules>
 
   <name>${project.groupId}.${project.artifactId}</name>

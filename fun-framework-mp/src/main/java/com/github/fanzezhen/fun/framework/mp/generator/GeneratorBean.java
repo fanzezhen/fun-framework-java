@@ -3,7 +3,6 @@ package com.github.fanzezhen.fun.framework.mp.generator;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.github.fanzezhen.fun.framework.core.constant.MpConstant;
 import com.github.fanzezhen.fun.framework.mp.base.entity.BaseEntity;
 import lombok.Data;
 import lombok.experimental.Accessors;

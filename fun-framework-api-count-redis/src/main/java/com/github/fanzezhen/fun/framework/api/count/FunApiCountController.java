@@ -27,8 +27,7 @@ import java.util.Map;
  * 接口统计 接口
  *
  * @author fanzezhen
- * @createTime 2024-09-18 10:39:24
- * @since 2.7.1
+ * @since 3.4.3.3
  */
 @Slf4j
 @RestController
@@ -63,7 +62,7 @@ public class FunApiCountController {
         response.setContentType("application/force-download");
         // 设置文件名
         response.addHeader("Content-Disposition", "attachment;fileName=" +
-                new String(file.getName().getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
+            new String(file.getName().getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
         byte[] buffer = new byte[1024];
         try (FileInputStream fis = new FileInputStream(file);
              BufferedInputStream bis = new BufferedInputStream(fis)) {

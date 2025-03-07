@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.github.fanzezhen.fun.framework.mp.base.entity.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.ibatis.mapping.SqlCommandType;
@@ -13,9 +14,9 @@ import org.apache.ibatis.mapping.SqlCommandType;
  * 痕迹表
  *
  * @author fanzezhen
- * @createTime 2025-01-13 17:12:18
  * @since 3.4.3.1
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor

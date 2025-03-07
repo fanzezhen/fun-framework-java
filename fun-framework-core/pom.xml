@@ -2,15 +2,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>fun-framework-java</artifactId>
     <groupId>com.github.fanzezhen</groupId>
     <version>${revision}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
   <artifactId>fun-framework-core</artifactId>
-  <name>${project.groupId}.${project.artifactId}</name>
+  <name>${project.artifactId}</name>
+  <packaging>pom</packaging>
+  <modules>
+    <module>fun-framework-core-all</module>
+    <module>fun-framework-core-context</module>
+    <module>fun-framework-core-model</module>
+    <module>fun-framework-core-exception</module>
+    <module>fun-framework-core-cache</module>
+    <module>fun-framework-core-data</module>
+    <module>fun-framework-core-thread</module>
+    <module>fun-framework-core-log</module>
+    <module>fun-framework-core-jasypt</module>
+    <module>fun-framework-core-verify</module>
+    <module>fun-framework-core-web</module>
+  </modules>
 
   <dependencies>
     <dependency>
@@ -40,6 +54,11 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-logging</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.springdoc</groupId>
@@ -98,10 +117,6 @@
     <dependency>
       <groupId>io.projectreactor.addons</groupId>
       <artifactId>reactor-extra</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.aspectj</groupId>

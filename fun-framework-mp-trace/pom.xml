@@ -15,11 +15,11 @@
   <dependencies>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-log</artifactId>
+      <artifactId>fun-framework-mp</artifactId>
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-mp</artifactId>
+      <artifactId>fun-framework-core-log</artifactId>
     </dependency>
   </dependencies>
 </project>

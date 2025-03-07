@@ -2,7 +2,7 @@ package com.github.fanzezhen.fun.framework.redis;
 
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
-import com.github.fanzezhen.fun.framework.core.service.LockService;
+import com.github.fanzezhen.fun.framework.core.cache.LockService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
@@ -42,7 +42,8 @@ public class FunRedisLockServiceImpl implements LockService {
                 log.info("没有获取到锁，等待时间结束:{}", key);
             }
         } catch (InterruptedException e) {
-            log.info("redis锁错误:{},{}", e, key);
+            log.warn("redis锁错误:{},{}", e, key);
+            Thread.currentThread().interrupt(); // 重新中断当前线程
             throw new ServiceException(CoreExceptionEnum.SERVICE_ERROR.getCode(), "redis锁错误" + key + e.getLocalizedMessage());
         }
         throw new ServiceException(CoreExceptionEnum.SERVICE_ERROR.getCode(), "没有获取到锁，等待时间结束" + key + "：" + waitTime + "：" + timeUnit);

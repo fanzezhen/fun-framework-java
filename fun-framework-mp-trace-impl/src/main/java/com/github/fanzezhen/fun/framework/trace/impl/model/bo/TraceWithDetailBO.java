@@ -1,6 +1,7 @@
 package com.github.fanzezhen.fun.framework.trace.impl.model.bo;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
  * @author fanzezhen
  * @since 3.4.3.1
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor

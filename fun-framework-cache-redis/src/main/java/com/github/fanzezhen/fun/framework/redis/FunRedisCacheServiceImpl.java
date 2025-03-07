@@ -1,6 +1,6 @@
 package com.github.fanzezhen.fun.framework.redis;
 
-import com.github.fanzezhen.fun.framework.core.service.CacheService;
+import com.github.fanzezhen.fun.framework.core.cache.CacheService;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;

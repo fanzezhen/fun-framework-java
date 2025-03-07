@@ -2,6 +2,7 @@ package com.github.fanzezhen.fun.framework.trace.impl.model.bo;
 
 import com.github.fanzezhen.fun.framework.core.model.bo.BaseBO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.ibatis.mapping.SqlCommandType;
@@ -12,6 +13,7 @@ import org.apache.ibatis.mapping.SqlCommandType;
  * @author fanzezhen
  * @since 3.4.3.1
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
