@@ -12,7 +12,6 @@ import lombok.Getter;
  */
 public enum FunFrameworkExceptionEnum implements AbstractBaseExceptionEnum {
 
-    ASYNC_ERROR(100100, "数据在被别人修改，请稍后重试"),
     ASYNC_ERROR_THREAD_TERMINATE_ABNORMALLY(100101, "异步错误，线程终止异常：%s");
 
     FunFrameworkExceptionEnum(int code, String message) {

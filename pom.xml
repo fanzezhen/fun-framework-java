@@ -642,16 +642,17 @@
   <modules>
     <module>fun-framework-all</module>
     <module>fun-framework-core</module>
+    <module>fun-framework-api-count-redis</module>
+    <module>fun-framework-cache-redis</module>
     <module>fun-framework-exception</module>
     <module>fun-framework-log</module>
+    <module>fun-framework-jasypt</module>
     <module>fun-framework-mp</module>
-    <module>fun-framework-cache-redis</module>
+    <module>fun-framework-mp-trace</module>
+    <module>fun-framework-mp-trace-impl</module>
     <module>fun-framework-sentinel</module>
     <module>fun-framework-spring-doc</module>
     <module>fun-framework-web</module>
-    <module>fun-framework-jasypt</module>
-    <module>fun-framework-mp-trace</module>
-    <module>fun-framework-mp-trace-impl</module>
   </modules>
 
   <name>${project.groupId}.${project.artifactId}</name>

@@ -1,0 +1,11 @@
+{
+  "properties": [
+    {
+      "sourceType": "com.github.fanzezhen.fun.framework.log.support.web.LogPrintFilter",
+      "name": "fun.log.level",
+      "defaultValue": "DEBUG",
+      "description": "日志级别.",
+      "type": "java.lang.String"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "properties": [
+    {
+      "sourceType": "com.github.fanzezhen.fun.framework.api.count.FunApiCountController",
+      "name": "fun.api.count.web.enabled",
+      "defaultValue": false,
+      "description": "是否注册controller接口.",
+      "type": "java.lang.Boolean"
+    }
+  ]
+}
