@@ -9,7 +9,7 @@
     <version>${revision}</version>
   </parent>
 
-  <artifactId>fun-framework-mp-trace</artifactId>
+  <artifactId>fun-framework-mp-trace-impl</artifactId>
   <name>${project.groupId}.${project.artifactId}</name>
 
   <dependencies>
@@ -19,7 +19,7 @@
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-mp</artifactId>
+      <artifactId>fun-framework-mp-trace</artifactId>
     </dependency>
   </dependencies>
 </project>

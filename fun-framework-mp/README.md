@@ -1,4 +1,4 @@
-fun-framework-cache-redis
+fun-framework-mp
 ------------------------------------------
 Mybatis-plus配置模块
 

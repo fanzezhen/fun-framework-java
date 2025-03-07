@@ -11,7 +11,7 @@
 
   <properties>
     <com.github.fanzezhen.jdk8.version>0.0.3.4</com.github.fanzezhen.jdk8.version>
-    <revision>3.4.3.2</revision>
+    <revision>3.4.3.3</revision>
     <app.server>-tomcat</app.server>
     <ch.qos.logback.version>1.2.3</ch.qos.logback.version>
     <cn.hutool.version>5.8.28</cn.hutool.version>
@@ -145,6 +145,11 @@
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-mp-trace</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-mp-trace-impl</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
@@ -646,6 +651,7 @@
     <module>fun-framework-web</module>
     <module>fun-framework-jasypt</module>
     <module>fun-framework-mp-trace</module>
+    <module>fun-framework-mp-trace-impl</module>
   </modules>
 
   <name>${project.groupId}.${project.artifactId}</name>

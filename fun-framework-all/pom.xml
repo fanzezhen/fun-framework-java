@@ -13,11 +13,6 @@
   <artifactId>fun-framework-all</artifactId>
   <name>${project.groupId}.${project.artifactId}</name>
 
-  <properties>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
   <dependencies>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
@@ -25,7 +20,15 @@
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
+      <artifactId>fun-framework-cache-redis</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.fanzezhen</groupId>
       <artifactId>fun-framework-exception</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.fanzezhen</groupId>
+      <artifactId>fun-framework-jasypt</artifactId>
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
@@ -34,10 +37,6 @@
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
       <artifactId>fun-framework-mp</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-cache-redis</artifactId>
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>

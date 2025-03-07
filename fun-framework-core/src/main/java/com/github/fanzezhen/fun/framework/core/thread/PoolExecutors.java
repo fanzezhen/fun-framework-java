@@ -35,6 +35,9 @@ public class PoolExecutors {
             new ThreadPoolExecutor.CallerRunsPolicy());
     }
 
+    public static ThreadPoolTaskExecutor newThreadPoolTaskExecutor(String name, int coreSize, int maxSize) {
+        return newThreadPoolTaskExecutor(name, coreSize, maxSize, null, null, ThreadPoolConfig.getTaskDecorator(), null, null);
+    }
     public static ThreadPoolExecutor computeThreadPoolExecutor(String name,
                                                                int coreSize,
                                                                int maxSize,

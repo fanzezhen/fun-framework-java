@@ -1,0 +1,11 @@
+{
+  "properties": [
+    {
+      "sourceType": "com.github.fanzezhen.fun.framework.trace.impl.controller.TraceController",
+      "name": "fun.trace.api.enabled",
+      "defaultValue": true,
+      "description": "是否注册controller接口.",
+      "type": "java.lang.Boolean"
+    }
+  ]
+}
