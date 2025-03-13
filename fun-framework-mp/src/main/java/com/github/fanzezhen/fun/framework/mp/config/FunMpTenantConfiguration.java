@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.annotation.Resource;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Configuration
 @ConditionalOnProperty(value = "fun.mp.tenant.enabled", havingValue = "true")

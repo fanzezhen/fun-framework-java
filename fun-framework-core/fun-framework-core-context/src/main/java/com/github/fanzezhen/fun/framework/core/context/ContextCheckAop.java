@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Slf4j
 @Aspect

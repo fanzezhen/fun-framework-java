@@ -3,7 +3,7 @@ package com.github.fanzezhen.fun.framework.core.model.bean;
 import lombok.Data;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Data
 public class SwaggerRequestParameter {

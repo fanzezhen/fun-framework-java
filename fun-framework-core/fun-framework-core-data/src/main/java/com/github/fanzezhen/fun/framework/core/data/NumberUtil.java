@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 public class NumberUtil {
     private NumberUtil() {

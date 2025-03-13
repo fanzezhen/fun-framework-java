@@ -10,7 +10,7 @@
   <version>${revision}</version>
 
   <properties>
-    <revision>3.4.3.4</revision>
+    <revision>3.4.3.5</revision>
     <app.server>-tomcat</app.server>
     <ch.qos.logback.version>1.2.3</ch.qos.logback.version>
     <cn.hutool.version>5.8.28</cn.hutool.version>
@@ -37,6 +37,7 @@
     <io.jaegertracing.version>1.6.0</io.jaegertracing.version>
     <io.jsonwebtoken.version>0.9.1</io.jsonwebtoken.version>
     <io.projectreactor.version>3.4.7</io.projectreactor.version>
+    <ma.glasnost.orika.version>1.5.4</ma.glasnost.orika.version>
     <io.springfox.version>3.0.0</io.springfox.version>
     <javax.annotation.version>1.3.2</javax.annotation.version>
     <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
@@ -183,6 +184,26 @@
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-cache-redis</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-proxy-core</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-proxy-fastjson</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-proxy-mybatis</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-proxy-orika</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
@@ -472,6 +493,11 @@
         <scope>test</scope>
         <version>${io.projectreactor.version}</version>
       </dependency>
+      <dependency>
+        <groupId>ma.glasnost.orika</groupId>
+        <artifactId>orika-core</artifactId>
+        <version>${ma.glasnost.orika.version}</version>
+      </dependency>
       <!--net-->
       <dependency>
         <groupId>net.lingala.zip4j</groupId>
@@ -665,6 +691,7 @@
     <module>fun-framework-mp-trace-impl</module>
     <module>fun-framework-sentinel</module>
     <module>fun-framework-spring-doc</module>
+    <module>fun-framework-proxy</module>
   </modules>
 
   <name>${project.groupId}.${project.artifactId}</name>

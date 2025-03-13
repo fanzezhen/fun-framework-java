@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Slf4j
 @Aspect

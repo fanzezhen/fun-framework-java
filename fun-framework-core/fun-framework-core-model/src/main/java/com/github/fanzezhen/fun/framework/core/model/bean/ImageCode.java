@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Data
 public class ImageCode {

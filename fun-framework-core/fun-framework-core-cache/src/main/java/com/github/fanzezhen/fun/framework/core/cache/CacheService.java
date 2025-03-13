@@ -3,7 +3,7 @@ package com.github.fanzezhen.fun.framework.core.cache;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 public interface CacheService {
     /**

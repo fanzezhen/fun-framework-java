@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.core.model.tree;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 public class BinarySearchTree<T extends Comparable<T>> {
     private BinaryNode<T> root;

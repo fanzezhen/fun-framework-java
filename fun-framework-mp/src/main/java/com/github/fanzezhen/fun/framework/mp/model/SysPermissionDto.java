@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

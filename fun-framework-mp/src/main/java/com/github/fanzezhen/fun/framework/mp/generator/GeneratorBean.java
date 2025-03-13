@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Slf4j
 @Accessors(chain = true)

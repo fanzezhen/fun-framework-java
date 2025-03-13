@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Slf4j
 public class LogTreadFactory implements ThreadFactory {

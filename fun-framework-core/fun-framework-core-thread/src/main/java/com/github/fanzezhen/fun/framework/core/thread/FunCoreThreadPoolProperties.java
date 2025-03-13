@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Data
 @RefreshScope

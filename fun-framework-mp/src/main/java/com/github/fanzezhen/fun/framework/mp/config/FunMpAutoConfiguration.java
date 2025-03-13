@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Configuration
 @ComponentScan("com.github.fanzezhen.fun.framework.mp")

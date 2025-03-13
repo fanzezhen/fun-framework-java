@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 日志管理器
  *
- * @author zezhen.fan
+ * @author fanzezhen
  */
 public class LogManager {
 

@@ -24,7 +24,7 @@ import cn.hutool.cache.impl.TimedCache;
 /**
  * 缓存的key 常量
  *
- * @author zezhen.fan
+ * @author fanzezhen
  */
 public interface CacheConstant {
 

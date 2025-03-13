@@ -2,7 +2,7 @@ package com.github.fanzezhen.fun.framework.core.model.enums;
 
 /**
  * 权限类型枚举类
- * @author zezhen.fan
+ * @author fanzezhen
  */
 public enum PermissionTypeEnum {
     /**

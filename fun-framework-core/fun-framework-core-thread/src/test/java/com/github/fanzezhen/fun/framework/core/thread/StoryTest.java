@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Slf4j
 @Disabled
@@ -27,7 +27,7 @@ class StoryTest {
     @Disabled("手动调用")
      void testChapters() throws InterruptedException {
         String separator = "、";
-        String originFilename = "D:\\Users\\zezhen.fan\\Documents\\Tencent Files\\842618916\\FileRecv\\MobileFile\\会说话的肘子-第一序列.txt";
+        String originFilename = "D:\\Users\\fanzezhen\\Documents\\Tencent Files\\842618916\\FileRecv\\MobileFile\\会说话的肘子-第一序列.txt";
         String targetFilename = originFilename.substring(0, originFilename.lastIndexOf(StrPool.DOT)) + StrPool.DOT + DateUtil.format(new DateTime(), DatePattern.CHINESE_DATE_TIME_FORMAT) + originFilename.substring(originFilename.lastIndexOf(StrPool.DOT));
         FileWriter fileWriter = new FileWriter(FileUtil.touch(targetFilename));
         FileReader fileReader = new FileReader(originFilename);

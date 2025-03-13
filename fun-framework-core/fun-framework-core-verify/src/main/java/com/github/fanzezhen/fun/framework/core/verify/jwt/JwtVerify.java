@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 /**
  * JWT校验
  *
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

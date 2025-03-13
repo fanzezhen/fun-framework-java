@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * 全局异常处理
  *
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Slf4j
 @Component

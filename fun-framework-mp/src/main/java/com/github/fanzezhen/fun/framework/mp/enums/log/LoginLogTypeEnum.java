@@ -6,7 +6,7 @@ import lombok.Getter;
 
 /**
  * 登录日志类型枚举
- * @author zezhen.fan
+ * @author fanzezhen
  */
 public enum LoginLogTypeEnum {
     /**

@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * 全局的异常处理器
  *
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Slf4j
 @RestControllerAdvice

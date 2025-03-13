@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Slf4j
 public class ServletUtil {

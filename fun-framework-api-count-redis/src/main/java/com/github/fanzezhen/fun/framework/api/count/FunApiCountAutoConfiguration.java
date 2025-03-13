@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Configuration
 @ComponentScan("com.github.fanzezhen.fun.framework.api.count")

@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 /**
  * 禁止并发
  *
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

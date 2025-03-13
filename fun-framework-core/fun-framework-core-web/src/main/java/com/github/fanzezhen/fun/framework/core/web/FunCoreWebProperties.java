@@ -7,7 +7,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import java.util.Set;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Data
 @RefreshScope

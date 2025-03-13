@@ -6,7 +6,7 @@ import com.github.fanzezhen.fun.framework.core.model.ClassInfoBean;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 public class SingletonUtil {
     private SingletonUtil() {

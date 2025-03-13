@@ -14,7 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Configuration
 @ComponentScan("com.github.fanzezhen.fun.framework.trace")

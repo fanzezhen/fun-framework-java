@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.mp.generator;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @SuppressWarnings("unused")
 public class MpConstant {

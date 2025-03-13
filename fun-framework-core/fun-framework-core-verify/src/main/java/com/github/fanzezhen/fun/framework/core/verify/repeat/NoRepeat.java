@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 防止重复提交注解
  *
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

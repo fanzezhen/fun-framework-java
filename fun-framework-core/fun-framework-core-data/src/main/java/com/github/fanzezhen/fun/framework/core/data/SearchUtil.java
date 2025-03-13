@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.core.data;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  * Desc:
  */
 public class SearchUtil {

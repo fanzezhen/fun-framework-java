@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 public enum TableFieldEnum {
     /**

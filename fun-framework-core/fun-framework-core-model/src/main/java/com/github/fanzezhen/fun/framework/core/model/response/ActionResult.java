@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * 响应信息主体
  *
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Data
 @ToString

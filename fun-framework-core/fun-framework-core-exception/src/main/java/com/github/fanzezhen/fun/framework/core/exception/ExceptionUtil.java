@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 public class ExceptionUtil {
     private ExceptionUtil() {

@@ -23,7 +23,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Configuration
 public class JacksonConfig {

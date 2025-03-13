@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 public enum SexEnum {
     /**

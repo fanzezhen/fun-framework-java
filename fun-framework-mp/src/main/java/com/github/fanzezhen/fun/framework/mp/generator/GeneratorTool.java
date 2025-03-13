@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.generator.config.*;
 import java.util.Collections;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 public class GeneratorTool {
     private GeneratorTool() {

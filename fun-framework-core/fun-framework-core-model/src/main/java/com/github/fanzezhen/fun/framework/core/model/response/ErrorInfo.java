@@ -10,7 +10,7 @@ import org.springframework.web.ErrorResponseException;
 import java.io.Serializable;
 
 /**
- * @author zezhen.fan
+ * @author fanzezhen
  */
 @Data
 @NoArgsConstructor
