@@ -263,8 +263,14 @@ public class SysContextHolder {
         CONTEXT_MAP.remove();
     }
 
-    public static void remove(String key) {
-        getContextMap().remove(key);
+    public static Object remove(String key) {
+        return getContextMap().remove(key);
+    }
+
+    public static void put(Map<String, Object> contextMap) {
+        if (contextMap != null) {
+            contextMap.forEach(SysContextHolder::set);
+        }
     }
 
     public static String getHeaderJsonStr(String[] headerArgs) {

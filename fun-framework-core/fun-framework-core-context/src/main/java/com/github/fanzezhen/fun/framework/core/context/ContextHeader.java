@@ -14,6 +14,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Documented
-public @interface ContextCheck {
-    String[] headers() ;
+public @interface ContextHeader {
+    /**
+     * 需校验的请求头
+     */
+    String[] required() default {};
+
+    /**
+     * 需隐藏的请求头
+     */
+    String[] hidden() default {};
 }
