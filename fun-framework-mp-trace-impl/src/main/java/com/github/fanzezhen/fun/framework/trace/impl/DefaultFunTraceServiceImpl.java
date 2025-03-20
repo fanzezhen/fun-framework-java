@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -41,14 +40,6 @@ public class DefaultFunTraceServiceImpl implements IFunTraceService<TraceEntity,
     @Override
     public TraceRuleBO getTraceRule(String tableName) {
         return funTraceProperties.getRules().get(tableName);
-    }
-
-    /**
-     * 根据上下文id和业务id查询
-     */
-    @Override
-    public TraceEntity getByTraceAndBiz(String traceId, Serializable businessId) {
-        return dao.getByTraceAndBiz(traceId, businessId);
     }
 
     /**

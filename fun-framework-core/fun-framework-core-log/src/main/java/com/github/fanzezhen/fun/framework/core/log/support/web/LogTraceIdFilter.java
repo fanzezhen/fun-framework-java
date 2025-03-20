@@ -1,6 +1,8 @@
 package com.github.fanzezhen.fun.framework.core.log.support.web;
 
 import cn.hutool.core.lang.UUID;
+import com.github.fanzezhen.fun.framework.core.context.ContextConstant;
+import com.github.fanzezhen.fun.framework.core.context.SysContextHolder;
 import com.github.fanzezhen.fun.framework.core.log.config.FunCoreLogAutoConfiguration;
 import com.github.fanzezhen.fun.framework.core.log.support.LogSysContextTaskDecorator;
 import jakarta.servlet.*;
@@ -18,7 +20,6 @@ import java.io.IOException;
  * TraceId 过滤器
  *
  * @author fanzezhen
- * @createTime 2024/2/1 17:40
  * @since 3.1.7
  */
 @Slf4j
@@ -34,7 +35,9 @@ public class LogTraceIdFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        MDC.put(FunCoreLogAutoConfiguration.TRACE_ID, UUID.fastUUID().toString(true));
+        String traceId = UUID.fastUUID().toString(true);
+        MDC.put(ContextConstant.KEY_TRACE_ID, traceId);
+        SysContextHolder.setTraceId(traceId);
         try {
             filterChain.doFilter(servletRequest, servletResponse);
         } finally {

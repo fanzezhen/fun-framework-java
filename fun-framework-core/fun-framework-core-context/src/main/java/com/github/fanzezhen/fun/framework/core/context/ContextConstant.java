@@ -19,7 +19,7 @@ public class ContextConstant {
     public static final String HEADER_USER_AGENT = "User-Agent";
 
     /***************公共header********************/
-    public static final String CONTEXT_HEADER_PREFIX = "common-header-";
+    public static final String CONTEXT_HEADER_PREFIX = "fun-header-";
     public static final String HEADER_TOKEN = CONTEXT_HEADER_PREFIX + "token";
 
     /**
@@ -81,11 +81,15 @@ public class ContextConstant {
      * 设备型号
      */
     public static final String HEADER_DEVICE = CONTEXT_HEADER_PREFIX + "Device";
+    /**
+     * 日志跟踪标识
+     */
+    public static final String KEY_TRACE_ID = "traceId";
 
     /**
      * TraceId
      */
-    public static final String HEADER_TRACE_ID = CONTEXT_HEADER_PREFIX + "TraceId";
+    public static final String HEADER_TRACE_ID = CONTEXT_HEADER_PREFIX + KEY_TRACE_ID;
 
     /**
      * NodeId

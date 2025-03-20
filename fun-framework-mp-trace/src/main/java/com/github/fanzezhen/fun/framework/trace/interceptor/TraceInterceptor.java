@@ -63,7 +63,7 @@ public class TraceInterceptor implements Interceptor {
                     if (traceRuleBO == null) {
                         return result;
                     }
-                        funTraceThreadPoolTaskExecutor.execute(()->funTraceService.traceOfInsert(tableName, traceRuleBO, parameter));
+                    funTraceThreadPoolTaskExecutor.execute(() -> funTraceService.traceOfInsert(tableName, traceRuleBO, parameter));
                 } catch (Exception e) {
                     log.warn("", e);
                 }

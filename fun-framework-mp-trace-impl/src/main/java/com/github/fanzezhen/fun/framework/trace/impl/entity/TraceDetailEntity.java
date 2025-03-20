@@ -20,8 +20,6 @@ import lombok.experimental.Accessors;
 @TableName(value = "fun_trace_detail", autoResultMap = true)
 public class TraceDetailEntity extends BaseEntity{
 
-    private static final long serialVersionUID = 1L;
-
     /**
      * 业务表ID
      */

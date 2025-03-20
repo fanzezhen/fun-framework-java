@@ -1,6 +1,7 @@
 package com.github.fanzezhen.fun.framework.core.log.support;
 
 import cn.hutool.core.text.CharSequenceUtil;
+import com.github.fanzezhen.fun.framework.core.context.ContextConstant;
 import com.github.fanzezhen.fun.framework.core.log.config.FunCoreLogAutoConfiguration;
 import com.github.fanzezhen.fun.framework.core.thread.decorator.SysContextTaskDecorator;
 import org.slf4j.MDC;
@@ -24,10 +25,10 @@ public class LogSysContextTaskDecorator extends SysContextTaskDecorator {
         return () -> {
             try {
                 MDC.setContextMap(map);
-                String traceId = MDC.get(FunCoreLogAutoConfiguration.TRACE_ID);
+                String traceId = MDC.get(ContextConstant.KEY_TRACE_ID);
                 if (CharSequenceUtil.isBlank(traceId)) {
                     traceId = UUID.randomUUID().toString();
-                    MDC.put(FunCoreLogAutoConfiguration.TRACE_ID, traceId);
+                    MDC.put(ContextConstant.KEY_TRACE_ID, traceId);
                 }
                 super.decorate(runnable).run();
             } finally {

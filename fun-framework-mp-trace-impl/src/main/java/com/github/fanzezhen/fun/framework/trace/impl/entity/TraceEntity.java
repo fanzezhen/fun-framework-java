@@ -23,8 +23,10 @@ import org.apache.ibatis.mapping.SqlCommandType;
 @TableName(value = "fun_trace", autoResultMap = true)
 public class TraceEntity extends BaseEntity{
 
-    private static final long serialVersionUID = 1L;
-
+    /**
+     * 父级id
+     */
+    private String pid;
     /**
      * 名称
      */
@@ -42,6 +44,7 @@ public class TraceEntity extends BaseEntity{
 
     /**
      * 操作类型
+     * 为UNKNOWN时为仅子表数据变更
      */
     private SqlCommandType type;
 

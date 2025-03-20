@@ -40,10 +40,6 @@ fun:
         name: 字典项
         # 痕迹主体的展示名字段（大写）
         name-key: NAME
-        # 关联的父表，如果有则当前表的修改只会出现在明细表中，痕迹主表会记录parent被修改，比如修改字典项时主表记录某某字典被修改，明细表记录字典项的修改
-        parent: sys_dict
-        # 关联父表用的字段，比如 sys_dict_item.dict_id 关联 sys_dict.id
-        parent-key: DICT_ID
         # 痕迹明细需要记录的字段，会在明细中记录旧值和新值
         detail:
           # 字段名（大写）

@@ -29,18 +29,6 @@ public class TraceRuleBO extends BaseBO<String> {
      */
     private String nameKey;
     /**
-     * 父级
-     */
-    private String parent;
-    /**
-     * 父级字段
-     */
-    private String parentKey;
-    /**
-     * 项目字段
-     */
-    private String projectKey;
-    /**
      * 明细字段
      */
     private Map<String, String> detail;

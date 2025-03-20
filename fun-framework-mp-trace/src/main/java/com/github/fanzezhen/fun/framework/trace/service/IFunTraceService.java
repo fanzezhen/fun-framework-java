@@ -2,23 +2,14 @@ package com.github.fanzezhen.fun.framework.trace.service;
 
 import cn.hutool.core.lang.Pair;
 import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.text.CharSequenceUtil;
-import cn.hutool.core.text.StrPool;
-import cn.hutool.core.util.ClassUtil;
-import cn.hutool.extra.spring.SpringUtil;
-import cn.hutool.log.StaticLog;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
-import com.github.fanzezhen.fun.framework.core.log.config.FunCoreLogAutoConfiguration;
-import com.github.fanzezhen.fun.framework.mp.base.IBaseMapper;
 import com.github.fanzezhen.fun.framework.mp.base.entity.BaseEntity;
 import com.github.fanzezhen.fun.framework.trace.model.bo.TraceRuleBO;
 import lombok.SneakyThrows;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.mapping.SqlCommandType;
-import org.slf4j.MDC;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -27,7 +18,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -42,11 +32,6 @@ public interface IFunTraceService<A extends BaseEntity, B> {
      * 获取痕迹规则
      */
     TraceRuleBO getTraceRule(String tableName);
-
-    /**
-     * 根据上下文id和业务id查询
-     */
-    A getByTraceAndBiz(String traceId, Serializable businessId);
 
     /**
      * 保存痕迹记录
@@ -121,7 +106,6 @@ public interface IFunTraceService<A extends BaseEntity, B> {
      */
     @SneakyThrows
     default void traceOfInsert(String tableName, TraceRuleBO traceRuleBO, Object parameter) {
-        TraceRuleBO parentTraceRuleBO = getTraceRule(traceRuleBO.getParent());
         TableInfo tableInfo = TableInfoHelper.getTableInfo(tableName);
         List<TableFieldInfo> fieldList = tableInfo.getFieldList();
         Map<String, Field> columnFieldMap = fieldList.stream().collect(Collectors.toMap(tableFieldInfo ->
@@ -131,7 +115,6 @@ public interface IFunTraceService<A extends BaseEntity, B> {
             buildTrace(
                 tableName,
                 traceRuleBO,
-                parentTraceRuleBO,
                 parameterBaseEntity,
                 columnFieldMap,
                 traceMap);
@@ -143,7 +126,6 @@ public interface IFunTraceService<A extends BaseEntity, B> {
                         buildTrace(
                             tableName,
                             traceRuleBO,
-                            parentTraceRuleBO,
                             argItemBaseEntity,
                             columnFieldMap,
                             traceMap);
@@ -157,16 +139,14 @@ public interface IFunTraceService<A extends BaseEntity, B> {
     /**
      * 构建痕迹数据
      *
-     * @param tableName         表名
-     * @param traceRuleBO       痕迹规则
-     * @param parentTraceRuleBO 父级痕迹规则
-     * @param entity            当前实体
-     * @param columnFieldMap    字段名称与字段的映射
-     * @param traceMap          已收集的痕迹数据
+     * @param tableName      表名
+     * @param traceRuleBO    痕迹规则
+     * @param entity         当前实体
+     * @param columnFieldMap 字段名称与字段的映射
+     * @param traceMap       已收集的痕迹数据
      */
     default Map<Serializable, Pair<A, List<B>>> buildTrace(String tableName,
                                                            TraceRuleBO traceRuleBO,
-                                                           TraceRuleBO parentTraceRuleBO,
                                                            BaseEntity entity,
                                                            Map<String, Field> columnFieldMap,
                                                            Map<Serializable, Pair<A, List<B>>> traceMap)
@@ -175,75 +155,10 @@ public interface IFunTraceService<A extends BaseEntity, B> {
             traceMap = new HashMap<>();
         }
         String id = entity.getId();
-        if (parentTraceRuleBO == null) {
-            String value = columnFieldMap.get(traceRuleBO.getNameKey()).get(entity).toString();
-            A trace = newTrace(SqlCommandType.INSERT, id, traceRuleBO.getName(), tableName, value);
-            traceMap.computeIfAbsent(id, t -> Pair.of(trace, new ArrayList<>()));
-        } else buildTraceWithParent(tableName, traceRuleBO, parentTraceRuleBO, entity, columnFieldMap, traceMap);
+        String value = columnFieldMap.get(traceRuleBO.getNameKey()).get(entity).toString();
+        A trace = newTrace(SqlCommandType.INSERT, id, traceRuleBO.getName(), tableName, value);
+        traceMap.computeIfAbsent(id, t -> Pair.of(trace, new ArrayList<>()));
         return traceMap;
-    }
-
-    private void buildTraceWithParent(String tableName,
-                                      TraceRuleBO traceRuleBO,
-                                      TraceRuleBO parentTraceRuleBO,
-                                      BaseEntity entity,
-                                      Map<String, Field> columnFieldMap,
-                                      Map<Serializable, Pair<A, List<B>>> traceMap) throws IllegalAccessException {
-        String id = entity.getId();
-        TableInfo parentTableInfo = TableInfoHelper.getTableInfo(tableName);
-        String parentKey = traceRuleBO.getParentKey();
-        Object parentPkObj = columnFieldMap.get(parentKey).get(entity);
-        if (parentTableInfo == null || CharSequenceUtil.isBlank(parentKey)) {
-            String value = columnFieldMap.get(traceRuleBO.getNameKey()).get(entity).toString();
-            A trace = newTrace(SqlCommandType.INSERT, id, traceRuleBO.getName(), tableName, value);
-            traceMap.computeIfAbsent(id, t -> Pair.of(trace, new ArrayList<>()));
-        } else if (parentPkObj instanceof Serializable parentPk) {
-            Object nameValue = columnFieldMap.get(traceRuleBO.getNameKey()).get(entity);
-            String name = nameValue != null ? nameValue.toString() : CharSequenceUtil.EMPTY;
-            String namePrefix = traceRuleBO.getName() + name + "的";
-            for (Map.Entry<String, Field> entry : columnFieldMap.entrySet()) {
-                String fieldName = traceRuleBO.getDetail().get(entry.getKey());
-                Object newValue = entry.getValue().get(entity);
-                if (fieldName == null || newValue == null) {
-                    continue;
-                }
-                B traceDetail = newTraceDetail(id, namePrefix + "“" + fieldName + "”", tableName + StrPool.DOT + entry.getKey(), (newValue instanceof JSON json) ? json.toJSONString() : newValue.toString());
-                traceMap.computeIfAbsent(parentPk, k -> generateTraceForChild(parentPk, parentTraceRuleBO, parentTableInfo)).getValue().add(traceDetail);
-            }
-        }
-    }
-
-    private Pair<A, List<B>> generateTraceForChild(Serializable parentPk, TraceRuleBO parentTraceRuleBO, TableInfo parentTableInfo) {
-        A t = getByTraceAndBiz(MDC.get(FunCoreLogAutoConfiguration.TRACE_ID), parentPk);
-        if (t != null) {
-            return Pair.of(t, new ArrayList<>());
-        }
-        String currentNamespace = parentTableInfo.getCurrentNamespace();
-        BaseEntity parent = getParent(parentPk, currentNamespace);
-        String parentValue = null;
-        Optional<TableFieldInfo> parentNameTableFieldInfo =
-            parentTableInfo.getFieldList().stream().filter(tableFieldInfo ->
-                    tableFieldInfo.getColumn().equalsIgnoreCase(parentTraceRuleBO.getNameKey()))
-                .findAny();
-        if (parentNameTableFieldInfo.isPresent()) {
-            try {
-                parentValue = parentNameTableFieldInfo.get().getField().get(parent).toString();
-            } catch (Exception e) {
-                StaticLog.warn("", e);
-            }
-        }
-        return Pair.of(newTrace(SqlCommandType.UPDATE, parent.getId(), parentTraceRuleBO.getName(), parentTableInfo.getTableName(), parentValue), new ArrayList<>());
-    }
-
-    /**
-     * 获取父级实体
-     *
-     * @param parentPk         父级主键
-     * @param currentNamespace 父级实体的mybatis命名空间
-     */
-    default BaseEntity getParent(Serializable parentPk, String currentNamespace) {
-        IBaseMapper<?> parentDao = SpringUtil.getBean(ClassUtil.loadClass(currentNamespace));
-        return parentDao.selectById(parentPk);
     }
 
 }
