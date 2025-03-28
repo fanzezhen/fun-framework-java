@@ -47,9 +47,9 @@ public class FunApiCountController {
     }
 
     /**
-     * 导出excel
+     * 根据YApi接口数据导出excel，报告为YApi中每个接口的访问次数和返回值各字段的空值率
      */
-    @PostMapping("/export/excel")
+    @PostMapping("/export/excel-by-y-api")
     public void exportExcel(@RequestBody List<YApiModel> yApiModelList, HttpServletResponse response) throws IOException {
         File file = webCountService.exportExcel(yApiModelList);
         response(response, file);
