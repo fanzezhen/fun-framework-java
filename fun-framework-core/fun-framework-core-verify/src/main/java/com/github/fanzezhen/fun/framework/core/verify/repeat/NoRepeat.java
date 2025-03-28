@@ -1,6 +1,6 @@
 package com.github.fanzezhen.fun.framework.core.verify.repeat;
 
-import com.github.fanzezhen.fun.framework.core.context.ContextConstant;
+import com.github.fanzezhen.fun.framework.core.context.properties.ContextConstant;
 
 import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;
@@ -18,7 +18,7 @@ public @interface NoRepeat {
 
     String[] paramArgs() default {};
 
-    String[] headerArgs() default {ContextConstant.HEADER_TENANT_ID};
+    String[] headerArgs() default {ContextConstant.DEFAULT_HEADER_TENANT_ID};
 
     TimeUnit timeUnit() default TimeUnit.SECONDS;
 

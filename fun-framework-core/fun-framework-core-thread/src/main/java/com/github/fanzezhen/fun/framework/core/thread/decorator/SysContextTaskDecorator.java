@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.core.thread.decorator;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.fanzezhen.fun.framework.core.context.SysContextHolder;
+import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.NonNull;
 
@@ -16,14 +16,14 @@ public class SysContextTaskDecorator implements ThreadPoolTaskDecorator {
     @Override
     public @NonNull Runnable decorate(@NonNull Runnable runnable) {
         Thread thread = Thread.currentThread();
-        JSONObject contextMap = SysContextHolder.getContextMap();
+        JSONObject contextMap = ContextHolder.getContextMap();
         return () -> {
             try {
-                SysContextHolder.setContextMap(contextMap);
+                ContextHolder.setContextMap(contextMap);
                 runnable.run();
             } finally {
                 if (Thread.currentThread() != thread) {
-                    SysContextHolder.clean();
+                    ContextHolder.clean();
                 }
             }
         };

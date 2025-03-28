@@ -1,4 +1,4 @@
-package com.github.fanzezhen.fun.framework.core.context;
+package com.github.fanzezhen.fun.framework.core.context.properties;
 
 import cn.stylefeng.roses.kernel.model.exception.AbstractBaseExceptionEnum;
 import lombok.Getter;

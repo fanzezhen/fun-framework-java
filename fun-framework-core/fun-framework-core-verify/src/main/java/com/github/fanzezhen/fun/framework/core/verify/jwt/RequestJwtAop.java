@@ -3,8 +3,8 @@ package com.github.fanzezhen.fun.framework.core.verify.jwt;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.jwt.JWT;
 import com.alibaba.fastjson.JSON;
-import com.github.fanzezhen.fun.framework.core.context.SysContextHolder;
-import com.github.fanzezhen.fun.framework.core.cache.CacheService;
+import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
+import com.github.fanzezhen.fun.framework.core.cache.service.CacheService;
 import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
 import com.github.fanzezhen.fun.framework.core.verify.FunCoreVerifyProperties;
 import jakarta.servlet.http.HttpServletRequest;
@@ -69,11 +69,11 @@ public class RequestJwtAop {
         String args = JSON.toJSONString(argList);
         log.info("验证JWT： url={}, Args={}", request.getRequestURL().toString(), args);
         JwtVerify jwtVerify = ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(JwtVerify.class);
-        String token = SysContextHolder.get(jwtVerify.header());
+        String token = ContextHolder.get(jwtVerify.header());
         if (CharSequenceUtil.isBlank(token)) {
             throw ExceptionUtil.wrapException("token不能为空");
         }
-        String account = cacheService.get(SysContextHolder.getAppId() + SysContextHolder.getTenantId() + "-jwt-" + token);
+        String account = cacheService.get(ContextHolder.getAppId() + ContextHolder.getTenantId() + "-jwt-" + token);
         if (CharSequenceUtil.isBlank(account)) {
             throw ExceptionUtil.wrapException("token is null or not exists");
         }
@@ -91,7 +91,7 @@ public class RequestJwtAop {
         }
         String tenantId = accountInfo.getTenantId();
         if (CharSequenceUtil.isNotEmpty(tenantId)) {
-            SysContextHolder.setTenantId(tenantId);
+            ContextHolder.setTenantId(tenantId);
         }
         log.info("验证JWT通过： url={}, Args={}", request.getRequestURL().toString(), args);
     }

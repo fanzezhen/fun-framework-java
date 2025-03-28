@@ -1,10 +1,10 @@
-package com.github.fanzezhen.fun.framework.core.cache.impl;
+package com.github.fanzezhen.fun.framework.core.cache.service.impl;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
-import com.github.fanzezhen.fun.framework.core.cache.CacheService;
-import com.github.fanzezhen.fun.framework.core.cache.LockService;
+import com.github.fanzezhen.fun.framework.core.cache.service.CacheService;
+import com.github.fanzezhen.fun.framework.core.cache.service.LockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.core.annotation.Order;
@@ -26,7 +26,7 @@ public class MemoryLockServiceImpl implements LockService {
     private CacheService memoryCacheServiceImpl;
 
     @Override
-    public <T> T lockKey(String key, long waitTime, TimeUnit timeUnit, Supplier<T> supplier) {
+    public <T> T lockAndExecute(Supplier<T> supplier, String key, long waitTime, TimeUnit timeUnit) {
         if (memoryCacheServiceImpl.get(key) != null) {
             try {
                 if (waitTime > 0) {

@@ -2,7 +2,7 @@ package com.github.fanzezhen.fun.framework.redis;
 
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
-import com.github.fanzezhen.fun.framework.core.cache.LockService;
+import com.github.fanzezhen.fun.framework.core.cache.service.LockService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
@@ -26,7 +26,7 @@ public class FunRedisLockServiceImpl implements LockService {
     RedissonClient redissonClient;
 
     @Override
-    public <T> T lockKey(String key, long waitTime, TimeUnit timeUnit, Supplier<T> supplier) {
+    public <T> T lockAndExecute(Supplier<T> supplier, String key, long waitTime, TimeUnit timeUnit) {
         RLock lock = redissonClient.getLock(key);
         try {
             boolean isLock = lock.tryLock(waitTime, timeUnit);

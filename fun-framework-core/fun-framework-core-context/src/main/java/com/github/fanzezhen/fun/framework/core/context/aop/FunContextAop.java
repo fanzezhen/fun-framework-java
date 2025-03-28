@@ -1,7 +1,10 @@
-package com.github.fanzezhen.fun.framework.core.context;
+package com.github.fanzezhen.fun.framework.core.context.aop;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
+import com.github.fanzezhen.fun.framework.core.context.properties.FunContextExceptionEnum;
+import com.github.fanzezhen.fun.framework.core.context.FunContextFilter;
 import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -20,13 +23,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Aspect
 @Component
-@ConditionalOnBean(SysContextFilter.class)
-public class ContextCheckAop {
+@ConditionalOnBean(FunContextFilter.class)
+public class FunContextAop {
 
     /**
      * 要处理的方法，包名+类名+方法名
      */
-    @Pointcut("@annotation(com.github.fanzezhen.fun.framework.core.context.ContextHeader)")
+    @Pointcut("@annotation(com.github.fanzezhen.fun.framework.core.context.aop.ContextHeader)")
     public void cut() {
     }
 
@@ -41,7 +44,7 @@ public class ContextCheckAop {
         ContextHeader annotation = ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(ContextHeader.class);
         if (annotation.required()!=null){
             for (String header : annotation.required()) {
-                String context = SysContextHolder.get(header);
+                String context = ContextHolder.get(header);
                 if (CharSequenceUtil.isEmpty(context)){
                     throw ExceptionUtil.wrapException(FunContextExceptionEnum.CONTEXT_HEADER_MISSING, header);
                 }
@@ -55,12 +58,12 @@ public class ContextCheckAop {
         if (annotation.hidden() != null) {
             context = new JSONObject(annotation.hidden().length);
             for (String header : annotation.hidden()) {
-                context.put(header, SysContextHolder.remove(header));
+                context.put(header, ContextHolder.remove(header));
             }
         }
         Object proceeded = joinPoint.proceed();
         if (context != null) {
-            SysContextHolder.put(context);
+            ContextHolder.put(context);
         }
         return proceeded;
     }

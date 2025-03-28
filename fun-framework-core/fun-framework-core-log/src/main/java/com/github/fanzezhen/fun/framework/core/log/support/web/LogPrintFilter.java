@@ -2,7 +2,7 @@ package com.github.fanzezhen.fun.framework.core.log.support.web;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson2.JSON;
-import com.github.fanzezhen.fun.framework.core.context.SysContextHolder;
+import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.servlet.*;
@@ -85,7 +85,7 @@ public class LogPrintFilter implements Filter {
 
     public void preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, Object handler) {
         if (!Objects.isNull(levelLogger)) {
-            SysContextHolder.set(REQUEST_START_TIME_KEY, System.currentTimeMillis());
+            ContextHolder.set(REQUEST_START_TIME_KEY, System.currentTimeMillis());
             Enumeration<String> headerNames = request.getHeaderNames();
             Map<String, String> headerMap = new HashMap<>();
             while (headerNames.hasMoreElements()) {
@@ -113,7 +113,7 @@ public class LogPrintFilter implements Filter {
                 headers.put(headerName, headerValue);
             }
             levelLogger.log("请求返回Headers：{}", headers);
-            long starTime = SysContextHolder.getLongOrZero(REQUEST_START_TIME_KEY);
+            long starTime = ContextHolder.getLongOrZero(REQUEST_START_TIME_KEY);
             levelLogger.log("请求总耗时：  {}毫秒", System.currentTimeMillis() - starTime);
             levelLogger.log("==================================调用结束=======================================");
         }

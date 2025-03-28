@@ -4,8 +4,8 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrPool;
 import com.alibaba.fastjson.JSON;
-import com.github.fanzezhen.fun.framework.core.context.SysContextHolder;
-import com.github.fanzezhen.fun.framework.core.cache.LockService;
+import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
+import com.github.fanzezhen.fun.framework.core.cache.service.LockService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +55,7 @@ public class NoConcurrentAop {
             return joinPoint.proceed();
         }
         String key = getKey(joinPoint, noConcurrent);
-        return lockService.lockKey(key, () -> {
+        return lockService.lockAndExecute(() -> {
             Object result;
             try {
                 result = joinPoint.proceed();
@@ -63,7 +63,7 @@ public class NoConcurrentAop {
                 throw ExceptionUtil.wrapRuntime(e);
             }
             return result;
-        });
+        }, key);
     }
 
     private String getKey(JoinPoint joinPoint, NoConcurrent noConcurrent) {
@@ -76,7 +76,7 @@ public class NoConcurrentAop {
             springApplicationName + StrPool.SLASH +
             "NoConcurrent" + StrPool.SLASH +
             joinPoint.getTarget().getClass().getName() + StrPool.DOT + joinPoint.getSignature().getName() + StrPool.SLASH +
-            paramKey + StrPool.SLASH + SysContextHolder.getHeaderJsonStr(noConcurrent.headerArgs());
+            paramKey + StrPool.SLASH + ContextHolder.getHeaderJsonStr(noConcurrent.headerArgs());
         log.info("key={}", key);
         return key;
     }

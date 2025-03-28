@@ -1,10 +1,24 @@
-fun-framework-cache-redis
+基于Redis实现的[fun-framework-core-cache](..%2Ffun-framework-core%2Ffun-framework-core-cache)
 ------------------------------------------
-Redis缓存模块
+
+# 功能介绍
+
+## CacheService
+
+使用redis缓存实现了[fun-framework-core](..%2Ffun-framework-core)
+中的[CacheService](..%2Ffun-framework-core%2Ffun-framework-core-cache%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fcore%2Fcache%2FCacheService.java)
+
+## LockService
+
+基于Redisson实现了[fun-framework-core](..%2Ffun-framework-core)
+中的[LockService](..%2Ffun-framework-core%2Ffun-framework-core-cache%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fcore%2Fcache%2FLockService.java)
+，使用前需要先引入Redisson
 
 # 快速开始
 
 ## 1. 添加依赖
+
+* 核心依赖
 
 ```xml
 
@@ -14,26 +28,13 @@ Redis缓存模块
 </dependency>
 ```
 
-## 2. 使用注解
+*
+可选依赖，用于使用Redisson实现[LockService](..%2Ffun-framework-core%2Ffun-framework-core-cache%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fcore%2Fcache%2FLockService.java)
 
-```java
-package demo;
+```xml
 
-import com.github.fanzezhen.fun.framework.redis.EnableFunRedisAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@EnableFunRedisAutoConfiguration
-@SpringBootApplication
-public class Application {
-  public static void main(String[] args) {
-    SpringApplication.run(SysWebApplication.class, args);
-  }
-}
-
+<dependency>
+  <groupId>org.redisson</groupId>
+  <artifactId>redisson</artifactId>
+</dependency>
 ```
-# 功能介绍
-## CacheService
-使用redis缓存实现了[fun-framework-core](..%2Ffun-framework-core)中的CacheService
-
-## LockService
-基于Redisson实现了[fun-framework-core](..%2Ffun-framework-core)中的LockService，使用前需要先引入Redisson

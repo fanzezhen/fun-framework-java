@@ -1,7 +1,5 @@
 package com.github.fanzezhen.fun.framework.core.verify.concurrent;
 
-import com.github.fanzezhen.fun.framework.core.context.ContextConstant;
-
 import java.lang.annotation.*;
 
 /**
@@ -15,5 +13,5 @@ import java.lang.annotation.*;
 public @interface NoConcurrent {
 
     String key() default "";
-    String[] headerArgs() default {ContextConstant.HEADER_TENANT_ID};
+    String[] headerArgs() default {};
 }

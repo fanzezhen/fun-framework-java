@@ -1,7 +1,6 @@
 package com.github.fanzezhen.fun.framework.core.web.mvc;
 
 import cn.hutool.core.text.CharSequenceUtil;
-import com.github.fanzezhen.fun.framework.core.model.response.ActionResult;
 import com.github.fanzezhen.fun.framework.core.web.FunCoreWebProperties;
 import org.springframework.core.MethodParameter;
 import org.springframework.lang.NonNull;
@@ -20,10 +19,14 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ResponseBodyWrapHandler implements HandlerMethodReturnValueHandler {
 
     private final HandlerMethodReturnValueHandler delegate;
+    private final ResponseBodyWrapper responseBodyWrapper;
     private final FunCoreWebProperties funCoreWebProperties;
 
-    public ResponseBodyWrapHandler(HandlerMethodReturnValueHandler delegate, FunCoreWebProperties funCoreWebProperties) {
+    public ResponseBodyWrapHandler(HandlerMethodReturnValueHandler delegate,
+                                   ResponseBodyWrapper responseBodyWrapper,
+                                   FunCoreWebProperties funCoreWebProperties) {
         this.delegate = delegate;
+        this.responseBodyWrapper = responseBodyWrapper;
         this.funCoreWebProperties = funCoreWebProperties;
     }
 
@@ -37,7 +40,7 @@ public class ResponseBodyWrapHandler implements HandlerMethodReturnValueHandler 
                                   @NonNull MethodParameter returnType,
                                   @NonNull ModelAndViewContainer mavContainer,
                                   @NonNull NativeWebRequest webRequest) throws Exception {
-        if (returnValue instanceof ActionResult) {
+        if (responseBodyWrapper.isWrapped(returnValue)) {
             delegate.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
             return;
         }
@@ -52,7 +55,7 @@ public class ResponseBodyWrapHandler implements HandlerMethodReturnValueHandler 
             AntPathMatcher antPathMatcher = new AntPathMatcher();
             String finalRequestUri = requestUri;
             if (funCoreWebProperties.getResponseIgnoreWrapUrls().stream().noneMatch(ignore -> antPathMatcher.match(ignore, finalRequestUri))) {
-                delegate.handleReturnValue(ActionResult.success(returnValue), returnType, mavContainer, webRequest);
+                delegate.handleReturnValue(responseBodyWrapper.wrap(returnValue), returnType, mavContainer, webRequest);
             } else {
                 delegate.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
             }

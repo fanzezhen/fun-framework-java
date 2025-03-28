@@ -1,13 +1,21 @@
 package com.github.fanzezhen.fun.framework.core.context;
 
+import cn.hutool.core.lang.Pair;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.ArrayUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.github.fanzezhen.fun.framework.core.context.properties.ContextConstant;
+import com.github.fanzezhen.fun.framework.core.context.properties.FunCoreContextProperties;
 import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -16,23 +24,33 @@ import java.util.TimeZone;
  */
 @Slf4j
 @SuppressWarnings("unused")
-public class SysContextHolder {
-    private SysContextHolder() {
+public class ContextHolder {
+    private ContextHolder() {
     }
 
-    private static final ThreadLocal<SysContext> CONTEXT_MAP = new ThreadLocal<>();
+    /**
+     * 上下文数据
+     */
+    private static final ThreadLocal<Context> CONTEXT_MAP = new ThreadLocal<>();
+    /**
+     * 上下文参数配置
+     */
+    static FunCoreContextProperties properties = new FunCoreContextProperties();
 
-    public static JSONObject getContextMap() {
-        SysContext systemContext = CONTEXT_MAP.get();
+    public static Context getContext() {
+        Context systemContext = CONTEXT_MAP.get();
         if (systemContext == null) {
-            systemContext = new SysContext();
+            systemContext = new Context();
             CONTEXT_MAP.set(systemContext);
         }
-
-        return systemContext.getContextMap();
+        return systemContext;
     }
 
-    public static SysContext getSysContext() {
+    public static JSONObject getContextMap() {
+        return getContext().getContextMap();
+    }
+
+    public static Context getSysContext() {
         return CONTEXT_MAP.get();
     }
 
@@ -59,7 +77,7 @@ public class SysContextHolder {
         return contextMap == null ? 0 : contextMap.getLongValue(key.toLowerCase());
     }
 
-    public static void set(SysContext systemContext) {
+    public static void set(Context systemContext) {
         CONTEXT_MAP.set(systemContext);
     }
 
@@ -74,13 +92,13 @@ public class SysContextHolder {
     public static void set(String key, Object value) {
         if (key == null) {
             log.warn("key is null, can't set it into the context map");
-        } else if (key.length() > SysContext.MAX_SIZE) {
-            throw ExceptionUtil.wrapException("key is more than " + SysContext.MAX_SIZE + ", i can't set it into the context map");
-        } else if (value != null && value.toString().length() > SysContext.MAX_SIZE) {
-            throw ExceptionUtil.wrapException("value is more than " + SysContext.MAX_SIZE + ", i can't set it into the context map");
+        } else if (key.length() > Context.MAX_SIZE) {
+            throw ExceptionUtil.wrapException("key is more than " + Context.MAX_SIZE + ", i can't set it into the context map");
+        } else if (value != null && value.toString().length() > Context.MAX_SIZE) {
+            throw ExceptionUtil.wrapException("value is more than " + Context.MAX_SIZE + ", i can't set it into the context map");
         } else {
             JSONObject contextMap = getContextMap();
-            if (contextMap.size() > SysContext.MAX_CAPACITY) {
+            if (contextMap.size() > Context.MAX_CAPACITY) {
                 throw ExceptionUtil.wrapException("the context map is full, can't set anything");
             } else {
                 contextMap.put(key.toLowerCase(), value);
@@ -94,67 +112,67 @@ public class SysContextHolder {
      * @return userId
      */
     public static String getUserId() {
-        return get(ContextConstant.HEADER_USER_ID);
+        return get(properties.getKey().getUserIdWithPrefix());
     }
 
     public static void setUserId(String userId) {
-        set(ContextConstant.HEADER_USER_ID, userId);
+        set(properties.getKey().getUserIdWithPrefix(), userId);
     }
 
     public static String getAccountId() {
-        return get(ContextConstant.HEADER_ACCOUNT_ID);
+        return get(properties.getKey().getAccountIdWithPrefix());
     }
 
     public static void setAccountId(String accountId) {
-        set(ContextConstant.HEADER_ACCOUNT_ID, accountId);
+        set(properties.getKey().getAccountIdWithPrefix(), accountId);
     }
 
     public static String getAccountName() {
-        return get(ContextConstant.HEADER_ACCOUNT_NAME);
+        return get(properties.getKey().getAccountNameWithPrefix());
     }
 
     public static void setAccountName(String accountName) {
-        set(ContextConstant.HEADER_ACCOUNT_NAME, accountName);
+        set(properties.getKey().getAccountNameWithPrefix(), accountName);
     }
 
     public static String getProjectId() {
-        return get(ContextConstant.HEADER_PROJECT_ID);
+        return get(properties.getKey().getProjectIdWithPrefix());
     }
 
     public static void setProjectId(String projectId) {
-        set(ContextConstant.HEADER_PROJECT_ID, projectId);
+        set(properties.getKey().getProjectIdWithPrefix(), projectId);
     }
 
     public static String getAppId() {
-        return get(ContextConstant.HEADER_APP_CODE);
+        return get(properties.getKey().getAppCodeWithPrefix());
     }
 
     public static void setAppId(String appId) {
-        set(ContextConstant.HEADER_APP_CODE, appId);
+        set(properties.getKey().getAppCodeWithPrefix(), appId);
     }
 
     public static String getCurrentAppCode() {
-        return get(ContextConstant.CURRENT_PROJECT_ID_KEY);
+        return get(properties.getKey().getProjectIdWithPrefix());
     }
 
     public static void setCurrentAppCode(String appCode) {
-        set(ContextConstant.CURRENT_PROJECT_ID_KEY, appCode);
+        set(properties.getKey().getProjectIdWithPrefix(), appCode);
     }
 
     public static String getTraceId() {
-        return get(ContextConstant.HEADER_TRACE_ID);
+        return get(properties.getKey().getTraceIdWithPrefix());
     }
 
     public static void setTraceId(String traceId) {
-        set(ContextConstant.HEADER_TRACE_ID, traceId);
+        set(properties.getKey().getTraceIdWithPrefix(), traceId);
     }
 
     public static String getNodeId() {
-        return get(ContextConstant.HEADER_NODE_ID);
+        return get(properties.getKey().getNodeIdWithPrefix());
     }
 
     public static void setNodeId(String nodeId) {
-        set(ContextConstant.HEADER_NODE_ID, nodeId);
+        set(properties.getKey().getNodeIdWithPrefix(), nodeId);
     }
 
     /**
@@ -163,11 +181,11 @@ public class SysContextHolder {
      * @return username
      */
     public static String getUserName() {
-        return get(ContextConstant.HEADER_USER_NAME);
+        return get(properties.getKey().getUserNameWithPrefix());
     }
 
     public static void setUserName(String userName) {
-        set(ContextConstant.HEADER_USER_NAME, userName);
+        set(properties.getKey().getUserNameWithPrefix(), userName);
     }
 
     /**
@@ -176,7 +194,7 @@ public class SysContextHolder {
      * @return userAgent
      */
     public static String getUseAgent() {
-        return get(ContextConstant.HEADER_USER_AGENT);
+        return get(properties.getKey().getDeviceWithPrefix());
     }
 
     /**
@@ -185,11 +203,11 @@ public class SysContextHolder {
      * @return tenantId
      */
     public static String getTenantId() {
-        return get(ContextConstant.HEADER_TENANT_ID);
+        return get(properties.getKey().getTenantIdWithPrefix());
     }
 
     public static void setTenantId(String tenantId) {
-        set(ContextConstant.HEADER_TENANT_ID, tenantId);
+        set(properties.getKey().getTenantIdWithPrefix(), tenantId);
     }
 
     /**
@@ -199,7 +217,7 @@ public class SysContextHolder {
      * @return locale
      */
     public static String getLocale() {
-        String locale = get(ContextConstant.HEADER_LOCALE);
+        String locale = get(properties.getKey().getLocaleWithPrefix());
         if (locale == null || locale.isEmpty()) {
             return ContextConstant.DEFAULT_LOCALE;
         }
@@ -207,7 +225,7 @@ public class SysContextHolder {
     }
 
     public static void setLocale(String locale) {
-        set(ContextConstant.HEADER_LOCALE, locale);
+        set(properties.getKey().getLocaleWithPrefix(), locale);
     }
 
     /**
@@ -217,7 +235,7 @@ public class SysContextHolder {
      * @return 时区
      */
     public static TimeZone getTimeZone() {
-        String zoneOffset = get(ContextConstant.HEADER_TIME_ZONE);
+        String zoneOffset = get(properties.getKey().getTimeZoneWithPrefix());
         if (CharSequenceUtil.isBlank(zoneOffset)) {
             return TimeZone.getDefault();
         }
@@ -227,7 +245,7 @@ public class SysContextHolder {
     }
 
     public static void setTimeZone(String timeZone) {
-        set(ContextConstant.HEADER_TIME_ZONE, timeZone);
+        set(properties.getKey().getTimeZoneWithPrefix(), timeZone);
     }
 
     /**
@@ -236,27 +254,27 @@ public class SysContextHolder {
      * @return clientIp
      */
     public static String getClientIp() {
-        return get(ContextConstant.HEADER_USER_IP);
+        return get(properties.getKey().getUserIpWithPrefix());
     }
 
     public static void setClientIp(String clientIp) {
-        set(ContextConstant.HEADER_USER_IP, clientIp);
+        set(properties.getKey().getUserIpWithPrefix(), clientIp);
     }
 
     public static void setUserAgent(String userAgent) {
-        set(ContextConstant.HEADER_USER_AGENT, userAgent);
+        set(properties.getKey().getDeviceWithPrefix(), userAgent);
     }
 
     public static String getServerHost() {
-        return get(ContextConstant.HEADER_SERVER_HOST);
+        return get(properties.getKey().getServerHostWithPrefix());
     }
 
     public static void setServerHost(String serverHost) {
-        set(ContextConstant.HEADER_SERVER_HOST, serverHost);
+        set(properties.getKey().getServerHostWithPrefix(), serverHost);
     }
 
     public static void removeServerHost() {
-        getContextMap().remove(ContextConstant.HEADER_SERVER_HOST);
+        getContextMap().remove(properties.getKey().getServerHostWithPrefix());
     }
 
     public static void clean() {
@@ -269,7 +287,7 @@ public class SysContextHolder {
 
     public static void put(Map<String, Object> contextMap) {
         if (contextMap != null) {
-            contextMap.forEach(SysContextHolder::set);
+            contextMap.forEach(ContextHolder::set);
         }
     }
 
@@ -288,5 +306,37 @@ public class SysContextHolder {
             stringBuilder.append(headerKey).append("=").append(get(headerKey));
         }
         return stringBuilder.toString();
+    }
+
+    public static List<Pair<String, String>> toHeaders() {
+        JSONObject contextMap = getContextMap();
+        if (contextMap.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            FunCoreContextProperties.Key headerKey = properties.getKey();
+            List<Pair<String, String>> pairs = new ArrayList<>();
+            contextMap.forEach((key, value) -> {
+                if (ExceptionUtil.isBlank(value)) {
+                    log.warn("header:{}'s value:{} is empty,will not add to headers", key, value);
+                } else if (CharSequenceUtil.startWithIgnoreCase(key, headerKey.getPrefix())) {
+                    log.debug("adding header{{}:{}}", key, value);
+                    if (!CharSequenceUtil.equalsIgnoreCase(key, headerKey.getAccountNameWithPrefix()) &&
+                        !CharSequenceUtil.equalsIgnoreCase(key, headerKey.getUserNameWithPrefix())) {
+                        pairs.add(convertKey(key, value.toString(), false));
+                    } else {
+                        pairs.add(convertKey(key, value.toString(), true));
+                    }
+                }
+            });
+            return pairs;
+        }
+    }
+
+    static Pair<String, String> convertKey(String name, String value, boolean encoding) {
+        return encoding ? Pair.of(name, URLEncoder.encode(value, StandardCharsets.UTF_8)) : Pair.of(name, value);
+    }
+
+     static void setProperties(FunCoreContextProperties properties) {
+        ContextHolder.properties = properties;
     }
 }

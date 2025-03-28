@@ -1,8 +1,8 @@
-package com.github.fanzezhen.fun.framework.core.cache.impl;
+package com.github.fanzezhen.fun.framework.core.cache.service.impl;
 
 import cn.hutool.cache.impl.TimedCache;
 import com.github.fanzezhen.fun.framework.core.cache.CacheConstant;
-import com.github.fanzezhen.fun.framework.core.cache.CacheService;
+import com.github.fanzezhen.fun.framework.core.cache.service.CacheService;
 import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.core.annotation.Order;

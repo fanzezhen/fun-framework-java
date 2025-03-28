@@ -8,8 +8,8 @@ import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.fanzezhen.fun.framework.core.verify.repeat.NoRepeat;
-import com.github.fanzezhen.fun.framework.core.context.SysContextHolder;
-import com.github.fanzezhen.fun.framework.core.cache.CacheService;
+import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
+import com.github.fanzezhen.fun.framework.core.cache.service.CacheService;
 import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,7 @@ public class FunCoreVerifyTokenApi {
         if (cacheService == null) {
             throw new ServiceException(CoreExceptionEnum.SERVICE_ERROR.getCode(), "缓存未注入");
         }
-        cacheService.set(SysContextHolder.getAppId() + SysContextHolder.getTenantId() + "-jwt-" + token, appId, jwtSeconds, TimeUnit.SECONDS);
+        cacheService.set(ContextHolder.getAppId() + ContextHolder.getTenantId() + "-jwt-" + token, appId, jwtSeconds, TimeUnit.SECONDS);
         return token;
     }
 

@@ -7,8 +7,8 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.github.fanzezhen.fun.framework.core.context.SysContextHolder;
-import com.github.fanzezhen.fun.framework.core.cache.CacheService;
+import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
+import com.github.fanzezhen.fun.framework.core.cache.service.CacheService;
 import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -90,7 +90,7 @@ public class NoRepeatedAop {
         loadHeaderArgs(param, headerArgs);
         String[] paramArgs = noRepeat.paramArgs();
         loadParamArgs(param, paramArgs, args);
-        String headerJsonStr = SysContextHolder.getHeaderJsonStr(noRepeat.headerArgs());
+        String headerJsonStr = ContextHolder.getHeaderJsonStr(noRepeat.headerArgs());
         String paramKey = noRepeat.key();
         if (CharSequenceUtil.isEmpty(paramKey)) {
             paramKey = JSON.toJSONString(Arrays.stream(args).filter(arg -> !(arg instanceof HttpServletRequest)).toList());
@@ -134,7 +134,7 @@ public class NoRepeatedAop {
                 if (CharSequenceUtil.isBlank(headerKey)) {
                     continue;
                 }
-                param.put(headerKey, SysContextHolder.get(headerKey));
+                param.put(headerKey, ContextHolder.get(headerKey));
             }
         }
     }

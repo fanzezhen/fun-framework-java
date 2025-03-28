@@ -2,7 +2,7 @@ package com.github.fanzezhen.fun.framework.mp.config;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.github.fanzezhen.fun.framework.core.context.SysContextHolder;
+import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
 import com.github.fanzezhen.fun.framework.mp.base.entity.BaseGenericEntity;
 import com.github.fanzezhen.fun.framework.mp.enums.StatusEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class FunMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
-        String loginUserId = SysContextHolder.getUserId();
+        String loginUserId = ContextHolder.getUserId();
         if (CharSequenceUtil.isNotBlank(loginUserId)) {
             this.fillStrategy(metaObject, "createUserId", loginUserId);
         }
@@ -31,7 +31,7 @@ public class FunMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        String loginUserId = SysContextHolder.getUserId();
+        String loginUserId = ContextHolder.getUserId();
         if (CharSequenceUtil.isNotBlank(loginUserId)) {
             this.fillStrategy(metaObject, "updateUserId", loginUserId);
         }

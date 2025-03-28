@@ -24,6 +24,9 @@ public class ResponseBodyWrapFactoryBean implements InitializingBean {
     @Resource
     private FunCoreWebProperties funCoreWebProperties;
 
+    @Resource
+    private ResponseBodyWrapper responseBodyWrapper;
+
     @Override
     public void afterPropertiesSet() {
         List<HandlerMethodReturnValueHandler> returnValueHandlers = requestMappingHandlerAdapter.getReturnValueHandlers();
@@ -36,9 +39,9 @@ public class ResponseBodyWrapFactoryBean implements InitializingBean {
             return newHandlers;
         }
         for (HandlerMethodReturnValueHandler handler : handlers) {
-            if (handler instanceof RequestResponseBodyMethodProcessor) {
-                //用自己的ResponseBody包装类替换掉框架的，达到返回Result的效果
-                ResponseBodyWrapHandler decorator = new ResponseBodyWrapHandler(handler, funCoreWebProperties);
+            if (handler instanceof RequestResponseBodyMethodProcessor requestResponseBodyMethodProcessor) {
+                // 用自己的ResponseBody包装类替换掉框架的，达到返回Result的效果
+                ResponseBodyWrapHandler decorator = new ResponseBodyWrapHandler(requestResponseBodyMethodProcessor, responseBodyWrapper, funCoreWebProperties);
                 newHandlers.add(decorator);
             } else {
                 newHandlers.add(handler);

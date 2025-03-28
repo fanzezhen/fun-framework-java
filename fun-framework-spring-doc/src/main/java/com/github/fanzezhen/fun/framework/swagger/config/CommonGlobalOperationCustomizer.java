@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.swagger.config;
 
 import cn.hutool.core.collection.CollUtil;
-import com.github.fanzezhen.fun.framework.core.context.ContextConstant;
+import com.github.fanzezhen.fun.framework.core.context.properties.ContextConstant;
 import com.github.fanzezhen.fun.framework.swagger.SwaggerProperty;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.parameters.Parameter;
@@ -24,16 +24,16 @@ public class CommonGlobalOperationCustomizer implements GlobalOperationCustomize
     public Operation customize(Operation operation, HandlerMethod handlerMethod) {
         List<Parameter> headerParameterList = swaggerProperty.getHeaderParameterList();
         if (!swaggerProperty.isHeaderParameterCommonDisabled()){
-            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.HEADER_TOKEN));
-            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.HEADER_LOCALE));
-            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.HEADER_ACCOUNT_ID));
-            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.HEADER_ACCOUNT_NAME));
-            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.HEADER_USER_ID));
-            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.HEADER_USER_NAME));
-            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.HEADER_USER_IP));
-            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.HEADER_APP_CODE));
-            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.HEADER_TENANT_ID));
-            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.HEADER_PROJECT_ID));
+            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.DEFAULT_HEADER_TOKEN));
+            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.DEFAULT_HEADER_LOCALE));
+            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.DEFAULT_HEADER_ACCOUNT_ID));
+            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.DEFAULT_HEADER_ACCOUNT_NAME));
+            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.DEFAULT_HEADER_USER_ID));
+            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.DEFAULT_HEADER_USER_NAME));
+            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.DEFAULT_HEADER_USER_IP));
+            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.DEFAULT_HEADER_APP_CODE));
+            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.DEFAULT_HEADER_TENANT_ID));
+            operation.addParametersItem(new Parameter().in(HEADER).name(ContextConstant.DEFAULT_HEADER_PROJECT_ID));
         }
         if (CollUtil.isNotEmpty(headerParameterList)) {
             headerParameterList.forEach(operation::addParametersItem);

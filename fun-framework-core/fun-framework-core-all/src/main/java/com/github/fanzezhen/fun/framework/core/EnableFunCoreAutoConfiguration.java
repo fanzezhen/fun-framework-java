@@ -1,6 +1,4 @@
-package com.github.fanzezhen.fun.framework.redis;
-
-import org.springframework.context.annotation.Import;
+package com.github.fanzezhen.fun.framework.core;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,6 +10,5 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Import({FunRedisAutoConfiguration.class})
-public @interface EnableFunRedisAutoConfiguration {
+public @interface EnableFunCoreAutoConfiguration {
 }

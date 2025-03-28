@@ -2,7 +2,7 @@ package com.github.fanzezhen.fun.framework.mp.config;
 
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
-import com.github.fanzezhen.fun.framework.core.context.SysContextHolder;
+import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.StringValue;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -30,7 +30,7 @@ public class FunMpTenantConfiguration {
         return new TenantLineInnerInterceptor(new TenantLineHandler() {
             @Override
             public Expression getTenantId() {
-                return new StringValue(SysContextHolder.getTenantId());
+                return new StringValue(ContextHolder.getTenantId());
             }
 
             @Override

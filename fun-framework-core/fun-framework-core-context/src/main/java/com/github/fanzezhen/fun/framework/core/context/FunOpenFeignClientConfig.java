@@ -13,20 +13,17 @@ import java.util.List;
 
 /**
  * @author fanzezhen
- * @date 2023/8/16
  */
 @Slf4j
 @Configuration
 @ConditionalOnClass(
         name = {"org.springframework.cloud.openfeign.EnableFeignClients"}
 )
-public class OpenFeignClientConfig {
+public class FunOpenFeignClientConfig {
     @Bean
     public RequestInterceptor systemContextInterceptor() {
         return requestTemplate -> {
-            SysContext systemContext = SysContextHolder.getSysContext();
-            if (systemContext != null) {
-                List<Pair<String, String>> pairs = systemContext.toHeaders();
+                List<Pair<String, String>> pairs = ContextHolder.toHeaders();
                 Pair<String, String> pair;
                 if (CollUtil.isNotEmpty(pairs)) {
                     for (Iterator<Pair<String, String>> var3 = pairs.iterator(); var3.hasNext(); requestTemplate.header(pair.getKey(), pair.getValue())) {
@@ -36,7 +33,6 @@ public class OpenFeignClientConfig {
                         }
                     }
                 }
-            }
         };
     }
 }
