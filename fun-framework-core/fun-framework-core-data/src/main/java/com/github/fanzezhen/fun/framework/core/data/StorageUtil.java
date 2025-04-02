@@ -89,8 +89,10 @@ public class StorageUtil {
         return figure.stripTrailingZeros().toPlainString() + "YB";
     }
 
-    // 私有方法，用于根据单位返回乘数  
-    private static long getMultiplier(String unit) {
+    /**
+     * 用于根据单位返回乘数  
+     */
+    public static long getMultiplier(String unit) {
         return switch (unit.toLowerCase()) {
             case "b", "byte", "bytes" -> BYTE;
             case "k", "kb", "kib" -> KILOBYTE;
@@ -101,7 +103,9 @@ public class StorageUtil {
         };
     }
 
-    // 将包含单位的字符串转换为字节数  
+    /**
+     * 将包含单位的字符串转换为字节数  
+     */
     public static Long convertToBytes(String sizeWithUnit) {
         // 使用正则表达式匹配数字和单位  
         Matcher matcher = NUMBER_PATTERN.matcher(sizeWithUnit);
@@ -119,6 +123,8 @@ public class StorageUtil {
     }
 
     /**
+     * 根据字节数截断字符串
+     *
      * @param input            需要处理的原始字符串
      * @param maxLengthInBytes 字符串截断后的最大允许字节数
      * @param isReverse        是否从字符串的末尾开始截取（如果为 true）或者从开头开始截取（如果为 false）
@@ -156,7 +162,14 @@ public class StorageUtil {
         return stringBuilder.toString();
     }
 
-    private static void insertStringBuilder(StringBuilder stringBuilder, int maxLengthInBytes, char[] inputCharArray) {
+    /**
+     * 插入字符到StringBuilder中
+     *
+     * @param stringBuilder StringBuilder对象
+     * @param maxLengthInBytes 最大允许字节数
+     * @param inputCharArray 输入字符数组
+     */
+    public static void insertStringBuilder(StringBuilder stringBuilder, int maxLengthInBytes, char[] inputCharArray) {
         int byteLength = stringBuilder.toString().getBytes(StandardCharsets.UTF_8).length;
         for (int i = inputCharArray.length - (maxLengthInBytes / 4) - 1; i > 0; i--) {
             byteLength += String.valueOf(inputCharArray[i]).getBytes(StandardCharsets.UTF_8).length;
@@ -168,6 +181,8 @@ public class StorageUtil {
     }
 
     /**
+     * 根据字符数截断字符串
+     *
      * @param input            需要处理的原始字符串
      * @param maxLengthInChars 字符串截断后的最大允许字符数
      * @param filler           填充字符

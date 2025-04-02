@@ -1,15 +1,15 @@
 package com.github.fanzezhen.fun.framework.core.data;
 
-import cn.hutool.core.text.CharSequenceUtil;
 import com.sun.management.OperatingSystemMXBean;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 服务器信息工具类
+ *
  * @author fanzezhen
  */
 public class ServerInfoUtil {
@@ -29,34 +29,6 @@ public class ServerInfoUtil {
         long freePhysicalMemorySize = operatingSystem.getFreeMemorySize();
         double compare = (1 - freePhysicalMemorySize * 1.0 / totalSwapSpaceSize) * 100;
         return "内存已使用:" + (int) compare + "%";
-    }
-
-    public static String getDiskRatingString() {
-        double usableSpace = 0;
-        double totalSpace = 0;
-        File[] disks = File.listRoots();
-        for (File file : disks) {
-            usableSpace += file.getUsableSpace();
-            totalSpace += file.getTotalSpace();
-        }
-        if (totalSpace == 0){
-            return CharSequenceUtil.EMPTY;
-        }
-        return new DecimalFormat("0.00").format(usableSpace / totalSpace * 100) + "%";
-    }
-
-    public static float getDiskRating() {
-        float usableSpace = 0;
-        float totalSpace = 0;
-        File[] disks = File.listRoots();
-        for (File file : disks) {
-            usableSpace += file.getUsableSpace();
-            totalSpace += file.getTotalSpace();
-        }
-        if (totalSpace == 0){
-            return 0f;
-        }
-        return usableSpace / totalSpace;
     }
 
     /**

@@ -3,16 +3,10 @@ package com.github.fanzezhen.fun.framework.core.data;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.ArrayUtil;
-import cn.stylefeng.roses.kernel.model.exception.ServiceException;
-import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 
@@ -48,13 +42,16 @@ public class FileUtil {
         return null;
     }
 
-    public static void replaceInFile(String originPath, String targetPath, CharSequence target, CharSequence replacement) {
+    /**
+     * 按行读取文件并替换该行中的指定字符串，将结果写入targetPath
+     */
+    public static void replaceLineInFile(String originPath, String targetPath, CharSequence target, CharSequence replacement) {
         File file = new File(originPath);
         if (!file.exists()) {
             return;
         }
         if (file.isFile()) {
-            replaceInFile(file, targetPath, target, replacement);
+            replaceLineInFile(file, targetPath, target, replacement);
         }
         File[] files = file.listFiles();
         if (ArrayUtil.isEmpty(files)) {
@@ -64,11 +61,14 @@ public class FileUtil {
             targetPath += File.separator;
         }
         for (File listFile : files) {
-            replaceInFile(listFile, targetPath + listFile.getName(), target, replacement);
+            replaceLineInFile(listFile, targetPath + listFile.getName(), target, replacement);
         }
     }
 
-    private static void replaceInFile(File file, String targetFilePath, CharSequence target, CharSequence replacement) {
+    /**
+     * 按行读取文件并替换该行中的指定字符串，将结果写入targetFilePath
+     */
+    private static void replaceLineInFile(File file, String targetFilePath, CharSequence target, CharSequence replacement) {
         if (!file.isFile()) {
             return;
         }

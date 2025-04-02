@@ -16,6 +16,7 @@ import java.util.Set;
  * @author fanzezhen
  */
 @Slf4j
+@SuppressWarnings("unused")
 public class ValidUtil {
 
     public static final String IMG_ERR_MSG = "图片校验不通过！";
@@ -25,34 +26,44 @@ public class ValidUtil {
     }
     static final String EMPTY_ERROR_MESSAGE = "图片文件不能为空";
 
+    /**
+     * 验证对象的约束条件
+     * @param bean 要验证的对象
+     */
     public static <T> void validate(T bean) {
         validate(bean, CharSequenceUtil.EMPTY, CharSequenceUtil.EMPTY);
     }
 
+    /**
+     * 验证对象的约束条件，并添加自定义的错误信息
+     * @param bean 要验证的对象
+     * @param startMsg 错误信息的前缀
+     * @param endMsg 错误信息的后缀
+     */
     public static <T> void validate(T bean, String startMsg, String endMsg) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Set<ConstraintViolation<T>> violations = validator.validate(bean);
+        Set<ConstraintViolation<T>> violations = loadViolationSet(bean);
         if (CollUtil.isEmpty(violations)) {
             return;
         }
         throw new ConstraintViolationException(startMsg + violations.iterator().next().getMessage() + endMsg, violations);
     }
 
+    /**
+     * 加载对象的约束违规集合
+     * @param bean 要验证的对象
+     * @return 约束违规集合
+     */
     public static <T> Set<ConstraintViolation<T>> loadViolationSet(T bean) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        return validator.validate(bean);
-    }
-
-    public static <T> void throwInValidate(T bean) {
-        Set<ConstraintViolation<T>> violations = loadViolationSet(bean);
-        if (CollUtil.isEmpty(violations)) {
-            return;
+        try(ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+            Validator validator = factory.getValidator();
+            return validator.validate(bean);
         }
-        throw new ConstraintViolationException(violations.iterator().next().getMessage(), violations);
     }
 
+    /**
+     * 验证文件是否为有效的图片
+     * @param imageFile 要验证的图片文件
+     */
     public static void validateImage(File imageFile) {
         try {
             BufferedImage image = ImageIO.read(imageFile);
@@ -65,6 +76,11 @@ public class ValidUtil {
         }
     }
 
+    /**
+     * 判断文件是否为图片
+     * @param imageFile 要判断的图片文件
+     * @return 如果是图片返回true，否则返回false
+     */
     public static boolean isImage(File imageFile) {
         try {
             BufferedImage image = ImageIO.read(imageFile);
@@ -77,6 +93,10 @@ public class ValidUtil {
         return false;
     }
 
+    /**
+     * 验证MultipartFile是否为有效的图片
+     * @param imageMultipartFile 要验证的图片文件
+     */
     public static void validateImage(MultipartFile imageMultipartFile) {
         try {
             BufferedImage image = ImageIO.read(imageMultipartFile.getInputStream());
@@ -89,6 +109,11 @@ public class ValidUtil {
         }
     }
 
+    /**
+     * 判断MultipartFile是否为图片
+     * @param imageMultipartFile 要判断的图片文件
+     * @return 如果是图片返回true，否则返回false
+     */
     public static boolean isImage(MultipartFile imageMultipartFile) {
         try {
             BufferedImage image = ImageIO.read(imageMultipartFile.getInputStream());
@@ -101,6 +126,10 @@ public class ValidUtil {
         return false;
     }
 
+    /**
+     * 验证InputStream是否为有效的图片
+     * @param inputStream 要验证的图片输入流
+     */
     public static void validateImage(InputStream inputStream) {
         try {
             BufferedImage image = ImageIO.read(inputStream);
@@ -113,6 +142,11 @@ public class ValidUtil {
         }
     }
 
+    /**
+     * 判断InputStream是否为图片
+     * @param inputStream 要判断的图片输入流
+     * @return 如果是图片返回true，否则返回false
+     */
     public static boolean isImage(InputStream inputStream) {
         try {
             BufferedImage image = ImageIO.read(inputStream);

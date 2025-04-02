@@ -24,6 +24,7 @@ import java.util.List;
  */
 @Slf4j
 @RestControllerAdvice
+@SuppressWarnings("unused")
 public class DefaultExceptionHandler {
     /**
      * 全局异常.

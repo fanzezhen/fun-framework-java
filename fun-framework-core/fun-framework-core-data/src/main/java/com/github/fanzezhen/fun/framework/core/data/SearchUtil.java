@@ -2,7 +2,6 @@ package com.github.fanzezhen.fun.framework.core.data;
 
 /**
  * @author fanzezhen
- * Desc:
  */
 public class SearchUtil {
     private SearchUtil() {

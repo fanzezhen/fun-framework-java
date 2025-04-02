@@ -43,7 +43,10 @@ fun:
     context:
       # 上下文key
       key:
-        # 上下文key的前缀
+        # 请求头和上下文key的前缀
         prefix: fun-header-
+        ## 特殊请求头和上下文key的命名
+        # 租户id请求头和上下文key的命名
+        tenant-id: TenantId
 
 ```

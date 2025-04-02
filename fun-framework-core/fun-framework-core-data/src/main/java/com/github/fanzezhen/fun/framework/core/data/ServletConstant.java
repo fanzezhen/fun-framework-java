@@ -1,6 +1,7 @@
 package com.github.fanzezhen.fun.framework.core.data;
 
 /**
+ * Servlet常量
  * @author fanzezhen
  */
 public class ServletConstant {

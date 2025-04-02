@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Servlet工具类
  * @author fanzezhen
  */
 @Slf4j
@@ -62,12 +63,18 @@ public class ServletUtil {
         return ip;
     }
 
-    private static String getHeader(HttpServletRequest request, String headerName) {
+    /**
+     * 获取请求头
+     */
+    public static String getHeader(HttpServletRequest request, String headerName) {
         String ip = request.getHeader(headerName);
         return isUnknown(ip) ? null : ip;
     }
 
-    private static boolean isUnknown(String ip) {
+    /**
+     * 判断IP地址是否unknown
+     */
+    public static boolean isUnknown(String ip) {
         return ip == null || ip.isEmpty() || unknown.equalsIgnoreCase(ip);
     }
 
@@ -104,22 +111,33 @@ public class ServletUtil {
         return operatingSystem.getName();
     }
 
-
+    /**
+     * 获取当前请求的IP地址
+     */
     public static String getIp() {
         HttpServletRequest request = getRequest();
         return request == null ? "127.0.0.1" : request.getRemoteHost();
     }
 
+    /**
+     * 获取当前请求对象
+     */
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         return requestAttributes == null ? null : requestAttributes.getRequest();
     }
 
+    /**
+     * 获取当前响应对象
+     */
     public static HttpServletResponse getResponse() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         return requestAttributes == null ? null : requestAttributes.getResponse();
     }
 
+    /**
+     * 获取请求参数
+     */
     public static Map<String, String> getRequestParameters() {
         HashMap<String, String> values = new HashMap<>(8);
         HttpServletRequest request = getRequest();
@@ -136,6 +154,9 @@ public class ServletUtil {
         return values;
     }
 
+    /**
+     * 获取请求的所有信息
+     */
     public static Map<String, String> getAll(HttpServletRequest request) {
         return MapUtil.builder(new HashMap<String, String>())
             .put("os", ServletUtil.getOsName(request)).
@@ -146,6 +167,9 @@ public class ServletUtil {
             .build();
     }
 
+    /**
+     * 将文件作为响应返回
+     */
     public static void response(HttpServletResponse response, File file) {
         // 清空输出流
         response.reset();

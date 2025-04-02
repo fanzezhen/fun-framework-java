@@ -13,6 +13,7 @@ import java.util.Map;
 /**
  * @author fanzezhen
  */
+@SuppressWarnings("unused")
 public class ExceptionUtil {
     private ExceptionUtil() {
     }

@@ -23,10 +23,11 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 /**
+ * jackson 配置
  * @author fanzezhen
  */
 @Configuration
-public class JacksonConfig {
+public class FunJacksonConfig {
 
     @Bean
     @ConditionalOnMissingBean
