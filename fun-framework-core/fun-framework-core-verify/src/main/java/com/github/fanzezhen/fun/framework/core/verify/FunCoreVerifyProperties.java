@@ -2,7 +2,6 @@ package com.github.fanzezhen.fun.framework.core.verify;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 import java.util.Map;
 
@@ -10,8 +9,7 @@ import java.util.Map;
  * @author fanzezhen
  */
 @Data
-@RefreshScope
-@ConfigurationProperties(prefix = "fun")
+@ConfigurationProperties(prefix = "fun.core.verify")
 public class FunCoreVerifyProperties {
     /**
      * "{\n\"admin\": {\n\"secret\": \"admin\",\n\"tenantId\": \"\"\n}}"

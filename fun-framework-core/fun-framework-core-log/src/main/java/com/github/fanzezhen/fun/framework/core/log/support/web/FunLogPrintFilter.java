@@ -2,7 +2,6 @@ package com.github.fanzezhen.fun.framework.core.log.support.web;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson2.JSON;
-import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.servlet.*;
@@ -16,6 +15,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.MDC;
 import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
@@ -38,10 +38,10 @@ import java.util.*;
 @Slf4j
 @Aspect
 @Component
-@WebFilter(filterName = "traceIdFilter", urlPatterns = "/*")
+@WebFilter(filterName = "funLogPrintFilter", urlPatterns = "/*")
 @SuppressWarnings("unused")
-@Order(Short.MIN_VALUE)
-public class LogPrintFilter implements Filter {
+@Order(Short.MIN_VALUE + 1)
+public class FunLogPrintFilter implements Filter {
     private static final LevelLogger debugLogger = log::debug;
     private static final LevelLogger infoLogger = log::info;
     private static final LevelLogger warnLogger = log::warn;
@@ -50,7 +50,7 @@ public class LogPrintFilter implements Filter {
     private static LevelLogger levelLogger;
     private static final String REQUEST_START_TIME_KEY = "REQUEST_START_TIME_KEY";
 
-    @Value("${fun.log.level:DEBUG}")
+    @Value("${fun.core.log.print-level:DEBUG}")
     private Level level;
 
     @Resource
@@ -85,7 +85,7 @@ public class LogPrintFilter implements Filter {
 
     public void preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, Object handler) {
         if (!Objects.isNull(levelLogger)) {
-            ContextHolder.set(REQUEST_START_TIME_KEY, System.currentTimeMillis());
+            MDC.put(REQUEST_START_TIME_KEY, String.valueOf(System.currentTimeMillis()));
             Enumeration<String> headerNames = request.getHeaderNames();
             Map<String, String> headerMap = new HashMap<>();
             while (headerNames.hasMoreElements()) {
@@ -113,8 +113,12 @@ public class LogPrintFilter implements Filter {
                 headers.put(headerName, headerValue);
             }
             levelLogger.log("请求返回Headers：{}", headers);
-            long starTime = ContextHolder.getLongOrZero(REQUEST_START_TIME_KEY);
-            levelLogger.log("请求总耗时：  {}毫秒", System.currentTimeMillis() - starTime);
+            try {
+                String startedTime = MDC.get(REQUEST_START_TIME_KEY);
+                long used = System.currentTimeMillis() - Long.parseLong(startedTime);
+                levelLogger.log("请求总耗时：  {}毫秒", used);
+            } catch (Exception ignored) {
+            }
             levelLogger.log("==================================调用结束=======================================");
         }
     }
@@ -149,6 +153,7 @@ public class LogPrintFilter implements Filter {
     /**
      * 默认不做处理
      */
+    @Component
     static class DefaultArgResolve implements ArgResolve {
 
         private final Set<Class<?>> toStringClassSet = new HashSet<>();
@@ -178,6 +183,7 @@ public class LogPrintFilter implements Filter {
 
     }
 
+    @Component
     static class IoArgResolve implements ArgResolve {
 
         @Override
@@ -196,6 +202,7 @@ public class LogPrintFilter implements Filter {
 
     }
 
+    @Component
     static class PartArgResolve extends DefaultArgResolve {
 
         @Override
@@ -211,6 +218,7 @@ public class LogPrintFilter implements Filter {
 
     }
 
+    @Component
     static class MultipartFileArgResolve extends DefaultArgResolve {
 
         @Override
@@ -266,7 +274,7 @@ public class LogPrintFilter implements Filter {
     }
 
     private static void setLevelLogger(LevelLogger levelLogger) {
-        LogPrintFilter.levelLogger = levelLogger;
+        FunLogPrintFilter.levelLogger = levelLogger;
     }
 
     @PostConstruct

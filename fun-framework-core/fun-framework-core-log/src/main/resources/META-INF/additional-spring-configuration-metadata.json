@@ -1,8 +1,8 @@
 {
   "properties": [
     {
-      "sourceType": "com.github.fanzezhen.fun.framework.core.log.support.web.LogPrintFilter",
-      "name": "fun.log.level",
+      "sourceType": "com.github.fanzezhen.fun.framework.core.log.support.web.FunLogPrintFilter",
+      "name": "fun.core.log.print-level",
       "defaultValue": "DEBUG",
       "description": "日志级别.",
       "type": "java.lang.String"

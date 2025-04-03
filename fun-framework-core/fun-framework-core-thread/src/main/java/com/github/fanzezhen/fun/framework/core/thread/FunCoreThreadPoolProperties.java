@@ -3,13 +3,11 @@ package com.github.fanzezhen.fun.framework.core.thread;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 /**
  * @author fanzezhen
  */
 @Data
-@RefreshScope
 @NoArgsConstructor
 @ConfigurationProperties(prefix = "fun")
 public class FunCoreThreadPoolProperties {

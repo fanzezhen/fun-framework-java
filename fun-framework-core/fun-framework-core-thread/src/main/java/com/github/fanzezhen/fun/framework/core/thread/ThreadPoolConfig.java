@@ -1,6 +1,5 @@
 package com.github.fanzezhen.fun.framework.core.thread;
 
-import com.github.fanzezhen.fun.framework.core.thread.decorator.SysContextTaskDecorator;
 import com.github.fanzezhen.fun.framework.core.thread.decorator.ThreadPoolTaskDecorator;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -33,12 +32,6 @@ public class ThreadPoolConfig {
     @ConditionalOnMissingBean
     ThreadPoolTaskExecutor defaultThreadPoolTaskExecutor() {
         return PoolExecutors.defaultThreadPoolTaskExecutor();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    SysContextTaskDecorator sysContextTaskDecorator() {
-        return new SysContextTaskDecorator();
     }
 
     @PostConstruct

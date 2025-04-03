@@ -2,13 +2,11 @@ package com.github.fanzezhen.fun.framework.core.context.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 /**
  * @author fanzezhen
  */
 @Data
-@RefreshScope
 @ConfigurationProperties(prefix = "fun.core.context")
 public class FunCoreContextProperties {
     /**
@@ -17,7 +15,6 @@ public class FunCoreContextProperties {
     private Key key = new Key();
 
     @Data
-    @RefreshScope
     public static class Key {
         /**
          * 上下文前缀

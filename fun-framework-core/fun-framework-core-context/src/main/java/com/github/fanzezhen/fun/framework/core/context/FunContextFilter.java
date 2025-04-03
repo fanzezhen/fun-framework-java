@@ -7,6 +7,8 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +22,11 @@ import java.util.Enumeration;
 @WebFilter
 @Order(0)
 public class FunContextFilter implements Filter {
+    /**
+     * 痕迹的key
+     */
+    @Value("${fun.core.log.key.trace-id:traceId}")
+    private String traceIdKey;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) {
@@ -30,6 +37,10 @@ public class FunContextFilter implements Filter {
             }
             Enumeration<String> headerNames = request.getHeaderNames();
             while (headerNames.hasMoreElements()) filterHeader(headerNames.nextElement(), request);
+            String traceId = MDC.get(traceIdKey);
+            if (CharSequenceUtil.isNotBlank(traceId)) {
+                ContextHolder.setTraceId(traceId);
+            }
             chain.doFilter(servletRequest, servletResponse);
         } catch (Throwable ex) {
             log.error(ex.getMessage(), ex);

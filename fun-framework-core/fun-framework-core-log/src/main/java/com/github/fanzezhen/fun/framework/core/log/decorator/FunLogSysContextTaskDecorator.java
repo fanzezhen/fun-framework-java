@@ -1,9 +1,9 @@
-package com.github.fanzezhen.fun.framework.core.log.support;
+package com.github.fanzezhen.fun.framework.core.log.decorator;
 
 import cn.hutool.core.text.CharSequenceUtil;
-import com.github.fanzezhen.fun.framework.core.context.properties.ContextConstant;
-import com.github.fanzezhen.fun.framework.core.thread.decorator.SysContextTaskDecorator;
+import com.github.fanzezhen.fun.framework.core.thread.decorator.ThreadPoolTaskDecorator;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -19,21 +19,28 @@ import java.util.UUID;
  */
 @Order(Integer.MAX_VALUE - 1)
 @Component
-public class FunLogSysContextTaskDecorator extends SysContextTaskDecorator {
+public class FunLogSysContextTaskDecorator implements ThreadPoolTaskDecorator {
+    /**
+     * 痕迹的key
+     */
+    @Value("${fun.core.log.key.trace-id:traceId}")
+    private String traceIdKey;
     @Override
     public @NonNull Runnable decorate(@NonNull Runnable runnable) {
+        Thread thread = Thread.currentThread();
         Map<String, String> map = MDC.getCopyOfContextMap();
         return () -> {
             try {
                 MDC.setContextMap(map);
-                String traceId = MDC.get(ContextConstant.DEFAULT_HEADER_TRACE_ID);
+                String traceId = MDC.get(traceIdKey);
                 if (CharSequenceUtil.isBlank(traceId)) {
                     traceId = UUID.randomUUID().toString();
-                    MDC.put(ContextConstant.DEFAULT_HEADER_TRACE_ID, traceId);
+                    MDC.put(traceIdKey, traceId);
                 }
-                super.decorate(runnable).run();
             } finally {
-                MDC.clear();
+                if (Thread.currentThread() != thread) {
+                    MDC.clear();
+                }
             }
         };
     }

@@ -15,8 +15,16 @@
 
   <dependencies>
     <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.github.fanzezhen</groupId>
       <artifactId>fun-framework-core-exception</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.fanzezhen</groupId>
+      <artifactId>fun-framework-core-thread</artifactId>
     </dependency>
   </dependencies>
 </project>

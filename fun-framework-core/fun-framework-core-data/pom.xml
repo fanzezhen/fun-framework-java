@@ -18,5 +18,9 @@
       <groupId>com.github.fanzezhen</groupId>
       <artifactId>fun-framework-core-model</artifactId>
     </dependency>
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+    </dependency>
   </dependencies>
 </project>

@@ -1,9 +1,12 @@
-package com.github.fanzezhen.fun.framework.core.thread.decorator;
+package com.github.fanzezhen.fun.framework.core.context.decorator;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
+import com.github.fanzezhen.fun.framework.core.thread.decorator.ThreadPoolTaskDecorator;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 /**
  * 上下文装饰器
@@ -12,7 +15,9 @@ import org.springframework.lang.NonNull;
  * @since 3.1.7
  */
 @Order
-public class SysContextTaskDecorator implements ThreadPoolTaskDecorator {
+@Component
+@ConditionalOnClass(ContextHolder.class)
+public class ContextTaskDecorator implements ThreadPoolTaskDecorator {
     @Override
     public @NonNull Runnable decorate(@NonNull Runnable runnable) {
         Thread thread = Thread.currentThread();
