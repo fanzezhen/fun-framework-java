@@ -3,7 +3,7 @@ package com.github.fanzezhen.fun.framework.core.thread;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.task.TaskDecorator;
-import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
+import org.springframework.scheduling.concurrent.DefaultManagedAwareThreadFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.Map;
@@ -27,6 +27,15 @@ public class PoolExecutors {
     private PoolExecutors() {
     }
 
+    public static ThreadPoolTaskExecutor newThreadPoolTaskExecutor(String name, int coreSize, int maxSize) {
+        return computeThreadPoolTaskExecutor(
+            new ThreadPoolTaskExecutorBuilder()
+                .threadGroupName(name)
+                .coreSize(coreSize)
+                .maxSize(maxSize)
+                .taskDecorator(ThreadPoolConfig.getTaskDecorator()));
+    }
+
     public static ThreadPoolExecutor defaultThreadPoolExecutor() {
         return computeThreadPoolExecutor("defaultThreadPoolExecutor",
             DEFAULT_CORE_SIZE,
@@ -37,22 +46,13 @@ public class PoolExecutors {
             new ThreadPoolExecutor.CallerRunsPolicy());
     }
 
-    public static ThreadPoolTaskExecutor newThreadPoolTaskExecutor(String name, int coreSize, int maxSize) {
-        return computeThreadPoolTaskExecutor(
-            new ThreadPoolTaskExecutorBuilder()
-                .threadGroupName(name)
-                .coreSize(coreSize)
-                .maxSize(maxSize)
-                .taskDecorator(ThreadPoolConfig.getTaskDecorator()));
-    }
-
     public static ThreadPoolExecutor computeThreadPoolExecutor(String name,
                                                                int coreSize,
                                                                int maxSize,
                                                                long keepAliveTime,
                                                                TimeUnit unit,
                                                                BlockingQueue<Runnable> workQueue) {
-        return computeThreadPoolExecutor(name, coreSize, maxSize, keepAliveTime, unit, workQueue, new CustomizableThreadFactory(name));
+        return computeThreadPoolExecutor(name, coreSize, maxSize, keepAliveTime, unit, workQueue, null, null);
     }
 
     public static ThreadPoolExecutor computeThreadPoolExecutor(String name,
@@ -61,13 +61,8 @@ public class PoolExecutors {
                                                                long keepAliveTime,
                                                                TimeUnit unit,
                                                                BlockingQueue<Runnable> workQueue,
-                                                               RejectedExecutionHandler rejectedExecutionHandler) {
-        return computeThreadPoolExecutor(name,
-            new ThreadPoolExecutorBuilder(coreSize, maxSize, keepAliveTime)
-                .unit(unit)
-                .workQueue(workQueue)
-                .threadFactory(new CustomizableThreadFactory(name))
-                .rejectedExecutionHandler(rejectedExecutionHandler));
+                                                               RejectedExecutionHandler handler) {
+        return computeThreadPoolExecutor(name, coreSize, maxSize, keepAliveTime, unit, workQueue, null, handler);
     }
 
     public static ThreadPoolExecutor computeThreadPoolExecutor(String name,
@@ -75,29 +70,6 @@ public class PoolExecutors {
                                                                int maxSize,
                                                                long keepAliveTime,
                                                                TimeUnit unit,
-                                                               BlockingQueue<Runnable> workQueue,
-                                                               ThreadFactory threadFactory) {
-        return POOL_EXECUTOR_MAP.computeIfAbsent(name, k -> new ThreadPoolExecutor(coreSize, maxSize, keepAliveTime, unit, workQueue, threadFactory));
-    }
-
-    public static ThreadPoolExecutor computeThreadPoolExecutor(String name, ThreadPoolExecutorBuilder builder) {
-        return POOL_EXECUTOR_MAP.computeIfAbsent(name, k -> builder.build());
-    }
-
-    public static ThreadPoolExecutor computeThreadPoolExecutor(String name,
-                                                               int coreSize,
-                                                               int maxSize,
-                                                               int keepAliveSeconds,
-                                                               int queueCapacity,
-                                                               ThreadFactory threadFactory,
-                                                               RejectedExecutionHandler rejectedExecutionHandler) {
-        return computeThreadPoolExecutor(name, coreSize, maxSize, keepAliveSeconds, new LinkedBlockingQueue<>(queueCapacity), threadFactory, rejectedExecutionHandler);
-    }
-
-    public static ThreadPoolExecutor computeThreadPoolExecutor(String name,
-                                                               int coreSize,
-                                                               int maxSize,
-                                                               int keepAliveSeconds,
                                                                BlockingQueue<Runnable> workQueue,
                                                                ThreadFactory threadFactory,
                                                                RejectedExecutionHandler rejectedExecutionHandler) {
@@ -105,16 +77,23 @@ public class PoolExecutors {
             ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
                 coreSize,
                 maxSize,
-                keepAliveSeconds,
-                TimeUnit.SECONDS,
+                keepAliveTime,
+                unit,
                 workQueue,
-                threadFactory != null ? threadFactory : Executors.defaultThreadFactory()
+                threadFactory == null ? getDefaultThreadFactory(name) : threadFactory
             );
             if (rejectedExecutionHandler != null) {
                 threadPoolExecutor.setRejectedExecutionHandler(rejectedExecutionHandler);
             }
             return threadPoolExecutor;
         });
+    }
+
+    private static ThreadFactory getDefaultThreadFactory(String name) {
+        DefaultManagedAwareThreadFactory threadFactory = new DefaultManagedAwareThreadFactory();
+        threadFactory.setThreadGroupName(name);
+        threadFactory.setThreadNamePrefix(name);
+        return threadFactory;
     }
 
     public static ThreadPoolTaskExecutor defaultThreadPoolTaskExecutor() {

@@ -13,7 +13,7 @@ public class ContextConstant {
     public static final String DEFAULT_LOCALE = Locale.SIMPLIFIED_CHINESE.toString();
 
     /***************公共请求头的key********************/
-    public static final String DEFAULT_HEADER_PREFIX = "fun-header-";
+    public static final String DEFAULT_HEADER_PREFIX = "fun-";
     /**
      * token
      */

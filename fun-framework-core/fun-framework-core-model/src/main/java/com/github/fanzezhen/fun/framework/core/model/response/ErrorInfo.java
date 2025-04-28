@@ -15,6 +15,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@SuppressWarnings("unused")
 public class ErrorInfo implements Serializable {
     /**
      * 消息code

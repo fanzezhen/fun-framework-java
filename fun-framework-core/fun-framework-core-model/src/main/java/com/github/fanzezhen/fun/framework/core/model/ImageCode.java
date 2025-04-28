@@ -1,4 +1,4 @@
-package com.github.fanzezhen.fun.framework.core.model.bean;
+package com.github.fanzezhen.fun.framework.core.model;
 
 import lombok.Data;
 

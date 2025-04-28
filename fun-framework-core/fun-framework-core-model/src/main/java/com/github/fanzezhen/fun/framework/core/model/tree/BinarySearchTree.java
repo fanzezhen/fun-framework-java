@@ -3,6 +3,7 @@ package com.github.fanzezhen.fun.framework.core.model.tree;
 /**
  * @author fanzezhen
  */
+@SuppressWarnings("unused")
 public class BinarySearchTree<T extends Comparable<T>> {
     private BinaryNode<T> root;
 

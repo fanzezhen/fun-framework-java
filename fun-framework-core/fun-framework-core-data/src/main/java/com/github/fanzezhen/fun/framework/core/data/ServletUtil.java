@@ -3,6 +3,7 @@ package com.github.fanzezhen.fun.framework.core.data;
 import cn.hutool.core.map.MapUtil;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
+import com.github.fanzezhen.fun.framework.core.model.constant.ServletConstant;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;

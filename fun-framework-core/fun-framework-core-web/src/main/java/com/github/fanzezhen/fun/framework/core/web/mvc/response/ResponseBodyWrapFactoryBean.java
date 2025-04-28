@@ -1,4 +1,4 @@
-package com.github.fanzezhen.fun.framework.core.web.mvc;
+package com.github.fanzezhen.fun.framework.core.web.mvc.response;
 
 import cn.hutool.core.collection.CollUtil;
 import com.github.fanzezhen.fun.framework.core.web.FunCoreWebProperties;

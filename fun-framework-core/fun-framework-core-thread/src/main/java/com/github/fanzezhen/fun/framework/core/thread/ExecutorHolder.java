@@ -215,7 +215,8 @@ public class ExecutorHolder<R> {
      * @param suppliers 任务
      * @return 返回链式调用指针
      */
-    public ExecutorHolder<R> addTask(Supplier<R>... suppliers) {
+    @SafeVarargs
+    public final ExecutorHolder<R> addTask(Supplier<R>... suppliers) {
         return addTask((Function<Throwable, R>) null, suppliers);
     }
 

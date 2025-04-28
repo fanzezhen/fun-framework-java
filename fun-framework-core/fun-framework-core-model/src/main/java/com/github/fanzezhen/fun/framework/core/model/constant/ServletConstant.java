@@ -1,4 +1,4 @@
-package com.github.fanzezhen.fun.framework.core.data;
+package com.github.fanzezhen.fun.framework.core.model.constant;
 
 /**
  * Servlet常量

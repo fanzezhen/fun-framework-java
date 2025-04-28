@@ -25,6 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 @Accessors(chain = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@SuppressWarnings("unused")
 public class ActionResult<T> {
 
     private boolean success;

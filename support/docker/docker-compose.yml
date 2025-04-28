@@ -37,20 +37,53 @@ services:
     networks:
       - fun
 
+  easysearch:
+    image: registry.cn-hangzhou.aliyuncs.com/infinilabs/easysearch:latest
+    container_name: easysearch
+    hostname: easysearch
+    environment:
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - ./app/easysearch/config:/app/easysearch/config
+      - ./app/easysearch/data:/app/easysearch/data
+      - ./app/easysearch/logs:/app/easysearch/logs
+    ports:
+      - 9200:9200
+    networks:
+      - fun
 
   elasticsearch:
-    image: elasticsearch:7.7.0  #镜像
+    image: registry.cn-north-1.huaweicloud.com/elasticsearch:7.17.28  #镜像
     container_name: elasticsearch  #定义容器名称
     restart: always  #开机启动，失败也会一直重启
     environment:
       - "cluster.name=elasticsearch" #设置集群名称为elasticsearch
       - "discovery.type=single-node" #以单一节点模式启动
-      - "ES_JAVA_OPTS=-Xms512m -Xmx1024m" #设置使用jvm内存大小
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g" #设置使用jvm内存大小
     volumes:
       - ./app/elasticsearch/plugins:/usr/share/elasticsearch/plugins #插件文件挂载
       - ./app/elasticsearch/data:/usr/share/elasticsearch/data #数据文件挂载
     ports:
       - "9200:9200"
+    networks:
+      - fun
+
+  kibana:
+    image: kibana:latest
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://easysearch:9200
+    ports:
+      - "5601:5601" # 暴露 Kibana 的 Web 界面端口
+    depends_on:
+      - easysearch
     networks:
       - fun
 

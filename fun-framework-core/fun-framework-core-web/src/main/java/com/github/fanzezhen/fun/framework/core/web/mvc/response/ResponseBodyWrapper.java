@@ -1,4 +1,4 @@
-package com.github.fanzezhen.fun.framework.core.web.mvc;
+package com.github.fanzezhen.fun.framework.core.web.mvc.response;
 
 /**
  * @author fanzezhen

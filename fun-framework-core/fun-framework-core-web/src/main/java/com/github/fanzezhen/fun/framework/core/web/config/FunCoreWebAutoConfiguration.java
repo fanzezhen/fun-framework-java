@@ -2,7 +2,7 @@ package com.github.fanzezhen.fun.framework.core.web.config;
 
 import com.github.fanzezhen.fun.framework.core.model.response.ActionResult;
 import com.github.fanzezhen.fun.framework.core.web.FunCoreWebProperties;
-import com.github.fanzezhen.fun.framework.core.web.mvc.ResponseBodyWrapper;
+import com.github.fanzezhen.fun.framework.core.web.mvc.response.ResponseBodyWrapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

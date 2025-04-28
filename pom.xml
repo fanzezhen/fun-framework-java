@@ -694,7 +694,7 @@
     <module>fun-framework-proxy</module>
   </modules>
 
-  <name>${project.groupId}.${project.artifactId}</name>
+  <name>${project.artifactId}</name>
   <url>https://github.com/fanzezhen/${project.artifactId}</url>
   <description>Commonly used</description>
 

@@ -1,4 +1,4 @@
-package com.github.fanzezhen.fun.framework.core.web.mvc;
+package com.github.fanzezhen.fun.framework.core.web.mvc.response;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import com.github.fanzezhen.fun.framework.core.web.FunCoreWebProperties;
@@ -54,7 +54,7 @@ public class ResponseBodyWrapHandler implements HandlerMethodReturnValueHandler 
             // 对特殊的URL不进行统一包装结果处理
             AntPathMatcher antPathMatcher = new AntPathMatcher();
             String finalRequestUri = requestUri;
-            if (funCoreWebProperties.getResponseIgnoreWrapUrls().stream().noneMatch(ignore -> antPathMatcher.match(ignore, finalRequestUri))) {
+            if (funCoreWebProperties.getResponseIgnoreWrapPaths().stream().noneMatch(ignore -> antPathMatcher.match(ignore, finalRequestUri))) {
                 delegate.handleReturnValue(responseBodyWrapper.wrap(returnValue), returnType, mavContainer, webRequest);
             } else {
                 delegate.handleReturnValue(returnValue, returnType, mavContainer, webRequest);

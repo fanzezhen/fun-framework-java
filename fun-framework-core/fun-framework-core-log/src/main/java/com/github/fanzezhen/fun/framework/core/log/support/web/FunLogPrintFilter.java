@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 打印日志
@@ -156,7 +157,7 @@ public class FunLogPrintFilter implements Filter {
     @Component
     static class DefaultArgResolve implements ArgResolve {
 
-        private final Set<Class<?>> toStringClassSet = new HashSet<>();
+        private final Set<Class<?>> toStringClassSet = ConcurrentHashMap.newKeySet();
 
         @Override
         public boolean isSupport(Object o) {
