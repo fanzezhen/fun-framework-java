@@ -44,7 +44,7 @@
     <javax.servlet.version>4.0.1</javax.servlet.version>
     <javax.persistence.version>2.2</javax.persistence.version>
     <nz.net.ultraq.thymeleaf.version>2.4.1</nz.net.ultraq.thymeleaf.version>
-    <net.lingala.zip4j.version>2.6.2</net.lingala.zip4j.version>
+    <net.lingala.zip4j.version>2.11.3</net.lingala.zip4j.version>
     <org.apache.velocity.version>2.3</org.apache.velocity.version>
     <org.aspectj.version>1.9.6</org.aspectj.version>
     <org.freemarker.version>2.3.30</org.freemarker.version>
