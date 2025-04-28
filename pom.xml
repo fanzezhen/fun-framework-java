@@ -54,7 +54,7 @@
     <org.apache.commons.commons-beanutils.version>1.9.4</org.apache.commons.commons-beanutils.version>
     <org.apache.commons.commons-collections4.version>4.4</org.apache.commons.commons-collections4.version>
     <org.apache.logging.log4j.version>2.20.0</org.apache.logging.log4j.version>
-    <org.apache.poi.version>5.2.5</org.apache.poi.version>
+    <org.apache.poi.version>5.4.0</org.apache.poi.version>
     <org.bouncycastle.bcprov-jdk15on.version>1.70</org.bouncycastle.bcprov-jdk15on.version>
     <org.hibernate.validator.version>8.0.1.Final</org.hibernate.validator.version>
     <org.projectlombok.version>1.18.36</org.projectlombok.version>
