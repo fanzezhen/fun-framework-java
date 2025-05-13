@@ -97,24 +97,24 @@ public class Generator {
                 .customFile(file -> file
                     .enableFileOverride()
                     .fileName("BO.java")
-                    .formatNameFunction(tableInfo -> CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(StringUtil.removeAnyPrefix(tableInfo.getName(), tablePrefixes))))
+                    .formatNameFunction(tableInfo -> CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(StringUtil.removeAnyPrefixIgnoreCase(tableInfo.getName(), tablePrefixes))))
                     .templatePath("/templates/bo.java.vm")
                     .filePath(packageDir + "/model/bo"))
                 .customFile(file -> file
                     .enableFileOverride()
                     .fileName("DTO.java")
-                    .formatNameFunction(tableInfo -> CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(StringUtil.removeAnyPrefix(tableInfo.getName(), tablePrefixes))))
+                    .formatNameFunction(tableInfo -> CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(StringUtil.removeAnyPrefixIgnoreCase(tableInfo.getName(), tablePrefixes))))
                     .templatePath("/templates/dto.java.vm")
                     .filePath(packageDir + "/model/dto"))
                 .customFile(file -> file
                     .enableFileOverride()
                     .fileName("SearchDTO.java")
-                    .formatNameFunction(tableInfo -> CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(StringUtil.removeAnyPrefix(tableInfo.getName(), tablePrefixes))))
+                    .formatNameFunction(tableInfo -> CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(StringUtil.removeAnyPrefixIgnoreCase(tableInfo.getName(), tablePrefixes))))
                     .templatePath("/templates/searchDTO.java.vm")
                     .filePath(packageDir + "/model/dto"))
                 .beforeOutputFile((tableInfo, objectMap) -> {
-                    objectMap.put("name", CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(StringUtil.removeAnyPrefix(tableInfo.getName(), tablePrefixes))));
-                    objectMap.put("path", StringUtil.removeAnyPrefix(tableInfo.getName(), tablePrefixes).replace(StrPool.UNDERLINE, StrPool.DASHED));
+                    objectMap.put("name", CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(StringUtil.removeAnyPrefixIgnoreCase(tableInfo.getName(), tablePrefixes))));
+                    objectMap.put("path", StringUtil.removeAnyPrefixIgnoreCase(tableInfo.getName(), tablePrefixes).replace(StrPool.UNDERLINE, StrPool.DASHED));
                 })
                 .customMap(new JSONObject()
                     .fluentPut("pkType", pkType)

@@ -15,14 +15,26 @@ public class StringUtil {
     /**
      * 移除字符串前缀，优先移除最长的前缀
      */
-    public static String removeAnyPrefix(String str, String... prefixes) {
+    public static String removeAnyPrefix(CharSequence str, boolean ignoreCase, CharSequence... prefixes) {
         if (CharSequenceUtil.isNotEmpty(str)) {
-            for (String prefix : Arrays.stream(prefixes).sorted(Comparator.comparingInt(String::length).reversed()).toArray(String[]::new)) {
-                if (str.startsWith(prefix)) {
-                    return str.substring(prefix.length());
+            for (CharSequence prefix : Arrays.stream(prefixes).sorted(Comparator.comparingInt(CharSequence::length).reversed()).toArray(CharSequence[]::new)) {
+                if (CharSequenceUtil.startWith(str, prefix, ignoreCase)) {
+                    return CharSequenceUtil.subSuf(str, prefix.length());
                 }
             }
         }
-        return str;
+        return str.toString();
+    }
+    /**
+     * 移除字符串前缀，优先移除最长的前缀
+     */
+    public static String removeAnyPrefix(CharSequence str, CharSequence... prefixes) {
+        return removeAnyPrefix(str, false, prefixes);
+    }
+    /**
+     * 移除字符串前缀，优先移除最长的前缀
+     */
+    public static String removeAnyPrefixIgnoreCase(CharSequence str, CharSequence... prefixes) {
+        return removeAnyPrefix(str, true, prefixes);
     }
 }
