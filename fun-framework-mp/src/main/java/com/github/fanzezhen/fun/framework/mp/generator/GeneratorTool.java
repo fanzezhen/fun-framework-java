@@ -6,6 +6,7 @@ import cn.hutool.core.util.ArrayUtil;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.*;
 
+import java.io.File;
 import java.util.Collections;
 
 /**
@@ -33,7 +34,7 @@ public class GeneratorTool {
                 // 生成结束时不打开文件管理器
                 .disableOpenDir()
                 // 指定输出目录
-                .outputDir(System.getProperty("user.dir") + StrPool.SLASH + generatorBean.getJavaDir()))
+                .outputDir(System.getProperty("user.dir") + File.separator + generatorBean.getJavaDir()))
                 .packageConfig(builder -> builder
                         // 设置父包名
                         .parent(generatorBean.getParentPackageName())

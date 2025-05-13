@@ -11,12 +11,12 @@ class GeneratorTest {
     @Test
     @Disabled("测试生成器")
     void testGenerator() {
-        Generator.fastAutoGenerator(Generator.Config.ofTable(
-            "jdbc:mysql://localhost:3306/dev?useSSL=false&useUnicode=true",
-            "root",
-            "root",
-            "sys_dict", "sys_dict_item"));
-        Assertions.assertTrue(true);
+        Assertions.assertDoesNotThrow(() ->
+            Generator.fastAutoGenerator(Generator.Config.ofTable(
+                "jdbc:mysql://localhost:3306/dev?useSSL=false&useUnicode=true",
+                "root",
+                "root",
+                "sys_dict", "sys_dict_item")));
     }
 
 }

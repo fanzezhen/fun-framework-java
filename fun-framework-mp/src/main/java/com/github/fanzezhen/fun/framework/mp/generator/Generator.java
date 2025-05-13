@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
+import com.github.fanzezhen.fun.framework.core.data.StringUtil;
 import com.github.fanzezhen.fun.framework.mp.base.IBaseMapper;
 import com.github.fanzezhen.fun.framework.mp.base.IService;
 import com.github.fanzezhen.fun.framework.mp.base.ServiceImpl;
@@ -18,6 +19,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.JdbcType;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -36,12 +38,15 @@ public class Generator {
         Class<?> superEntityClass = BaseGenericEntity.class;
         String[] tables = config.getTableNames();
         String[] tablePrefixes = config.getTablePrefixes();
+        String moduleName = config.getModuleName();
         String parentPackageName = config.getParentPackage();
         String since = config.getSince();
         String author = System.getProperty("user.name");
         String logicDeleteColumnName = "DEL_FLAG";
-        String outputDir = "src/test/java/";
-        String outputPackage = outputDir + parentPackageName.replace(".", StrPool.SLASH);
+        String moduleDir = config.getOutputDirOrCurrent() + (CharSequenceUtil.isNotBlank(moduleName) ?
+            (moduleName.trim() + File.separator) : CharSequenceUtil.EMPTY) +
+            "src" + File.separator + "main" + File.separator + "java" + File.separator;
+        String packageDir = moduleDir + parentPackageName.replace(".", File.separator);
         FastAutoGenerator.create(config.getUrl(), config.getUsername(), config.getPassword())
             .dataSourceConfig(builder -> builder.typeConvertHandler((globalConfig, typeRegistry, metaInfo) -> {
                 IColumnType columnType = typeRegistry.getColumnType(metaInfo);
@@ -58,7 +63,7 @@ public class Generator {
                 builder.author(author) // 设置作者
                     .disableOpenDir() //禁止打开输出目录
                     .commentDate(() -> since)
-                    .outputDir(System.getProperty("user.dir") + StrPool.SLASH + outputDir) // 指定输出目录
+                    .outputDir(moduleDir) // 指定输出目录
             )
             .strategyConfig(builder -> {
                 builder.addInclude(tables);
@@ -92,24 +97,24 @@ public class Generator {
                 .customFile(file -> file
                     .enableFileOverride()
                     .fileName("BO.java")
-                    .formatNameFunction(tableInfo -> CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(tableInfo.getName())))
+                    .formatNameFunction(tableInfo -> CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(StringUtil.removeAnyPrefix(tableInfo.getName(), tablePrefixes))))
                     .templatePath("/templates/bo.java.vm")
-                    .filePath(outputPackage + "/model/bo"))
+                    .filePath(packageDir + "/model/bo"))
                 .customFile(file -> file
                     .enableFileOverride()
                     .fileName("DTO.java")
-                    .formatNameFunction(tableInfo -> CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(tableInfo.getName())))
+                    .formatNameFunction(tableInfo -> CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(StringUtil.removeAnyPrefix(tableInfo.getName(), tablePrefixes))))
                     .templatePath("/templates/dto.java.vm")
-                    .filePath(outputPackage + "/model/dto"))
+                    .filePath(packageDir + "/model/dto"))
                 .customFile(file -> file
                     .enableFileOverride()
                     .fileName("SearchDTO.java")
-                    .formatNameFunction(tableInfo -> CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(tableInfo.getName())))
+                    .formatNameFunction(tableInfo -> CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(StringUtil.removeAnyPrefix(tableInfo.getName(), tablePrefixes))))
                     .templatePath("/templates/searchDTO.java.vm")
-                    .filePath(outputPackage + "/model/dto"))
+                    .filePath(packageDir + "/model/dto"))
                 .beforeOutputFile((tableInfo, objectMap) -> {
-                    objectMap.put("name", CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(tableInfo.getName())));
-                    objectMap.put("path", tableInfo.getName().replace(StrPool.UNDERLINE, StrPool.DASHED));
+                    objectMap.put("name", CharSequenceUtil.upperFirst(CharSequenceUtil.toCamelCase(StringUtil.removeAnyPrefix(tableInfo.getName(), tablePrefixes))));
+                    objectMap.put("path", StringUtil.removeAnyPrefix(tableInfo.getName(), tablePrefixes).replace(StrPool.UNDERLINE, StrPool.DASHED));
                 })
                 .customMap(new JSONObject()
                     .fluentPut("pkType", pkType)
@@ -128,9 +133,17 @@ public class Generator {
         static final String DEFAULT_SINCE = "1.0.0";
         static final String DEFAULT_AUTHOR = System.getProperty("user.name");
         static final String[] DEFAULT_TABLE_PREFIXES = new String[]{"t_"};
+        /**
+         * 文件输出目录
+         */
+        private String outputDir;
         private String url;
         private String username;
         private String password;
+        /**
+         * 模块名
+         */
+        private String moduleName;
         private String parentPackage;
         private String since;
         private String author;
@@ -161,6 +174,18 @@ public class Generator {
             this.parentPackage = parentPackage;
             this.since = since;
             this.author = author;
+        }
+
+        public String getOutputDirOrCurrent() {
+            String dir = CharSequenceUtil.isBlank(outputDir) ? System.getProperty("user.dir") : outputDir;
+            if (!dir.endsWith(File.separator)) {
+                dir += File.separator;
+            }
+            return dir;
+        }
+
+        public static void main(String[] args) {
+            System.out.println(System.getProperty("user.dir"));
         }
     }
 }
