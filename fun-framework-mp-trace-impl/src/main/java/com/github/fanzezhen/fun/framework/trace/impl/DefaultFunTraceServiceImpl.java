@@ -25,7 +25,7 @@ import java.util.Collection;
  */
 @Slf4j
 @Service
-@ConditionalOnMissingBean(IFunTraceService.class)
+@ConditionalOnMissingBean(value = IFunTraceService.class, ignored = DefaultFunTraceServiceImpl.class)
 public class DefaultFunTraceServiceImpl implements IFunTraceService<TraceEntity, TraceDetailEntity> {
     @Resource
     private ITraceRepository dao;

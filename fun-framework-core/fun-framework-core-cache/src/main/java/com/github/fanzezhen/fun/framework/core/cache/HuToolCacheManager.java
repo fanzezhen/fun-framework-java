@@ -19,7 +19,7 @@ import java.util.Set;
  * @since 3.1.8
  */
 @EnableCaching
-@ConditionalOnMissingBean(CacheManager.class)
+@ConditionalOnMissingBean(value = CacheManager.class, ignored = HuToolCacheManager.class)
 public class HuToolCacheManager implements CacheManager, InitializingBean {
     @Value("${com.github.fanzezhen.fun.framework.core.cache.time-out.seconds:600}")
     private Integer timeoutSeconds;

@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 @Slf4j
 @Order
 @Service
-@ConditionalOnMissingBean(LockService.class)
+@ConditionalOnMissingBean(value = LockService.class,ignored = MemoryLockServiceImpl.class)
 public class MemoryLockServiceImpl implements LockService {
     @Resource
     private CacheService memoryCacheServiceImpl;

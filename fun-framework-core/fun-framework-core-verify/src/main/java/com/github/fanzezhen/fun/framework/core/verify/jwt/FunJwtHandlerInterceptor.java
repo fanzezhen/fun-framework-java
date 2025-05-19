@@ -4,6 +4,7 @@ import com.github.fanzezhen.fun.framework.core.verify.FunCoreVerifyProperties;
 import com.github.fanzezhen.fun.framework.core.verify.jwt.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 import org.springframework.util.PatternMatchUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,6 +17,7 @@ import javax.annotation.Resource;
  * @author fanzezhen
  */
 @Component
+@ConditionalOnBean(JwtService.class)
 public class FunJwtHandlerInterceptor implements HandlerInterceptor {
     @Resource
     private JwtService jwtService;

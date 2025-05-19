@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
  */
 @Slf4j
 @Service
-@ConditionalOnMissingBean(JwtService.class)
+@ConditionalOnMissingBean(value = JwtService.class, ignored = FunDefaultJwtService.class)
 public class FunDefaultJwtService implements JwtService {
     @Resource
     private FunCoreVerifyProperties funCoreVerifyProperties;

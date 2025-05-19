@@ -20,33 +20,33 @@ fun.core.log.print-level=DEBUG
 # trace级别日志单个文件大小，默认1MB
 fun.core.log.level.trace.max-file-size=1MB
 # trace级别日志最久保存天数，默认30
-fun.core.log.level.trace.max-history=30
+fun.core.log.level.trace.max-history=31
 # trace级别日志总文件大小，默认1GB
-fun.core.log.level.trace.total-size-cap=1GB
+fun.core.log.level.trace.total-size-cap=100MB
 # debug级别日志单个文件大小，默认1MB
 fun.core.log.level.debug.max-file-size=1MB
 # debug级别日志最久保存天数，默认30
-fun.core.log.level.debug.max-history=30
+fun.core.log.level.debug.max-history=7
 # debug级别日志总文件大小，默认1GB
-fun.core.log.level.debug.total-size-cap=1GB
+fun.core.log.level.debug.total-size-cap=10MB
 # info级别日志单个文件大小，默认1MB
 fun.core.log.level.info.max-file-size=1MB
 # info级别日志最久保存天数，默认30
-fun.core.log.level.info.max-history=30
+fun.core.log.level.info.max-history=31
 # info级别日志总文件大小，默认1GB
 fun.core.log.level.info.total-size-cap=1GB
 # warn级别日志单个文件大小，默认1MB
 fun.core.log.level.warn.max-file-size=1MB
 # warn级别日志最久保存天数，默认30
-fun.core.log.level.warn.max-history=30
+fun.core.log.level.warn.max-history=185
 # warn级别日志总文件大小，默认1TB
-fun.core.log.level.warn.total-size-cap=1TB
+fun.core.log.level.warn.total-size-cap=1GB
 # error级别日志单个文件大小，默认1MB
 fun.core.log.level.error.max-file-size=1MB
 # error级别日志最久保存天数，默认30
-fun.core.log.level.error.max-history=30
+fun.core.log.level.error.max-history=366
 # error级别日志总文件大小，默认1TB
-fun.core.log.level.error.total-size-cap=1TB
+fun.core.log.level.error.total-size-cap=1GB
 # 日志文件路径
 logging.file.path=fun-demo-framework/fun-demo-framework-log/target/logs
 # 配置控制台日志显示格式

@@ -6,6 +6,96 @@
       "defaultValue": "DEBUG",
       "description": "日志级别.",
       "type": "java.lang.String"
+    },
+    {
+      "name": "fun.core.log.level.trace.max-file-size",
+      "type": "java.lang.String",
+      "description": "TRACE 日志单个文件最大大小.",
+      "defaultValue": "1MB"
+    },
+    {
+      "name": "fun.core.log.level.trace.max-history",
+      "type": "java.lang.String",
+      "description": "TRACE 日志最大保留天数.",
+      "defaultValue": "31"
+    },
+    {
+      "name": "fun.core.log.level.trace.total-size-cap",
+      "type": "java.lang.String",
+      "description": "TRACE 日志总大小上限.",
+      "defaultValue": "100MB"
+    },
+    {
+      "name": "fun.core.log.level.debug.max-file-size",
+      "type": "java.lang.String",
+      "description": "DEBUG 日志单个文件最大大小.",
+      "defaultValue": "1MB"
+    },
+    {
+      "name": "fun.core.log.level.debug.max-history",
+      "type": "java.lang.String",
+      "description": "DEBUG 日志最大保留天数.",
+      "defaultValue": "7"
+    },
+    {
+      "name": "fun.core.log.level.debug.total-size-cap",
+      "type": "java.lang.String",
+      "description": "DEBUG 日志总大小上限.",
+      "defaultValue": "10MB"
+    },
+    {
+      "name": "fun.core.log.level.info.max-file-size",
+      "type": "java.lang.String",
+      "description": "INFO 日志单个文件最大大小.",
+      "defaultValue": "1MB"
+    },
+    {
+      "name": "fun.core.log.level.info.max-history",
+      "type": "java.lang.String",
+      "description": "INFO 日志最大保留天数.",
+      "defaultValue": "31"
+    },
+    {
+      "name": "fun.core.log.level.info.total-size-cap",
+      "type": "java.lang.String",
+      "description": "INFO 日志总大小上限.",
+      "defaultValue": "1GB"
+    },
+    {
+      "name": "fun.core.log.level.warn.max-file-size",
+      "type": "java.lang.String",
+      "description": "WARN 日志单个文件最大大小.",
+      "defaultValue": "1MB"
+    },
+    {
+      "name": "fun.core.log.level.warn.max-history",
+      "type": "java.lang.String",
+      "description": "WARN 日志最大保留天数.",
+      "defaultValue": "185"
+    },
+    {
+      "name": "fun.core.log.level.warn.total-size-cap",
+      "type": "java.lang.String",
+      "description": "WARN 日志总大小上限.",
+      "defaultValue": "1GB"
+    },
+    {
+      "name": "fun.core.log.level.error.max-file-size",
+      "type": "java.lang.String",
+      "description": "ERROR 日志单个文件最大大小.",
+      "defaultValue": "1MB"
+    },
+    {
+      "name": "fun.core.log.level.error.max-history",
+      "type": "java.lang.String",
+      "description": "ERROR 日志最大保留天数.",
+      "defaultValue": "366"
+    },
+    {
+      "name": "fun.core.log.level.error.total-size-cap",
+      "type": "java.lang.String",
+      "description": "ERROR 日志总大小上限.",
+      "defaultValue": "1GB"
     }
   ]
 }

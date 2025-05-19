@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Order
 @Service
-@ConditionalOnMissingBean(CacheService.class)
+@ConditionalOnMissingBean(value = CacheService.class, ignored = MemoryCacheServiceImpl.class)
 public class MemoryCacheServiceImpl implements CacheService {
     @Override
     public String get(String k) {
