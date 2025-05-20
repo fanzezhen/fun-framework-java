@@ -10,7 +10,7 @@
   <version>${revision}</version>
 
   <properties>
-    <revision>3.4.3.7-SNAPSHOT</revision>
+    <revision>3.4.3.7</revision>
     <app.server>-tomcat</app.server>
     <ch.qos.logback.version>1.2.3</ch.qos.logback.version>
     <cn.hutool.version>5.8.28</cn.hutool.version>
@@ -61,7 +61,7 @@
     <org.projectlombok.version>1.18.36</org.projectlombok.version>
     <org.redisson.version>3.23.2</org.redisson.version>
     <org.reflections.version>0.9.12</org.reflections.version>
-    <org.springdoc.version>2.1.0</org.springdoc.version>
+    <org.springdoc.version>2.8.8</org.springdoc.version>
     <org.springframework.version>6.2.3</org.springframework.version>
     <org.springframework.boot.version>3.4.3</org.springframework.boot.version>
     <org.springframework.cloud.version>2024.0.0</org.springframework.cloud.version>

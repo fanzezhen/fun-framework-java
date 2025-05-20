@@ -1,6 +1,6 @@
 package com.github.fanzezhen.fun.framework.core.log.support.web;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSON;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
@@ -67,9 +67,9 @@ public class FunLogPrintFilter implements Filter {
         if (Objects.isNull(levelLogger)) {
             return joinPoint.proceed(joinPoint.getArgs());
         }
-        levelLogger.log("请求参数：    {}", resolveArgs(joinPoint.getArgs()));
+        levelLogger.log("入参：{}", resolveArgs(joinPoint.getArgs()));
         final Object object = joinPoint.proceed(joinPoint.getArgs());
-        levelLogger.log("请求返回值：      {}", JSON.toJSONString(object));
+        levelLogger.log("出参：{}", resolveArg(object));
         return object;
     }
 
@@ -125,35 +125,41 @@ public class FunLogPrintFilter implements Filter {
     }
 
 
-    private String resolveArgs(Object[] args) {
+    private String resolveArgs(Object... args) {
         if (Objects.isNull(args) || args.length == 0) {
             return "";
         }
-        List<Object> params = new ArrayList<>(args.length);
+        if (args.length == 1) {
+            return resolveArg(args[0]);
+        } else {
+            String[] strArr = new String[args.length];
+            for (int i = 0; i < args.length; i++) {
+                strArr[i] = resolveArg(args[i]);
+            }
+            return JSON.toJSONString(strArr);
+        }
+    }
 
-        for (Object arg : args) {
-            for (ArgResolve argResolve : argResolves) {
-                if (Objects.isNull(arg)) {
-                    continue;
-                }
-                if (argResolve.isSupport(arg)) {
-                    params.add(argResolve.resolve(arg));
-                    break;
-                }
+
+    private String resolveArg(Object arg) {
+        for (ArgResolve argResolve : argResolves) {
+            if (argResolve.isSupport(arg)) {
+                return argResolve.resolve(arg);
             }
         }
-        return params.toString();
+        return "'不支持的类型：" + arg.getClass().getName() + "'";
     }
 
     interface ArgResolve {
         boolean isSupport(Object o);
 
-        Object resolve(Object o);
+        String resolve(Object o);
     }
 
     /**
      * 默认不做处理
      */
+    @Order
     @Component
     static class DefaultArgResolve implements ArgResolve {
 
@@ -168,7 +174,10 @@ public class FunLogPrintFilter implements Filter {
          * 优先json转，如果失败则直接toString
          */
         @Override
-        public Object resolve(Object o) {
+        public String resolve(Object o) {
+            if (o == null) {
+                return null;
+            }
             if (toStringClassSet.contains(o.getClass())) {
                 return o.toString();
             }
@@ -184,6 +193,7 @@ public class FunLogPrintFilter implements Filter {
 
     }
 
+    @Order(Short.MAX_VALUE-4)
     @Component
     static class IoArgResolve implements ArgResolve {
 
@@ -197,12 +207,13 @@ public class FunLogPrintFilter implements Filter {
         }
 
         @Override
-        public Object resolve(Object o) {
-            return "参数为文件流类型，忽略内容打印";
+        public String resolve(Object o) {
+            return "'不支持的类型：InputStream'";
         }
 
     }
 
+    @Order(Short.MAX_VALUE-3)
     @Component
     static class PartArgResolve extends DefaultArgResolve {
 
@@ -212,7 +223,7 @@ public class FunLogPrintFilter implements Filter {
         }
 
         @Override
-        public Object resolve(Object o) {
+        public String resolve(Object o) {
             Part p = (Part) o;
             return super.resolve(new FileInfo(p.getName(), p.getSubmittedFileName(), p.getSize()));
         }
@@ -220,6 +231,7 @@ public class FunLogPrintFilter implements Filter {
     }
 
     @Component
+    @Order(Short.MAX_VALUE-2)
     static class MultipartFileArgResolve extends DefaultArgResolve {
 
         @Override
@@ -228,9 +240,39 @@ public class FunLogPrintFilter implements Filter {
         }
 
         @Override
-        public Object resolve(Object o) {
+        public String resolve(Object o) {
             MultipartFile file = (MultipartFile) o;
             return super.resolve(new FileInfo(file.getName(), file.getOriginalFilename(), file.getSize()));
+        }
+    }
+
+    @Component
+    @Order(Short.MAX_VALUE-1)
+    static class BytesArgResolve extends DefaultArgResolve {
+
+        @Override
+        public boolean isSupport(Object o) {
+            return o instanceof byte[];
+        }
+
+        @Override
+        public String resolve(Object o) {
+            return "'不支持的类型：byte[]'";
+        }
+    }
+
+    @Component
+    @Order(Short.MAX_VALUE)
+    static class CharSequenceArgResolve extends DefaultArgResolve {
+
+        @Override
+        public boolean isSupport(Object o) {
+            return o instanceof CharSequence;
+        }
+
+        @Override
+        public String resolve(Object o) {
+            return o.toString();
         }
     }
 

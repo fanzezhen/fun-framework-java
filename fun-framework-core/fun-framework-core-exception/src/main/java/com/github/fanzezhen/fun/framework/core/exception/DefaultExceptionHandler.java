@@ -3,6 +3,7 @@ package com.github.fanzezhen.fun.framework.core.exception;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
 import com.github.fanzezhen.fun.framework.core.model.response.ActionResult;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -23,6 +24,7 @@ import java.util.List;
  * @author fanzezhen
  */
 @Slf4j
+@Hidden
 @RestControllerAdvice
 @SuppressWarnings("unused")
 public class DefaultExceptionHandler {

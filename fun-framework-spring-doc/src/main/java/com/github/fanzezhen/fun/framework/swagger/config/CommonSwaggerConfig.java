@@ -17,6 +17,6 @@ public class CommonSwaggerConfig {
 
     @Bean
     public OpenAPI springOpenApi() {
-        return (new OpenAPI()).info(this.info());
+        return new OpenAPI().info(this.info());
     }
 }
