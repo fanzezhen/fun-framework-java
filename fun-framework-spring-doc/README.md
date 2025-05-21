@@ -26,3 +26,11 @@ common-springdoc
     project.license=The Apache License
     # 项目许可链接
     project.license.url=https://www.apache.org/licenses/LICENSE-2.0
+
+访问地址 ：/swagger-ui/index.html
+
+常见报错
+* Unable to render this definition 
+
+    
+    spring-doc版本号与spring-boot版本号不匹配
