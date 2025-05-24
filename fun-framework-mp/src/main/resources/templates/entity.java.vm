@@ -18,11 +18,7 @@ import lombok.experimental.Accessors;
 #end
 
 /**
- * $!{table.comment}
- *
- * @author ${author}
- * @createTime ${createTime}
- * @since ${date}
+ * $!{table.comment} 实体类
  */
 #if(${entityLombokModel})
 @Getter

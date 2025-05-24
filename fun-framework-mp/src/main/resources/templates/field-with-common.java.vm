@@ -1,0 +1,24 @@
+#parse("templates/field.java.vm")
+#foreach($field in ${table.commonFields})
+    #if(!${field.logicDeleteField})
+        #if(${field.keyFlag})
+#set($keyPropertyName = ${field.propertyName})
+        #end
+        #if("$!field.comment" != "")
+            #if(${springdoc})
+    @Schema(description = "${field.comment}")
+            #elseif(${swagger})
+    @ApiModelProperty("${field.comment}")
+            #else
+    /**
+     * ${field.comment}
+     */
+            #end
+        #else
+    /**
+     * 
+     */
+        #end
+    private ${field.propertyType} ${field.propertyName};
+    #end
+#end

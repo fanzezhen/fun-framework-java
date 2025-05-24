@@ -19,6 +19,9 @@ trim_trailing_whitespace = false
 [*.java]
 # 结尾换行符，可选"lf"、"cr"、"crlf"
 indent_size = 4
+[*.vm]
+# 结尾换行符，可选"lf"、"cr"、"crlf"
+indent_size = 4
 
 [*.{sh,yaml,yml,json,sql}]
 # 缩进的空格数

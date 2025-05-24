@@ -1,6 +1,7 @@
 package com.github.fanzezhen.fun.framework.core.data;
 
 import cn.hutool.core.text.CharSequenceUtil;
+import cn.hutool.core.util.ArrayUtil;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -13,6 +14,9 @@ import java.util.Comparator;
  */
 @SuppressWarnings("unused")
 public class StringUtil {
+    private StringUtil() {
+    }
+
     /**
      * 移除字符串前缀，只移除 prefixes 中第一个匹配到的前缀
      */
@@ -45,6 +49,9 @@ public class StringUtil {
      * 移除字符串前缀，优先移除最长的前缀
      */
     public static String removeMaxPrefix(CharSequence str, boolean ignoreCase, CharSequence... prefixes) {
+        if (ArrayUtil.isEmpty(prefixes)) {
+            return str.toString();
+        }
         return removeFirstPrefix(str, ignoreCase, Arrays.stream(prefixes).sorted(Comparator.comparingInt(CharSequence::length).reversed()).toArray(CharSequence[]::new));
     }
 
@@ -61,6 +68,7 @@ public class StringUtil {
     public static String removeAnyPrefixIgnoreCase(CharSequence str, CharSequence... prefixes) {
         return removeMaxPrefix(str, true, prefixes);
     }
+
     /**
      * 移除字符串前缀，只移除 suffixes 中第一个匹配到的前缀
      */
@@ -68,7 +76,7 @@ public class StringUtil {
         if (CharSequenceUtil.isNotEmpty(str)) {
             for (CharSequence suffix : suffixes) {
                 if (CharSequenceUtil.endWith(str, suffix, ignoreCase)) {
-                    return CharSequenceUtil.subPre(str, str.length()-suffix.length());
+                    return CharSequenceUtil.subPre(str, str.length() - suffix.length());
                 }
             }
         }

@@ -6,6 +6,7 @@ import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.ReflectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
+import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.github.fanzezhen.fun.framework.core.data.StringUtil;
@@ -17,6 +18,7 @@ import com.github.fanzezhen.fun.framework.mp.base.entity.BaseGenericEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.type.JdbcType;
 
 import java.io.File;
@@ -50,17 +52,14 @@ public class Generator {
         FastAutoGenerator.create(config.getUrl(), config.getUsername(), config.getPassword())
             .dataSourceConfig(builder -> builder.typeConvertHandler((globalConfig, typeRegistry, metaInfo) -> {
                 IColumnType columnType = typeRegistry.getColumnType(metaInfo);
-                if (metaInfo.getColumnName().equals(logicDeleteColumnName) &&
-                    DbColumnType.BYTE.equals(columnType) &&
-                    JdbcType.TINYINT.equals(metaInfo.getJdbcType())) {
-                    columnType = DbColumnType.INTEGER;
-                } else if (DbColumnType.LOCAL_DATE_TIME.equals(columnType)) {
-                    columnType = DbColumnType.DATE;
+                if (DbColumnType.BYTE.equals(columnType) && JdbcType.TINYINT.equals(metaInfo.getJdbcType())) {
+                    columnType = DbColumnType.SHORT;
                 }
                 return columnType;
             }))
             .globalConfig(builder ->
                 builder.author(author) // 设置作者
+                    .dateType(DateType.TIME_PACK)
                     .disableOpenDir() //禁止打开输出目录
                     .commentDate(() -> since)
                     .outputDir(moduleDir) // 指定输出目录
@@ -78,6 +77,7 @@ public class Generator {
                 .superServiceImplClass(ServiceImpl.class)
             )
             .strategyConfig(builder -> builder.mapperBuilder().enableFileOverride()
+                .mapperAnnotation(Mapper.class)
                 .superClass(IBaseMapper.class)
                 .disableMapperXml()
                 .convertXmlFileName(entityName -> null)
@@ -182,10 +182,6 @@ public class Generator {
                 dir += File.separator;
             }
             return dir;
-        }
-
-        public static void main(String[] args) {
-            System.out.println(System.getProperty("user.dir"));
         }
     }
 }

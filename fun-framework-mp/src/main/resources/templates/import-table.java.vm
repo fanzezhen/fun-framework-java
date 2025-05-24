@@ -1,0 +1,7 @@
+#foreach($pkg in ${table.importPackages})
+    #if(!$pkg.equals("com.baomidou.mybatisplus.annotation.TableName")
+    && !$pkg.equals("com.github.fanzezhen.fun.framework.mp.base.entity.BaseGenericEntity")
+    && !$pkg.equals("java.io.Serializable"))
+import ${pkg};
+    #end
+#end

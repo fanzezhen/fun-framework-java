@@ -4,14 +4,10 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import javax.annotation.PostConstruct;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 
 /**
- * @author fanzezhen
- * @createTime 2024/6/6 16:02
  */
 public class ServiceImpl<M extends BaseMapper<T>, T, B> extends com.baomidou.mybatisplus.extension.service.impl.ServiceImpl<M, T> implements IService<T, B> {
     protected Class<B> boClass;
@@ -27,13 +23,8 @@ public class ServiceImpl<M extends BaseMapper<T>, T, B> extends com.baomidou.myb
     }
 
     @PostConstruct
-    @SuppressWarnings("unchecked")
     public void init() {
-        for (Type interfaceType : this.getClass().getGenericInterfaces()) {
-            if (interfaceType instanceof ParameterizedType parameterizedType && parameterizedType.getRawType() == IService.class) {
-                boClass = (Class<B>) parameterizedType.getActualTypeArguments()[1];
-                break;
-            }
-        }
+        boClass = IService.getBoClass(this.getClass().getGenericInterfaces());
     }
+
 }

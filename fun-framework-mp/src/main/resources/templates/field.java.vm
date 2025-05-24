@@ -1,0 +1,21 @@
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in ${table.fields})
+    #if(!${field.logicDeleteField})
+        #if(${field.keyFlag})
+#set($keyPropertyName = ${field.propertyName})
+        #end
+        #if("$!field.comment" != "")
+            #if(${springdoc})
+    @Schema(description = "${field.comment}")
+            #elseif(${swagger})
+    @ApiModelProperty("${field.comment}")
+            #else
+    /**
+     * ${field.comment}
+     */
+            #end
+        #end
+    private ${field.propertyType} ${field.propertyName};
+    #end
+#end
+## ----------  END 字段循环遍历  ----------

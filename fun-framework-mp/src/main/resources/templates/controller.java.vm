@@ -23,11 +23,7 @@ import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 /**
- * $!{table.comment} 接口
- *
- * @author ${author}
- * @createTime ${createTime}
- * @since ${date}
+ * $!{table.comment} 控制器
  */
 @Slf4j
 #if(${restControllerStyle})
