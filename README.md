@@ -2,6 +2,13 @@ fun-framework-java
 ------------------------------------------
 此项目目的是为了将常用的通用功能组件化，减负实际工作中的开发任务。
 此项目仅后端组件，无web页面，具体应用示例可见 https://github.com/fanzezhen/demo
+分支
+
+| 分支名      | 说明                                        |
+|----------|-------------------------------------------|
+| master   | 主分支，目前基于“springboot3.5.x”持续迭代             |
+| lasted   | 最新分支，基于最新的springboot版本                    |
+| backup/* | 备份，例如“backup/jdk8-before-upgrade”为jdk8的版本 |
 
 # 文件说明
 
