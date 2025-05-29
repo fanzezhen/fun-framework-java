@@ -10,7 +10,7 @@
   <version>${revision}</version>
 
   <properties>
-    <revision>3.5.0.20250526-SNAPSHOT</revision>
+    <revision>3.5.0.20250530</revision>
     <app.server>-tomcat</app.server>
     <cn.hutool.version>5.8.38</cn.hutool.version>
     <cn.stylefeng.roses.version>2.2.13</cn.stylefeng.roses.version>
@@ -70,7 +70,8 @@
     <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
     <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
     <maven.plugin.validation>VERBOSE</maven.plugin.validation>
-    <nexus-staging-maven-plugin.version>1.7.0</nexus-staging-maven-plugin.version>
+    <plugin.license-maven-plugin.version>5.0.0</plugin.license-maven-plugin.version>
+    <sonatype.central-publishing-maven-plugin.version>0.7.0</sonatype.central-publishing-maven-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -586,15 +587,19 @@
 
   <name>${project.artifactId}</name>
   <url>https://github.com/fanzezhen/${project.artifactId}</url>
-  <description>Commonly used</description>
+  <description>通用功能组件</description>
 
   <!-- 代码库 -->
   <scm>
     <tag>master</tag>
-    <url>https://github.com/fanzezhen/common.git</url>
-    <connection>scm:git:git@github.com:fanzezhen/common.git</connection>
-    <developerConnection>scm:git:git@github.com:fanzezhen/common.git</developerConnection>
+    <url>https://github.com/fanzezhen/${project.artifactId}.git</url>
+    <connection>scm:git:git@github.com:fanzezhen/${project.artifactId}.git</connection>
+    <developerConnection>scm:git:git@github.com:fanzezhen/${project.artifactId}.git</developerConnection>
   </scm>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/fanzezhen/${project.artifactId}/issues</url>
+  </issueManagement>
 
   <!-- 开发者信息 -->
   <developers>
@@ -677,6 +682,54 @@
     <finalName>${project.artifactId}</finalName>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>com.mycila</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>${plugin.license-maven-plugin.version}</version>
+          <configuration>
+            <basedir>${basedir}</basedir>
+            <quiet>false</quiet>
+            <failIfMissing>true</failIfMissing>
+            <aggregate>false</aggregate>
+            <useDefaultExcludes>true</useDefaultExcludes>
+            <useDefaultMapping>true</useDefaultMapping>
+            <mapping>
+              <java>SLASHSTAR_STYLE</java>
+            </mapping>
+            <strictCheck>true</strictCheck>
+            <failIfMissing>true</failIfMissing>
+            <aggregate>true</aggregate>
+            <strictCheck>true</strictCheck>
+            <encoding>${project.build.sourceEncoding}</encoding>
+            <licenseSets>
+              <licenseSet>
+                <header>${maven.multiModuleProjectDirectory}/LICENSE</header>
+                <excludes>
+                  <exclude>**/README</exclude>
+                  <exclude>src/test/resources/**</exclude>
+                  <exclude>src/main/resources/**</exclude>
+                  <exclude>**/generated/**</exclude>
+                  <exclude>target/**</exclude>
+                </excludes>
+                <includes>
+                  <include>src/main/java/**/*.java</include>
+                </includes>
+              </licenseSet>
+            </licenseSets>
+            <properties>
+              <owner>fanzezhen</owner>
+              <email>842618916@qq.com</email>
+              <year>2025</year>
+            </properties>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
         <!-- 指定编译器版本 -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -803,6 +856,20 @@
           </executions>
         </plugin>
         <plugin>
+          <groupId>org.sonatype.central</groupId>
+          <artifactId>central-publishing-maven-plugin</artifactId>
+          <version>${sonatype.central-publishing-maven-plugin.version}</version>
+          <extensions>true</extensions>
+          <configuration>
+            <!-- 自动同步到 Central -->
+            <autoPublish>true</autoPublish>
+            <!-- 指向中央仓库 -->
+            <!-- 注意：必须要和Maven配置环境中的 server.id 对应上 -->
+            <publishingServerId>central</publishingServerId>
+            <centralBaseUrl>https://central.sonatype.com</centralBaseUrl>
+          </configuration>
+        </plugin>
+        <plugin>
           <groupId>org.sonatype.plugins</groupId>
           <artifactId>nexus-staging-maven-plugin</artifactId>
           <version>${nexus-staging-maven-plugin.version}</version>
@@ -878,6 +945,10 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+      </plugin>
       <!-- 指定编译器版本 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -902,8 +973,8 @@
         <artifactId>flatten-maven-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

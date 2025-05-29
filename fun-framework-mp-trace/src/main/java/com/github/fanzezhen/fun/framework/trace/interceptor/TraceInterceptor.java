@@ -1,6 +1,6 @@
 package com.github.fanzezhen.fun.framework.trace.interceptor;
 
-import com.baomidou.mybatisplus.extension.parser.JsqlParserGlobal;
+import com.github.fanzezhen.fun.framework.mp.base.MybatisUtil;
 import com.github.fanzezhen.fun.framework.mp.config.properties.MybatisProperties;
 import com.github.fanzezhen.fun.framework.trace.model.bo.TraceRuleBO;
 import com.github.fanzezhen.fun.framework.trace.service.IFunTraceService;
@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.insert.Insert;
 import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.plugin.Interceptor;
@@ -52,9 +51,7 @@ public class TraceInterceptor implements Interceptor {
                 result = invocation.proceed();
                 try {
                     Object parameter = invocation.getArgs()[1];
-                    BoundSql boundSql = mappedStatement.getBoundSql(parameter);
-                    String sql = boundSql.getSql();
-                    Statement statement = JsqlParserGlobal.parse(sql);
+                    Statement statement = MybatisUtil.getStatement(mappedStatement, parameter);
                     if (!(statement instanceof Insert)) {
                         return result;
                     }
