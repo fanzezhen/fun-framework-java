@@ -22,6 +22,7 @@
     <com.baomidou.version>3.5.12</com.baomidou.version>
     <com.fasterxml.jackson.version>2.19.0</com.fasterxml.jackson.version>
     <com.google.code.gson.version>2.13.1</com.google.code.gson.version>
+    <com.github.gavlyukovskiy.version>1.11.0</com.github.gavlyukovskiy.version>
     <com.github.ulisesbocchio.version>3.0.5</com.github.ulisesbocchio.version>
     <com.google.guava.version>33.4.8-jre</com.google.guava.version>
     <com.mysql.version>9.3.0</com.mysql.version>
@@ -50,7 +51,6 @@
     <org.springframework.cloud.version>2024.0.1</org.springframework.cloud.version>
     <org.ssssssss.version>2.2.1</org.ssssssss.version>
     <us.codecraft.version>1.0.3</us.codecraft.version>
-    <p6spy.version>3.9.1</p6spy.version>
 
     <project.build.main-class> </project.build.main-class>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -343,6 +343,11 @@
         <version>${com.fasterxml.jackson.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.github.gavlyukovskiy</groupId>
+        <artifactId>p6spy-spring-boot-starter</artifactId>
+        <version>${com.github.gavlyukovskiy.version}</version>
+      </dependency>
+      <dependency>
         <groupId>com.github.ulisesbocchio</groupId>
         <artifactId>jasypt-spring-boot-starter</artifactId>
         <version>${com.github.ulisesbocchio.version}</version>
@@ -407,11 +412,6 @@
         <groupId>javax.annotation</groupId>
         <artifactId>javax.annotation-api</artifactId>
         <version>${javax.annotation.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>p6spy</groupId>
-        <artifactId>p6spy</artifactId>
-        <version>${p6spy.version}</version>
       </dependency>
       <!--io-->
       <dependency>

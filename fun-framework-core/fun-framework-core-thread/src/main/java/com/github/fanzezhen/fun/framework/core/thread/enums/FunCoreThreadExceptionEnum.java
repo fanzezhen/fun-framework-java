@@ -1,6 +1,9 @@
 package com.github.fanzezhen.fun.framework.core.thread.enums;
 
 import cn.stylefeng.roses.kernel.model.exception.AbstractBaseExceptionEnum;
+import com.alibaba.fastjson2.JSONWriter;
+import com.alibaba.fastjson2.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 /**
@@ -18,6 +21,8 @@ public enum FunCoreThreadExceptionEnum implements AbstractBaseExceptionEnum {
         this.message = message;
     }
 
+    @JsonValue
+    @JSONField(serializeFeatures = JSONWriter.Feature.WriteEnumUsingToString)
     private final int code;
     @Getter
     private final String message;

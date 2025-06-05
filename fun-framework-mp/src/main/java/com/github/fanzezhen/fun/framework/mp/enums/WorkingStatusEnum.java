@@ -1,5 +1,7 @@
 package com.github.fanzezhen.fun.framework.mp.enums;
 
+import com.alibaba.fastjson2.JSONWriter;
+import com.alibaba.fastjson2.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
@@ -19,6 +21,7 @@ public enum WorkingStatusEnum {
 
     @EnumValue
     @JsonValue
+    @JSONField(serializeFeatures = JSONWriter.Feature.WriteEnumUsingToString)
     public final int code;
     @Getter
     private final String desc;

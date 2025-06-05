@@ -56,8 +56,8 @@
       <artifactId>jackson-module-parameter-names</artifactId>
     </dependency>
     <dependency>
-      <groupId>p6spy</groupId>
-      <artifactId>p6spy</artifactId>
+      <groupId>com.github.gavlyukovskiy</groupId>
+      <artifactId>p6spy-spring-boot-starter</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.velocity</groupId>

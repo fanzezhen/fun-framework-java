@@ -1,4 +1,9 @@
-package com.github.fanzezhen.fun.framework.core.model.enums;
+package com.github.fanzezhen.fun.framework.mp.enums;
+
+import com.alibaba.fastjson2.JSONWriter;
+import com.alibaba.fastjson2.annotation.JSONField;
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * 权限类型枚举类
@@ -14,6 +19,9 @@ public enum PermissionTypeEnum {
      */
     BUTTON(2, "按钮");
 
+    @EnumValue
+    @JsonValue
+    @JSONField(serializeFeatures = JSONWriter.Feature.WriteEnumUsingToString)
     private final int type;
     private final String desc;
 
