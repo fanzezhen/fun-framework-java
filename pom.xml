@@ -10,13 +10,13 @@
   <version>${revision}</version>
 
   <properties>
-    <revision>3.5.0.20250606-SNAPSHOT</revision>
+    <revision>3.5.0.20250606</revision>
     <app.server>-tomcat</app.server>
     <cn.hutool.version>5.8.38</cn.hutool.version>
     <cn.stylefeng.roses.version>2.2.13</cn.stylefeng.roses.version>
     <com.alibaba.version>2.0.37</com.alibaba.version>
     <com.alibaba.boot.version>0.2.12</com.alibaba.boot.version>
-    <com.alibaba.cloud.version>2023.0.3.2</com.alibaba.cloud.version>
+    <com.alibaba.cloud.version>2023.0.3.3</com.alibaba.cloud.version>
     <com.alibaba.csp.version>1.8.8</com.alibaba.csp.version>
     <com.alibaba.druid.version>1.2.24</com.alibaba.druid.version>
     <com.baomidou.version>3.5.12</com.baomidou.version>
@@ -39,7 +39,7 @@
     <net.lingala.zip4j.version>2.11.5</net.lingala.zip4j.version>
     <org.apache.velocity.version>2.3</org.apache.velocity.version>
     <org.aspectj.version>1.9.6</org.aspectj.version>
-    <org.apereo.cas.version>7.1.5</org.apereo.cas.version>
+    <org.apereo.cas.version>7.2.3</org.apereo.cas.version>
     <org.apache.commons.version>3.17.0</org.apache.commons.version>
     <org.apache.poi.version>5.4.1</org.apache.poi.version>
     <org.bouncycastle.bcprov-jdk18on.version>1.80</org.bouncycastle.bcprov-jdk18on.version>
@@ -48,16 +48,16 @@
     <org.redisson.version>3.47.0</org.redisson.version>
     <org.springdoc.version>2.7.0</org.springdoc.version>
     <org.springframework.boot.version>3.5.0</org.springframework.boot.version>
-    <org.springframework.cloud.version>2024.0.1</org.springframework.cloud.version>
+    <org.springframework.cloud.version>2025.0.0</org.springframework.cloud.version>
     <org.ssssssss.version>2.2.1</org.ssssssss.version>
     <us.codecraft.version>1.0.3</us.codecraft.version>
 
-    <project.build.main-class> </project.build.main-class>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>17</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
+    <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
     <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
     <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
     <maven-flatten-plugin.version>1.7.0</maven-flatten-plugin.version>
@@ -219,6 +219,11 @@
       <dependency>
         <groupId>cn.hutool</groupId>
         <artifactId>hutool-all</artifactId>
+        <version>${cn.hutool.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.hutool</groupId>
+        <artifactId>hutool-log</artifactId>
         <version>${cn.hutool.version}</version>
       </dependency>
       <!--alibaba-->
@@ -658,6 +663,18 @@
               </execution>
             </executions>
           </plugin>
+          <plugin>
+            <groupId>com.mycila</groupId>
+            <artifactId>license-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>none</phase> <!-- 设置为 none 表示不执行 -->
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
       </build>
     </profile>
@@ -730,7 +747,23 @@
             </execution>
           </executions>
         </plugin>
-        <!-- 指定编译器版本 -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${maven-assembly-plugin.version}</version>
+          <configuration>
+            <finalName>${project.artifactId}-${project.version}</finalName>
+            <appendAssemblyId>false</appendAssemblyId>
+          </configuration>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -746,13 +779,6 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
           <version>${maven-jar-plugin.version}</version>
-          <configuration>
-            <archive>
-              <manifest>
-                <Main-Class>${project.build.main-class}</Main-Class>
-              </manifest>
-            </archive>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
