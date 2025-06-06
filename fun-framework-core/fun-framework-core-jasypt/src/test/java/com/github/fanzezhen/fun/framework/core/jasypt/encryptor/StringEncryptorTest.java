@@ -22,15 +22,20 @@ import java.util.Base64;
 @Slf4j
 @Disabled
 class StringEncryptorTest {
+    String privateKey = "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQg+MxXxSMFFgNtXGoFzkH3TJg0jXAo2J5XnM8isT7i0higCgYIKoEcz1UBgi2hRANCAARiDlNDvfGANqiqPHLWUN1mg1nz+4hN/06skj9DelWhIDK8IQ35NvFqf8dWoJkQ0KkxNvbuneWO0xt/e3fOgWkU";
+    String publicKey = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEYg5TQ73xgDaoqjxy1lDdZoNZ8/uITf9OrJI/Q3pVoSAyvCEN+Tbxan/HVqCZENCpMTb27p3ljtMbf3t3zoFpFA==";
+    String password = "password";
+    @Test
+    void testSM2StringEncryptorKey() {
+        KeyPair pair = SecureUtil.generateKeyPair("SM2");
+         privateKey = new String(Base64.getEncoder().encode(pair.getPrivate().getEncoded()), StandardCharsets.UTF_8);
+        log.info("privateKey:{}", privateKey);
+         publicKey = new String(Base64.getEncoder().encode(pair.getPublic().getEncoded()), StandardCharsets.UTF_8);
+        log.info("publicKey:{}", publicKey);
+    }
     @Test
     void testSM2StringEncryptor() {
-        KeyPair pair = SecureUtil.generateKeyPair("SM2");
-        String privateKey = new String(Base64.getEncoder().encode(pair.getPrivate().getEncoded()), StandardCharsets.UTF_8);
-        log.info("privateKey:{}", privateKey);
-        String publicKey = new String(Base64.getEncoder().encode(pair.getPublic().getEncoded()), StandardCharsets.UTF_8);
-        log.info("publicKey:{}", publicKey);
         StringEncryptor stringEncryptor = new SM2StringEncryptor(new FunJasyptEncryptorProperties.ASymmetric(privateKey, publicKey));
-        String password = "123456";
         log.info("加密前:{}", password);
         String encrypted = stringEncryptor.encrypt(password);
         log.info("加密后:{}", encrypted);
@@ -48,7 +53,6 @@ class StringEncryptorTest {
         String hexKey = Hex.encodeHexString(bytes); // 转换为32字符的十六进制字符串
         log.info("secretKey:{}", hexKey);
         StringEncryptor stringEncryptor = new SM4StringEncryptor(new FunJasyptEncryptorProperties.Symmetric(hexKey));
-        String password = "123456";
         log.info("加密前:{}", password);
         String encrypted = stringEncryptor.encrypt(password);
         log.info("加密后:{}", encrypted);

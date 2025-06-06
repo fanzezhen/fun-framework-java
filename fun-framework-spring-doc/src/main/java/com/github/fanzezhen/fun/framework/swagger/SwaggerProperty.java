@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Data
 @Component
-@ConfigurationProperties(prefix = "com.github.fanzezhen.fun.framework.swagger")
+@ConfigurationProperties(prefix = "fun.spring-doc")
 public class SwaggerProperty {
     private boolean headerParameterCommonDisabled;
     private List<Parameter> headerParameterList;

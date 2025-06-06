@@ -16,7 +16,6 @@ import javax.annotation.Resource;
 @Configuration
 @EnableConfigurationProperties(FunJasyptEncryptorProperties.class)
 @ComponentScan("com.github.fanzezhen.fun.framework.core.jasypt")
-@ConditionalOnProperty(name = {"jasypt.encryptor.bootstrap"}, havingValue = "true")
 public class FunCoreJasyptAutoConfiguration {
     @Resource
     private FunJasyptEncryptorProperties funJasyptEncryptorProperties;

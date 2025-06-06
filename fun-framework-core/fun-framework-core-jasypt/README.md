@@ -9,10 +9,10 @@
 
 ```properties
 #SM2非对称加密
-com.github.fanzezhen.fun.framework.jasypt.encryptor.bean=sm2StringEncryptor
-com.github.fanzezhen.fun.framework.jasypt.type=SM2
-com.github.fanzezhen.fun.framework.jasypt.a-symmetric.privateKey=MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQg+MxXxSMFFgNtXGoFzkH3TJg0jXAo2J5XnM8isT7i0higCgYIKoEcz1UBgi2hRANCAARiDlNDvfGANqiqPHLWUN1mg1nz+4hN/06skj9DelWhIDK8IQ35NvFqf8dWoJkQ0KkxNvbuneWO0xt/e3fOgWkU
-com.github.fanzezhen.fun.framework.jasypt.a-symmetric.publicKey=MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEYg5TQ73xgDaoqjxy1lDdZoNZ8/uITf9OrJI/Q3pVoSAyvCEN+Tbxan/HVqCZENCpMTb27p3ljtMbf3t3zoFpFA==
+fun.core.jasypt.encryptor.bean=sm2StringEncryptor
+fun.core.jasypt.type=SM2
+fun.core.jasypt.a-symmetric.privateKey=MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQg+MxXxSMFFgNtXGoFzkH3TJg0jXAo2J5XnM8isT7i0higCgYIKoEcz1UBgi2hRANCAARiDlNDvfGANqiqPHLWUN1mg1nz+4hN/06skj9DelWhIDK8IQ35NvFqf8dWoJkQ0KkxNvbuneWO0xt/e3fOgWkU
+fun.core.jasypt.a-symmetric.publicKey=MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEYg5TQ73xgDaoqjxy1lDdZoNZ8/uITf9OrJI/Q3pVoSAyvCEN+Tbxan/HVqCZENCpMTb27p3ljtMbf3t3zoFpFA==
 ```
 
 - SM4对称加密

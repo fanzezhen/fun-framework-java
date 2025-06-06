@@ -12,7 +12,7 @@ import java.util.Map;
  * @since 3.1.8
  */
 @Data
-@ConfigurationProperties(prefix = "com.github.fanzezhen.fun.framework.core.jasypt")
+@ConfigurationProperties(prefix = "fun.core.jasypt")
 public class FunJasyptEncryptorProperties {
 
     /**
