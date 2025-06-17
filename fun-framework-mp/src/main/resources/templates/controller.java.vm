@@ -18,7 +18,7 @@ import org.springframework.stereotype.Controller;
 #if(${superControllerClassPackage})
 import ${superControllerClassPackage};
 #end
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 

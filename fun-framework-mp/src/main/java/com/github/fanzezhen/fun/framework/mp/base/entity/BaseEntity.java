@@ -29,7 +29,7 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "ID")
     @TableId(value = "ID", type = IdType.ASSIGN_UUID)
     @Schema(name = "主键ID")
-    private String id;
+    protected String id;
 
     /**
      * 创建时间
@@ -37,7 +37,7 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "CREATE_TIME")
     @TableField(value = "CREATE_TIME", fill = FieldFill.INSERT)
     @Schema(name = "创建时间")
-    private LocalDateTime createTime;
+    protected LocalDateTime createTime;
 
     /**
      * 创建人ID
@@ -45,7 +45,7 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "CREATE_USER_ID")
     @TableField(value = "CREATE_USER_ID", fill = FieldFill.INSERT)
     @Schema(name = "创建人ID")
-    private String createUserId;
+    protected String createUserId;
 
     public void init(BaseEntity baseVarEntry) {
         this.id = baseVarEntry.getId();

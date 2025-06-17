@@ -3,7 +3,7 @@ package com.github.fanzezhen.fun.framework.mp.base;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class ServiceImpl<M extends BaseMapper<T>, T, B> extends com.baomidou.myb
 
     @PostConstruct
     public void init() {
-        boClass = IService.getBoClass(this.getClass().getGenericInterfaces());
+        boClass = getBoClass(this.getClass().getGenericInterfaces());
     }
 
 }

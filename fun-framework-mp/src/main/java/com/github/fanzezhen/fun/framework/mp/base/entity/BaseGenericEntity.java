@@ -1,9 +1,6 @@
 package com.github.fanzezhen.fun.framework.mp.base.entity;
 
 import cn.hutool.core.util.ArrayUtil;
-import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
@@ -40,13 +37,11 @@ public abstract class BaseGenericEntity extends BaseEntity {
     /**
      * 删除标识（1-已删除；0-未删除），默认 0
      */
-    @EnumValue
     @Column(name = "DEL_FLAG")
     @TableField(value = "DEL_FLAG", fill = FieldFill.INSERT)
     @TableLogic(value = DEFAULT_DEL_FLAG_STR, delval = "NOW()")
     @Schema(name = "删除标识（0-未删除），默认 0")
-    @JSONField(serialzeFeatures = SerializerFeature.WriteEnumUsingToString)
-    private Long delFlag;
+    protected Long delFlag;
 
     /**
      * 更新时间
@@ -54,7 +49,7 @@ public abstract class BaseGenericEntity extends BaseEntity {
     @Column(name = "UPDATE_TIME")
     @TableField(value = "UPDATE_TIME", fill = FieldFill.INSERT_UPDATE)
     @Schema(name = "更新时间")
-    private LocalDateTime updateTime;
+    protected LocalDateTime updateTime;
 
     /**
      * 更新者ID
@@ -62,7 +57,7 @@ public abstract class BaseGenericEntity extends BaseEntity {
     @Column(name = "UPDATE_USER_ID")
     @TableField(value = "UPDATE_USER_ID", fill = FieldFill.INSERT_UPDATE)
     @Schema(name = "更新者ID")
-    private String updateUserId;
+    protected String updateUserId;
 
     public boolean isDeleted() {
         return delFlag != null && !delFlag.equals(0L);

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.PatternMatchUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * JWT拦截器

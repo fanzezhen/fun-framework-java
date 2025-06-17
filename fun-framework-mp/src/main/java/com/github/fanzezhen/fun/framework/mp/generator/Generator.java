@@ -79,6 +79,7 @@ public class Generator {
             .strategyConfig(builder -> builder.mapperBuilder().enableFileOverride()
                 .mapperAnnotation(Mapper.class)
                 .superClass(IBaseMapper.class)
+                .formatMapperFileName("I%sMapper")
                 .disableMapperXml()
                 .convertXmlFileName(entityName -> null)
             )

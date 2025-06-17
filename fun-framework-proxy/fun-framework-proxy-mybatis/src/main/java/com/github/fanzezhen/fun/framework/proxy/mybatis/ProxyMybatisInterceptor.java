@@ -15,7 +15,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * 静态资源代理拦截器

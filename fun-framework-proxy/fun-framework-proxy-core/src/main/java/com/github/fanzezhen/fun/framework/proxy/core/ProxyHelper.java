@@ -3,7 +3,7 @@ package com.github.fanzezhen.fun.framework.proxy.core;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**

@@ -13,10 +13,11 @@ class GeneratorTest {
     void testGenerator() {
         Assertions.assertDoesNotThrow(() ->
             Generator.fastAutoGenerator(Generator.Config.ofTable(
-                "jdbc:mysql://localhost:3306/dev?useSSL=false&useUnicode=true",
-                "root",
-                "root",
-                "sys_dict", "sys_dict_item")));
+                "jdbc:mysql://192.168.32.5:33200/tmp?serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&useUnicode=true&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true",
+                "qxb-test",
+                "ut1zqBo9pLtv_aeY",
+                "auth_user", "business_partner"))
+        );
     }
 
 }

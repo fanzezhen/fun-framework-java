@@ -18,5 +18,9 @@
       <groupId>com.github.fanzezhen</groupId>
       <artifactId>fun-framework-core-exception</artifactId>
     </dependency>
+    <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+    </dependency>
   </dependencies>
 </project>
