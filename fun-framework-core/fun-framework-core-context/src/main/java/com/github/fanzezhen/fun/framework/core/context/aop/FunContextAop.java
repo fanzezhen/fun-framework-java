@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.core.context.aop;
 
 import cn.hutool.core.text.CharSequenceUtil;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
 import com.github.fanzezhen.fun.framework.core.context.properties.FunContextExceptionEnum;
 import com.github.fanzezhen.fun.framework.core.context.FunContextFilter;

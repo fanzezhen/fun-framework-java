@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.PathMatcher;
 import org.springframework.util.PatternMatchUtils;
+import org.springframework.web.servlet.mvc.condition.PathPatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.util.pattern.PathPattern;
@@ -19,10 +20,10 @@ import java.util.Set;
  * @author fanzezhen
  */
 @Slf4j
-public class OpenApiRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
+public class FunRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
     private final FunCoreWebProperties.Register registerProperties;
 
-    public OpenApiRequestMappingHandlerMapping(FunCoreWebProperties.Register registerProperties) {
+    public FunRequestMappingHandlerMapping(FunCoreWebProperties.Register registerProperties) {
         this.registerProperties = registerProperties;
     }
 
@@ -43,7 +44,10 @@ public class OpenApiRequestMappingHandlerMapping extends RequestMappingHandlerMa
     @Override
     protected void registerHandlerMethod(@NotNull Object handler, @NotNull Method method, RequestMappingInfo mapping) {
         Set<String> directPaths = new HashSet<>(mapping.getPatternsCondition().getDirectPaths());
-        directPaths.addAll(mapping.getPathPatternsCondition().getDirectPaths());
+        PathPatternsRequestCondition pathPatternsCondition = mapping.getPathPatternsCondition();
+        if (pathPatternsCondition != null && pathPatternsCondition.getDirectPaths() != null) {
+            directPaths.addAll(pathPatternsCondition.getDirectPaths());
+        }
         if (Boolean.TRUE.equals(registerProperties.getFlag())) {
             for (String directPath : directPaths) {
                 if (PatternMatchUtils.simpleMatch(registerProperties.getPaths(), directPath)) {

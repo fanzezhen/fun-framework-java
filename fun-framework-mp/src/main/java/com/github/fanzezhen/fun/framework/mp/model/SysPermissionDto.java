@@ -3,11 +3,11 @@ package com.github.fanzezhen.fun.framework.mp.model;
 
 import com.github.fanzezhen.fun.framework.mp.base.entity.tenant.BaseTenantEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 /**
  * @author fanzezhen

@@ -5,11 +5,11 @@ import cn.stylefeng.roses.kernel.model.exception.AbstractBaseExceptionEnum;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.ConstraintViolationException;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.validation.FieldError;
 
-import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 

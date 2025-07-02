@@ -1,6 +1,6 @@
 package com.github.fanzezhen.fun.framework.core.context.decorator;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
 import com.github.fanzezhen.fun.framework.core.thread.decorator.ThreadPoolTaskDecorator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

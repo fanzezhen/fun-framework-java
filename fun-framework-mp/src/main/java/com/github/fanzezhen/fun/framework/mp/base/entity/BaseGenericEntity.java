@@ -11,7 +11,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
@@ -21,15 +20,10 @@ import java.time.LocalDateTime;
  * @author fanzezhen
  */
 @EqualsAndHashCode(callSuper = true)
-@Entity
 @Data
-@MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@Table(indexes = {
-    @Index(name = "ix_del", columnList = "DEL_FLAG")
-})
 public abstract class BaseGenericEntity extends BaseEntity {
     public static final Long DEFAULT_DEL_FLAG = 0L;
     static final String DEFAULT_DEL_FLAG_STR = "0";
@@ -37,7 +31,6 @@ public abstract class BaseGenericEntity extends BaseEntity {
     /**
      * 删除标识（1-已删除；0-未删除），默认 0
      */
-    @Column(name = "DEL_FLAG")
     @TableField(value = "DEL_FLAG", fill = FieldFill.INSERT)
     @TableLogic(value = DEFAULT_DEL_FLAG_STR, delval = "NOW()")
     @Schema(name = "删除标识（0-未删除），默认 0")
@@ -46,7 +39,6 @@ public abstract class BaseGenericEntity extends BaseEntity {
     /**
      * 更新时间
      */
-    @Column(name = "UPDATE_TIME")
     @TableField(value = "UPDATE_TIME", fill = FieldFill.INSERT_UPDATE)
     @Schema(name = "更新时间")
     protected LocalDateTime updateTime;
@@ -54,7 +46,6 @@ public abstract class BaseGenericEntity extends BaseEntity {
     /**
      * 更新者ID
      */
-    @Column(name = "UPDATE_USER_ID")
     @TableField(value = "UPDATE_USER_ID", fill = FieldFill.INSERT_UPDATE)
     @Schema(name = "更新者ID")
     protected String updateUserId;

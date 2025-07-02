@@ -4,13 +4,13 @@ import com.github.fanzezhen.fun.framework.core.verify.FunCoreVerifyProperties;
 import com.github.fanzezhen.fun.framework.core.verify.jwt.service.JwtService;
 import com.github.fanzezhen.fun.framework.core.verify.repeat.NoRepeat;
 import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
+import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.annotation.Resource;
-import javax.validation.constraints.NotBlank;
 
 /**
  * @author fanzezhen

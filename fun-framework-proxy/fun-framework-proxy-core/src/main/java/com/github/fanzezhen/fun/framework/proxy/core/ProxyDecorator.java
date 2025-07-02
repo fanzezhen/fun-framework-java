@@ -3,12 +3,13 @@ package com.github.fanzezhen.fun.framework.proxy.core;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ReflectUtil;
+import jakarta.validation.constraints.NotNull;
 import lombok.SneakyThrows;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.Resource;
-import javax.validation.constraints.NotNull;
+
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;

@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Pair;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.ArrayUtil;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.core.context.properties.ContextConstant;
 import com.github.fanzezhen.fun.framework.core.context.properties.FunCoreContextProperties;
 import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
@@ -60,6 +60,10 @@ public class ContextHolder {
 
     public static void setContextMap(JSONObject contextMap) {
         getContextMap().putAll(contextMap);
+    }
+
+    public static void setOriginHeaders(JSONObject originHeaders) {
+        set(properties.getKey().getOriginHeaders(), originHeaders);
     }
 
     public static String get(String key) {

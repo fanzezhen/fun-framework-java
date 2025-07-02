@@ -1,6 +1,7 @@
 package com.github.fanzezhen.fun.framework.core.context;
 
 import cn.hutool.core.text.CharSequenceUtil;
+import com.alibaba.fastjson2.JSONObject;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletRequest;
@@ -36,7 +37,19 @@ public class FunContextFilter implements Filter {
                 log.debug("system context init");
             }
             Enumeration<String> headerNames = request.getHeaderNames();
-            while (headerNames.hasMoreElements()) filterHeader(headerNames.nextElement(), request);
+            JSONObject headers = new JSONObject();
+            while (headerNames.hasMoreElements()) {
+                String curHeader = headerNames.nextElement();
+                String headerVal = request.getHeader(curHeader);
+                headers.put(curHeader, headerVal);
+                if (!CharSequenceUtil.startWithIgnoreCase(curHeader, ContextHolder.properties.getKey().getPrefix())) {
+                    return;
+                }
+                String requestUri = request.getRequestURI();
+                ContextHolder.set(curHeader, headerVal);
+                log(requestUri, curHeader, headerVal);
+            }
+            ContextHolder.setOriginHeaders(headers);
             String traceId = MDC.get(traceIdKey);
             if (CharSequenceUtil.isNotBlank(traceId)) {
                 ContextHolder.setTraceId(traceId);
@@ -47,16 +60,6 @@ public class FunContextFilter implements Filter {
         } finally {
             ContextHolder.clean();
         }
-    }
-
-    private static void filterHeader(String curHeader, HttpServletRequest request) {
-        if (!CharSequenceUtil.startWithIgnoreCase(curHeader, ContextHolder.properties.getKey().getPrefix())) {
-            return;
-        }
-        String headerVal = request.getHeader(curHeader);
-        String requestUri = request.getRequestURI();
-        ContextHolder.set(curHeader, headerVal);
-        log(requestUri, curHeader, headerVal);
     }
 
     private static void log(String requestUri, String headerKey, String headerVal) {

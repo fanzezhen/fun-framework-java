@@ -84,6 +84,10 @@ public class FunCoreContextProperties {
          * 节点id
          */
         private String nodeId = ContextConstant.DEFAULT_HEADER_NODE_ID;
+        /**
+         * 原始
+         */
+        private String originHeaders = ContextConstant.DEFAULT_HEADER_NODE_ID;
 
         public String getTokenWithPrefix() {
             return prefix + token;

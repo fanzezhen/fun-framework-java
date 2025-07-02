@@ -14,12 +14,12 @@ import jakarta.annotation.Resource;
  */
 @Component
 @ConditionalOnExpression("${fun.core.web.register.flag:null} != null")
-public class OpenApiWebMvcRegistrations implements WebMvcRegistrations {
+public class FunWebMvcRegistrations implements WebMvcRegistrations {
     @Resource
     private FunCoreWebProperties funCoreWebProperties;
 
     @Override
     public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
-        return new OpenApiRequestMappingHandlerMapping(funCoreWebProperties.getRegister());
+        return new FunRequestMappingHandlerMapping(funCoreWebProperties.getRegister());
     }
 }

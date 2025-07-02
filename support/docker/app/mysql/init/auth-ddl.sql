@@ -20,8 +20,7 @@ create table sys_permission
   version         int          not null default 0 comment '版本号',
   app_code        varchar(20) comment '所属应用',
   primary key (id)
-)
-  auto_increment = 10000;
+);
 
 alter table sys_permission
   comment '菜单、按钮表';

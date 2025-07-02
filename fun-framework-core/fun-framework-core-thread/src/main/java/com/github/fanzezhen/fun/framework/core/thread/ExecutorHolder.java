@@ -1,11 +1,11 @@
 package com.github.fanzezhen.fun.framework.core.thread;
 
 import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.lang.func.Consumer3;
+import cn.hutool.core.lang.func.Supplier3;
 import cn.hutool.core.util.ArrayUtil;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.thread.enums.FunCoreThreadExceptionEnum;
-import reactor.function.Consumer3;
-import reactor.function.Function3;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -262,8 +262,8 @@ public class ExecutorHolder<R> {
         return this;
     }
 
-    public <T1, T2, T3> ExecutorHolder<R> addTask(Function3<T1, T2, T3, R> function, T1 arg1, T2 arg2, T3 arg3) {
-        Task<R> task = new Task<>(() -> function.apply(arg1, arg2, arg3), null);
+    public <T1, T2, T3> ExecutorHolder<R> addTask(Supplier3<R, T1, T2, T3> function, T1 arg1, T2 arg2, T3 arg3) {
+        Task<R> task = new Task<>(() -> function.get(arg1, arg2, arg3), null);
         addTask(task);
         return this;
     }
@@ -290,7 +290,7 @@ public class ExecutorHolder<R> {
         return this;
     }
 
-    public <T1, T2, T3> ExecutorHolder<R> addTasks(Function3<T1, T2, T3, R> function, Object[]... threeArgsArr) {
+    public <T1, T2, T3> ExecutorHolder<R> addTasks(Supplier3<R, T1, T2, T3> function, Object[]... threeArgsArr) {
         if (threeArgsArr == null) {
             return this;
         }

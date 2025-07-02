@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.core.context;
 
 import cn.hutool.core.map.CaseInsensitiveMap;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
