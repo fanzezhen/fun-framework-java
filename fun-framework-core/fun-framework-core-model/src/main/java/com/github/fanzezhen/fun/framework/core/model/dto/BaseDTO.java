@@ -1,4 +1,4 @@
-package com.github.fanzezhen.fun.framework.core.model.bo;
+package com.github.fanzezhen.fun.framework.core.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -10,18 +10,17 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 公共Model,将每个表都有的公共字段抽取出来
+ * 公共业务模型类
  *
  * @author fanzezhen
- * @ MappedSuperclass注解表示不是一个完整的实体类，将不会映射到数据库表，但是它的属性都将映射到其子类的数据库字段中
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public abstract class BaseDTO<K extends Serializable> implements Serializable {
+public abstract class BaseDTO<P extends Serializable> implements Serializable {
     @Schema(name = "主键ID")
-    private K id;
+    private P id;
 
     /**
      * 创建时间
@@ -33,16 +32,12 @@ public abstract class BaseDTO<K extends Serializable> implements Serializable {
      * 创建人ID
      */
     @Schema(name = "创建人ID")
-    private K createUserId;
+    private P createUserId;
 
-    public void init(BaseDTO<K> baseVarEntry) {
+    public void init(BaseDTO<P> baseVarEntry) {
         this.id = baseVarEntry.getId();
         this.createTime = baseVarEntry.getCreateTime();
         this.createUserId = baseVarEntry.getCreateUserId();
-    }
-
-    public static String[] getFieldNames() {
-        return new String[]{"id", "create_time", "create_user_id"};
     }
 
 }

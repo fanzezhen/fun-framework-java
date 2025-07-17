@@ -1,7 +1,7 @@
 package ${modelPackage}dto;
 
 #parse("templates/import-table.java.vm")
-import com.github.fanzezhen.fun.framework.core.model.bo.BaseDTO;
+import com.github.fanzezhen.fun.framework.core.model.dto.BaseDTO;
 #if(${springdoc})
 import io.swagger.v3.oas.annotations.media.Schema;
 #elseif(${swagger})

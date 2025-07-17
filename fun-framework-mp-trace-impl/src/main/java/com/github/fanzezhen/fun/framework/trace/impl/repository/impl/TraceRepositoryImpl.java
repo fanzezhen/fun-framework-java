@@ -2,10 +2,10 @@ package com.github.fanzezhen.fun.framework.trace.impl.repository.impl;
 
 
 import com.baomidou.mybatisplus.extension.repository.CrudRepository;
-import com.github.fanzezhen.fun.framework.trace.impl.dao.ITraceDao;
-import com.github.fanzezhen.fun.framework.trace.impl.repository.ITraceRepository;
 import com.github.fanzezhen.fun.framework.trace.impl.condition.TraceSearchCondition;
+import com.github.fanzezhen.fun.framework.trace.impl.dao.ITraceDao;
 import com.github.fanzezhen.fun.framework.trace.impl.entity.TraceEntity;
+import com.github.fanzezhen.fun.framework.trace.impl.repository.ITraceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 

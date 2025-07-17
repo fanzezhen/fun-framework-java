@@ -5,10 +5,10 @@ import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
-import com.github.fanzezhen.fun.framework.mp.base.IBaseMapper;
 import com.github.fanzezhen.fun.framework.trace.impl.condition.TracePageCondition;
 import com.github.fanzezhen.fun.framework.trace.impl.condition.TraceSearchCondition;
 import com.github.fanzezhen.fun.framework.trace.impl.entity.TraceEntity;
+import com.github.fanzezhen.fun.framework.mp.base.IBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.io.Serializable;

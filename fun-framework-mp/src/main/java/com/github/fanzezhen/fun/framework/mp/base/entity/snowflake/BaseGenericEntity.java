@@ -1,9 +1,10 @@
-package com.github.fanzezhen.fun.framework.mp.base.entity;
+package com.github.fanzezhen.fun.framework.mp.base.entity.snowflake;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.github.fanzezhen.fun.framework.core.model.entity.IBaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,8 +15,7 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * 公共Model,将每个表都有的公共字段抽取出来
- * MappedSuperclass 注解表示不是一个完整的实体类，将不会映射到数据库表，但是它的属性都将映射到其子类的数据库字段中
+ * 常规数据库实体类
  *
  * @author fanzezhen
  */
@@ -25,14 +25,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Accessors(chain = true)
 public abstract class BaseGenericEntity extends BaseEntity {
-    public static final Long DEFAULT_DEL_FLAG = 0L;
-    static final String DEFAULT_DEL_FLAG_STR = "0";
 
     /**
      * 删除标识（1-已删除；0-未删除），默认 0
      */
     @TableField(value = "DEL_FLAG", fill = FieldFill.INSERT)
-    @TableLogic(value = DEFAULT_DEL_FLAG_STR, delval = "NOW()")
+    @TableLogic(value = IBaseEntity.DEFAULT_DEL_FLAG_STR, delval = "id")
     @Schema(name = "删除标识（0-未删除），默认 0")
     protected Long delFlag;
 
@@ -48,10 +46,10 @@ public abstract class BaseGenericEntity extends BaseEntity {
      */
     @TableField(value = "UPDATE_USER_ID", fill = FieldFill.INSERT_UPDATE)
     @Schema(name = "更新者ID")
-    protected String updateUserId;
+    protected Long updateUserId;
 
     public boolean isDeleted() {
-        return delFlag != null && !delFlag.equals(0L);
+        return delFlag != null && !delFlag.equals(IBaseEntity.DEFAULT_DEL_FLAG_LONG);
     }
 
     public static String[] getFieldNames() {

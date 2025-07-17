@@ -3,7 +3,7 @@ package com.github.fanzezhen.fun.framework.trace.impl.entity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.github.fanzezhen.fun.framework.mp.base.entity.BaseEntity;
+import com.github.fanzezhen.fun.framework.mp.base.entity.snowflake.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ import org.apache.ibatis.mapping.SqlCommandType;
 @Accessors(chain = true)
 @NoArgsConstructor
 @TableName(value = "fun_trace", autoResultMap = true)
-public class TraceEntity extends BaseEntity{
+public class TraceEntity extends BaseEntity {
 
     /**
      * 父级id
@@ -63,7 +63,7 @@ public class TraceEntity extends BaseEntity{
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private String creator;
 
-    public TraceEntity(String id) {
+    public TraceEntity(Long id) {
         setId(id);
     }
 

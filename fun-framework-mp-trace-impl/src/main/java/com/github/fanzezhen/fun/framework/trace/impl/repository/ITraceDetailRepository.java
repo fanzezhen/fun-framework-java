@@ -3,10 +3,10 @@ package com.github.fanzezhen.fun.framework.trace.impl.repository;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.baomidou.mybatisplus.extension.repository.IRepository;
-import com.github.fanzezhen.fun.framework.trace.impl.model.bo.TraceDetailBO;
 import com.github.fanzezhen.fun.framework.trace.impl.condition.TraceDetailCondition;
 import com.github.fanzezhen.fun.framework.trace.impl.condition.TraceDetailPageCondition;
 import com.github.fanzezhen.fun.framework.trace.impl.entity.TraceDetailEntity;
+import com.github.fanzezhen.fun.framework.trace.impl.model.bo.TraceDetailBO;
 
 import java.io.Serializable;
 import java.util.Collection;

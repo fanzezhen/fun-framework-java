@@ -10,7 +10,7 @@
   <version>${revision}</version>
 
   <properties>
-    <revision>3.5.0.20250617-SNAPSHOT</revision>
+    <revision>3.5.3.20250717-SNAPSHOT</revision>
     <app.server>-tomcat</app.server>
     <cn.hutool.version>5.8.38</cn.hutool.version>
     <cn.stylefeng.roses.version>2.2.13</cn.stylefeng.roses.version>
@@ -47,7 +47,7 @@
     <org.hibernate.validator.version>8.0.2.Final</org.hibernate.validator.version>
     <org.redisson.version>3.47.0</org.redisson.version>
     <org.springdoc.version>2.7.0</org.springdoc.version>
-    <org.springframework.boot.version>3.5.0</org.springframework.boot.version>
+    <org.springframework.boot.version>3.5.3</org.springframework.boot.version>
     <org.springframework.cloud.version>2025.0.0</org.springframework.cloud.version>
     <org.ssssssss.version>2.2.1</org.ssssssss.version>
     <us.codecraft.version>1.0.3</us.codecraft.version>
@@ -517,11 +517,6 @@
         <groupId>org.redisson</groupId>
         <artifactId>redisson</artifactId>
         <version>${org.redisson.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-lang3</artifactId>
-        <version>${org.apache.commons.version}</version>
       </dependency>
       <!--接口文档-->
       <dependency>

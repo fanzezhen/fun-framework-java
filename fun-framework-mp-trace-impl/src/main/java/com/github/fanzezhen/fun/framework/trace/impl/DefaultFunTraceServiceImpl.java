@@ -1,20 +1,20 @@
 package com.github.fanzezhen.fun.framework.trace.impl;
 
 import com.baomidou.mybatisplus.extension.repository.IRepository;
+import com.github.fanzezhen.fun.framework.trace.impl.entity.TraceDetailEntity;
+import com.github.fanzezhen.fun.framework.trace.impl.entity.TraceEntity;
+import com.github.fanzezhen.fun.framework.trace.impl.repository.ITraceDetailRepository;
+import com.github.fanzezhen.fun.framework.trace.impl.repository.ITraceRepository;
 import com.github.fanzezhen.fun.framework.trace.FunTraceProperties;
 import com.github.fanzezhen.fun.framework.trace.model.bo.TraceRuleBO;
-import com.github.fanzezhen.fun.framework.trace.impl.entity.TraceEntity;
-import com.github.fanzezhen.fun.framework.trace.impl.entity.TraceDetailEntity;
-import com.github.fanzezhen.fun.framework.trace.impl.repository.ITraceRepository;
 import com.github.fanzezhen.fun.framework.trace.service.IFunTraceService;
-import com.github.fanzezhen.fun.framework.trace.impl.repository.ITraceDetailRepository;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.annotation.Resource;
 import java.util.Collection;
 
 /**
@@ -26,7 +26,7 @@ import java.util.Collection;
 @Slf4j
 @Service
 @ConditionalOnMissingBean(value = IFunTraceService.class, ignored = DefaultFunTraceServiceImpl.class)
-public class DefaultFunTraceServiceImpl implements IFunTraceService<TraceEntity, TraceDetailEntity> {
+public class DefaultFunTraceServiceImpl implements IFunTraceService<Long, TraceEntity, TraceDetailEntity> {
     @Resource
     private ITraceRepository dao;
     @Resource
@@ -63,7 +63,7 @@ public class DefaultFunTraceServiceImpl implements IFunTraceService<TraceEntity,
      * 为明细数据设置痕迹id
      */
     @Override
-    public TraceDetailEntity setTraceId(TraceDetailEntity detail, String traceId) {
+    public TraceDetailEntity setTraceId(TraceDetailEntity detail, Long traceId) {
         return detail.setTraceId(traceId);
     }
 

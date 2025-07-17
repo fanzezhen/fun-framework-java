@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.trace.impl.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.github.fanzezhen.fun.framework.mp.base.entity.BaseEntity;
+import com.github.fanzezhen.fun.framework.mp.base.entity.snowflake.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -28,7 +28,7 @@ public class TraceDetailEntity extends BaseEntity{
     /**
      * 痕迹表ID
      */
-    private String traceId;
+    private Long traceId;
 
     /**
      * 名称
@@ -50,8 +50,7 @@ public class TraceDetailEntity extends BaseEntity{
      */
     private String newValue;
 
-    public TraceDetailEntity(String id) {
+    public TraceDetailEntity(Long id) {
         setId(id);
     }
-
 }
