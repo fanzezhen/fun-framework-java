@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.fanzezhen.fun.framework.mp.base.entity.BaseEntity;
+import com.github.fanzezhen.fun.framework.core.model.entity.IBaseEntity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,7 +19,11 @@ import java.util.List;
  *
  * @author fanzezhen
  */
-public interface IBaseMapper<T extends BaseEntity> extends com.baomidou.mybatisplus.core.mapper.BaseMapper<T> {
+@SuppressWarnings({"unchecked", "unused"})
+public interface IBaseMapper<T extends IBaseEntity> extends com.baomidou.mybatisplus.core.mapper.BaseMapper<T> {
+    /**
+     * 批量插入时单次插入的行数
+     */
     int INSERT_FETCH_SIZE = 1000;
 
     /**
@@ -190,7 +194,7 @@ public interface IBaseMapper<T extends BaseEntity> extends com.baomidou.mybatisp
     /**
      * 保存
      */
-    default String save(T entity) {
+    default <P extends Serializable> P save(T entity) {
         if (entity == null) {
             return null;
         }
@@ -200,7 +204,7 @@ public interface IBaseMapper<T extends BaseEntity> extends com.baomidou.mybatisp
         } else {
             updateById(entity);
         }
-        return entity.getId();
+        return (P) entity.getId();
     }
 
     /**

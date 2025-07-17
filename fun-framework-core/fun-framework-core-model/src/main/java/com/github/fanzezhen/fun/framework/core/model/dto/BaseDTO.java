@@ -1,4 +1,4 @@
-package com.github.fanzezhen.fun.framework.core.model.bo;
+package com.github.fanzezhen.fun.framework.core.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public abstract class BaseBO<P extends Serializable> implements Serializable {
+public abstract class BaseDTO<P extends Serializable> implements Serializable {
     @Schema(name = "主键ID")
     private P id;
 
@@ -34,14 +34,10 @@ public abstract class BaseBO<P extends Serializable> implements Serializable {
     @Schema(name = "创建人ID")
     private P createUserId;
 
-    public void init(BaseBO<P> baseVarEntry) {
+    public void init(BaseDTO<P> baseVarEntry) {
         this.id = baseVarEntry.getId();
         this.createTime = baseVarEntry.getCreateTime();
         this.createUserId = baseVarEntry.getCreateUserId();
-    }
-
-    public static String[] getFieldNames() {
-        return new String[]{"id", "create_time", "create_user_id"};
     }
 
 }

@@ -5,7 +5,8 @@ import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
-import com.github.fanzezhen.fun.framework.mp.base.entity.BaseEntity;
+import com.github.fanzezhen.fun.framework.core.model.entity.IBaseEntity;
+import com.github.fanzezhen.fun.framework.mp.base.entity.uuid.BaseEntity;
 import com.github.fanzezhen.fun.framework.trace.model.bo.TraceRuleBO;
 import lombok.SneakyThrows;
 import org.apache.ibatis.binding.MapperMethod;
@@ -27,7 +28,7 @@ import java.util.stream.Stream;
  * @author fanzezhen
  * @since 3.4.3.1
  */
-public interface IFunTraceService<A extends BaseEntity, B> {
+public interface IFunTraceService<P extends Serializable, A extends IBaseEntity<P>, B extends IBaseEntity<P>> {
     /**
      * 获取痕迹规则
      */
@@ -46,7 +47,7 @@ public interface IFunTraceService<A extends BaseEntity, B> {
     /**
      * 为明细数据设置痕迹id
      */
-    B setTraceId(B detail, String traceId);
+    B setTraceId(B detail, P traceId);
 
     /**
      * 创建痕迹实体

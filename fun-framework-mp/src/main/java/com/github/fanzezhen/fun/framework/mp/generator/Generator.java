@@ -11,10 +11,8 @@ import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.github.fanzezhen.fun.framework.core.data.StringUtil;
 import com.github.fanzezhen.fun.framework.mp.base.IBaseMapper;
-import com.github.fanzezhen.fun.framework.mp.base.IService;
-import com.github.fanzezhen.fun.framework.mp.base.ServiceImpl;
-import com.github.fanzezhen.fun.framework.mp.base.entity.BaseEntity;
-import com.github.fanzezhen.fun.framework.mp.base.entity.BaseGenericEntity;
+import com.github.fanzezhen.fun.framework.mp.base.entity.increment.BaseEntity;
+import com.github.fanzezhen.fun.framework.mp.base.entity.increment.BaseGenericEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -71,11 +69,7 @@ public class Generator {
                 }
             })
             .strategyConfig(builder -> builder.controllerBuilder().enableFileOverride().enableRestStyle())
-            .strategyConfig(builder -> builder.serviceBuilder()
-                .enableFileOverride()
-                .superServiceClass(IService.class)
-                .superServiceImplClass(ServiceImpl.class)
-            )
+            .strategyConfig(builder -> builder.serviceBuilder().enableFileOverride())
             .strategyConfig(builder -> builder.mapperBuilder().enableFileOverride()
                 .mapperAnnotation(Mapper.class)
                 .superClass(IBaseMapper.class)

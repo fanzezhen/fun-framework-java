@@ -10,7 +10,7 @@
   <version>${revision}</version>
 
   <properties>
-    <revision>3.5.0.20250617-SNAPSHOT</revision>
+    <revision>3.5.0.20250717-SNAPSHOT</revision>
     <app.server>-tomcat</app.server>
     <cn.hutool.version>5.8.38</cn.hutool.version>
     <cn.stylefeng.roses.version>2.2.13</cn.stylefeng.roses.version>
@@ -153,11 +153,6 @@
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-mp-trace</artifactId>
-        <version>${revision}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-mp-trace-impl</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
@@ -518,11 +513,6 @@
         <artifactId>redisson</artifactId>
         <version>${org.redisson.version}</version>
       </dependency>
-      <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-lang3</artifactId>
-        <version>${org.apache.commons.version}</version>
-      </dependency>
       <!--接口文档-->
       <dependency>
         <groupId>org.springdoc</groupId>
@@ -584,7 +574,6 @@
     <module>fun-framework-cache-redis</module>
     <module>fun-framework-mp</module>
     <module>fun-framework-mp-trace</module>
-    <module>fun-framework-mp-trace-impl</module>
     <module>fun-framework-sentinel</module>
     <module>fun-framework-spring-doc</module>
     <module>fun-framework-proxy</module>

@@ -48,5 +48,4 @@ fun:
 
 ## 3. 实现[IFunTraceService](..%2Ffun-framework-mp-trace%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Ftrace%2Fservice%2FIFunTraceService.java)
 
-参考[DefaultFunTraceServiceImpl](..%2Ffun-framework-mp-trace-impl%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Ftrace%2Fimpl%2FDefaultFunTraceServiceImpl.java)
 

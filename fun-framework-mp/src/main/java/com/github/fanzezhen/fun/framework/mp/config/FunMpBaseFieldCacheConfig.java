@@ -1,10 +1,6 @@
 package com.github.fanzezhen.fun.framework.mp.config;
 
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
-import com.github.fanzezhen.fun.framework.mp.base.entity.BaseEntity;
-import com.github.fanzezhen.fun.framework.mp.base.entity.BaseGenericEntity;
-import com.github.fanzezhen.fun.framework.mp.base.entity.tenant.BaseTenantEntity;
-import com.github.fanzezhen.fun.framework.mp.base.entity.tenant.BaseTenantGenericEntity;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +24,20 @@ public class FunMpBaseFieldCacheConfig {
      */
     @PostConstruct
     private void init() {
-        Class<?>[] entityClasses = new Class[]{BaseEntity.class, BaseTenantEntity.class, BaseGenericEntity.class, BaseTenantGenericEntity.class};
+        Class<?>[] entityClasses = new Class[]{
+            com.github.fanzezhen.fun.framework.mp.base.entity.increment.BaseEntity.class,
+            com.github.fanzezhen.fun.framework.mp.base.entity.increment.tenant.BaseTenantEntity.class,
+            com.github.fanzezhen.fun.framework.mp.base.entity.increment.BaseGenericEntity.class,
+            com.github.fanzezhen.fun.framework.mp.base.entity.increment.tenant.BaseTenantGenericEntity.class,
+            com.github.fanzezhen.fun.framework.mp.base.entity.snowflake.BaseEntity.class,
+            com.github.fanzezhen.fun.framework.mp.base.entity.snowflake.tenant.BaseTenantEntity.class,
+            com.github.fanzezhen.fun.framework.mp.base.entity.snowflake.BaseGenericEntity.class,
+            com.github.fanzezhen.fun.framework.mp.base.entity.snowflake.tenant.BaseTenantGenericEntity.class,
+            com.github.fanzezhen.fun.framework.mp.base.entity.uuid.BaseEntity.class,
+            com.github.fanzezhen.fun.framework.mp.base.entity.uuid.tenant.BaseTenantEntity.class,
+            com.github.fanzezhen.fun.framework.mp.base.entity.uuid.BaseGenericEntity.class,
+            com.github.fanzezhen.fun.framework.mp.base.entity.uuid.tenant.BaseTenantGenericEntity.class,
+        };
         for (Class<?> entityClass : entityClasses) {
             MapperBuilderAssistant mapperBuilderAssistant = new MapperBuilderAssistant(sqlSessionFactory.getConfiguration(), entityClass.getName());
             mapperBuilderAssistant.setCurrentNamespace(entityClass.getName());
