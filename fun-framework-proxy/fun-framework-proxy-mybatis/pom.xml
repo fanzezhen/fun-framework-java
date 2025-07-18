@@ -16,7 +16,7 @@
   <dependencies>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-mp</artifactId>
+      <artifactId>fun-framework-mp-starter</artifactId>
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>

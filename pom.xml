@@ -10,7 +10,7 @@
   <version>${revision}</version>
 
   <properties>
-    <revision>3.5.3.20250717-SNAPSHOT</revision>
+    <revision>3.5.3.20250718-SNAPSHOT</revision>
     <app.server>-tomcat</app.server>
     <cn.hutool.version>5.8.38</cn.hutool.version>
     <cn.stylefeng.roses.version>2.2.13</cn.stylefeng.roses.version>
@@ -19,6 +19,7 @@
     <com.alibaba.cloud.version>2023.0.3.3</com.alibaba.cloud.version>
     <com.alibaba.csp.version>1.8.8</com.alibaba.csp.version>
     <com.alibaba.druid.version>1.2.24</com.alibaba.druid.version>
+    <com.alibaba.fastjson2.version>2.0.57</com.alibaba.fastjson2.version>
     <com.baomidou.version>3.5.12</com.baomidou.version>
     <com.fasterxml.jackson.version>2.19.0</com.fasterxml.jackson.version>
     <com.google.code.gson.version>2.13.1</com.google.code.gson.version>
@@ -152,6 +153,11 @@
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-mp-starter</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-mp-trace</artifactId>
         <version>${revision}</version>
       </dependency>
@@ -187,7 +193,22 @@
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-security-base</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-security-spring-security</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-sentinel</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-security</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
@@ -286,6 +307,11 @@
         <groupId>com.alibaba.csp</groupId>
         <artifactId>sentienl-http-simple-transport</artifactId>
         <version>${com.alibaba.cloud.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.alibaba.fastjson2</groupId>
+        <artifactId>fastjson2</artifactId>
+        <version>${com.alibaba.fastjson2.version}</version>
       </dependency>
       <dependency>
         <groupId>com.baomidou</groupId>
@@ -578,8 +604,7 @@
     <module>fun-framework-api-count-redis</module>
     <module>fun-framework-cache-redis</module>
     <module>fun-framework-mp</module>
-    <module>fun-framework-mp-trace</module>
-    <module>fun-framework-mp-trace-impl</module>
+    <module>fun-framework-security</module>
     <module>fun-framework-sentinel</module>
     <module>fun-framework-spring-doc</module>
     <module>fun-framework-proxy</module>

@@ -12,6 +12,7 @@
   <artifactId>fun-framework-core</artifactId>
   <name>${project.artifactId}</name>
   <packaging>pom</packaging>
+
   <modules>
     <module>fun-framework-core-all</module>
     <module>fun-framework-core-context</module>
@@ -44,10 +45,6 @@
       <artifactId>jackson-module-parameter-names</artifactId>
     </dependency>
     <dependency>
-      <groupId>javax.annotation</groupId>
-      <artifactId>javax.annotation-api</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
     </dependency>
@@ -59,10 +56,6 @@
     <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.persistence</groupId>
-      <artifactId>javax.persistence-api</artifactId>
     </dependency>
     <dependency>
       <groupId>com.alibaba</groupId>

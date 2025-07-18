@@ -17,8 +17,9 @@ import java.util.concurrent.*;
 public class PoolExecutors {
     private static final Map<String, ThreadPoolExecutor> POOL_EXECUTOR_MAP = new ConcurrentHashMap<>(2);
     private static final Map<String, ThreadPoolTaskExecutor> POOL_TASK_EXECUTOR_MAP = new ConcurrentHashMap<>(2);
+    private static final int CPU_CORE_SIZE = Runtime.getRuntime().availableProcessors();
     private static final int DEFAULT_CORE_SIZE = 1;
-    private static final int DEFAULT_MAX_SIZE = 10;
+    private static final int DEFAULT_MAX_SIZE = Math.max(10, CPU_CORE_SIZE*2);
     private static final int DEFAULT_QUEUE_CAPACITY = 0;
     private static final int DEFAULT_KEEP_ALIVE_TIME = 60;
     private static final TimeUnit DEFAULT_TIME_UNIT = TimeUnit.SECONDS;

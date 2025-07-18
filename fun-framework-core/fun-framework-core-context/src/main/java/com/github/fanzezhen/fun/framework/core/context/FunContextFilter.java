@@ -43,7 +43,7 @@ public class FunContextFilter implements Filter {
                 String headerVal = request.getHeader(curHeader);
                 headers.put(curHeader, headerVal);
                 if (!CharSequenceUtil.startWithIgnoreCase(curHeader, ContextHolder.properties.getKey().getPrefix())) {
-                    return;
+                    continue;
                 }
                 String requestUri = request.getRequestURI();
                 ContextHolder.set(curHeader, headerVal);

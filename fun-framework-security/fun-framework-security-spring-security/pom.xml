@@ -4,28 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>fun-framework-java</artifactId>
+    <artifactId>fun-framework-security</artifactId>
     <groupId>com.github.fanzezhen</groupId>
     <version>${revision}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-
-  <artifactId>fun-framework-api-count-redis</artifactId>
+  <artifactId>fun-framework-security-spring-security</artifactId>
   <name>${project.artifactId}</name>
-
+  
   <dependencies>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-core-all</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-cache-redis</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-mp-starter</artifactId>
-      <scope>test</scope>
+      <artifactId>fun-framework-security-base</artifactId>
     </dependency>
     <dependency>
       <groupId>jakarta.servlet</groupId>
@@ -33,8 +23,18 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-configuration-processor</artifactId>
-      <optional>true</optional>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <!-- OAuth2 Client -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-client</artifactId>
+    </dependency>
+
+    <!-- CAS Client -->
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-cas</artifactId>
     </dependency>
   </dependencies>
 </project>
