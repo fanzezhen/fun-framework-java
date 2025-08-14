@@ -7,9 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.Collections;
 import java.util.Set;
 
-/**
- * @author fanzezhen
- */
 @Data
 @ConfigurationProperties(prefix = "fun.security")
 public class FunSpringSecurityProperties {

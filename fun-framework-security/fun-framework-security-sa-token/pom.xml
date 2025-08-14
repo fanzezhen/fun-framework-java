@@ -4,32 +4,39 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>fun-framework-java</artifactId>
     <groupId>com.github.fanzezhen</groupId>
+    <artifactId>fun-framework-security</artifactId>
     <version>${revision}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>fun-framework-api-count-redis</artifactId>
-  <name>${project.artifactId}</name>
+  <artifactId>fun-framework-security-sa-token</artifactId>
 
   <dependencies>
     <dependency>
-      <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-core-all</artifactId>
+      <groupId>cn.dev33</groupId>
+      <artifactId>sa-token-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>cn.dev33</groupId>
+      <artifactId>sa-token-sign</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>cn.dev33</groupId>
+      <artifactId>sa-token-spring-boot3-starter</artifactId>
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-cache-redis</artifactId>
+      <artifactId>fun-framework-core-cache</artifactId>
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-mp-starter</artifactId>
-      <scope>test</scope>
+      <artifactId>fun-framework-security-base</artifactId>
     </dependency>
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
     </dependency>
   </dependencies>
+
 </project>

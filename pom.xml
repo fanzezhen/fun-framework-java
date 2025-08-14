@@ -10,8 +10,11 @@
   <version>${revision}</version>
 
   <properties>
-    <revision>3.5.3.20250718-SNAPSHOT</revision>
+    <org.springframework.boot.version>3.5.4</org.springframework.boot.version>
+    <org.springframework.cloud.version>2025.0.0</org.springframework.cloud.version>
+    <revision>${org.springframework.boot.version}.20250816</revision>
     <app.server>-tomcat</app.server>
+    <cn.dev33.version>1.44.0</cn.dev33.version>
     <cn.hutool.version>5.8.38</cn.hutool.version>
     <cn.stylefeng.roses.version>2.2.13</cn.stylefeng.roses.version>
     <com.alibaba.version>2.0.37</com.alibaba.version>
@@ -48,8 +51,6 @@
     <org.hibernate.validator.version>8.0.2.Final</org.hibernate.validator.version>
     <org.redisson.version>3.47.0</org.redisson.version>
     <org.springdoc.version>2.7.0</org.springdoc.version>
-    <org.springframework.boot.version>3.5.3</org.springframework.boot.version>
-    <org.springframework.cloud.version>2025.0.0</org.springframework.cloud.version>
     <org.ssssssss.version>2.2.1</org.ssssssss.version>
     <us.codecraft.version>1.0.3</us.codecraft.version>
 
@@ -77,6 +78,26 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>cn.dev33</groupId>
+        <artifactId>sa-token-core</artifactId>
+        <version>${cn.dev33.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.dev33</groupId>
+        <artifactId>sa-token-sign</artifactId>
+        <version>${cn.dev33.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.dev33</groupId>
+        <artifactId>sa-token-spring-boot3-starter</artifactId>
+        <version>${cn.dev33.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.dev33</groupId>
+        <artifactId>sa-token-redis-jackson</artifactId>
+        <version>${cn.dev33.version}</version>
+      </dependency>
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
@@ -199,6 +220,11 @@
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-security-spring-security</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-security-sa-token</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
@@ -599,6 +625,14 @@
     </dependencies>
   </dependencyManagement>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
+  
   <modules>
     <module>fun-framework-core</module>
     <module>fun-framework-api-count-redis</module>

@@ -49,13 +49,14 @@ create table auth_role
     update_time    timestamp   not null default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '更新时间',
     del_flag       integer     not null default 0 comment '是否删除（0--否；非0即为删除）',
     version        integer     not null default 0 comment '版本号',
-    app_id       smallint comment '所属应用',
-    role_name      varchar(50) not null comment '角色名',
+    app_id         smallint comment '所属应用',
+    code           varchar(50) not null comment '代码',
+    name           varchar(500) comment '名称',
     admin          tinyint     not null default 0 comment '是否管理员',
     description    text comment '释义',
     disabled       tinyint     not null default 0 comment '是否禁用（0--正常；1--停用）',
     primary key (id),
-    unique key uk_name_del_app (role_name, del_flag, app_id)
+    unique key uk_code_del_app (code, del_flag, app_id)
 ) comment '鉴权-角色表';
 
 

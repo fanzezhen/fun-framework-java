@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.security.spring.security;
 
 import cn.hutool.core.collection.CollUtil;
-import com.github.fanzezhen.fun.framework.security.base.FunPermissionFacade;
+import com.github.fanzezhen.fun.framework.security.base.FunSecurityFacade;
 import com.github.fanzezhen.fun.framework.security.base.FunSpringSecurityProperties;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
@@ -30,7 +30,7 @@ public class FunPermissionEvaluator implements PermissionEvaluator {
      * 权限门面类，用于调用权限相关的业务逻辑。
      */
     @Resource
-    private FunPermissionFacade funPermissionFacade;
+    private FunSecurityFacade funPermissionFacade;
     /**
      * 权限门面类，用于调用权限相关的业务逻辑。
      */

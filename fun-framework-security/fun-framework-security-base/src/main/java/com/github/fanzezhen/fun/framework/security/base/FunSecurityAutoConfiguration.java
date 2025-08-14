@@ -1,12 +1,11 @@
 package com.github.fanzezhen.fun.framework.security.base;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * @author fanzezhen
- */
 @Configuration
+@ComponentScan("com.github.fanzezhen.fun.framework.security")
 @EnableConfigurationProperties(FunSpringSecurityProperties.class)
-public class FunSpringSecurityAutoConfiguration {
+public class FunSecurityAutoConfiguration {
 }

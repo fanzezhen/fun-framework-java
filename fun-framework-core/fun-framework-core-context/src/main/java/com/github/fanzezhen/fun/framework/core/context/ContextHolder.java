@@ -8,8 +8,10 @@ import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.core.context.properties.ContextConstant;
 import com.github.fanzezhen.fun.framework.core.context.properties.FunCoreContextProperties;
 import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
+import com.github.fanzezhen.fun.framework.core.model.IUser;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Serializable;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.ZoneOffset;
@@ -71,6 +73,12 @@ public class ContextHolder {
         return contextMap == null ? null : contextMap.getString(key.toLowerCase());
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> T getJavaObject(String key) {
+        JSONObject contextMap = getContextMap();
+        return contextMap != null ? (T) contextMap.get(key.toLowerCase()) : null;
+    }
+
     public static <T> T get(String key, Class<T> clazz) {
         JSONObject contextMap = getContextMap();
         return contextMap == null ? null : contextMap.getObject(key.toLowerCase(), clazz);
@@ -115,11 +123,28 @@ public class ContextHolder {
      *
      * @return userId
      */
+    public static <U> U getLoginUser() {
+        return getJavaObject("loginUser");
+    }
+
+    public static <K extends Serializable, U extends IUser<K>> void setLoginUser(U loginUser) {
+        set("loginUser", loginUser);
+        if (loginUser!=null) {
+            setUserId(loginUser.getLoginCode());
+            setUsername(loginUser.getUsername());
+        }
+    }
+
+    /**
+     * 获取当前登录用户的Id
+     *
+     * @return userId
+     */
     public static String getUserId() {
         return get(properties.getKey().getUserIdWithPrefix());
     }
 
-    public static void setUserId(String userId) {
+    public static void setUserId(Serializable userId) {
         set(properties.getKey().getUserIdWithPrefix(), userId);
     }
 
@@ -184,11 +209,11 @@ public class ContextHolder {
      *
      * @return username
      */
-    public static String getUserName() {
+    public static String getUsername() {
         return get(properties.getKey().getUserNameWithPrefix());
     }
 
-    public static void setUserName(String userName) {
+    public static void setUsername(String userName) {
         set(properties.getKey().getUserNameWithPrefix(), userName);
     }
 
@@ -340,7 +365,7 @@ public class ContextHolder {
         return encoding ? Pair.of(name, URLEncoder.encode(value, StandardCharsets.UTF_8)) : Pair.of(name, value);
     }
 
-     static void setProperties(FunCoreContextProperties properties) {
+    static void setProperties(FunCoreContextProperties properties) {
         ContextHolder.properties = properties;
     }
 }

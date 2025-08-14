@@ -15,6 +15,7 @@
   <modules>
     <module>fun-framework-security-spring-security</module>
     <module>fun-framework-security-base</module>
+      <module>fun-framework-security-sa-token</module>
   </modules>
 
   <dependencies>
