@@ -11,16 +11,20 @@ import lombok.Getter;
 @Getter
 public enum FileTypeEnum {
     /**
-     * xlsx
+     * word文档
+     */
+    DOCX(".docx"),
+    /**
+     * json
      */
     JSON(".json"),
     /**
-     * xlsx
+     * excel
      */
     XLSX(".xlsx");
-    private final String prefix;
+    private final String suffix;
 
-    FileTypeEnum(String prefix) {
-        this.prefix = prefix;
+    FileTypeEnum(String suffix) {
+        this.suffix = suffix;
     }
 }

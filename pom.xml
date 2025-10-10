@@ -243,16 +243,6 @@
         <version>${revision}</version>
       </dependency>
       <dependency>
-        <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-web</artifactId>
-        <version>${revision}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.alibaba.boot</groupId>
-        <artifactId>nacos-config-spring-boot-starter</artifactId>
-        <version>${com.alibaba.boot.version}</version>
-      </dependency>
-      <dependency>
         <groupId>com.alibaba.cloud</groupId>
         <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         <version>${com.alibaba.cloud.version}</version>
@@ -311,11 +301,6 @@
       </dependency>
       <dependency>
         <groupId>com.alibaba.csp</groupId>
-        <artifactId>sentinel-spring-cloud-gateway-adapter</artifactId>
-        <version>${com.alibaba.csp.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.alibaba.csp</groupId>
         <artifactId>sentinel-transport-simple-http</artifactId>
         <version>${com.alibaba.csp.version}</version>
       </dependency>
@@ -323,16 +308,6 @@
         <groupId>com.alibaba.csp</groupId>
         <artifactId>sentinel-datasource-nacos</artifactId>
         <version>${com.alibaba.csp.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.alibaba.csp</groupId>
-        <artifactId>spring-boot-starter-ahas-sentinel-client</artifactId>
-        <version>${com.alibaba.csp.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.alibaba.csp</groupId>
-        <artifactId>sentienl-http-simple-transport</artifactId>
-        <version>${com.alibaba.cloud.version}</version>
       </dependency>
       <dependency>
         <groupId>com.alibaba.fastjson2</groupId>
@@ -424,11 +399,6 @@
         <artifactId>jakarta.servlet-api</artifactId>
         <version>${jakarta.servlet.version}</version>
         <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>commons-net</groupId>
-        <artifactId>commons-net</artifactId>
-        <version>${commons-net.version}</version>
       </dependency>
       <dependency>
         <groupId>com.google.code.gson</groupId>
