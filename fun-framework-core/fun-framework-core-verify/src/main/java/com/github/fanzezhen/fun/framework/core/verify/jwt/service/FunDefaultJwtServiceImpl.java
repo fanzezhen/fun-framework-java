@@ -6,6 +6,7 @@ import cn.hutool.jwt.JWT;
 import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
 import com.github.fanzezhen.fun.framework.core.verify.FunCoreVerifyProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,12 @@ import java.nio.charset.StandardCharsets;
  * @author fanzezhen
  */
 @Slf4j
-@Service
-@ConditionalOnMissingBean(value = JwtService.class, ignored = FunDefaultJwtService.class)
-public class FunDefaultJwtService implements JwtService {
-    @Resource
-    private FunCoreVerifyProperties funCoreVerifyProperties;
+public class FunDefaultJwtServiceImpl implements JwtService {
+    private final FunCoreVerifyProperties funCoreVerifyProperties;
+
+    public FunDefaultJwtServiceImpl(FunCoreVerifyProperties funCoreVerifyProperties) {
+        this.funCoreVerifyProperties = funCoreVerifyProperties;
+    }
 
     /**
      * 生成 Token

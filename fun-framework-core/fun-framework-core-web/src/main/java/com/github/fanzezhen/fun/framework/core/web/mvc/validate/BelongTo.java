@@ -1,4 +1,4 @@
-package com.github.fanzezhen.fun.framework.core.web.mvc;
+package com.github.fanzezhen.fun.framework.core.web.mvc.validate;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;

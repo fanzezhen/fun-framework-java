@@ -4,19 +4,15 @@ import cn.hutool.cache.impl.TimedCache;
 import com.github.fanzezhen.fun.framework.core.cache.CacheConstant;
 import com.github.fanzezhen.fun.framework.core.cache.service.CacheService;
 import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
 
 /**
  * @author fanzezhen
  */
-@Order
-@Service
-@ConditionalOnMissingBean(value = CacheService.class, ignored = MemoryCacheServiceImpl.class)
-public class MemoryCacheServiceImpl implements CacheService {
+@Slf4j
+public class FunMemoryCacheServiceImpl implements CacheService {
     @Override
     public String get(String k) {
         TimedCache<String, String> timedCache = CacheConstant.getHourTimedCacheInstance();

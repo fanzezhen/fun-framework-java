@@ -9,6 +9,7 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
@@ -18,9 +19,10 @@ import java.util.Set;
  * @author fanzezhen
  * @since 3.1.8
  */
+@Component
 @EnableCaching
-@ConditionalOnMissingBean(value = CacheManager.class, ignored = HuToolCacheManager.class)
-public class HuToolCacheManager implements CacheManager, InitializingBean {
+@ConditionalOnMissingBean(value = CacheManager.class, ignored = FunHuToolCacheManager.class)
+public class FunHuToolCacheManager implements CacheManager, InitializingBean {
     @Value("${com.github.fanzezhen.fun.framework.core.cache.time-out.seconds:600}")
     private Integer timeoutSeconds;
     @Value("${com.github.fanzezhen.fun.framework.core.cache.schedule-prune.seconds:180}")
