@@ -44,7 +44,7 @@
     <org.apache.velocity.version>2.3</org.apache.velocity.version>
     <org.aspectj.version>1.9.6</org.aspectj.version>
     <org.apereo.cas.version>7.2.3</org.apereo.cas.version>
-    <org.apache.commons.version>3.17.0</org.apache.commons.version>
+    <org.apache.commons.version>3.18.0</org.apache.commons.version>
     <org.apache.poi.version>5.4.1</org.apache.poi.version>
     <org.bouncycastle.bcprov-jdk18on.version>1.80</org.bouncycastle.bcprov-jdk18on.version>
     <org.freemarker.version>2.3.34</org.freemarker.version>
