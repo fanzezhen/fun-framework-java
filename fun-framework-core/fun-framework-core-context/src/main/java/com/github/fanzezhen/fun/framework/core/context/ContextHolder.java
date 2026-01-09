@@ -7,7 +7,8 @@ import cn.hutool.core.util.ArrayUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.core.context.properties.ContextConstant;
 import com.github.fanzezhen.fun.framework.core.context.properties.FunCoreContextProperties;
-import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
+import com.github.fanzezhen.fun.framework.core.exception.ValidUtil;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.model.IUser;
 import lombok.extern.slf4j.Slf4j;
 
@@ -105,13 +106,13 @@ public class ContextHolder {
         if (key == null) {
             log.warn("key is null, can't set it into the context map");
         } else if (key.length() > Context.MAX_SIZE) {
-            throw ExceptionUtil.wrapException("key is more than " + Context.MAX_SIZE + ", i can't set it into the context map");
+            throw new ServiceException("key is more than " + Context.MAX_SIZE + ", i can't set it into the context map");
         } else if (value != null && value.toString().length() > Context.MAX_SIZE) {
-            throw ExceptionUtil.wrapException("value is more than " + Context.MAX_SIZE + ", i can't set it into the context map");
+            throw new ServiceException("value is more than " + Context.MAX_SIZE + ", i can't set it into the context map");
         } else {
             JSONObject contextMap = getContextMap();
             if (contextMap.size() > Context.MAX_CAPACITY) {
-                throw ExceptionUtil.wrapException("the context map is full, can't set anything");
+                throw new ServiceException("the context map is full, can't set anything");
             } else {
                 contextMap.put(key.toLowerCase(), value);
             }
@@ -345,7 +346,7 @@ public class ContextHolder {
             FunCoreContextProperties.Key headerKey = properties.getKey();
             List<Pair<String, String>> pairs = new ArrayList<>();
             contextMap.forEach((key, value) -> {
-                if (ExceptionUtil.isBlank(value)) {
+                if (ValidUtil.isBlank(value)) {
                     log.warn("header:{}'s value:{} is empty,will not add to headers", key, value);
                 } else if (CharSequenceUtil.startWithIgnoreCase(key, headerKey.getPrefix())) {
                     log.debug("adding header{{}:{}}", key, value);

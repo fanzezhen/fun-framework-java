@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.core.exception;
 
-import cn.stylefeng.roses.kernel.model.exception.ServiceException;
-import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
+import com.github.fanzezhen.fun.framework.core.model.exception.enums.ExceptionCodeEnum;
 import com.github.fanzezhen.fun.framework.core.model.response.ActionResult;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.ConstraintViolationException;
@@ -38,7 +38,7 @@ public class DefaultExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     public ActionResult<Object> exception(Exception e) {
         log.error("全局异常信息 ex={}", e.getMessage(), e);
-        return ActionResult.failed(CoreExceptionEnum.SERVICE_ERROR);
+        return ActionResult.failed(ExceptionCodeEnum.SERVICE_ERROR);
     }
 
     /**

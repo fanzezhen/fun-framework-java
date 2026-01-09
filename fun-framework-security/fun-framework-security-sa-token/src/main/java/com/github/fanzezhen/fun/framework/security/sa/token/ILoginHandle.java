@@ -2,7 +2,7 @@ package com.github.fanzezhen.fun.framework.security.sa.token;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.model.IUser;
 import com.github.fanzezhen.fun.framework.security.base.ILoginParameter;
 import com.github.fanzezhen.fun.framework.security.base.ILoginResult;
@@ -44,7 +44,7 @@ public interface ILoginHandle<
     default R doLogin(P parameter) {
         U user = verify(parameter);
         if (user == null) {
-            throw ExceptionUtil.wrapException(SecurityExceptionEnum.LOGIN_FAILED_USER_VERIFY_ERROR);
+            throw new ServiceException(SecurityExceptionEnum.LOGIN_FAILED_USER_VERIFY_ERROR);
         }
         StpUtil.login(user.getLoginCode());
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
@@ -73,6 +73,6 @@ public interface ILoginHandle<
                 return (T) loginHandle;
             }
         }
-        throw ExceptionUtil.wrapException(SecurityExceptionEnum.LOGIN_MODEL_UNSUPPORTED, mode);
+        throw new ServiceException(SecurityExceptionEnum.LOGIN_MODEL_UNSUPPORTED, mode);
     }
 }

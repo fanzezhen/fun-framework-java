@@ -21,7 +21,7 @@ public class ProxyFastjsonConfig {
 
     @PostConstruct
     public void afterPropertiesSet() {
-        ProxyFieldDeserializer.initStatic(true, proxyHelper);
-        ProxyFieldSerializer.initStatic(true, proxyHelper);
+        ProxyFieldReader.initStatic(true, proxyHelper);
+        ProxyFieldWriter.initStatic(true, proxyHelper);
     }
 }

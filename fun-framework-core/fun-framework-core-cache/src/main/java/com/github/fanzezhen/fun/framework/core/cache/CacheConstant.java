@@ -53,7 +53,7 @@ public interface CacheConstant {
      */
     String PARAMS_DETAILS = "params_details";
 
-    static TimedCache<String, String> getHourTimedCacheInstance() {
+    static TimedCache<String, Object> getHourTimedCacheInstance() {
         return HourCacheSingletonHolder.HOUR_TIMED_CACHE;
     }
 
@@ -61,7 +61,7 @@ public interface CacheConstant {
         private HourCacheSingletonHolder() {
         }
 
-        private static final TimedCache<String, String> HOUR_TIMED_CACHE = CacheUtil.newTimedCache(60 * 60 * 1000L);
+        private static final TimedCache<String, Object> HOUR_TIMED_CACHE = CacheUtil.newTimedCache(60 * 60 * 1000L);
 
         static {
             HOUR_TIMED_CACHE.schedulePrune(60 * 60 * 1000L);

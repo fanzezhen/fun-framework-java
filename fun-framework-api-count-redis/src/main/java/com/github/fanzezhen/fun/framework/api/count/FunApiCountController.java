@@ -1,7 +1,6 @@
 package com.github.fanzezhen.fun.framework.api.count;
 
-import cn.stylefeng.roses.kernel.model.exception.ServiceException;
-import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.model.YApiModel;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -74,7 +73,7 @@ public class FunApiCountController {
                 i = bis.read(buffer);
             }
         } catch (IOException e) {
-            throw new ServiceException(CoreExceptionEnum.SERVICE_ERROR);
+            throw new ServiceException("HttpServletResponse 流写入失败", e);
         }
     }
 }

@@ -6,6 +6,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
+
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -33,8 +35,8 @@ public class FunRedisCacheServiceImpl implements CacheService {
     }
 
     @Override
-    public void set(String k, String v, long timeout, TimeUnit timeUnit) {
-        stringRedisTemplate.opsForValue().set(k, v, timeout, timeUnit);
+    public Boolean setIfAbsent(String k, Serializable v, long timeout, TimeUnit timeUnit) {
+       return stringRedisTemplate.opsForValue().setIfAbsent(k, String.valueOf(v), timeout, timeUnit);
     }
 
 }

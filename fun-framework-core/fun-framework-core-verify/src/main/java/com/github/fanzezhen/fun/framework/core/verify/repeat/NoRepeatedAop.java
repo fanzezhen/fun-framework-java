@@ -1,15 +1,16 @@
 package com.github.fanzezhen.fun.framework.core.verify.repeat;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ReflectUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
 import com.github.fanzezhen.fun.framework.core.cache.service.CacheService;
-import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -26,7 +27,7 @@ import jakarta.annotation.Resource;
 import java.util.Arrays;
 
 /**
- * @author fanzezhen
+ * 禁止重复提交
  */
 @Slf4j
 @Aspect
@@ -56,7 +57,6 @@ public class NoRepeatedAop {
     @Before("cut()")
     public void doBefore(JoinPoint joinPoint) {
         String key;
-        String value;
         NoRepeat noRepeat;
         try {
             noRepeat = ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(NoRepeat.class);
@@ -64,22 +64,12 @@ public class NoRepeatedAop {
                 return;
             }
             key = getKey(joinPoint, noRepeat);
-            if (cacheService == null) {
-                log.warn("noRepeated check skip cacheService is null");
-                return;
+            Boolean absent = cacheService.setIfAbsent(key, DateUtil.now(), noRepeat.timeout(), noRepeat.timeUnit());
+            if (!Boolean.TRUE.equals(absent)){
+                throw new ServiceException("请勿重复提交");
             }
-            value = cacheService.get(key);
-        } catch (Throwable throwable) {
-            log.error("noRepeated check failed exception", throwable);
-            return;
-        }
-        if (!CharSequenceUtil.isEmpty(value)) {
-            throw ExceptionUtil.wrapException("请勿重复提交");
-        }
-        try {
-            cacheService.set(key, String.valueOf(System.currentTimeMillis()), noRepeat.timeout(), noRepeat.timeUnit());
         } catch (Exception exception) {
-            log.error("noRepeated put failed exception", exception);
+            log.error("noRepeated check failed", exception);
         }
     }
 

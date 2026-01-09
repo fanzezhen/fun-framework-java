@@ -1,9 +1,9 @@
 package com.github.fanzezhen.fun.framework.core.model.response;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.stylefeng.roses.kernel.model.exception.AbstractBaseExceptionEnum;
-import cn.stylefeng.roses.kernel.model.exception.ServiceException;
-import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
+import com.github.fanzezhen.fun.framework.core.model.enums.ICodeTextEnum;
+import com.github.fanzezhen.fun.framework.core.model.exception.enums.ExceptionCodeEnum;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.ConstraintViolationException;
 import lombok.*;
@@ -37,7 +37,7 @@ public class ActionResult<T> {
             return "success";
         }
         if (CollUtil.isEmpty(errors)) {
-            return CoreExceptionEnum.SERVICE_ERROR.getMessage();
+            return ExceptionCodeEnum.SERVICE_ERROR.getText();
         }
         return errors.get(0).getMessage();
     }
@@ -106,7 +106,7 @@ public class ActionResult<T> {
         return new ActionResult<>(errorList);
     }
 
-    public static <T> ActionResult<T> failed(AbstractBaseExceptionEnum exceptionEnum) {
+    public static <T> ActionResult<T> failed(ICodeTextEnum exceptionEnum) {
         return new ActionResult<>(new ErrorInfo(exceptionEnum));
     }
 

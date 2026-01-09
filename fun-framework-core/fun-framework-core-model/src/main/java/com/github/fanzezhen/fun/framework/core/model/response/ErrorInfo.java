@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.core.model.response;
 
-import cn.stylefeng.roses.kernel.model.exception.AbstractBaseExceptionEnum;
-import cn.stylefeng.roses.kernel.model.exception.ServiceException;
+import com.github.fanzezhen.fun.framework.core.model.enums.ICodeTextEnum;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,9 +33,9 @@ public class ErrorInfo implements Serializable {
         this.message = message;
     }
 
-    public ErrorInfo(AbstractBaseExceptionEnum exceptionEnum) {
-        this.code = exceptionEnum.getCode();
-        this.message = exceptionEnum.getMessage();
+    public ErrorInfo(ICodeTextEnum<?> exceptionEnum) {
+        this.code = exceptionEnum.intVal();
+        this.message = exceptionEnum.text();
     }
 
     public ErrorInfo(ServiceException serviceException) {

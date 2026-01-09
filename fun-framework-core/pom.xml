@@ -58,14 +58,6 @@
       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.alibaba</groupId>
-      <artifactId>fastjson</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>cn.stylefeng.roses</groupId>
-      <artifactId>kernel-model</artifactId>
-    </dependency>
-    <dependency>
       <groupId>eu.bitwalker</groupId>
       <artifactId>UserAgentUtils</artifactId>
     </dependency>

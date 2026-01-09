@@ -5,8 +5,9 @@ import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
-import com.github.fanzezhen.fun.framework.core.data.model.FileContentInfo;
-import com.github.fanzezhen.fun.framework.core.data.model.LineMatchRule;
+import com.github.fanzezhen.fun.framework.core.data.util.StrFileUtil;
+import com.github.fanzezhen.fun.framework.core.model.file.FileContentInfo;
+import com.github.fanzezhen.fun.framework.core.model.file.FileLineMatchRule;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -100,9 +101,9 @@ class StrFileUtilTest {
         Assertions.assertTrue(FileUtil.isNotEmpty(tempFile));
     }
 
-    private List<LineMatchRule<DataXJobResult>> getLineMatchRuleList() {
-        LineMatchRule<DataXJobResult> flowLineMatchRule = getFlowLineMatchRule();
-        LineMatchRule<DataXJobResult> recLineMatchRule = new LineMatchRule<>();
+    private List<FileLineMatchRule<DataXJobResult>> getLineMatchRuleList() {
+        FileLineMatchRule<DataXJobResult> flowLineMatchRule = getFlowLineMatchRule();
+        FileLineMatchRule<DataXJobResult> recLineMatchRule = new FileLineMatchRule<>();
         recLineMatchRule.setName("记录写入速度");
         recLineMatchRule.setPredicate((line, data) -> (data == null || data.getRec() == null) && line.startsWith("记录写入速度"));
         recLineMatchRule.setExtractFunction((line, data) -> {
@@ -125,8 +126,8 @@ class StrFileUtilTest {
         }};
     }
 
-    private static LineMatchRule<DataXJobResult> getFlowLineMatchRule() {
-        LineMatchRule<DataXJobResult> flowLineMatchRule = new LineMatchRule<>();
+    private static FileLineMatchRule<DataXJobResult> getFlowLineMatchRule() {
+        FileLineMatchRule<DataXJobResult> flowLineMatchRule = new FileLineMatchRule<>();
         flowLineMatchRule.setName("任务平均流量");
         flowLineMatchRule.setPredicate((line, data) -> (data == null || data.getFlow() == null) && line.startsWith("任务平均流量"));
         flowLineMatchRule.setExtractFunction((line, data) -> {

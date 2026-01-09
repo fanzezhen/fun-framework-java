@@ -3,13 +3,10 @@ package com.github.fanzezhen.fun.framework.security.spring.security;
 import cn.hutool.core.collection.CollUtil;
 import com.github.fanzezhen.fun.framework.security.base.FunSecurityFacade;
 import com.github.fanzezhen.fun.framework.security.base.FunSpringSecurityProperties;
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PatternMatchUtils;
@@ -31,11 +28,6 @@ public class FunPermissionEvaluator implements PermissionEvaluator {
      */
     @Resource
     private FunSecurityFacade funPermissionFacade;
-    /**
-     * 权限门面类，用于调用权限相关的业务逻辑。
-     */
-    @Autowired(required = false)
-    private DefaultWebSecurityExpressionHandler webSecurityExpressionHandler;
 
     /**
      * 安全模块的配置属性，包含路由规则、权限模式等。
@@ -65,12 +57,12 @@ public class FunPermissionEvaluator implements PermissionEvaluator {
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
         // 判断用户是否已登录（Principal 是否为 UserDetails 实例）
-        if (!(authentication.getPrincipal() instanceof UserDetails)) {
+        if (!(authentication.getPrincipal() instanceof UserDetails userDetails)) {
             return false;
         }
 
         // 获取当前登录用户名
-        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        String username = userDetails.getUsername();
 
         // 获取目标路径（即接口路径）
         String requestPath = (String) targetDomainObject;
@@ -138,12 +130,5 @@ public class FunPermissionEvaluator implements PermissionEvaluator {
     @Override
     public boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
         return false;
-    }
-    
-    @PostConstruct
-    public void init(){
-        if (webSecurityExpressionHandler!=null){
-        webSecurityExpressionHandler.setPermissionEvaluator(this);
-        }
     }
 }

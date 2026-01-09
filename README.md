@@ -29,7 +29,7 @@ fun-framework-java
 | [fun-framework-core](fun-framework-core)               | 核心基础代码               | [README.md](fun-framework-core%2FREADME.md)        |
 | [fun-framework-cache-redis](fun-framework-cache-redis) | redis缓存模块            | [README.md](fun-framework-cache-redis%2FREADME.md) |
 | [fun-framework-jasypt](fun-framework-jasypt)           | 主要用于对配置文件加密          | [README.md](fun-framework-jasypt%2FREADME.md)      |
-| [fun-framework-mp](fun-framework-mp)                   | MyBatis-Plus         | [README.md](fun-framework-mp%2FREADME.md)          |
+| [fun-framework-data-mp](fun-framework-data-mp)                   | MyBatis-Plus         | [README.md](fun-framework-data-mp%2FREADME.md)          |
 | [fun-framework-sentinel](fun-framework-sentinel)       | sentinel防控模块         | [README.md](fun-framework-sentinel%2FREADME.md)    |
 | [fun-framework-spring-doc](fun-framework-spring-doc)   | 用于生成接口文档-基于springdoc | [README.md](fun-framework-spring-doc%2FREADME.md)  |
 | [fun-framework-web](fun-framework-web)                 | web模块，通用的mvc配置       | [README.md](fun-framework-web%2FREADME.md)         |

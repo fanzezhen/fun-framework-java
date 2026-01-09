@@ -4,17 +4,18 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.poi.excel.ExcelUtil;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.core.model.YApiModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.Cursor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
 @Service
 public class FunApiCountService {
     @Resource
-    private RedisTemplate<String, String> redisTemplate;
+    private StringRedisTemplate redisTemplate;
     @Value("${spring.application.name}")
     private String springApplicationName;
 
@@ -43,7 +44,7 @@ public class FunApiCountService {
         Map<String, LinkedHashMap<String, Integer>> result = new HashMap<>();
         String keyPrefix = FunApiCountAop.getKeyPrefix(springApplicationName);
         ScanOptions scanOptions = ScanOptions.scanOptions()
-            .match("\"" + keyPrefix + "**") // 使用通配符匹配键
+            .match(keyPrefix + "**") // 使用通配符匹配键
             .count(1000) // 每次扫描返回的数量
             .build();
         try (Cursor<String> cursor = redisTemplate.scan(scanOptions)) {
@@ -53,18 +54,16 @@ public class FunApiCountService {
                     key = key.substring(1, key.length() - 1);
                 }
                 Set<ZSetOperations.TypedTuple<String>> tupleSet = redisTemplate.opsForZSet().rangeByScoreWithScores(key, -1, Integer.MAX_VALUE);
-                if (tupleSet != null) {
-                    LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
-                    tupleSet.stream()
-                        .filter(tuple -> tuple != null && tuple.getScore() != null)
-                        .sorted(Comparator.comparingDouble(ZSetOperations.TypedTuple::getScore))
-                        .forEach(tuple -> {
-                            if (tuple.getScore() != null) {
-                                map.put(tuple.getValue(), tuple.getScore().intValue());
-                            }
-                        });
-                    result.put(key.substring(keyPrefix.length()), map);
-                }
+                LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
+                tupleSet.stream()
+                    .filter(tuple -> tuple != null && tuple.getScore() != null)
+                    .sorted(Comparator.comparingDouble(ZSetOperations.TypedTuple::getScore))
+                    .forEach(tuple -> {
+                        if (tuple.getScore() != null) {
+                            map.put(tuple.getValue(), tuple.getScore().intValue());
+                        }
+                    });
+                result.put(key.substring(keyPrefix.length()), map);
             }
         }
         return result;
@@ -78,7 +77,7 @@ public class FunApiCountService {
                 for (YApiModel.Api api : yApiModel.getList()) {
                     String apiPath = api.getPath();
                     LinkedHashMap<String, Integer> map = apiMap.get(apiPath);
-                    JSONObject row = new JSONObject(8, true)
+                    JSONObject row = new JSONObject(8, 1f, true)
                         .fluentPut("功能模块", yApiModel.getName())
                         .fluentPut("接口名", api.getTitle())
                         .fluentPut("接口", apiPath)

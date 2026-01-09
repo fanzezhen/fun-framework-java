@@ -4,7 +4,7 @@ import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.lang.func.Consumer3;
 import cn.hutool.core.lang.func.Supplier3;
 import cn.hutool.core.util.ArrayUtil;
-import cn.stylefeng.roses.kernel.model.exception.ServiceException;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.thread.enums.FunCoreThreadExceptionEnum;
 
 import java.util.*;

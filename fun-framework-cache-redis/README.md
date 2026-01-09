@@ -1,5 +1,6 @@
 基于Redis实现的[fun-framework-core-cache](..%2Ffun-framework-core%2Ffun-framework-core-cache)
 ------------------------------------------
+错误码前缀 1100**
 
 # 功能介绍
 

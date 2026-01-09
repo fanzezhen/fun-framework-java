@@ -1,5 +1,6 @@
 package com.github.fanzezhen.fun.framework.core.cache.service;
 
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -33,5 +34,5 @@ public interface CacheService {
      */
     void remove(String k);
 
-    void set(String k, String v, long timeout, TimeUnit timeUnit);
+    Boolean setIfAbsent(String k, Serializable v, long timeout, TimeUnit timeUnit);
 }

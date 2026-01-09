@@ -1,7 +1,9 @@
 package com.github.fanzezhen.fun.framework.core.exception;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.CharSequenceUtil;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validation;
@@ -15,6 +17,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -72,8 +76,8 @@ public class ValidUtil {
     public static void validateImage(File imageFile) {
         try {
             BufferedImage image = ImageIO.read(imageFile);
-            if (ExceptionUtil.isBlank(image)){
-                throw ExceptionUtil.wrapException(EMPTY_ERROR_MESSAGE);
+            if (isBlank(image)){
+                throw new ServiceException(EMPTY_ERROR_MESSAGE);
             }
         } catch (Exception exception) {
             log.warn(IMG_ERR_MSG, exception);
@@ -93,7 +97,7 @@ public class ValidUtil {
                 return true;
             }
         } catch (Exception e) {
-            throw ExceptionUtil.wrapException(IMG_PATTERN_ERR_MSG);
+            throw new ServiceException(IMG_PATTERN_ERR_MSG);
         }
         return false;
     }
@@ -105,8 +109,8 @@ public class ValidUtil {
     public static void validateImage(MultipartFile imageMultipartFile) {
         try {
             BufferedImage image = ImageIO.read(imageMultipartFile.getInputStream());
-            if (ExceptionUtil.isBlank(image)){
-                throw ExceptionUtil.wrapException(EMPTY_ERROR_MESSAGE);
+            if (isBlank(image)){
+                throw new ServiceException(EMPTY_ERROR_MESSAGE);
             }
         } catch (Exception throwable) {
             log.warn(IMG_ERR_MSG, throwable);
@@ -126,7 +130,7 @@ public class ValidUtil {
                 return true;
             }
         } catch (Exception e) {
-            throw ExceptionUtil.wrapException(IMG_PATTERN_ERR_MSG);
+            throw new ServiceException(IMG_PATTERN_ERR_MSG);
         }
         return false;
     }
@@ -138,8 +142,8 @@ public class ValidUtil {
     public static void validateImage(InputStream inputStream) {
         try {
             BufferedImage image = ImageIO.read(inputStream);
-            if (ExceptionUtil.isBlank(image)){
-                throw ExceptionUtil.wrapException(EMPTY_ERROR_MESSAGE);
+            if (isBlank(image)){
+                throw new ServiceException(EMPTY_ERROR_MESSAGE);
             }
         } catch (Exception throwable) {
             log.warn(IMG_ERR_MSG, throwable);
@@ -159,8 +163,45 @@ public class ValidUtil {
                 return true;
             }
         } catch (Exception e) {
-            throw ExceptionUtil.wrapException(IMG_PATTERN_ERR_MSG);
+            throw new ServiceException(IMG_PATTERN_ERR_MSG);
         }
         return false;
+    }
+
+    public static boolean isEmpty(Object o) {
+        return isEmpty(o, false);
+    }
+
+    public static boolean isEmpty(Object o, boolean isStrip) {
+        if (o == null) {
+            return true;
+        }
+        if (isStrip) {
+            if (CharSequenceUtil.isBlank(String.valueOf(o))) {
+                return true;
+            }
+        } else {
+            if (CharSequenceUtil.isEmpty(String.valueOf(o))) {
+                return true;
+            }
+        }
+        if (o instanceof Map && MapUtil.isEmpty((Map<?, ?>) o)) {
+            return true;
+        }
+        if (o instanceof Collection && CollUtil.isEmpty((Collection<?>) o)) {
+            return true;
+        }
+        if (o instanceof byte[] bytes && bytes.length == 0) {
+            return true;
+        }
+        return o instanceof String[] strings && strings.length == 0;
+    }
+
+    public static boolean isNotBlank(Object o) {
+        return !isBlank(o);
+    }
+
+    public static boolean isBlank(Object o) {
+        return isEmpty(o, true);
     }
 }

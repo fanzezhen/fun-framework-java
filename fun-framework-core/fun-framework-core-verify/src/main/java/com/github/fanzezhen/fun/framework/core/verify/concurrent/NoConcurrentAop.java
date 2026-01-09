@@ -1,9 +1,8 @@
 package com.github.fanzezhen.fun.framework.core.verify.concurrent;
 
-import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrPool;
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
 import com.github.fanzezhen.fun.framework.core.cache.service.LockService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +22,7 @@ import jakarta.annotation.Resource;
 import java.util.Arrays;
 
 /**
- * @author fanzezhen
+ * 禁止并发
  */
 @Slf4j
 @Aspect
@@ -55,15 +54,7 @@ public class NoConcurrentAop {
             return joinPoint.proceed();
         }
         String key = getKey(joinPoint, noConcurrent);
-        return lockService.lockAndExecute(() -> {
-            Object result;
-            try {
-                result = joinPoint.proceed();
-            } catch (Throwable e) {
-                throw ExceptionUtil.wrapRuntime(e);
-            }
-            return result;
-        }, key);
+        return lockService.lockAndExecute(joinPoint::proceed, key);
     }
 
     private String getKey(JoinPoint joinPoint, NoConcurrent noConcurrent) {

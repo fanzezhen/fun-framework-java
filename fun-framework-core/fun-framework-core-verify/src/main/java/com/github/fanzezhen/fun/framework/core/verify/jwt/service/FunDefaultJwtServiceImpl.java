@@ -3,14 +3,10 @@ package com.github.fanzezhen.fun.framework.core.verify.jwt.service;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.jwt.JWT;
-import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.verify.FunCoreVerifyProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.stereotype.Service;
 
-import jakarta.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -31,12 +27,12 @@ public class FunDefaultJwtServiceImpl implements JwtService {
     public String generateJwtToken(String code, String secretMd5, long timeMillis) {
         FunCoreVerifyProperties.Jwt.AccountInfo accountInfo = MapUtil.get(funCoreVerifyProperties.getJwt().getAccountInfos(), code, FunCoreVerifyProperties.Jwt.AccountInfo.class);
         if (accountInfo == null) {
-            throw ExceptionUtil.wrapException("账户未对接");
+            throw new ServiceException("账户未对接");
         }
         String secret = accountInfo.getSecret();
         String md5 = SecureUtil.md5(secret + timeMillis);
         if (!md5.equals(secretMd5)) {
-            throw ExceptionUtil.wrapException("账户秘钥错误");
+            throw new ServiceException("账户秘钥错误");
         }
         return JWT.create()
             .setPayload("code", code)
@@ -50,7 +46,7 @@ public class FunDefaultJwtServiceImpl implements JwtService {
     public boolean checkToken(String token, String code) {
         FunCoreVerifyProperties.Jwt.AccountInfo accountInfo = MapUtil.get(funCoreVerifyProperties.getJwt().getAccountInfos(), code, FunCoreVerifyProperties.Jwt.AccountInfo.class);
         if (accountInfo == null) {
-            throw ExceptionUtil.wrapException("账户未对接");
+            throw new ServiceException("账户未对接");
         }
         String secret = accountInfo.getSecret();
         JWT jwt = JWT.of(token).setKey(secret.getBytes(StandardCharsets.UTF_8));

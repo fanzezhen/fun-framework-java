@@ -2,7 +2,7 @@ package com.github.fanzezhen.fun.framework.core.context;
 
 import cn.hutool.core.map.CaseInsensitiveMap;
 import com.alibaba.fastjson2.JSONObject;
-import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,12 +46,12 @@ public class Context {
     public String set(String key, String value) {
         if (key != null && value != null) {
             if (key.length() > MAX_SIZE) {
-                throw ExceptionUtil.wrapException("key is more than " + MAX_SIZE + ", i can't set it into the context map");
+                throw new ServiceException("key is more than " + MAX_SIZE + ", i can't set it into the context map");
             } else if (value.length() > MAX_SIZE) {
-                throw ExceptionUtil.wrapException("value is more than " + MAX_SIZE + ", i can't set it into the context map");
+                throw new ServiceException("value is more than " + MAX_SIZE + ", i can't set it into the context map");
             } else {
                 if (this.getContextMap().size() > MAX_CAPACITY) {
-                    throw ExceptionUtil.wrapException("the context map is full, can't set anything");
+                    throw new ServiceException("the context map is full, can't set anything");
                 } else {
                     this.getContextMap().put(key.toLowerCase(), value);
                 }

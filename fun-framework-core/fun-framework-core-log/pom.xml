@@ -2,36 +2,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>fun-framework-core</artifactId>
     <groupId>com.github.fanzezhen</groupId>
+    <artifactId>fun-framework-core</artifactId>
     <version>${revision}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
   <artifactId>fun-framework-core-log</artifactId>
   <name>${project.artifactId}</name>
+  <packaging>pom</packaging>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-core-thread</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>jakarta.annotation</groupId>
-      <artifactId>jakarta.annotation-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.aspectj</groupId>
-      <artifactId>aspectjweaver</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
-    </dependency>
-  </dependencies>
+  <modules>
+    <module>fun-framework-core-log-base</module>
+    <module>fun-framework-core-log-web</module>
+  </modules>
+
 </project>

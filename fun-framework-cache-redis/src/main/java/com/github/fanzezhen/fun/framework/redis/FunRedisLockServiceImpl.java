@@ -1,9 +1,9 @@
 package com.github.fanzezhen.fun.framework.redis;
 
-import cn.stylefeng.roses.kernel.model.exception.ServiceException;
-import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.cache.service.LockService;
 import jakarta.annotation.Resource;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 
 /**
@@ -25,28 +24,37 @@ public class FunRedisLockServiceImpl implements LockService {
     @Resource
     RedissonClient redissonClient;
 
+    /**
+     * 获取锁并执行函数，执行完成后会释放锁，规定时间内获取不到锁则抛出异常
+     *
+     * @param supplier 业务函数
+     * @param key      键
+     * @param limit    尝试次数
+     * @param waitTime 每次等待时间
+     * @param timeUnit 时间单位
+     *
+     * @return 业务函数结果
+     */
+    @SneakyThrows
     @Override
-    public <T> T lockAndExecute(Supplier<T> supplier, String key, long waitTime, TimeUnit timeUnit) {
+    public <T> T lockAndExecute(FunSupplier<T> supplier, String key, int limit, long waitTime, TimeUnit timeUnit) {
         RLock lock = redissonClient.getLock(key);
-        try {
+        for (int i = 1; i <= limit; i++) {
             boolean isLock = lock.tryLock(waitTime, timeUnit);
             if (isLock) {
+                log.debug("{} 成功获取到锁，开始执行业务！{}/{}", key, i, limit);
                 try {
-                    return supplier.get();
+                    return supplier.call();
                 } finally {
                     if (lock.isLocked() && lock.isHeldByCurrentThread()) {
                         lock.unlock();
                     }
                 }
             } else {
-                log.info("没有获取到锁，等待时间结束:{}", key);
+                log.debug("{} 没有获取到锁，等待时间结束！{}/{}", key, i, limit);
             }
-        } catch (InterruptedException e) {
-            log.warn("redis锁错误:{},{}", e, key);
-            Thread.currentThread().interrupt(); // 重新中断当前线程
-            throw new ServiceException(CoreExceptionEnum.SERVICE_ERROR.getCode(), "redis锁错误" + key + e.getLocalizedMessage());
         }
-        throw new ServiceException(CoreExceptionEnum.SERVICE_ERROR.getCode(), "没有获取到锁，等待时间结束" + key + "：" + waitTime + "：" + timeUnit);
+        throw new ServiceException("没有获取到锁，等待时间结束 " + key + "：" + waitTime + "：" + timeUnit);
     }
 
 

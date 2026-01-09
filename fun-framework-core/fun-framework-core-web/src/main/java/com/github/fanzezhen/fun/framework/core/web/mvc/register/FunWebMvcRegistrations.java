@@ -2,7 +2,7 @@ package com.github.fanzezhen.fun.framework.core.web.mvc.register;
 
 import com.github.fanzezhen.fun.framework.core.web.FunCoreWebProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
+import org.springframework.boot.webmvc.autoconfigure.WebMvcRegistrations;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 

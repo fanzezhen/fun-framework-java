@@ -36,7 +36,11 @@
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-core-log</artifactId>
+      <artifactId>fun-framework-core-log-base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.fanzezhen</groupId>
+      <artifactId>fun-framework-core-log-web</artifactId>
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
@@ -49,6 +53,10 @@
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
       <artifactId>fun-framework-core-verify</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.fanzezhen</groupId>
+      <artifactId>fun-framework-core-web</artifactId>
     </dependency>
   </dependencies>
 </project>

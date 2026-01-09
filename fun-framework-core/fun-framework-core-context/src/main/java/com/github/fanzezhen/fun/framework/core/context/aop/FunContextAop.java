@@ -5,7 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.core.context.ContextHolder;
 import com.github.fanzezhen.fun.framework.core.context.properties.FunContextExceptionEnum;
 import com.github.fanzezhen.fun.framework.core.context.FunContextFilter;
-import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -46,7 +46,7 @@ public class FunContextAop {
             for (String header : annotation.required()) {
                 String context = ContextHolder.get(header);
                 if (CharSequenceUtil.isEmpty(context)){
-                    throw ExceptionUtil.wrapException(FunContextExceptionEnum.CONTEXT_HEADER_MISSING, header);
+                    throw new ServiceException(FunContextExceptionEnum.CONTEXT_HEADER_MISSING, header);
                 }
             }
         }

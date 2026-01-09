@@ -6,7 +6,7 @@ import cn.dev33.satoken.filter.SaFilter;
 import cn.dev33.satoken.filter.SaServletFilter;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.stylefeng.roses.kernel.model.exception.ServiceException;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.alibaba.fastjson2.JSON;
 import com.github.fanzezhen.fun.framework.core.model.response.ActionResult;
 import com.github.fanzezhen.fun.framework.core.model.response.ErrorInfo;
@@ -15,7 +15,7 @@ import com.github.fanzezhen.fun.framework.security.base.FunSpringSecurityPropert
 import jakarta.annotation.Resource;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.boot.web.server.servlet.context.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -10,29 +10,31 @@
   <version>${revision}</version>
 
   <properties>
-    <org.springframework.boot.version>3.5.4</org.springframework.boot.version>
-    <org.springframework.cloud.version>2025.0.0</org.springframework.cloud.version>
+    <org.springframework.boot.version>4.0.1</org.springframework.boot.version>
+    <org.springframework.cloud.version>2025.1.0</org.springframework.cloud.version>
+    <org.springframework.cloud.spring-cloud-starter-gateway.version>4.3.3</org.springframework.cloud.spring-cloud-starter-gateway.version>
     <revision>${org.springframework.boot.version}.20250816</revision>
     <app.server>-tomcat</app.server>
     <cn.dev33.version>1.44.0</cn.dev33.version>
-    <cn.hutool.version>5.8.38</cn.hutool.version>
-    <cn.stylefeng.roses.version>2.2.13</cn.stylefeng.roses.version>
-    <com.alibaba.version>2.0.37</com.alibaba.version>
-    <com.alibaba.boot.version>0.2.12</com.alibaba.boot.version>
-    <com.alibaba.cloud.version>2023.0.3.3</com.alibaba.cloud.version>
-    <com.alibaba.csp.version>1.8.8</com.alibaba.csp.version>
+    <cn.hutool.version>5.8.43</cn.hutool.version>
+    <com.alibaba.version>1.2.27</com.alibaba.version>
+    <com.alibaba.cloud.version>2025.0.0.0</com.alibaba.cloud.version>
+    <com.alibaba.csp.version>1.8.9</com.alibaba.csp.version>
     <com.alibaba.druid.version>1.2.24</com.alibaba.druid.version>
-    <com.alibaba.fastjson2.version>2.0.57</com.alibaba.fastjson2.version>
-    <com.baomidou.version>3.5.12</com.baomidou.version>
-    <com.fasterxml.jackson.version>2.19.0</com.fasterxml.jackson.version>
-    <com.google.code.gson.version>2.13.1</com.google.code.gson.version>
-    <com.github.gavlyukovskiy.version>1.11.0</com.github.gavlyukovskiy.version>
-    <com.github.ulisesbocchio.version>3.0.5</com.github.ulisesbocchio.version>
-    <com.google.guava.version>33.4.8-jre</com.google.guava.version>
-    <com.mysql.version>9.3.0</com.mysql.version>
-    <com.zaxxer.version>6.3.0</com.zaxxer.version>
-    <commons-io.version>2.19.0</commons-io.version>
-    <commons-net.version>3.11.1</commons-net.version>
+    <com.alibaba.fastjson2.version>2.0.60</com.alibaba.fastjson2.version>
+    <com.baomidou.version>3.5.15</com.baomidou.version>
+    <com.fasterxml.jackson.core.version>2.20.1</com.fasterxml.jackson.core.version>
+    <com.fasterxml.jackson.core.jackson-annotations.version>2.20</com.fasterxml.jackson.core.jackson-annotations.version>
+    <com.fasterxml.jackson.datatype.version>2.20.1</com.fasterxml.jackson.datatype.version>
+    <com.fasterxml.jackson.module.version>2.20.1</com.fasterxml.jackson.module.version>
+    <com.google.code.gson.version>2.13.2</com.google.code.gson.version>
+    <com.github.gavlyukovskiy.version>2.0.0</com.github.gavlyukovskiy.version>
+    <com.github.ulisesbocchio.version>4.0.3</com.github.ulisesbocchio.version>
+    <com.google.guava.version>33.5.0-jre</com.google.guava.version>
+    <com.mysql.version>9.5.0</com.mysql.version>
+    <com.zaxxer.version>7.0.2</com.zaxxer.version>
+    <commons-io.version>2.21.0</commons-io.version>
+    <commons-net.version>3.12.0</commons-net.version>
     <eu.bitwalker.version>1.21</eu.bitwalker.version>
     <io.github.openfeign.version>13.6</io.github.openfeign.version>
     <ma.glasnost.orika.version>1.5.4</ma.glasnost.orika.version>
@@ -41,39 +43,41 @@
     <javax.servlet.version>4.0.1</javax.servlet.version>
     <javax.persistence.version>2.2</javax.persistence.version>
     <net.lingala.zip4j.version>2.11.5</net.lingala.zip4j.version>
-    <org.apache.velocity.version>2.3</org.apache.velocity.version>
-    <org.aspectj.version>1.9.6</org.aspectj.version>
-    <org.apereo.cas.version>7.2.3</org.apereo.cas.version>
-    <org.apache.commons.version>3.17.0</org.apache.commons.version>
-    <org.apache.poi.version>5.4.1</org.apache.poi.version>
-    <org.bouncycastle.bcprov-jdk18on.version>1.80</org.bouncycastle.bcprov-jdk18on.version>
+    <org.apache.velocity.version>2.4.1</org.apache.velocity.version>
+    <org.aspectj.version>1.9.25.1</org.aspectj.version>
+    <org.apereo.cas.version>7.3.2</org.apereo.cas.version>
+    <org.apache.poi.version>5.5.1</org.apache.poi.version>
+    <org.bouncycastle.bcprov-jdk18on.version>1.83</org.bouncycastle.bcprov-jdk18on.version>
     <org.freemarker.version>2.3.34</org.freemarker.version>
-    <org.hibernate.validator.version>8.0.2.Final</org.hibernate.validator.version>
-    <org.redisson.version>3.47.0</org.redisson.version>
-    <org.springdoc.version>2.7.0</org.springdoc.version>
-    <org.ssssssss.version>2.2.1</org.ssssssss.version>
+    <org.hibernate.validator.version>9.1.0.Final</org.hibernate.validator.version>
+    <org.redisson.version>4.1.0</org.redisson.version>
+    <org.springdoc.version>3.0.1</org.springdoc.version>
+    <org.ssssssss.version>2.2.2</org.ssssssss.version>
     <us.codecraft.version>1.0.3</us.codecraft.version>
 
+    <plugin.central-publishing-maven-plugin.version>0.10.0</plugin.central-publishing-maven-plugin.version>
+    <plugin.flatten-maven-plugin.version>1.7.3</plugin.flatten-maven-plugin.version>
+    <plugin.license-maven-plugin.version>5.0.0</plugin.license-maven-plugin.version>
+    <plugin.maven-assembly-plugin.version>3.8.0</plugin.maven-assembly-plugin.version>
+    <plugin.maven-compiler-plugin.version>3.14.1</plugin.maven-compiler-plugin.version>
+    <plugin.maven-deploy-plugin.version>3.1.4</plugin.maven-deploy-plugin.version>
+    <plugin.maven-gpg-plugin.version>3.2.8</plugin.maven-gpg-plugin.version>
+    <plugin.maven-javadoc-plugin.version>3.12.0</plugin.maven-javadoc-plugin.version>
+    <plugin.maven-jar-plugin.version>3.5.0</plugin.maven-jar-plugin.version>
+    <plugin.maven-war-plugin.version>3.5.1</plugin.maven-war-plugin.version>
+    <plugin.maven-source-plugin.version>3.4.0</plugin.maven-source-plugin.version>
+    <plugin.maven-resources-plugin.version>3.4.0</plugin.maven-resources-plugin.version>
+    <plugin.maven-scm-plugin.version>2.2.1</plugin.maven-scm-plugin.version>
+    <plugin.maven-shade-plugin.version>3.6.1</plugin.maven-shade-plugin.version>
+    <plugin.nexus-staging-maven-plugin.version>1.7.0</plugin.nexus-staging-maven-plugin.version>
+    
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <java.version>17</java.version>
+    <java.version>21</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-    <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
-    <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
-    <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
-    <maven-flatten-plugin.version>1.7.0</maven-flatten-plugin.version>
-    <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
-    <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
-    <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
-    <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
-    <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-    <maven-scm-plugin.version>2.0.1</maven-scm-plugin.version>
-    <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
-    <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+    <maven.compiler.release>${java.version}</maven.compiler.release>
     <maven.plugin.validation>VERBOSE</maven.plugin.validation>
-    <plugin.license-maven-plugin.version>5.0.0</plugin.license-maven-plugin.version>
-    <sonatype.central-publishing-maven-plugin.version>0.7.0</sonatype.central-publishing-maven-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -113,6 +117,11 @@
         <scope>import</scope>
       </dependency>
       <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-gateway</artifactId>
+        <version>${org.springframework.cloud.spring-cloud-starter-gateway.version}</version>
+      </dependency>
+      <dependency>
         <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-core</artifactId>
         <version>${revision}</version>
@@ -139,6 +148,16 @@
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-data-elasticsearch-base</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-data-elasticsearch7-starter</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-core-exception</artifactId>
         <version>${revision}</version>
       </dependency>
@@ -150,6 +169,16 @@
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-core-log</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-core-log-base</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-core-log-web</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
@@ -169,22 +198,27 @@
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-mp</artifactId>
+        <artifactId>fun-framework-core-web</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-mp-starter</artifactId>
+        <artifactId>fun-framework-data-mp</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-mp-trace</artifactId>
+        <artifactId>fun-framework-data-mp-starter</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-mp-trace-impl</artifactId>
+        <artifactId>fun-framework-data-mp-trace</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-data-mp-trace-impl</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
@@ -267,11 +301,6 @@
       <dependency>
         <groupId>com.alibaba</groupId>
         <artifactId>druid-spring-boot-starter</artifactId>
-        <version>${com.alibaba.druid.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>fastjson</artifactId>
         <version>${com.alibaba.version}</version>
       </dependency>
       <dependency>
@@ -352,27 +381,27 @@
       <dependency>
         <groupId>com.fasterxml.jackson.module</groupId>
         <artifactId>jackson-module-parameter-names</artifactId>
-        <version>${com.fasterxml.jackson.version}</version>
+        <version>${com.fasterxml.jackson.module.version}</version>
       </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-annotations</artifactId>
-        <version>${com.fasterxml.jackson.version}</version>
+        <version>${com.fasterxml.jackson.core.jackson-annotations.version}</version>
       </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
-        <version>${com.fasterxml.jackson.version}</version>
+        <version>${com.fasterxml.jackson.core.version}</version>
       </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-core</artifactId>
-        <version>${com.fasterxml.jackson.version}</version>
+        <version>${com.fasterxml.jackson.core.version}</version>
       </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.datatype</groupId>
         <artifactId>jackson-datatype-jsr310</artifactId>
-        <version>${com.fasterxml.jackson.version}</version>
+        <version>${com.fasterxml.jackson.datatype.version}</version>
       </dependency>
       <dependency>
         <groupId>com.github.gavlyukovskiy</groupId>
@@ -561,11 +590,6 @@
         <artifactId>freemarker</artifactId>
         <version>${org.freemarker.version}</version>
       </dependency>
-      <dependency>
-        <groupId>cn.stylefeng.roses</groupId>
-        <artifactId>kernel-model</artifactId>
-        <version>${cn.stylefeng.roses.version}</version>
-      </dependency>
       <!--thymeleaf-->
       <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -602,16 +626,16 @@
       <optional>true</optional>
     </dependency>
   </dependencies>
-  
+
   <modules>
     <module>fun-framework-core</module>
     <module>fun-framework-api-count-redis</module>
     <module>fun-framework-cache-redis</module>
-    <module>fun-framework-mp</module>
     <module>fun-framework-security</module>
     <module>fun-framework-sentinel</module>
     <module>fun-framework-spring-doc</module>
     <module>fun-framework-proxy</module>
+    <module>fun-framework-data</module>
   </modules>
 
   <name>${project.artifactId}</name>
@@ -774,7 +798,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>${maven-assembly-plugin.version}</version>
+          <version>${plugin.maven-assembly-plugin.version}</version>
           <configuration>
             <finalName>${project.artifactId}-${project.version}</finalName>
             <appendAssemblyId>false</appendAssemblyId>
@@ -791,34 +815,35 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>${maven-compiler-plugin.version}</version>
+          <version>${plugin.maven-compiler-plugin.version}</version>
           <configuration>
             <source>${java.version}</source>
             <target>${java.version}</target>
+            <release>${java.version}</release>
             <encoding>${project.build.sourceEncoding}</encoding>
-            <forceJavacCompilerUse>true</forceJavacCompilerUse>
+            <forceLegacyJavacApi>true</forceLegacyJavacApi>
           </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>${maven-jar-plugin.version}</version>
+          <version>${plugin.maven-jar-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>${maven-resources-plugin.version}</version>
+          <version>${plugin.maven-resources-plugin.version}</version>
         </plugin>
         <!-- 生成sources源码包的插件 -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
-          <version>${maven-source-plugin.version}</version>
+          <version>${plugin.maven-source-plugin.version}</version>
           <dependencies>
             <dependency>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-resources-plugin</artifactId>
-              <version>${maven-resources-plugin.version}</version>
+              <version>${plugin.maven-resources-plugin.version}</version>
             </dependency>
           </dependencies>
           <executions>
@@ -835,7 +860,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>${maven-javadoc-plugin.version}</version>
+          <version>${plugin.maven-javadoc-plugin.version}</version>
           <configuration>
             <failOnError>false</failOnError>
             <doclint>none</doclint>
@@ -859,7 +884,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
-          <version>${maven-deploy-plugin.version}</version>
+          <version>${plugin.maven-deploy-plugin.version}</version>
           <executions>
             <execution>
               <id>default-deploy</id>
@@ -873,12 +898,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
-          <version>${maven-war-plugin.version}</version>
+          <version>${plugin.maven-war-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>flatten-maven-plugin</artifactId>
-          <version>${maven-flatten-plugin.version}</version>
+          <version>${plugin.flatten-maven-plugin.version}</version>
           <configuration>
             <updatePomFile>true</updatePomFile>
             <flattenMode>bom</flattenMode>
@@ -908,7 +933,7 @@
         <plugin>
           <groupId>org.sonatype.central</groupId>
           <artifactId>central-publishing-maven-plugin</artifactId>
-          <version>${sonatype.central-publishing-maven-plugin.version}</version>
+          <version>${plugin.central-publishing-maven-plugin.version}</version>
           <extensions>true</extensions>
           <configuration>
             <!-- 自动同步到 Central -->
@@ -945,12 +970,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-scm-plugin</artifactId>
-          <version>${maven-scm-plugin.version}</version>
+          <version>${plugin.maven-scm-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
-          <version>${maven-shade-plugin.version}</version>
+          <version>${plugin.maven-shade-plugin.version}</version>
           <executions>
             <execution>
               <phase>package</phase>
@@ -965,7 +990,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
-          <version>${maven-gpg-plugin.version}</version>
+          <version>${plugin.maven-gpg-plugin.version}</version>
           <executions>
             <execution>
               <id>sign-artifacts</id>

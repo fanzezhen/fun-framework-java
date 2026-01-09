@@ -3,7 +3,7 @@ package com.github.fanzezhen.fun.framework.core.verify.jwt;
 import com.github.fanzezhen.fun.framework.core.verify.FunCoreVerifyProperties;
 import com.github.fanzezhen.fun.framework.core.verify.jwt.service.JwtService;
 import com.github.fanzezhen.fun.framework.core.verify.repeat.NoRepeat;
-import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class FunCoreVerifyTokenApi {
     public String generateJwtToken(@RequestParam(value = "code") @NotBlank String code, @RequestParam(value = "secret") @NotBlank String secretMd5, @RequestParam(value = "timeMillis") long timeMillis) {
         FunCoreVerifyProperties.Jwt jwt = funCoreVerifyProperties.getJwt();
         if (jwt.getNetworkDelayMillis() != null && System.currentTimeMillis() - timeMillis > jwt.getNetworkDelayMillis()) {
-            throw ExceptionUtil.wrapException("请求已过期");
+            throw new ServiceException("请求已过期");
         }
         return jwtService.generateJwtToken(code, secretMd5, timeMillis);
     }

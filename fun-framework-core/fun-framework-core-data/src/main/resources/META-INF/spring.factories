@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.github.fanzezhen.fun.framework.core.data.FunCoreDataAutoConfiguration
+com.github.fanzezhen.fun.framework.core.data.config.FunCoreDataAutoConfiguration

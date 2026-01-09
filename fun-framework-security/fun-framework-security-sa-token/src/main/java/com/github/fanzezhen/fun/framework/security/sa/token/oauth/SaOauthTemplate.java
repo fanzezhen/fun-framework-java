@@ -6,7 +6,7 @@ import cn.dev33.satoken.stp.StpLogic;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaFoxUtil;
 import cn.dev33.satoken.util.SaResult;
-import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.security.sa.token.enums.SecurityExceptionEnum;
 import com.github.fanzezhen.fun.framework.security.sa.token.oauth.config.SaOauthConfig;
 import com.github.fanzezhen.fun.framework.security.sa.token.oauth.name.ApiName;
@@ -170,7 +170,6 @@ public class SaOauthTemplate {
         SaOauthConfig cfg = SaOauthManager.getConfig();
         Set<String> urlSet = session.get(SaOauthConstant.SLO_CALLBACK_SET_KEY, () -> new HashSet<String>());
         for (String url : urlSet) {
-            // url = addSignParams(url, loginId);
             cfg.getSendHttp().apply(url);
         }
 
@@ -204,10 +203,7 @@ public class SaOauthTemplate {
 
         back = SaFoxUtil.encodeUrl(back);
 
-        String serverAuthUrl = SaFoxUtil.joinParam(serverUrl, paramName.getRedirectUri(), back);
-
-        // 返回
-        return serverAuthUrl;
+        return SaFoxUtil.joinParam(serverUrl, paramName.getRedirectUri(), back);
     }
 
 
@@ -288,7 +284,7 @@ public class SaOauthTemplate {
         long disparity = Math.abs(System.currentTimeMillis() - timestamp);
         long allowDisparity = SaOauthManager.getConfig().getTimestampDisparity();
         if (allowDisparity != -1 && disparity > allowDisparity) {
-            throw ExceptionUtil.wrapException(SecurityExceptionEnum.TIMESTAMP_OUT_RANGE, allowDisparity);
+            throw new ServiceException(SecurityExceptionEnum.TIMESTAMP_OUT_RANGE, allowDisparity);
         }
     }
 

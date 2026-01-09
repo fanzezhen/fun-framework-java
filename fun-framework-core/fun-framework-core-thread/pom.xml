@@ -18,5 +18,9 @@
       <groupId>jakarta.annotation</groupId>
       <artifactId>jakarta.annotation-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.github.fanzezhen</groupId>
+      <artifactId>fun-framework-core-model</artifactId>
+    </dependency>
   </dependencies>
 </project>

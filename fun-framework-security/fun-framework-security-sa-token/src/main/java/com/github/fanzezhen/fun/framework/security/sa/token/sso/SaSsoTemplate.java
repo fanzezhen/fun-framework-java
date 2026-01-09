@@ -7,7 +7,7 @@ import cn.dev33.satoken.sign.SaSignManager;
 import cn.dev33.satoken.stp.StpLogic;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaFoxUtil;
-import com.github.fanzezhen.fun.framework.core.exception.ExceptionUtil;
+import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.security.sa.token.enums.SecurityExceptionEnum;
 import com.github.fanzezhen.fun.framework.security.sa.token.sso.config.SaSsoConfig;
 import com.github.fanzezhen.fun.framework.security.sa.token.sso.name.ApiName;
@@ -164,7 +164,7 @@ public class SaSsoTemplate {
 
             // 如果指定了 client 标识，则校验一下 client 标识是否一致
             if (SaFoxUtil.isNotEmpty(client) && SaFoxUtil.notEquals(client, ticketClient)) {
-                throw ExceptionUtil.wrapException(SecurityExceptionEnum.CONSISTENCY_VERIFICATION_TICKET_CLIENT, client, ticket);
+                throw new ServiceException(SecurityExceptionEnum.CONSISTENCY_VERIFICATION_TICKET_CLIENT, client, ticket);
             }
             // 删除 ticket 信息，使其只有一次性有效
             deleteTicket(ticket);
@@ -246,13 +246,10 @@ public class SaSsoTemplate {
          * 部分 Servlet 版本 request.getRequestURL() 返回的 url 带有 query 参数，形如：http://domain.com?id=1，
          * 如果不加判断会造成最终生成的 serverAuthUrl 带有双 back 参数 ，这个 if 判断正是为了解决此问题
          */
-        if (clientLoginUrl.indexOf(paramName.getBack() + "=" + back) == -1) {
+        if (!clientLoginUrl.contains(paramName.getBack() + "=" + back)) {
             clientLoginUrl = SaFoxUtil.joinParam(clientLoginUrl, paramName.getBack(), back);
         }
-        String serverAuthUrl = SaFoxUtil.joinParam(serverUrl, paramName.getRedirect(), clientLoginUrl);
-
-        // 返回
-        return serverAuthUrl;
+        return SaFoxUtil.joinParam(serverUrl, paramName.getRedirect(), clientLoginUrl);
     }
 
     /**
@@ -437,7 +434,7 @@ public class SaSsoTemplate {
         // 校验签名
         String calcSign = getSign(loginId, timestamp, nonce);
         if (!calcSign.equals(sign)) {
-            throw ExceptionUtil.wrapException(SecurityExceptionEnum.SIGN_INVALID,  calcSign);
+            throw new ServiceException(SecurityExceptionEnum.SIGN_INVALID,  calcSign);
         }
     }
 
@@ -450,7 +447,7 @@ public class SaSsoTemplate {
         long disparity = Math.abs(System.currentTimeMillis() - timestamp);
         long allowDisparity = SaSsoManager.getConfig().getTimestampDisparity();
         if (allowDisparity != -1 && disparity > allowDisparity) {
-            throw ExceptionUtil.wrapException(SecurityExceptionEnum.TIMESTAMP_OUT_RANGE, allowDisparity);
+            throw new ServiceException(SecurityExceptionEnum.TIMESTAMP_OUT_RANGE, allowDisparity);
         }
     }
 

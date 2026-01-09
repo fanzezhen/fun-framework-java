@@ -24,7 +24,7 @@
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-mp-starter</artifactId>
+      <artifactId>fun-framework-data-mp-starter</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

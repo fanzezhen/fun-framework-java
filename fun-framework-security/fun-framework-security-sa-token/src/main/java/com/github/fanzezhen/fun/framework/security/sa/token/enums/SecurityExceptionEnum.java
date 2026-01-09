@@ -1,15 +1,16 @@
 package com.github.fanzezhen.fun.framework.security.sa.token.enums;
 
-import cn.stylefeng.roses.kernel.model.exception.AbstractBaseExceptionEnum;
 import com.alibaba.fastjson2.JSONWriter;
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.github.fanzezhen.fun.framework.core.model.exception.enums.IExceptionCode;
 import lombok.Getter;
 
 /**
  * 安全错误码
  */
-public enum SecurityExceptionEnum implements AbstractBaseExceptionEnum {
+@Getter
+public enum SecurityExceptionEnum implements IExceptionCode<SecurityExceptionEnum> {
     /**
      * token请求超时
      */
@@ -36,19 +37,14 @@ public enum SecurityExceptionEnum implements AbstractBaseExceptionEnum {
     SIGN_INVALID(400103, "签名无效: %s"),
     ;
 
-    SecurityExceptionEnum(int code, String message) {
+    SecurityExceptionEnum(int code, String text) {
         this.code = code;
-        this.message = message;
+        this.text = text;
     }
 
     @JsonValue
     @JSONField(serializeFeatures = JSONWriter.Feature.WriteEnumUsingToString)
-    private final int code;
-    @Getter
-    private final String message;
+    private final Integer code;
+    private final String text;
 
-    @Override
-    public Integer getCode() {
-        return code;
-    }
 }
