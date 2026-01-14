@@ -13,7 +13,6 @@ import java.util.List;
  * @author fanzezhen
  */
 @Slf4j
-@Disabled
 class ExecutorHolderTest {
 
     @Test

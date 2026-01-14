@@ -107,15 +107,26 @@ public interface ITemplate<P extends Serializable> {
         return get(getColumnName(func), value, clz);
     }
 
-    static String getTable(Class<?> clz) {
+    static String getTable(Class<?> clz, String defaultPrefix) {
         if (clz == null) {
             return null;
         }
+        String table = null;
+        String tablePrefix = null;
         Entity entity = AnnotationUtils.getAnnotation(clz, Entity.class);
-        if (entity != null && CharSequenceUtil.isNotEmpty(entity.table())) {
-            return entity.table();
+        if (entity != null) {
+            table = entity.table();
+            tablePrefix = entity.tablePrefix();
         }
-        return CharSequenceUtil.toUnderlineCase(CharSequenceUtil.lowerFirst(clz.getSimpleName()));
+        tablePrefix = CharSequenceUtil.emptyToDefault(tablePrefix, CharSequenceUtil.nullToEmpty(defaultPrefix));
+        if (CharSequenceUtil.isEmpty(table)) {
+            table = CharSequenceUtil.toUnderlineCase(CharSequenceUtil.lowerFirst(clz.getSimpleName()));
+        }
+        return tablePrefix + table;
+    }
+
+    static String getTable(Class<?> clz) {
+        return getTable(clz, CharSequenceUtil.EMPTY);
     }
 
     static <T> String getColumnName(Func1<T, ?> func) {

@@ -21,7 +21,6 @@ import java.util.Base64;
  * @author fanzezhen
  */
 @Slf4j
-@Disabled
 class StringEncryptorTest {
     String privateKey = "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQg+MxXxSMFFgNtXGoFzkH3TJg0jXAo2J5XnM8isT7i0higCgYIKoEcz1UBgi2hRANCAARiDlNDvfGANqiqPHLWUN1mg1nz+4hN/06skj9DelWhIDK8IQ35NvFqf8dWoJkQ0KkxNvbuneWO0xt/e3fOgWkU";
     String publicKey = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEYg5TQ73xgDaoqjxy1lDdZoNZ8/uITf9OrJI/Q3pVoSAyvCEN+Tbxan/HVqCZENCpMTb27p3ljtMbf3t3zoFpFA==";

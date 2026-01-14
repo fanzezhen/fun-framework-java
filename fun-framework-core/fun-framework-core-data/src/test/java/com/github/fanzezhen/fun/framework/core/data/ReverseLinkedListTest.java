@@ -7,9 +7,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * @author fanzezhen
- * @date 2023/8/10
  */
-
 @Slf4j
 @Disabled
 class ReverseLinkedListTest {

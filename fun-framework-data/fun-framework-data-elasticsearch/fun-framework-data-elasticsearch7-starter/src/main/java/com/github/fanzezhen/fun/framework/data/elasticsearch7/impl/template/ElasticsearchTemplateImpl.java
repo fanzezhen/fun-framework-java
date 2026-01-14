@@ -2,6 +2,7 @@ package com.github.fanzezhen.fun.framework.data.elasticsearch7.impl.template;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.text.CharSequenceUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReflectUtil;
 import co.elastic.clients.elasticsearch._types.FieldValue;
 import co.elastic.clients.elasticsearch._types.Time;
@@ -10,6 +11,8 @@ import co.elastic.clients.elasticsearch._types.query_dsl.TermQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQuery;
 import co.elastic.clients.elasticsearch.core.BulkRequest;
 import co.elastic.clients.elasticsearch.core.BulkResponse;
+import co.elastic.clients.elasticsearch.core.ClearScrollRequest;
+import co.elastic.clients.elasticsearch.core.ClearScrollResponse;
 import co.elastic.clients.elasticsearch.core.GetRequest;
 import co.elastic.clients.elasticsearch.core.GetResponse;
 import co.elastic.clients.elasticsearch.core.IndexRequest;
@@ -24,6 +27,7 @@ import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.bulk.BulkOperation;
 import co.elastic.clients.elasticsearch.core.msearch.RequestItem;
+import co.elastic.clients.elasticsearch.core.search.TotalHits;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransportBase;
 import co.elastic.clients.transport.rest_client.RestClientOptions;
@@ -40,6 +44,7 @@ import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.Document
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.ISearchResult;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.serializer.IDocumentSerializer;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.template.BaseElasticsearchTemplate;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -294,6 +299,10 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
             searchRequest,
             request -> elasticsearchClient.search(request, JSONObject.class)
         );
+        TotalHits totalHits = response.hits().total();
+        if ((totalHits == null || totalHits.value() <= 0) && CharSequenceUtil.isNotEmpty(response.scrollId())) {
+            clearScroll(response.scrollId());
+        }
         return convertResponseToResult(response, clz);
     }
 
@@ -313,7 +322,6 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
      */
     @Override
     public <T> ISearchResult<T> scrollSearchByScrollId(String scrollId, Class<T> clz, Long timeSeconds) {
-        String indexName = getIndexName(clz);
         ScrollRequest scrollRequest = ScrollRequest.of(builder -> builder
             .scrollId(scrollId)
             .scroll(Time.of(timeBuilder -> timeBuilder.time(timeSeconds + "s")))
@@ -322,7 +330,34 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
             scrollRequest,
             request -> elasticsearchClient.scroll(request, JSONObject.class)
         );
+        TotalHits totalHits = response.hits().total();
+        if ((totalHits == null || totalHits.value() <= 0) && CharSequenceUtil.isNotEmpty(response.scrollId())) {
+            clearScroll(response.scrollId());
+        }
         return convertResponseToResult(response, clz);
+    }
+    
+    /**
+     * 清除滚动搜索的scroll上下文
+     *
+     * @param scrollIds 需要清除的一个或多个scroll ID
+     * @return 如果清除操作成功则返回true，否则返回false
+     */
+    @SneakyThrows
+    @Override
+    public boolean clearScroll(String scrollId, String... scrollIds) {
+        List<String>scrollIdList;
+        if (ArrayUtil.isEmpty(scrollIds)) {
+            scrollIdList = List.of(scrollId);
+        } else {
+            scrollIdList = new ArrayList<>(scrollIds.length+1);
+            scrollIdList.add(scrollId);
+            scrollIdList.addAll(Arrays.asList(scrollIds));
+        }
+        ClearScrollRequest clearScrollRequest =  
+            ClearScrollRequest.of(builder -> builder.scrollId(scrollIdList) );
+        ClearScrollResponse clearScrollResponse = elasticsearchClient.clearScroll(clearScrollRequest);
+        return clearScrollResponse.succeeded();
     }
 
     /**

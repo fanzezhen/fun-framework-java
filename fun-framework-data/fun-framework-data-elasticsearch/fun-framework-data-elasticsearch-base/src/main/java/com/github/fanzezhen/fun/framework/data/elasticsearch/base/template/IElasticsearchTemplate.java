@@ -84,6 +84,15 @@ public interface IElasticsearchTemplate extends ITemplate<String> {
      * @return SearchResult对象
      */
     <T> ISearchResult<T> scrollSearchByScrollId(String scrollId, Class<T> clz, Long timeSeconds);
+    
+    /**
+     * 清除滚动搜索的scroll上下文
+     *
+     * @param clz             文档类型
+     * @param scrollIds 需要清除的一个或多个scroll ID
+     * @return 如果清除操作成功则返回true，否则返回false
+     */
+    <T> boolean clearScroll(Class<T> clz, String scrollId, String... scrollIds);
 
     /**
      * 游标查询，通过{@link ISearchResult}获取其他结果

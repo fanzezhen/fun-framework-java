@@ -9,16 +9,10 @@ import java.util.stream.Collectors;
 
 /**
  * @author fanzezhen
- * @date 2023/8/7
  */
 @Slf4j
 @Disabled
 class StudyTest {
-
-    public static void main(String[] args) {
-        String str = "The furthest distance in the world. ls not between life and death, But when I stand in front of you, Yet you don't know that I love you";
-        System.out.println(Arrays.toString(str.split("[^a-zA-Z]")));
-    }
 
     /**
      * TLV编码是按[Tag Length Value 格式进行编码的，一段码流中的信元用Tag标识,Tag在码流中唯一不重复，Length表示信元Value的长度，Value表示信元的值。

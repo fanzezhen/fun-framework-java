@@ -23,6 +23,11 @@ public @interface Entity {
     String table();
 
     /**
+     * 表前缀名
+     */
+    String tablePrefix() default CharSequenceUtil.EMPTY;
+
+    /**
      * 数据源名称
      */
     String datasource() default CharSequenceUtil.EMPTY;

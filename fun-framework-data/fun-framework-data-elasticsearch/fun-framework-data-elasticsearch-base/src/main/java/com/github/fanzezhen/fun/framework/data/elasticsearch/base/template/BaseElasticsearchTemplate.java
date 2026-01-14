@@ -34,6 +34,14 @@ public abstract class BaseElasticsearchTemplate implements IElasticsearchTemplat
         this.documentSerializerList = documentSerializerList;
     }
 
+    /**
+     * 清除滚动搜索的scroll上下文
+     *
+     * @param scrollIds 需要清除的一个或多个scroll ID
+     * @return 如果清除操作成功则返回true，否则返回false
+     */
+    public abstract boolean clearScroll(String scrollId, String... scrollIds);
+
     @Override
     public <T> List<T> searchList(Object request, Class<T> clz) {
         return search(request, clz).asDocumentList();
@@ -45,13 +53,23 @@ public abstract class BaseElasticsearchTemplate implements IElasticsearchTemplat
     }
 
     /**
+     * 清除滚动搜索的scroll上下文
+     *
+     * @param clz       文档类型
+     * @param scrollIds 需要清除的一个或多个scroll ID
+     *
+     * @return 如果清除操作成功则返回true，否则返回false
+     */
+    @Override
+    public <T> boolean clearScroll(Class<T> clz, String scrollId, String... scrollIds) {
+        return clearScroll(scrollId, scrollIds);
+    }
+
+    /**
      * 获取索引名称
      */
     protected <T> String getIndexName(Class<T> clz) {
-        String table = ITemplate.getTable(clz);
-        //获取配置的前缀
-        String indexPrefix = config.getIndexPrefix();
-        return CharSequenceUtil.isNotEmpty(indexPrefix) ? indexPrefix + table : table;
+        return ITemplate.getTable(clz, config.getIndexPrefix());
     }
 
     /**

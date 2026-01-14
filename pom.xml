@@ -13,7 +13,7 @@
     <org.springframework.boot.version>4.0.1</org.springframework.boot.version>
     <org.springframework.cloud.version>2025.1.0</org.springframework.cloud.version>
     <org.springframework.cloud.spring-cloud-starter-gateway.version>4.3.3</org.springframework.cloud.spring-cloud-starter-gateway.version>
-    <revision>${org.springframework.boot.version}.20250816</revision>
+    <revision>${org.springframework.boot.version}.20260101</revision>
     <app.server>-tomcat</app.server>
     <cn.dev33.version>1.44.0</cn.dev33.version>
     <cn.hutool.version>5.8.43</cn.hutool.version>
@@ -45,7 +45,7 @@
     <net.lingala.zip4j.version>2.11.5</net.lingala.zip4j.version>
     <org.apache.velocity.version>2.4.1</org.apache.velocity.version>
     <org.aspectj.version>1.9.25.1</org.aspectj.version>
-    <org.apereo.cas.version>7.3.2</org.apereo.cas.version>
+    <org.apereo.cas.version>7.3.3</org.apereo.cas.version>
     <org.apache.poi.version>5.5.1</org.apache.poi.version>
     <org.bouncycastle.bcprov-jdk18on.version>1.83</org.bouncycastle.bcprov-jdk18on.version>
     <org.freemarker.version>2.3.34</org.freemarker.version>

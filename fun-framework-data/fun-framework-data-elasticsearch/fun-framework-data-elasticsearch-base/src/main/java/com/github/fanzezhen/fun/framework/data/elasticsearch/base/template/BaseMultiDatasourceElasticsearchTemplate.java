@@ -186,6 +186,20 @@ public abstract class BaseMultiDatasourceElasticsearchTemplate implements IElast
     }
 
     /**
+     * 清除滚动搜索的scroll上下文
+     *
+     * @param clz       文档类型
+     * @param scrollIds 需要清除的一个或多个scroll ID
+     *
+     * @return 如果清除操作成功则返回true，否则返回false
+     */
+    @Override
+    public <T> boolean clearScroll(Class<T> clz, String scrollId, String... scrollIds) {
+        final IElasticsearchTemplate template = findTemplate(clz);
+        return template.clearScroll(clz, scrollId, scrollIds);
+    }
+
+    /**
      * 更新文档，不存在则创建，存在则更新
      *
      * @param document 文档对象
