@@ -1,5 +1,6 @@
 package com.github.fanzezhen.fun.framework.core.model.exception;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.github.fanzezhen.fun.framework.core.model.exception.enums.ExceptionCodeEnum;
 import com.github.fanzezhen.fun.framework.core.model.exception.enums.IExceptionCode;
 
@@ -32,7 +33,7 @@ public class ServiceException extends RuntimeException {
      * @param params        参数
      */
     public ServiceException(IExceptionCode<?> exceptionCode, Object... params) {
-        super(null != params ? String.format(exceptionCode.text(), params) : exceptionCode.text());
+        super(ArrayUtil.isNotEmpty(params) ? String.format(exceptionCode.text(), params) : exceptionCode.text());
         this.exceptionCode = exceptionCode;
     }
 
@@ -40,7 +41,7 @@ public class ServiceException extends RuntimeException {
      * 创建异常
      */
     public ServiceException(Throwable e, IExceptionCode<?> exceptionCode, Object... params) {
-        super(null != params ? String.format(exceptionCode.text(), params) : exceptionCode.text(), e);
+        super(ArrayUtil.isNotEmpty(params) ? String.format(exceptionCode.text(), params) : exceptionCode.text(), e);
         this.exceptionCode = exceptionCode;
     }
 

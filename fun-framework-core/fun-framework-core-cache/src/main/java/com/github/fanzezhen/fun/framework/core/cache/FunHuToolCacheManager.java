@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.lang.NonNull;
+import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -36,12 +36,12 @@ public class FunHuToolCacheManager implements CacheManager, InitializingBean {
     }
 
     @Override
-    public Cache getCache(@NonNull String name) {
+    public Cache getCache(@Nonnull String name) {
         return this.timedCache.get(name, () -> createCache(name));
     }
 
     @Override
-    @NonNull
+    @Nonnull
     public Set<String> getCacheNames() {
         return timedCache.keySet();
     }

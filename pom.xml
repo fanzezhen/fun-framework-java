@@ -13,7 +13,7 @@
     <org.springframework.boot.version>4.0.1</org.springframework.boot.version>
     <org.springframework.cloud.version>2025.1.0</org.springframework.cloud.version>
     <org.springframework.cloud.spring-cloud-starter-gateway.version>4.3.3</org.springframework.cloud.spring-cloud-starter-gateway.version>
-    <revision>${org.springframework.boot.version}.20260101</revision>
+    <revision>${org.springframework.boot.version}.20260115</revision>
     <app.server>-tomcat</app.server>
     <cn.dev33.version>1.44.0</cn.dev33.version>
     <cn.hutool.version>5.8.43</cn.hutool.version>
@@ -163,7 +163,7 @@
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-core-jasypt</artifactId>
+        <artifactId>fun-framework-jasypt</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
@@ -410,7 +410,7 @@
       </dependency>
       <dependency>
         <groupId>com.github.ulisesbocchio</groupId>
-        <artifactId>jasypt-spring-boot-starter</artifactId>
+        <artifactId>jasypt-spring-boot-parent</artifactId>
         <version>${com.github.ulisesbocchio.version}</version>
       </dependency>
       <dependency>
@@ -631,11 +631,12 @@
     <module>fun-framework-core</module>
     <module>fun-framework-api-count-redis</module>
     <module>fun-framework-cache-redis</module>
+    <module>fun-framework-data</module>
+    <module>fun-framework-jasypt</module>
     <module>fun-framework-security</module>
     <module>fun-framework-sentinel</module>
     <module>fun-framework-spring-doc</module>
     <module>fun-framework-proxy</module>
-    <module>fun-framework-data</module>
   </modules>
 
   <name>${project.artifactId}</name>

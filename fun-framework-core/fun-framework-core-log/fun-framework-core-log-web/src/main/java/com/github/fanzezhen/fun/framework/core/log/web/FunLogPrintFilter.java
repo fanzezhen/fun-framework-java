@@ -52,7 +52,7 @@ public class FunLogPrintFilter implements Filter {
     private static final LevelLogger traceLogger = log::trace;
     private static final String REQUEST_START_TIME_KEY = "REQUEST_START_TIME_KEY";
 
-    @Value("${fun.core.log.print-level:DEBUG}")
+    @Value("${fun.log.print-level:DEBUG}")
     private Level level;
 
     @Resource

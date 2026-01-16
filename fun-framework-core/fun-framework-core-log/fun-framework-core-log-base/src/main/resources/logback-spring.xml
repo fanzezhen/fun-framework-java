@@ -14,43 +14,43 @@
 
   <!--  trace  -->
   <!-- 日志单个文件大小   -->
-  <springProperty scope="context" name="trace.max.file.size" source="fun.core.log.level.trace.max-file-size" defaultValue="1MB"/>
+  <springProperty scope="context" name="trace.max.file.size" source="fun.log.level.trace.max-file-size" defaultValue="1MB"/>
   <!-- 最大保存日期   -->
-  <springProperty scope="context" name="trace.max.history" source="fun.core.log.level.trace.max-history" defaultValue="31"/>
+  <springProperty scope="context" name="trace.max.history" source="fun.log.level.trace.max-history" defaultValue="31"/>
   <!-- 总日志文件大小   -->
-  <springProperty scope="context" name="trace.total.size.cap" source="fun.core.log.level.trace.total-size-cap" defaultValue="100MB"/>
+  <springProperty scope="context" name="trace.total.size.cap" source="fun.log.level.trace.total-size-cap" defaultValue="100MB"/>
 
   <!--  debug  -->
   <!-- 日志单个文件大小   -->
-  <springProperty scope="context" name="debug.max.file.size" source="fun.core.log.level.debug.max-file-size" defaultValue="1MB"/>
+  <springProperty scope="context" name="debug.max.file.size" source="fun.log.level.debug.max-file-size" defaultValue="1MB"/>
   <!-- 最大保存日期   -->
-  <springProperty scope="context" name="debug.max.history" source="fun.core.log.level.debug.max-history" defaultValue="7"/>
+  <springProperty scope="context" name="debug.max.history" source="fun.log.level.debug.max-history" defaultValue="7"/>
   <!-- 总日志文件大小   -->
-  <springProperty scope="context" name="debug.total.size.cap" source="fun.core.log.level.debug.total-size-cap" defaultValue="10MB"/>
+  <springProperty scope="context" name="debug.total.size.cap" source="fun.log.level.debug.total-size-cap" defaultValue="10MB"/>
 
   <!--  info  -->
   <!-- 日志单个文件大小   -->
-  <springProperty scope="context" name="info.max.file.size" source="fun.core.log.level.info.max-file-size" defaultValue="1MB"/>
+  <springProperty scope="context" name="info.max.file.size" source="fun.log.level.info.max-file-size" defaultValue="1MB"/>
   <!-- 最大保存日期   -->
-  <springProperty scope="context" name="info.max.history" source="fun.core.log.level.info.max-history" defaultValue="31"/>
+  <springProperty scope="context" name="info.max.history" source="fun.log.level.info.max-history" defaultValue="31"/>
   <!-- 总日志文件大小   -->
-  <springProperty scope="context" name="info.total.size.cap" source="fun.core.log.level.info.total-size-cap" defaultValue="1GB"/>
+  <springProperty scope="context" name="info.total.size.cap" source="fun.log.level.info.total-size-cap" defaultValue="1GB"/>
 
   <!--  warn  -->
   <!-- 日志单个文件大小   -->
-  <springProperty scope="context" name="warn.max.file.size" source="fun.core.log.level.warn.max-file-size" defaultValue="1MB"/>
+  <springProperty scope="context" name="warn.max.file.size" source="fun.log.level.warn.max-file-size" defaultValue="1MB"/>
   <!-- 最大保存日期   -->
-  <springProperty scope="context" name="warn.max.history" source="fun.core.log.level.warn.max-history" defaultValue="185"/>
+  <springProperty scope="context" name="warn.max.history" source="fun.log.level.warn.max-history" defaultValue="185"/>
   <!-- 总日志文件大小   -->
-  <springProperty scope="context" name="warn.total.size.cap" source="fun.core.log.level.warn.total-size-cap" defaultValue="1GB"/>
+  <springProperty scope="context" name="warn.total.size.cap" source="fun.log.level.warn.total-size-cap" defaultValue="1GB"/>
 
   <!--  error  -->
   <!-- 日志单个文件大小   -->
-  <springProperty scope="context" name="error.max.file.size" source="fun.core.log.level.error.max-file-size" defaultValue="1MB"/>
+  <springProperty scope="context" name="error.max.file.size" source="fun.log.level.error.max-file-size" defaultValue="1MB"/>
   <!-- 最大保存日期   -->
-  <springProperty scope="context" name="error.max.history" source="fun.core.log.level.error.max-history" defaultValue="366"/>
+  <springProperty scope="context" name="error.max.history" source="fun.log.level.error.max-history" defaultValue="366"/>
   <!-- 总日志文件大小   -->
-  <springProperty scope="context" name="error.total.size.cap" source="fun.core.log.level.error.total-size-cap" defaultValue="1GB"/>
+  <springProperty scope="context" name="error.total.size.cap" source="fun.log.level.error.total-size-cap" defaultValue="1GB"/>
 
   <!--0. 日志格式和颜色渲染 -->
   <!-- 彩色日志依赖的渲染类 -->

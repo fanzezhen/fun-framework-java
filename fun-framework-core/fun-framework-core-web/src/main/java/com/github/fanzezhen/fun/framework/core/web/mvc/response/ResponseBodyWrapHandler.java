@@ -3,8 +3,7 @@ package com.github.fanzezhen.fun.framework.core.web.mvc.response;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.github.fanzezhen.fun.framework.core.web.FunCoreWebProperties;
 import org.springframework.core.MethodParameter;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
+import jakarta.annotation.Nonnull;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
@@ -31,15 +30,15 @@ public class ResponseBodyWrapHandler implements HandlerMethodReturnValueHandler 
     }
 
     @Override
-    public boolean supportsReturnType(@NonNull MethodParameter returnType) {
+    public boolean supportsReturnType(@Nonnull MethodParameter returnType) {
         return delegate.supportsReturnType(returnType);
     }
 
     @Override
-    public void handleReturnValue(@Nullable Object returnValue,
-                                  @NonNull MethodParameter returnType,
-                                  @NonNull ModelAndViewContainer mavContainer,
-                                  @NonNull NativeWebRequest webRequest) throws Exception {
+    public void handleReturnValue(Object returnValue,
+                                  @Nonnull MethodParameter returnType,
+                                  @Nonnull ModelAndViewContainer mavContainer,
+                                  @Nonnull NativeWebRequest webRequest) throws Exception {
         if (responseBodyWrapper.isWrapped(returnValue)) {
             delegate.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
             return;

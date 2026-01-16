@@ -49,8 +49,8 @@ public class ContextHolder {
         return systemContext;
     }
 
-    public static JSONObject getContextMap() {
-        return getContext().getContextMap();
+    public static JSONObject getCopyOfContextMap() {
+        return getContext().getCopyOfContextMap();
     }
 
     public static Context getSysContext() {
@@ -58,51 +58,47 @@ public class ContextHolder {
     }
 
     public static void setContextMap(Map<String, String> contextMap) {
-        getContextMap().putAll(contextMap);
+        getContext().putAll(contextMap);
     }
 
     public static void setContextMap(JSONObject contextMap) {
-        getContextMap().putAll(contextMap);
+        getContext().putAll(contextMap);
     }
 
     public static void setOriginHeaders(JSONObject originHeaders) {
-        set(properties.getKey().getOriginHeaders(), originHeaders);
+        put(properties.getKey().getOriginHeaders(), originHeaders);
     }
 
     public static String get(String key) {
-        JSONObject contextMap = getContextMap();
-        return contextMap == null ? null : contextMap.getString(key.toLowerCase());
+        return getContext().getString(key.toLowerCase());
     }
 
     @SuppressWarnings("unchecked")
     public static <T> T getJavaObject(String key) {
-        JSONObject contextMap = getContextMap();
-        return contextMap != null ? (T) contextMap.get(key.toLowerCase()) : null;
+        return (T) getContext().get(key.toLowerCase());
     }
 
     public static <T> T get(String key, Class<T> clazz) {
-        JSONObject contextMap = getContextMap();
-        return contextMap == null ? null : contextMap.getObject(key.toLowerCase(), clazz);
+        return getContext().contextMap.getObject(key.toLowerCase(), clazz);
     }
 
     public static long getLongOrZero(String key) {
-        JSONObject contextMap = getContextMap();
-        return contextMap == null ? 0 : contextMap.getLongValue(key.toLowerCase());
+        return getContext().contextMap.getLongValue(key.toLowerCase(), 0);
     }
 
-    public static void set(Context systemContext) {
+    public static void put(Context systemContext) {
         CONTEXT_MAP.set(systemContext);
     }
 
     public static void clear(String key) {
-        JSONObject contextMap = getContextMap();
-        if (contextMap != null) {
-            contextMap.remove(key);
-        }
-
+            getContext().remove(key);
     }
 
-    public static void set(String key, Object value) {
+    public static void clear() {
+        getContext().clear();
+    }
+
+    public static void put(String key, Object value) {
         if (key == null) {
             log.warn("key is null, can't set it into the context map");
         } else if (key.length() > Context.MAX_SIZE) {
@@ -110,11 +106,10 @@ public class ContextHolder {
         } else if (value != null && value.toString().length() > Context.MAX_SIZE) {
             throw new ServiceException("value is more than " + Context.MAX_SIZE + ", i can't set it into the context map");
         } else {
-            JSONObject contextMap = getContextMap();
-            if (contextMap.size() > Context.MAX_CAPACITY) {
+            if (getContext().size() > Context.MAX_CAPACITY) {
                 throw new ServiceException("the context map is full, can't set anything");
             } else {
-                contextMap.put(key.toLowerCase(), value);
+                getContext().put(key.toLowerCase(), value);
             }
         }
     }
@@ -129,7 +124,7 @@ public class ContextHolder {
     }
 
     public static <K extends Serializable, U extends IUser<K>> void setLoginUser(U loginUser) {
-        set("loginUser", loginUser);
+        put("loginUser", loginUser);
         if (loginUser!=null) {
             setUserId(loginUser.getLoginCode());
             setUsername(loginUser.getUsername());
@@ -146,7 +141,7 @@ public class ContextHolder {
     }
 
     public static void setUserId(Serializable userId) {
-        set(properties.getKey().getUserIdWithPrefix(), userId);
+        put(properties.getKey().getUserIdWithPrefix(), userId);
     }
 
     public static String getAccountId() {
@@ -154,7 +149,7 @@ public class ContextHolder {
     }
 
     public static void setAccountId(String accountId) {
-        set(properties.getKey().getAccountIdWithPrefix(), accountId);
+        put(properties.getKey().getAccountIdWithPrefix(), accountId);
     }
 
     public static String getAccountName() {
@@ -162,7 +157,7 @@ public class ContextHolder {
     }
 
     public static void setAccountName(String accountName) {
-        set(properties.getKey().getAccountNameWithPrefix(), accountName);
+        put(properties.getKey().getAccountNameWithPrefix(), accountName);
     }
 
     public static String getProjectId() {
@@ -170,7 +165,7 @@ public class ContextHolder {
     }
 
     public static void setProjectId(String projectId) {
-        set(properties.getKey().getProjectIdWithPrefix(), projectId);
+        put(properties.getKey().getProjectIdWithPrefix(), projectId);
     }
 
     public static String getAppId() {
@@ -178,7 +173,7 @@ public class ContextHolder {
     }
 
     public static void setAppId(String appId) {
-        set(properties.getKey().getAppCodeWithPrefix(), appId);
+        put(properties.getKey().getAppCodeWithPrefix(), appId);
     }
 
     public static String getCurrentAppCode() {
@@ -186,7 +181,7 @@ public class ContextHolder {
     }
 
     public static void setCurrentAppCode(String appCode) {
-        set(properties.getKey().getProjectIdWithPrefix(), appCode);
+        put(properties.getKey().getProjectIdWithPrefix(), appCode);
     }
 
     public static String getTraceId() {
@@ -194,7 +189,7 @@ public class ContextHolder {
     }
 
     public static void setTraceId(String traceId) {
-        set(properties.getKey().getTraceIdWithPrefix(), traceId);
+        put(properties.getKey().getTraceIdWithPrefix(), traceId);
     }
 
     public static String getNodeId() {
@@ -202,7 +197,7 @@ public class ContextHolder {
     }
 
     public static void setNodeId(String nodeId) {
-        set(properties.getKey().getNodeIdWithPrefix(), nodeId);
+        put(properties.getKey().getNodeIdWithPrefix(), nodeId);
     }
 
     /**
@@ -215,7 +210,7 @@ public class ContextHolder {
     }
 
     public static void setUsername(String userName) {
-        set(properties.getKey().getUserNameWithPrefix(), userName);
+        put(properties.getKey().getUserNameWithPrefix(), userName);
     }
 
     /**
@@ -237,7 +232,7 @@ public class ContextHolder {
     }
 
     public static void setTenantId(String tenantId) {
-        set(properties.getKey().getTenantIdWithPrefix(), tenantId);
+        put(properties.getKey().getTenantIdWithPrefix(), tenantId);
     }
 
     /**
@@ -255,7 +250,7 @@ public class ContextHolder {
     }
 
     public static void setLocale(String locale) {
-        set(properties.getKey().getLocaleWithPrefix(), locale);
+        put(properties.getKey().getLocaleWithPrefix(), locale);
     }
 
     /**
@@ -275,7 +270,7 @@ public class ContextHolder {
     }
 
     public static void setTimeZone(String timeZone) {
-        set(properties.getKey().getTimeZoneWithPrefix(), timeZone);
+        put(properties.getKey().getTimeZoneWithPrefix(), timeZone);
     }
 
     /**
@@ -288,11 +283,11 @@ public class ContextHolder {
     }
 
     public static void setClientIp(String clientIp) {
-        set(properties.getKey().getUserIpWithPrefix(), clientIp);
+        put(properties.getKey().getUserIpWithPrefix(), clientIp);
     }
 
     public static void setUserAgent(String userAgent) {
-        set(properties.getKey().getDeviceWithPrefix(), userAgent);
+        put(properties.getKey().getDeviceWithPrefix(), userAgent);
     }
 
     public static String getServerHost() {
@@ -300,11 +295,11 @@ public class ContextHolder {
     }
 
     public static void setServerHost(String serverHost) {
-        set(properties.getKey().getServerHostWithPrefix(), serverHost);
+        put(properties.getKey().getServerHostWithPrefix(), serverHost);
     }
 
     public static void removeServerHost() {
-        getContextMap().remove(properties.getKey().getServerHostWithPrefix());
+        getContext().remove(properties.getKey().getServerHostWithPrefix());
     }
 
     public static void clean() {
@@ -312,12 +307,12 @@ public class ContextHolder {
     }
 
     public static Object remove(String key) {
-        return getContextMap().remove(key);
+        return getContext().remove(key);
     }
 
     public static void put(Map<String, Object> contextMap) {
         if (contextMap != null) {
-            contextMap.forEach(ContextHolder::set);
+            contextMap.forEach(ContextHolder::put);
         }
     }
 
@@ -339,13 +334,12 @@ public class ContextHolder {
     }
 
     public static List<Pair<String, String>> toHeaders() {
-        JSONObject contextMap = getContextMap();
-        if (contextMap.isEmpty()) {
+        if (getContext().isEmpty()) {
             return Collections.emptyList();
         } else {
             FunCoreContextProperties.Key headerKey = properties.getKey();
             List<Pair<String, String>> pairs = new ArrayList<>();
-            contextMap.forEach((key, value) -> {
+            getContext().contextMap.forEach((key, value) -> {
                 if (ValidUtil.isBlank(value)) {
                     log.warn("header:{}'s value:{} is empty,will not add to headers", key, value);
                 } else if (CharSequenceUtil.startWithIgnoreCase(key, headerKey.getPrefix())) {

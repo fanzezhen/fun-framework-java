@@ -3,16 +3,17 @@ package com.github.fanzezhen.fun.framework.core.thread;
 import com.github.fanzezhen.fun.framework.core.thread.decorator.ThreadPoolTaskDecorator;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskDecorator;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Resource;
-import java.util.Map;
+
+import java.util.List;
 
 /**
  * 线程配置
@@ -22,11 +23,15 @@ import java.util.Map;
  */
 @Slf4j
 @Configuration
-public class ThreadPoolConfig {
+public class ThreadPoolConfig implements DisposableBean {
     @Getter
     private static TaskDecorator taskDecorator;
-    @Resource
-    private ApplicationContext applicationContext;
+    private final List<ThreadPoolTaskDecorator> threadPoolTaskDecoratorList;
+
+    @Autowired(required = false)
+    public ThreadPoolConfig(List<ThreadPoolTaskDecorator> threadPoolTaskDecoratorList) {
+        this.threadPoolTaskDecoratorList = threadPoolTaskDecoratorList;
+    }
 
     @Bean
     @ConditionalOnMissingBean
@@ -37,9 +42,8 @@ public class ThreadPoolConfig {
     @PostConstruct
     public void init() {
         try {
-            Map<String, ThreadPoolTaskDecorator> beanMap = applicationContext.getBeansOfType(ThreadPoolTaskDecorator.class);
             setTaskDecorator(runnable -> {
-                for (ThreadPoolTaskDecorator decorator : beanMap.values()) {
+                for (ThreadPoolTaskDecorator decorator : threadPoolTaskDecoratorList) {
                     runnable = decorator.decorate(runnable);
                 }
                 return runnable;
@@ -51,5 +55,10 @@ public class ThreadPoolConfig {
 
     private static void setTaskDecorator(TaskDecorator taskDecorator) {
         ThreadPoolConfig.taskDecorator = taskDecorator;
+    }
+
+    @Override
+    public void destroy() {
+        PoolExecutors.destroy();
     }
 }

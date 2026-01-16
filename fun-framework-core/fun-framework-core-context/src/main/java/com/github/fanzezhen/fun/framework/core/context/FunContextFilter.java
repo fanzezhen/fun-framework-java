@@ -26,7 +26,7 @@ public class FunContextFilter implements Filter {
     /**
      * 痕迹的key
      */
-    @Value("${fun.core.log.key.trace-id:traceId}")
+    @Value("${fun.log.key.trace-id:traceId}")
     private String traceIdKey;
 
     @Override
@@ -46,7 +46,7 @@ public class FunContextFilter implements Filter {
                     continue;
                 }
                 String requestUri = request.getRequestURI();
-                ContextHolder.set(curHeader, headerVal);
+                ContextHolder.put(curHeader, headerVal);
                 log(requestUri, curHeader, headerVal);
             }
             ContextHolder.setOriginHeaders(headers);

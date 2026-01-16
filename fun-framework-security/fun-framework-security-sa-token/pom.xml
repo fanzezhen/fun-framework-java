@@ -41,6 +41,10 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-web-server</artifactId>
     </dependency>
+      <dependency>
+          <groupId>com.github.fanzezhen</groupId>
+          <artifactId>fun-framework-core-thread</artifactId>
+      </dependency>
   </dependencies>
 
 </project>

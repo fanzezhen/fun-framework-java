@@ -9,24 +9,39 @@
     <version>${revision}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <artifactId>fun-framework-core</artifactId>
-  <name>${project.artifactId}</name>
-  <packaging>pom</packaging>
 
-  <modules>
-    <module>fun-framework-core-all</module>
-    <module>fun-framework-core-context</module>
-    <module>fun-framework-core-model</module>
-    <module>fun-framework-core-exception</module>
-    <module>fun-framework-core-cache</module>
-    <module>fun-framework-core-data</module>
-    <module>fun-framework-core-thread</module>
-    <module>fun-framework-core-log</module>
-    <module>fun-framework-core-verify</module>
-    <module>fun-framework-core-web</module>
-  </modules>
+  <artifactId>fun-framework-jasypt</artifactId>
+  <name>${project.artifactId}</name>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.github.ulisesbocchio</groupId>
+        <artifactId>jasypt-spring-boot-parent</artifactId>
+        <version>${com.github.ulisesbocchio.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
+    <dependency>
+      <groupId>com.github.fanzezhen</groupId>
+      <artifactId>fun-framework-core-model</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.ulisesbocchio</groupId>
+      <artifactId>jasypt-spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk18on</artifactId>
+    </dependency>
     <dependency>
       <groupId>cn.hutool</groupId>
       <artifactId>hutool-all</artifactId>

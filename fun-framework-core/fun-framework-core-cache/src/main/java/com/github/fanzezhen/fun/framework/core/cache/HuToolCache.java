@@ -2,8 +2,7 @@ package com.github.fanzezhen.fun.framework.core.cache;
 
 import cn.hutool.cache.impl.TimedCache;
 import org.springframework.cache.support.AbstractValueAdaptingCache;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
+import jakarta.annotation.Nonnull;
 
 import java.util.concurrent.Callable;
 
@@ -28,39 +27,37 @@ public class HuToolCache extends AbstractValueAdaptingCache {
 
 
     @Override
-    @NonNull
+    @Nonnull
     public final String getName() {
         return this.name;
     }
 
     @Override
-    @NonNull
+    @Nonnull
     public final TimedCache<Object, Object> getNativeCache() {
         return this.store;
     }
 
     @Override
-    @Nullable
-    protected Object lookup(@NonNull Object key) {
+    protected Object lookup(@Nonnull Object key) {
         return this.store.get(key, false);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    @Nullable
-    public <T> T get(@NonNull Object key, @NonNull Callable<T> valueLoader) {
+    public <T> T get(@Nonnull Object key, @Nonnull Callable<T> valueLoader) {
         Object value = this.store.get(key, () -> toStoreValue(valueLoader.call()));
         return (T) fromStoreValue(value);
     }
 
     @Override
-    public void put(@NonNull Object key, @Nullable Object value) {
+    public void put(@Nonnull Object key,  Object value) {
         this.store.put(key, toStoreValue(value));
     }
 
 
     @Override
-    public void evict(@NonNull Object key) {
+    public void evict(@Nonnull Object key) {
         this.store.remove(key);
     }
 

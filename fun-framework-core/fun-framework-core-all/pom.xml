@@ -32,10 +32,6 @@
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-core-jasypt</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.fanzezhen</groupId>
       <artifactId>fun-framework-core-log-base</artifactId>
     </dependency>
     <dependency>

@@ -3,18 +3,20 @@ package com.github.fanzezhen.fun.framework.core.context;
 import cn.hutool.core.map.CaseInsensitiveMap;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
  * @author fanzezhen
  */
 @Slf4j
-@Getter
 @SuppressWarnings("unused")
 public class Context {
-    private final JSONObject contextMap = new JSONObject(new CaseInsensitiveMap<>());
+    protected final JSONObject contextMap = new JSONObject(new CaseInsensitiveMap<>());
 
     /**
      * context map 最大容量
@@ -24,6 +26,10 @@ public class Context {
      * context map key 或者 value 最大值
      */
     public static final Integer MAX_SIZE = 1024;
+
+    public JSONObject getCopyOfContextMap() {
+        return contextMap.clone();
+    }
 
     public Object get(String key) {
         return contextMap.get(key);
@@ -50,10 +56,10 @@ public class Context {
             } else if (value.length() > MAX_SIZE) {
                 throw new ServiceException("value is more than " + MAX_SIZE + ", i can't set it into the context map");
             } else {
-                if (this.getContextMap().size() > MAX_CAPACITY) {
+                if (this.size() > MAX_CAPACITY) {
                     throw new ServiceException("the context map is full, can't set anything");
                 } else {
-                    this.getContextMap().put(key.toLowerCase(), value);
+                    this.put(key.toLowerCase(), value);
                 }
             }
         } else {
@@ -73,6 +79,54 @@ public class Context {
 
     public void clean() {
         contextMap.clear();
+    }
+
+    public int size() {
+        return contextMap.size();
+    }
+
+    public boolean isEmpty() {
+        return contextMap.isEmpty();
+    }
+
+    public boolean containsKey(Object key) {
+        return contextMap.containsKey(key);
+    }
+
+    public boolean containsValue(Object value) {
+        return contextMap.containsValue(value);
+    }
+
+    public Object get(Object key) {
+        return contextMap.get(key);
+    }
+
+    public Object put(String key, Object value) {
+        return contextMap.put(key, value);
+    }
+
+    public void putAll(Map<String, ?> m) {
+        contextMap.putAll(m);
+    }
+
+    public void clear() {
+        contextMap.clear();
+    }
+
+    public Set<String> keySet() {
+        return contextMap.keySet();
+    }
+
+    public Collection<Object> values() {
+        return contextMap.values();
+    }
+
+    public Set<Map.Entry<String, Object>> entrySet() {
+        return contextMap.entrySet();
+    }
+
+    public String getString(String lowerCase) {
+        return contextMap.getString(lowerCase);
     }
 }
 

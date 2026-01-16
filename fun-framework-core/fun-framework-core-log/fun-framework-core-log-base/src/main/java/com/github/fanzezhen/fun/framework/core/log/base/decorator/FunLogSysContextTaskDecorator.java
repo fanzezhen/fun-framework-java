@@ -23,7 +23,7 @@ public class FunLogSysContextTaskDecorator implements ThreadPoolTaskDecorator {
     /**
      * 痕迹的key
      */
-    @Value("${fun.core.log.key.trace-id:traceId}")
+    @Value("${fun.log.key.trace-id:traceId}")
     private String traceIdKey;
 
     @Override
@@ -31,17 +31,20 @@ public class FunLogSysContextTaskDecorator implements ThreadPoolTaskDecorator {
         Thread thread = Thread.currentThread();
         Map<String, String> map = MDC.getCopyOfContextMap();
         return () -> {
-            try {
-                MDC.setContextMap(map);
-                String traceId = MDC.get(traceIdKey);
-                if (CharSequenceUtil.isBlank(traceId)) {
-                    traceId = UUID.randomUUID().toString();
-                    MDC.put(traceIdKey, traceId);
-                }
-            } finally {
-                if (Thread.currentThread() != thread) {
+            if (Thread.currentThread() != thread) {
+                try {
+                    MDC.setContextMap(map);
+                    String traceId = MDC.get(traceIdKey);
+                    if (CharSequenceUtil.isBlank(traceId)) {
+                        traceId = UUID.randomUUID().toString();
+                        MDC.put(traceIdKey, traceId);
+                    }
+                    runnable.run();
+                } finally {
                     MDC.clear();
                 }
+            } else {
+                runnable.run();
             }
         };
     }

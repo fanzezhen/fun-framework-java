@@ -25,7 +25,7 @@ public class FunLogTraceIdFilter implements Filter {
     /**
      * 痕迹的key
      */
-    @Value("${fun.core.log.key.trace-id:traceId}")
+    @Value("${fun.log.key.trace-id:traceId}")
     private String traceIdKey;
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

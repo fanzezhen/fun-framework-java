@@ -16,10 +16,6 @@
   <dependencies>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-data-mp-starter</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.fanzezhen</groupId>
       <artifactId>fun-framework-proxy-core</artifactId>
     </dependency>
     <dependency>
