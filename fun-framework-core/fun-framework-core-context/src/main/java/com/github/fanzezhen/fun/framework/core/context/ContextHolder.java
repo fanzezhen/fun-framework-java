@@ -7,7 +7,7 @@ import cn.hutool.core.util.ArrayUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.core.context.properties.ContextConstant;
 import com.github.fanzezhen.fun.framework.core.context.properties.FunCoreContextProperties;
-import com.github.fanzezhen.fun.framework.core.exception.ValidUtil;
+import com.github.fanzezhen.fun.framework.core.model.util.ValidUtil;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.model.IUser;
 import lombok.extern.slf4j.Slf4j;

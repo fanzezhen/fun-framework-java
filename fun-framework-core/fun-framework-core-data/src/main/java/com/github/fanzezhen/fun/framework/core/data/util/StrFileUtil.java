@@ -34,19 +34,22 @@ public class StrFileUtil {
     @SuppressWarnings("unchecked")
     public static <T> T cast(Class<T> classType, Object value) {
         try {
-            T result = classType.getDeclaredConstructor().newInstance();
-            if (value == null) {
-                return result;
+            if (classType.isInstance(value)) {
+                return (T) value;
             }
+            if (value == null) {
+                return null;
+            }
+            T result;
             if (value instanceof String) {
                 String valueString = String.valueOf(value);
                 if (classType == Date.class) {
-                    result = (T) DateUtil.parse(valueString);
+                    return (T) DateUtil.parse(valueString);
                 } else if (classType == Long.class) {
-                    result = (T) Long.valueOf(valueString);
+                    return (T) Long.valueOf(valueString);
                 }
             }
-            return result;
+            return classType.getDeclaredConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                  NoSuchMethodException e) {
             log.warn("类型转化失败", e);

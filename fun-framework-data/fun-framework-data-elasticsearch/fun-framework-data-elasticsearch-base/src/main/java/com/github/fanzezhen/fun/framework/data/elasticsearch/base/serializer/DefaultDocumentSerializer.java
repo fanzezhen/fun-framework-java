@@ -5,7 +5,7 @@ import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.core.data.annotation.Column;
-import com.github.fanzezhen.fun.framework.core.exception.ValidUtil;
+import com.github.fanzezhen.fun.framework.core.model.util.ValidUtil;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.DocumentData;
 import org.springframework.core.annotation.Order;
 

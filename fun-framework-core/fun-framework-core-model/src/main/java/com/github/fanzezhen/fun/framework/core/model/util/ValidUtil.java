@@ -1,8 +1,9 @@
-package com.github.fanzezhen.fun.framework.core.exception;
+package com.github.fanzezhen.fun.framework.core.model.util;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.CharSequenceUtil;
+import com.github.fanzezhen.fun.framework.core.model.IHolder;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -185,16 +186,13 @@ public class ValidUtil {
                 return true;
             }
         }
-        if (o instanceof Map && MapUtil.isEmpty((Map<?, ?>) o)) {
-            return true;
-        }
-        if (o instanceof Collection && CollUtil.isEmpty((Collection<?>) o)) {
-            return true;
-        }
-        if (o instanceof byte[] bytes && bytes.length == 0) {
-            return true;
-        }
-        return o instanceof String[] strings && strings.length == 0;
+        return switch (o) {
+            case IHolder holder -> holder.isEmpty();
+            case Map<?, ?> map when MapUtil.isEmpty(map) -> true;
+            case Collection<?> collection when CollUtil.isEmpty(collection) -> true;
+            case byte[] bytes when bytes.length == 0 -> true;
+            default -> o instanceof String[] strings && strings.length == 0;
+        };
     }
 
     public static boolean isNotBlank(Object o) {

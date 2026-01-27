@@ -56,7 +56,7 @@ public class StorageUtil {
         }
         // 保留3位有效数字，四舍五入
         BigDecimal figure = BigDecimal.valueOf(size);
-        MathContext mathContext = new MathContext(3, RoundingMode.HALF_UP);
+        MathContext mathContext = new MathContext(4, RoundingMode.HALF_UP);
         figure = figure.divide(KILOBYTE_BIG_DECIMAL, mathContext);
         if (figure.longValue() < KILOBYTE) {
             return figure.stripTrailingZeros().toPlainString() + "K";
