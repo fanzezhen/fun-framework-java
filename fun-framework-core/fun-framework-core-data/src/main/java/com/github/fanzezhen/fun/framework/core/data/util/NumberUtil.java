@@ -121,8 +121,10 @@ public class NumberUtil {
         String decimalStr = strings[1];
         if (decimalStr.length() == 1) {
             intStr = intStr + decimalStr + "0";
+            decimalStr = CharSequenceUtil.EMPTY;
         } else if (decimalStr.length() == 2) {
             intStr = intStr + decimalStr;
+            decimalStr = CharSequenceUtil.EMPTY;
         } else {
             intStr = intStr + decimalStr.substring(0, 2);
             decimalStr = decimalStr.substring(2);

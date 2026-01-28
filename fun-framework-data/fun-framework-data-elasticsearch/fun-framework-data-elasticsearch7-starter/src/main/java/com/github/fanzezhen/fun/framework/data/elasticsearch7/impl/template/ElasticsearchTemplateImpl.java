@@ -1,11 +1,17 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch7.impl.template;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.func.Func1;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReflectUtil;
 import co.elastic.clients.elasticsearch._types.FieldValue;
 import co.elastic.clients.elasticsearch._types.Time;
+import co.elastic.clients.elasticsearch._types.aggregations.Aggregate;
+import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
+import co.elastic.clients.elasticsearch._types.aggregations.CardinalityAggregate;
+import co.elastic.clients.elasticsearch._types.aggregations.ScriptedMetricAggregate;
+import co.elastic.clients.elasticsearch._types.aggregations.ScriptedMetricAggregation;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQuery;
@@ -32,13 +38,16 @@ import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransportBase;
 import co.elastic.clients.transport.rest_client.RestClientOptions;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
+import co.elastic.clients.util.ObjectBuilder;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.core.data.annotation.Column;
 import com.github.fanzezhen.fun.framework.core.data.annotation.Entity;
+import com.github.fanzezhen.fun.framework.core.data.template.ITemplate;
 import com.github.fanzezhen.fun.framework.core.log.base.support.FunLogHelper;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.model.entity.IEntity;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.config.FunElasticsearchProperties;
+import com.github.fanzezhen.fun.framework.data.elasticsearch.base.constant.ElasticsearchConstant;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.IResponseDeserializer;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.DocumentData;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.ISearchResult;
@@ -73,6 +82,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 /**
  * es Template 实现类
@@ -269,6 +279,58 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
             .map(multiSearchResponseItem->
                 convertResponseToResult(multiSearchResponseItem, clz))
             .toList();
+    }
+
+    /**
+     * 计算不重复值的数量（近似值）
+     */
+    @Override
+    public <T> int cardinalityCount(Object requestBuilder, Func1<T, ?> column, Class<T> clz) {
+        if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
+            throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
+        }
+        String indexName = getIndexName(clz);
+        searchRequestBuilder.index(indexName);
+        String columnName = ITemplate.getColumnName(column);
+        String key = "cardinality_" + columnName + "_count";
+        searchRequestBuilder.aggregations(key, agg -> agg.cardinality(b -> b.field(columnName)));
+        SearchRequest searchRequest = searchRequestBuilder.build();
+        final SearchResponse<JSONObject> response = executeByLog(
+            searchRequest,
+            request -> elasticsearchClient.search(request, JSONObject.class)
+        );
+        return Optional.ofNullable(response.aggregations().get(key))
+            .map(Aggregate::cardinality)
+            .map(CardinalityAggregate::value)
+            .map(Long::intValue)
+            .orElse(0)
+            ;
+    }
+
+    /**
+     * 计算不重复值的数量（精确值）
+     */
+    @Override
+    public <T> int distinctCount(Object requestBuilder, Func1<T, ?> column, Class<T> clz) {
+        if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
+            throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
+        }
+        String indexName = getIndexName(clz);
+        searchRequestBuilder.index(indexName);
+        String columnName = ITemplate.getColumnName(column);
+        String key = "distinct_" + columnName + "_count";
+        searchRequestBuilder.aggregations(key, buildScriptedMetricAggregation(columnName));
+        SearchRequest searchRequest = searchRequestBuilder.build();
+        final SearchResponse<JSONObject> response = executeByLog(
+            searchRequest,
+            request -> elasticsearchClient.search(request, JSONObject.class)
+        );
+        return Optional.ofNullable(response.aggregations().get(key))
+            .map(Aggregate::scriptedMetric)
+            .map(ScriptedMetricAggregate::value)
+            .map(o->o.to(Long.class))
+            .orElse(0L)
+            .intValue();
     }
 
     /**
@@ -563,6 +625,36 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         TermQuery termQuery = builder.build();
         boolQuery.must(termQuery._toQuery());
         return boolQuery;
+    }
+
+    /**
+     * 精确去重脚本，占用的空间和查询条件过滤后的数据集成正比，适合中大型数据量
+     * @param fieldName 需要去重的字段
+     * @return ScriptedMetricAggregation,使用此不需要lambda表达式
+     */
+    public static Function<Aggregation.Builder, ObjectBuilder<Aggregation>> buildScriptedMetricAggregation(String fieldName){
+        return builder -> builder.scriptedMetric(scriptedMetricAggregation(fieldName));
+    }
+
+    /**
+     * 精确去重脚本，占用的空间和查询条件过滤后的数据集成正比，适合中大型数据量
+     * @param fieldName 需要去重的字段
+     * @return ScriptedMetricAggregation
+     */
+    public static ScriptedMetricAggregation scriptedMetricAggregation(String fieldName){
+        ScriptedMetricAggregation.Builder builder = new ScriptedMetricAggregation.Builder();
+        //初始化HashSet
+        String initScript = "state.distinct = new HashSet();";
+        //蒋文档的目标字段提取出来，加入到 单机的 HashSet
+        String mapScript = "if (doc['" + fieldName + "'].size() > 0) state.distinct.add(doc['" + fieldName + "'].value);";
+        String combineScript = "return state.distinct;";
+        //所有的机器的hashSet合并到一个机器上,计算不同的个数
+        String reduceScript = "HashSet result = new HashSet(); for (state in states) { result.addAll(state); } return result.size();";
+        builder.initScript(s -> s.inline(in -> in.source(initScript).lang(ElasticsearchConstant.PAINLESS)))
+            .mapScript(s -> s.inline(in -> in.source(mapScript).lang(ElasticsearchConstant.PAINLESS)))
+            .combineScript(s -> s.inline(in -> in.source(combineScript).lang(ElasticsearchConstant.PAINLESS)))
+            .reduceScript(s -> s.inline(in -> in.source(reduceScript).lang(ElasticsearchConstant.PAINLESS)));
+        return builder.build();
     }
 
 }

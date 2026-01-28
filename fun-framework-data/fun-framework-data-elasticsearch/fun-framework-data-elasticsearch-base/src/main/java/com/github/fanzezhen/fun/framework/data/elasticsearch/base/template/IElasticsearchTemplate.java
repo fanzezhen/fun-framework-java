@@ -1,5 +1,6 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch.base.template;
 
+import cn.hutool.core.lang.func.Func1;
 import com.github.fanzezhen.fun.framework.core.data.template.ITemplate;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.ISearchResult;
 
@@ -120,5 +121,15 @@ public interface IElasticsearchTemplate extends ITemplate<String> {
      * @return 按照requestBuilders的顺序逐一包装的返回结果，如果某个request没有值，也会有一个空对象
      */
     <T> List<ISearchResult<T>> mSearch(Collection<?> requestBuilders, Class<T> clz);
+
+    /**
+     * 计算不重复值的数量（近似值）
+     */
+    <T> int cardinalityCount(Object requestBuilder, Func1<T, ?> column, Class<T> clz);
+
+    /**
+     * 计算不重复值的数量（精确值，可能会有性能问题）
+     */ 
+    <T> int distinctCount(Object requestBuilder, Func1<T, ?> column, Class<T> clz);
 
 }

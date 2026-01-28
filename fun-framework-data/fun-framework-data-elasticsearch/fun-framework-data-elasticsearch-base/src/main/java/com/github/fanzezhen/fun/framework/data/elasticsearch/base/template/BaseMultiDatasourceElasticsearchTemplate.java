@@ -1,6 +1,7 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch.base.template;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.func.Func1;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.github.fanzezhen.fun.framework.core.data.annotation.Column;
 import com.github.fanzezhen.fun.framework.core.data.annotation.Entity;
@@ -197,6 +198,24 @@ public abstract class BaseMultiDatasourceElasticsearchTemplate implements IElast
     public <T> boolean clearScroll(Class<T> clz, String scrollId, String... scrollIds) {
         final IElasticsearchTemplate template = findTemplate(clz);
         return template.clearScroll(clz, scrollId, scrollIds);
+    }
+
+    /**
+     * 计算不重复值的数量（近似值）
+     */
+    @Override
+    public <T> int cardinalityCount(Object requestBuilder, Func1<T, ?> column, Class<T> clz) {
+        final IElasticsearchTemplate template = findTemplate(clz);
+        return template.cardinalityCount(requestBuilder, column, clz);
+    }
+
+    /**
+     * 计算不重复值的数量（精确值）
+     */
+    @Override
+    public <T> int distinctCount(Object requestBuilder, Func1<T, ?> column, Class<T> clz) {
+        final IElasticsearchTemplate template = findTemplate(clz);
+        return template.distinctCount(requestBuilder, column, clz);
     }
 
     /**

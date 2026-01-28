@@ -29,6 +29,9 @@ public class ObjUtil {
      */
     @SuppressWarnings("unchecked")
     public static <T> T empty(Class<T> tClass) {
+        if (Object.class.equals(tClass)) {
+            return null;
+        }
         // 按照字段类型解析值
         if (tClass.isAssignableFrom(List.class)) {
             return (T) new ArrayList<>(0);
