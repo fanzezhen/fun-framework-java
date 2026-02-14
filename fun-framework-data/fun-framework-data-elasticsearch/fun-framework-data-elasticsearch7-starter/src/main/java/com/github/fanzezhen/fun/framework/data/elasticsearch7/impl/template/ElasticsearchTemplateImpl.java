@@ -328,9 +328,9 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         return Optional.ofNullable(response.aggregations().get(key))
             .map(Aggregate::scriptedMetric)
             .map(ScriptedMetricAggregate::value)
-            .map(o->o.to(Long.class))
-            .orElse(0L)
-            .intValue();
+            .map(o->o.to(Integer.class))
+            .orElse(0)
+            ;
     }
 
     /**

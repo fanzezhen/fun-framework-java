@@ -17,7 +17,7 @@ import jakarta.annotation.Resource;
  */
 @Slf4j
 @RestController
-@RequestMapping("/fun/core/verify/token")
+@RequestMapping("/fun-core-verify-token")
 @ConditionalOnProperty(name = "fun.core.verify.api.enabled", havingValue = "true")
 public class FunCoreVerifyTokenApi {
     private final JwtService jwtService;

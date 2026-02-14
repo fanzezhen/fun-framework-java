@@ -29,7 +29,7 @@
     <com.fasterxml.jackson.module.version>2.20.1</com.fasterxml.jackson.module.version>
     <com.google.code.gson.version>2.13.2</com.google.code.gson.version>
     <com.github.gavlyukovskiy.version>2.0.0</com.github.gavlyukovskiy.version>
-    <com.github.ulisesbocchio.version>4.0.3</com.github.ulisesbocchio.version>
+    <com.github.ulisesbocchio.version>4.0.4</com.github.ulisesbocchio.version>
     <com.google.guava.version>33.5.0-jre</com.google.guava.version>
     <com.mysql.version>9.5.0</com.mysql.version>
     <com.zaxxer.version>7.0.2</com.zaxxer.version>
@@ -411,6 +411,11 @@
       <dependency>
         <groupId>com.github.ulisesbocchio</groupId>
         <artifactId>jasypt-spring-boot-parent</artifactId>
+        <version>${com.github.ulisesbocchio.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.ulisesbocchio</groupId>
+        <artifactId>jasypt-spring-boot-starter</artifactId>
         <version>${com.github.ulisesbocchio.version}</version>
       </dependency>
       <dependency>
@@ -818,6 +823,9 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${plugin.maven-compiler-plugin.version}</version>
           <configuration>
+            <compilerArgs>
+              <arg>-parameters</arg>
+            </compilerArgs>
             <source>${java.version}</source>
             <target>${java.version}</target>
             <release>${java.version}</release>

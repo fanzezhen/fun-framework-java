@@ -1,15 +1,13 @@
-package com.github.fanzezhen.fun.framework.core.jasypt.encryptor;
+package com.github.fanzezhen.fun.framework.jasypt.encryptor;
 
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import com.github.fanzezhen.fun.framework.jasypt.config.FunJasyptEncryptorProperties;
-import com.github.fanzezhen.fun.framework.jasypt.encryptor.SM2StringEncryptor;
-import com.github.fanzezhen.fun.framework.jasypt.encryptor.SM4StringEncryptor;
+import com.ulisesbocchio.jasyptspringboot.properties.JasyptEncryptorConfigurationProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Hex;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -39,28 +37,30 @@ class StringEncryptorTest {
 
     @Test
     void testSM2StringEncryptor() {
-        StringEncryptor stringEncryptor = new SM2StringEncryptor(new FunJasyptEncryptorProperties.ASymmetric(privateKey, publicKey));
+        FunJasyptEncryptorProperties properties = new FunJasyptEncryptorProperties();
+        StringEncryptor stringEncryptor = new FunSM2StringEncryptor(properties, new JasyptEncryptorConfigurationProperties());
         log.info("加密前:{}", password);
-        String encrypted = stringEncryptor.encrypt(password);
+        String encrypted = stringEncryptor.encrypt(password+properties.getSeparator()+privateKey+properties.getSeparator()+publicKey);
         log.info("加密后:{}", encrypted);
-        String decrypted = stringEncryptor.decrypt(encrypted);
+        String decrypted = stringEncryptor.decrypt(encrypted+properties.getSeparator()+privateKey+properties.getSeparator()+publicKey);
         log.info("解密后:{}", decrypted);
         Assertions.assertEquals(password, decrypted);
     }
 
     @Test
     void testSM4StringEncryptor() {
+        FunJasyptEncryptorProperties properties = new FunJasyptEncryptorProperties();
         // 生成符合SM4规范的128位密钥示例
         SecureRandom secureRandom = new SecureRandom();
         byte[] bytes = new byte[8]; // 16字节 = 128位
         secureRandom.nextBytes(bytes);
         String hexKey = Hex.encodeHexString(bytes); // 转换为32字符的十六进制字符串
         log.info("secretKey:{}", hexKey);
-        StringEncryptor stringEncryptor = new SM4StringEncryptor(new FunJasyptEncryptorProperties.Symmetric(hexKey));
+        StringEncryptor stringEncryptor = new FunSM4StringEncryptor(properties, null);
         log.info("加密前:{}", password);
-        String encrypted = stringEncryptor.encrypt(password);
+        String encrypted = stringEncryptor.encrypt(password+properties.getSeparator()+hexKey);
         log.info("加密后:{}", encrypted);
-        String decrypted = stringEncryptor.decrypt(encrypted);
+        String decrypted = stringEncryptor.decrypt(encrypted+properties.getSeparator()+hexKey);
         log.info("解密后:{}", decrypted);
         Assertions.assertEquals(password, decrypted);
     }

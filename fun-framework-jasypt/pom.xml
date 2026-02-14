@@ -12,18 +12,6 @@
 
   <artifactId>fun-framework-jasypt</artifactId>
   <name>${project.artifactId}</name>
-  
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>com.github.ulisesbocchio</groupId>
-        <artifactId>jasypt-spring-boot-parent</artifactId>
-        <version>${com.github.ulisesbocchio.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -100,6 +88,11 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-autoconfigure</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-test</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.github.openfeign</groupId>

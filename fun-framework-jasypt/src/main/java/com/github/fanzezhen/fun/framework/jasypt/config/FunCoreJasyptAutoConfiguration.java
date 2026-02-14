@@ -1,7 +1,9 @@
 package com.github.fanzezhen.fun.framework.jasypt.config;
 
-import com.github.fanzezhen.fun.framework.jasypt.encryptor.SM2StringEncryptor;
-import com.github.fanzezhen.fun.framework.jasypt.encryptor.SM4StringEncryptor;
+import com.github.fanzezhen.fun.framework.jasypt.encryptor.FunRSAStringEncryptor;
+import com.github.fanzezhen.fun.framework.jasypt.encryptor.FunSM2StringEncryptor;
+import com.github.fanzezhen.fun.framework.jasypt.encryptor.FunSM4StringEncryptor;
+import com.ulisesbocchio.jasyptspringboot.properties.JasyptEncryptorConfigurationProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -14,21 +16,29 @@ import jakarta.annotation.Resource;
  * @author fanzezhen
  */
 @Configuration
-@EnableConfigurationProperties(FunJasyptEncryptorProperties.class)
-@ComponentScan("com.github.fanzezhen.fun.framework.core.jasypt")
+@EnableConfigurationProperties({FunJasyptEncryptorProperties.class, JasyptEncryptorConfigurationProperties.class})
+@ComponentScan("com.github.fanzezhen.fun.framework.jasypt")
 public class FunCoreJasyptAutoConfiguration {
     @Resource
     private FunJasyptEncryptorProperties funJasyptEncryptorProperties;
+    @Resource
+    private JasyptEncryptorConfigurationProperties jasyptEncryptorConfigurationProperties;
 
-    @Bean(name = "sm2ECBStringEncryptor")
-    @ConditionalOnProperty(prefix = "com.github.fanzezhen.fun.framework.core.jasypt", name = "type", havingValue = "SM2")
-    public SM2StringEncryptor sm2ECBStringEncryptor() {
-        return new SM2StringEncryptor(funJasyptEncryptorProperties.getASymmetric());
+    @Bean
+    @ConditionalOnProperty(prefix = "jasypt.encryptor", name = "bean", havingValue = "funSM2StringEncryptor")
+    public FunSM2StringEncryptor funSM2StringEncryptor() {
+        return new FunSM2StringEncryptor(funJasyptEncryptorProperties, jasyptEncryptorConfigurationProperties);
     }
 
-    @Bean(name = "sm4ECBStringEncryptor")
-    @ConditionalOnProperty(prefix = "com.github.fanzezhen.fun.framework.core.jasypt", name = "type", havingValue = "SM4")
-    public SM4StringEncryptor sm4ECBStringEncryptor() {
-        return new SM4StringEncryptor(funJasyptEncryptorProperties.getSymmetric());
+    @Bean
+    @ConditionalOnProperty(prefix = "jasypt.encryptor", name = "bean", havingValue = "funSM4StringEncryptor")
+    public FunSM4StringEncryptor funSM4StringEncryptor() {
+        return new FunSM4StringEncryptor(funJasyptEncryptorProperties, jasyptEncryptorConfigurationProperties);
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "jasypt.encryptor", name = "bean", havingValue = "funRSAStringEncryptor")
+    public FunRSAStringEncryptor funRSAStringEncryptor() {
+        return new FunRSAStringEncryptor(funJasyptEncryptorProperties, jasyptEncryptorConfigurationProperties);
     }
 }

@@ -2,7 +2,7 @@ package com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.
 
 
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IHit;
-import com.github.fanzezhen.fun.framework.data.elasticsearch.base.annotation.ESHighlightField;
+import com.github.fanzezhen.fun.framework.data.elasticsearch.base.annotation.HighlightField;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * es 高亮字段解析器，解析es映射javaBean中被  {@link ESHighlightField} 标记的字段
+ * es 高亮字段解析器，解析es映射javaBean中被  {@link HighlightField} 标记的字段
  */
 @Order(Short.MIN_VALUE)
 @Component
@@ -19,7 +19,7 @@ public class EsHighlightAnnotationSupportFieldDeserializer extends BaseFieldDese
 
     @Override
     public boolean isSupport(Field field) {
-        return Objects.nonNull(field.getAnnotation(ESHighlightField.class));
+        return Objects.nonNull(field.getAnnotation(HighlightField.class));
     }
 
     /**
