@@ -1,5 +1,6 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch7.impl.model;
 
+import cn.hutool.core.text.CharSequenceUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IAggregationAdapter;
 
@@ -18,12 +19,13 @@ public class JsonAggregationsAdapterV7 extends JsonAggregationsAdapter {
 
     @Override
     public IAggregationAdapter getAggregation(String name) {
+        boolean isAny = CharSequenceUtil.isEmpty(name);
         for (Map.Entry<String, Object> entry : aggregationsJson.entrySet()) {
             if (!(entry.getValue() instanceof JSONObject)) {
                 continue;
             }
             final String key = entry.getKey();
-            if (key.equals(name)){
+            if (key.equals(name) || isAny){
                 return new SearchAggregationAdapter((JSONObject) entry.getValue());
             }
         }

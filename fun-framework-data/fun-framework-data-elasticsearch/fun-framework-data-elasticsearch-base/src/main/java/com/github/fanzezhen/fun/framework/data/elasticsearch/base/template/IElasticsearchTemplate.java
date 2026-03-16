@@ -2,6 +2,8 @@ package com.github.fanzezhen.fun.framework.data.elasticsearch.base.template;
 
 import cn.hutool.core.lang.func.Func1;
 import com.github.fanzezhen.fun.framework.core.data.template.ITemplate;
+import com.github.fanzezhen.fun.framework.core.model.bucket.AggregationCondition;
+import com.github.fanzezhen.fun.framework.core.model.bucket.Bucket;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.ISearchResult;
 
 import java.util.Collection;
@@ -13,6 +15,20 @@ import java.util.List;
  */
 public interface IElasticsearchTemplate extends ITemplate<String> {
      String ELASTICSEARCH_MARK = "（elasticsearch）" ;
+
+    /**
+     * 高级查询,查询条件与searchList类似,但可以通过{@link ISearchResult}获取其他结果
+     * <p>
+     * es6       org.elasticsearch.search.builder.SearchSourceBuilder 作为入参
+     * <p>
+     * es7或es8  co.elastic.clients.elasticsearch.core.SearchRequest.Builder 作为入参
+     *
+     * @param requestBuilder 查询条件
+     * @param clz     文档类型
+     * @param <T>     返回文档类型
+     * @return SearchResult对象
+     */
+    <T> ISearchResult<T> search(Object requestBuilder, Class<T> clz);
 
     /**
      * 查询单个文档
@@ -41,18 +57,16 @@ public interface IElasticsearchTemplate extends ITemplate<String> {
     <T> List<T> searchList(Object request, Class<T> clz);
 
     /**
-     * 高级查询,查询条件与searchList类似,但可以通过{@link ISearchResult}获取其他结果
-     * <p>
+     * 查询多个文档
      * es6       org.elasticsearch.search.builder.SearchSourceBuilder 作为入参
      * <p>
      * es7或es8  co.elastic.clients.elasticsearch.core.SearchRequest.Builder 作为入参
      *
      * @param requestBuilder 查询条件
      * @param clz     文档类型
-     * @param <T>     返回文档类型
-     * @return SearchResult对象
+     * @return 查询结果列表
      */
-    <T> ISearchResult<T> search(Object requestBuilder, Class<T> clz);
+    <T> List<Bucket> searchBucketList(Object requestBuilder, Class<T> clz, AggregationCondition aggregationCondition);
 
     /**
      * 游标查询，通过{@link ISearchResult}获取其他结果

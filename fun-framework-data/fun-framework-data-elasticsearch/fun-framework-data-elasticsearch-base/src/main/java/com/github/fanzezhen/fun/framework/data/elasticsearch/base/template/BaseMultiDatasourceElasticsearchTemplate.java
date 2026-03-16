@@ -7,6 +7,8 @@ import com.github.fanzezhen.fun.framework.core.data.annotation.Column;
 import com.github.fanzezhen.fun.framework.core.data.annotation.Entity;
 import com.github.fanzezhen.fun.framework.core.data.enums.FunCoreDataExceptionEnum;
 import com.github.fanzezhen.fun.framework.core.log.base.support.FunLogHelper;
+import com.github.fanzezhen.fun.framework.core.model.bucket.AggregationCondition;
+import com.github.fanzezhen.fun.framework.core.model.bucket.Bucket;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.model.entity.IEntity;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.config.FunElasticsearchProperties;
@@ -158,6 +160,23 @@ public abstract class BaseMultiDatasourceElasticsearchTemplate implements IElast
     public <T> ISearchResult<T> search(Object requestBuilder, Class<T> clz) {
         final IElasticsearchTemplate template = findTemplate(clz);
         return template.search(requestBuilder, clz);
+    }
+
+    /**
+     * 查询多个文档
+     * es6       org.elasticsearch.search.builder.SearchSourceBuilder 作为入参
+     * <p>
+     * es7或es8  co.elastic.clients.elasticsearch.core.SearchRequest.Builder 作为入参
+     *
+     * @param requestBuilder 查询条件
+     * @param clz     文档类型
+     *
+     * @return 查询结果列表
+     */
+    @Override
+    public <T> List<Bucket> searchBucketList(Object requestBuilder, Class<T> clz, AggregationCondition aggregationCondition) {
+        final IElasticsearchTemplate template = findTemplate(clz);
+        return template.searchBucketList(requestBuilder, clz, aggregationCondition);
     }
 
     /**

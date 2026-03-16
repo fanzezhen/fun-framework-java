@@ -44,11 +44,14 @@ import com.github.fanzezhen.fun.framework.core.data.annotation.Column;
 import com.github.fanzezhen.fun.framework.core.data.annotation.Entity;
 import com.github.fanzezhen.fun.framework.core.data.template.ITemplate;
 import com.github.fanzezhen.fun.framework.core.log.base.support.FunLogHelper;
+import com.github.fanzezhen.fun.framework.core.model.bucket.AggregationCondition;
+import com.github.fanzezhen.fun.framework.core.model.bucket.Bucket;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.model.entity.IEntity;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.config.FunElasticsearchProperties;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.constant.ElasticsearchConstant;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.IResponseDeserializer;
+import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.BucketAggregation;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.DocumentData;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.ISearchResult;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.serializer.IDocumentSerializer;
@@ -69,6 +72,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 
+import javax.swing.*;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.net.URI;
@@ -171,15 +175,16 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
             if (endpointsMissingProductHeader instanceof Set) {
                 // 一次性添加常用端点（覆盖绝大多数业务场景）
                 ((Set<String>) endpointsMissingProductHeader).addAll(Arrays.asList(
-                    "es/search",    // 单索引搜索
-                    "es/msearch",   // 多索引搜索
-                    "es/get",       // 获取文档
-                    "es/mget",      // 多索引获取文档
-                    "es/scroll",    // 滚动查询
-                    "es/index",     // 新增/更新文档
-                    "es/delete",    // 删除文档
-                    "es/bulk",      // 批量操作
-                    "es/count"      // 计数
+                    "es/search",        // 单索引搜索
+                    "es/msearch",       // 多索引搜索
+                    "es/get",           // 获取文档
+                    "es/mget",          // 多索引获取文档
+                    "es/scroll",        // 滚动查询
+                    "es/clear_scroll",  // 清除游标
+                    "es/index",         // 新增/更新文档
+                    "es/delete",        // 删除文档
+                    "es/bulk",          // 批量操作
+                    "es/count"          // 计数
                 ));
             }
         } catch (Exception e) {
@@ -202,11 +207,10 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
      * @return SearchResult对象
      */
     @Override
-    public <T> ISearchResult<T> search(Object requestBuilder, Class<T> clz) {
+    public <T> ISearchResult<T> search(Object requestBuilder, Class<T> clz, String indexName) {
         if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
             throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
         }
-        String indexName = getIndexName(clz);
         SearchRequest searchRequest = SearchRequest.of(builder -> searchRequestBuilder.index(indexName));
         final SearchResponse<JSONObject> response = executeByLog(
             searchRequest,
@@ -282,6 +286,35 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
+     * 查询多个文档
+     * es6       org.elasticsearch.search.builder.SearchSourceBuilder 作为入参
+     * <p>
+     * es7或es8  co.elastic.clients.elasticsearch.core.SearchRequest.Builder 作为入参
+     *
+     * @param requestBuilder 查询条件
+     * @param clz     文档类型
+     *
+     * @return 查询结果列表
+     */
+    @Override
+    public <T> List<Bucket> searchBucketList(Object requestBuilder, Class<T> clz, AggregationCondition aggregationCondition) {
+        if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
+            throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
+        }
+        String key = "group_count_" + aggregationCondition.getFieldName();
+        Function<Aggregation.Builder, ObjectBuilder<Aggregation>> builderScriptedMetricBuilderFunction = 
+            buildScriptedMetricAggregation(
+                aggregationCondition.getFieldName(), 
+                aggregationCondition.getSortOrder(),
+                aggregationCondition.getLimit());
+        searchRequestBuilder.aggregations(key, builderScriptedMetricBuilderFunction);
+        searchRequestBuilder.size(0);
+        ISearchResult<BucketAggregation> searchResult = search(searchRequestBuilder, BucketAggregation.class, getIndexName(clz));
+        BucketAggregation aggregations = searchResult.asAggregations();
+        return aggregations!=null?aggregations.getBucketList():null;
+    }
+
+    /**
      * 计算不重复值的数量（近似值）
      */
     @Override
@@ -291,6 +324,7 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         }
         String indexName = getIndexName(clz);
         searchRequestBuilder.index(indexName);
+        searchRequestBuilder.size(0);
         String columnName = ITemplate.getColumnName(column);
         String key = "cardinality_" + columnName + "_count";
         searchRequestBuilder.aggregations(key, agg -> agg.cardinality(b -> b.field(columnName)));
@@ -317,6 +351,7 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         }
         String indexName = getIndexName(clz);
         searchRequestBuilder.index(indexName);
+        searchRequestBuilder.size(0);
         String columnName = ITemplate.getColumnName(column);
         String key = "distinct_" + columnName + "_count";
         searchRequestBuilder.aggregations(key, buildScriptedMetricAggregation(columnName));
@@ -639,6 +674,18 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     /**
      * 精确去重脚本，占用的空间和查询条件过滤后的数据集成正比，适合中大型数据量
      * @param fieldName 需要去重的字段
+     * @return ScriptedMetricAggregation,使用此不需要lambda表达式
+     */
+    public static Function<Aggregation.Builder, ObjectBuilder<Aggregation>> buildScriptedMetricAggregation(
+        String fieldName, 
+        SortOrder sortOrder, 
+        int limit){
+        return builder -> builder.scriptedMetric(scriptedMetricAggregation(fieldName, sortOrder, limit));
+    }
+
+    /**
+     * 精确去重脚本，占用的空间和查询条件过滤后的数据集成正比，适合中大型数据量
+     * @param fieldName 需要去重的字段
      * @return ScriptedMetricAggregation
      */
     public static ScriptedMetricAggregation scriptedMetricAggregation(String fieldName){
@@ -650,6 +697,30 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         String combineScript = "return state.distinct;";
         //所有的机器的hashSet合并到一个机器上,计算不同的个数
         String reduceScript = "HashSet result = new HashSet(); for (state in states) { result.addAll(state); } return result.size();";
+        builder.initScript(s -> s.inline(in -> in.source(initScript).lang(ElasticsearchConstant.PAINLESS)))
+            .mapScript(s -> s.inline(in -> in.source(mapScript).lang(ElasticsearchConstant.PAINLESS)))
+            .combineScript(s -> s.inline(in -> in.source(combineScript).lang(ElasticsearchConstant.PAINLESS)))
+            .reduceScript(s -> s.inline(in -> in.source(reduceScript).lang(ElasticsearchConstant.PAINLESS)));
+        return builder.build();
+    }
+
+    /**
+     * 精确去重脚本，占用的空间和查询条件过滤后的数据集成正比，适合中大型数据量
+     * @param fieldName 需要去重的字段
+     * @return ScriptedMetricAggregation
+     */
+    public static ScriptedMetricAggregation scriptedMetricAggregation(String fieldName, SortOrder sortOrder, int limit){
+        ScriptedMetricAggregation.Builder builder = new ScriptedMetricAggregation.Builder();
+        String initScript = "state.statistics = new HashMap();";
+        String mapScript = String.format(ElasticsearchConstant.MAP_SCRIPT_TEMPLATE, fieldName, fieldName);
+        String combineScript = "return state.statistics;";
+        String reduceScriptTemplate = ElasticsearchConstant.REDUCE_SCRIPT_UNSORTED_TEMPLATE;
+        if (SortOrder.DESCENDING.equals(sortOrder)){
+            reduceScriptTemplate = ElasticsearchConstant.REDUCE_SCRIPT_DESCENDING_TEMPLATE;
+        } else if (SortOrder.ASCENDING.equals(sortOrder)) {
+            reduceScriptTemplate = ElasticsearchConstant.REDUCE_SCRIPT_ASCENDING_TEMPLATE;
+        }
+        String reduceScript = String.format(reduceScriptTemplate, limit, limit);
         builder.initScript(s -> s.inline(in -> in.source(initScript).lang(ElasticsearchConstant.PAINLESS)))
             .mapScript(s -> s.inline(in -> in.source(mapScript).lang(ElasticsearchConstant.PAINLESS)))
             .combineScript(s -> s.inline(in -> in.source(combineScript).lang(ElasticsearchConstant.PAINLESS)))

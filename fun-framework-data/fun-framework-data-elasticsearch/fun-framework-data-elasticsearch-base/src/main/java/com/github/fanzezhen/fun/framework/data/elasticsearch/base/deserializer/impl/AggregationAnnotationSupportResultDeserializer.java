@@ -1,10 +1,8 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.impl;
 
-import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.annotation.Aggregation;
 import com.github.fanzezhen.fun.framework.core.data.util.ObjUtil;
-import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IAggregationAdapter;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IAggregationsAdapter;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IResponseAdapter;
@@ -59,15 +57,11 @@ public class AggregationAnnotationSupportResultDeserializer extends BaseAggregat
     }
 
     private <V> String getAggregationName(Class<V> vClass) {
-        String aggregationName = "";
         final Aggregation aggregation = AnnotationUtils.findAnnotation(vClass, Aggregation.class);
         if (Objects.nonNull(aggregation)) {
-            aggregationName = aggregation.value();
+            return aggregation.value();
         }
-        if (CharSequenceUtil.isBlank(aggregationName)) {
-            throw new ServiceException("@Aggregation 注解的 value 属性不能为空");
-        }
-        return aggregationName;
+        return null;
     }
 
 }

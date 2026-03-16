@@ -1,6 +1,7 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch7.impl.model;
 
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IAggregationAdapter;
@@ -36,6 +37,7 @@ public class JsonAggregationsAdapter implements IAggregationsAdapter {
         if (MapUtil.isEmpty(aggregationsJson)) {
             return null;
         }
+        boolean isAny = CharSequenceUtil.isEmpty(name);
         for (Map.Entry<String, Object> entry : aggregationsJson.entrySet()) {
             if (!(entry.getValue() instanceof JSONObject)) {
                 continue;
@@ -45,7 +47,7 @@ public class JsonAggregationsAdapter implements IAggregationsAdapter {
             if (-1 == aggregationNameSplitIndex) {
                 continue;
             }
-            if (key.substring(aggregationNameSplitIndex + 1).equals(name)) {
+            if (key.substring(aggregationNameSplitIndex + 1).equals(name) || isAny) {
                 return new SearchAggregationAdapter((JSONObject) entry.getValue());
             }
         }
@@ -128,8 +130,13 @@ public class JsonAggregationsAdapter implements IAggregationsAdapter {
         }
 
         private List<BucketAdapter> initBucketList(JSONObject aggregationJson) {
-            final JSONArray bucketsJson = aggregationJson.getJSONArray("buckets");
-
+            JSONArray bucketsJson = aggregationJson.getJSONArray("buckets");
+            if (bucketsJson == null) {
+                try {
+                    bucketsJson = aggregationJson.getJSONArray("value");
+                } catch (Exception ignored) {
+                }
+            }
             if (Objects.isNull(bucketsJson)) {
                 return Collections.emptyList();
             }

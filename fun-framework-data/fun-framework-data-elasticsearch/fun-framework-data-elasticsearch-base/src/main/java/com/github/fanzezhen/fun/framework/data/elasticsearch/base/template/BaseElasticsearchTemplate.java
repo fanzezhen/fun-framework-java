@@ -33,23 +33,55 @@ public abstract class BaseElasticsearchTemplate implements IElasticsearchTemplat
         this.responseDeserializerList = responseDeserializerList;
         this.documentSerializerList = documentSerializerList;
     }
+    /**
+     * 高级查询,查询条件与searchList类似,但可以通过{@link ISearchResult}获取其他结果
+     * <p>
+     * es6       org.elasticsearch.search.builder.SearchSourceBuilder 作为入参
+     * <p>
+     * es7或es8  co.elastic.clients.elasticsearch.core.SearchRequest.Builder 作为入参
+     *
+     * @param requestBuilder 查询条件
+     * @param clz            文档类型
+     *
+     * @return SearchResult对象
+     */
+    @Override
+    public <T> ISearchResult<T> search(Object requestBuilder, Class<T> clz) {
+        String indexName = getIndexName(clz);
+        return search(requestBuilder, clz, indexName);
+    }
+
+    /**
+     * 高级查询,查询条件与searchList类似,但可以通过{@link ISearchResult}获取其他结果
+     * <p>
+     * es6       org.elasticsearch.search.builder.SearchSourceBuilder 作为入参
+     * <p>
+     * es7或es8  co.elastic.clients.elasticsearch.core.SearchRequest.Builder 作为入参
+     *
+     * @param requestBuilder 查询条件
+     * @param clz     文档类型
+     * @param <T>     返回文档类型
+     * @return SearchResult对象
+     */
+    public abstract  <T> ISearchResult<T> search(Object requestBuilder, Class<T> clz, String indexName);
 
     /**
      * 清除滚动搜索的scroll上下文
      *
      * @param scrollIds 需要清除的一个或多个scroll ID
+     *
      * @return 如果清除操作成功则返回true，否则返回false
      */
     public abstract boolean clearScroll(String scrollId, String... scrollIds);
+    
+    @Override
+    public <T> T searchOne(Object request, Class<T> clz) {
+        return search(request, clz).asDocument();
+    }
 
     @Override
     public <T> List<T> searchList(Object request, Class<T> clz) {
         return search(request, clz).asDocumentList();
-    }
-
-    @Override
-    public <T> T searchOne(Object request, Class<T> clz) {
-        return search(request, clz).asDocument();
     }
 
     /**
@@ -112,17 +144,17 @@ public abstract class BaseElasticsearchTemplate implements IElasticsearchTemplat
     /**
      * 将response对象转化为SearchResult
      *
-     * @param response 响应结果
-     * @param documentClass    文档对象类型
+     * @param response      响应结果
+     * @param documentClass 文档对象类型
      *
      * @return 解析后的文档Bean
      */
-    protected<T> ISearchResult<T> convertResponseToResult(Object response, Class<T> documentClass) {
-        if (response == null){
+    protected <T> ISearchResult<T> convertResponseToResult(Object response, Class<T> documentClass) {
+        if (response == null) {
             return BaseSearchResult.empty(documentClass);
         }
         for (IResponseDeserializer responseDeserializer : responseDeserializerList) {
-            if (responseDeserializer.isSupport(response)){
+            if (responseDeserializer.isSupport(response)) {
                 return responseDeserializer.deserialize(response, documentClass);
             }
         }
