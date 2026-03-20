@@ -1,5 +1,6 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.constant.BucketFieldEnum;
 
 public interface BucketAdapter extends IAggregationsAdapter {
@@ -13,6 +14,8 @@ public interface BucketAdapter extends IAggregationsAdapter {
     double getDouble(BucketFieldEnum aggregationField);
 
     IAggregationAdapter getAggregation(String aggregationName);
+
+    JSONObject getBucketJson();
 
     <T> T get(String key, Class<T> tClass);
 

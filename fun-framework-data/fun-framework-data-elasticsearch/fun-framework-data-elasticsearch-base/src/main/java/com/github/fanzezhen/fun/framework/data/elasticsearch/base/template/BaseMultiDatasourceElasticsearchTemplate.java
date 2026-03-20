@@ -6,13 +6,15 @@ import cn.hutool.core.text.CharSequenceUtil;
 import com.github.fanzezhen.fun.framework.core.data.annotation.Column;
 import com.github.fanzezhen.fun.framework.core.data.annotation.Entity;
 import com.github.fanzezhen.fun.framework.core.data.enums.FunCoreDataExceptionEnum;
+import com.github.fanzezhen.fun.framework.core.data.model.NestedAggregationCondition;
 import com.github.fanzezhen.fun.framework.core.log.base.support.FunLogHelper;
-import com.github.fanzezhen.fun.framework.core.model.bucket.AggregationCondition;
+import com.github.fanzezhen.fun.framework.core.data.model.AggregationCondition;
 import com.github.fanzezhen.fun.framework.core.model.bucket.Bucket;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.model.entity.IEntity;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.config.FunElasticsearchProperties;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.IResponseDeserializer;
+import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.HitsBucket;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.ISearchResult;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.serializer.IDocumentSerializer;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -163,6 +165,15 @@ public abstract class BaseMultiDatasourceElasticsearchTemplate implements IElast
     }
 
     /**
+     * 查询分组聚合近似结果
+     */
+    @Override
+    public <T> List<Bucket> searchTermsAggregationBucketList(Object requestBuilder, Class<T> clz, AggregationCondition aggregationCondition) {
+        final IElasticsearchTemplate template = findTemplate(clz);
+        return template.searchTermsAggregationBucketList(requestBuilder, clz, aggregationCondition);
+    }
+
+    /**
      * 查询多个文档
      * es6       org.elasticsearch.search.builder.SearchSourceBuilder 作为入参
      * <p>
@@ -174,9 +185,27 @@ public abstract class BaseMultiDatasourceElasticsearchTemplate implements IElast
      * @return 查询结果列表
      */
     @Override
-    public <T> List<Bucket> searchBucketList(Object requestBuilder, Class<T> clz, AggregationCondition aggregationCondition) {
+    public <T> List<Bucket> searchScriptedMetricAggregationBucketList(Object requestBuilder, Class<T> clz, AggregationCondition aggregationCondition) {
         final IElasticsearchTemplate template = findTemplate(clz);
-        return template.searchBucketList(requestBuilder, clz, aggregationCondition);
+        return template.searchScriptedMetricAggregationBucketList(requestBuilder, clz, aggregationCondition);
+    }
+
+    /**
+     * 查询分组聚合近似结果
+     */
+    @Override
+    public <T> List<HitsBucket<T>> searchTermsAggregationHitsBucketList(Object requestBuilder, Class<T> clz, NestedAggregationCondition aggregationCondition) {
+        final IElasticsearchTemplate template = findTemplate(clz);
+        return template.searchTermsAggregationHitsBucketList(requestBuilder, clz, aggregationCondition);
+    }
+
+    /**
+     * 查询分组聚合精确结果，占用的空间和查询条件过滤后的key集成正比，不适合key数量过多的场景
+     */
+    @Override
+    public <T> List<HitsBucket<T>> searchScriptedMetricAggregationHitsBucketList(Object requestBuilder, Class<T> clz, NestedAggregationCondition aggregationCondition) {
+        final IElasticsearchTemplate template = findTemplate(clz);
+        return template.searchScriptedMetricAggregationHitsBucketList(requestBuilder, clz, aggregationCondition);
     }
 
     /**

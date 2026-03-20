@@ -89,7 +89,7 @@ public class AggregationFieldAnnotationSupportFieldDeserializer extends Abstract
             return tList;
         } else {
             final Class<?> type = targetField.getType();
-            final IHit hit = hits.getHitList().get(0);
+            final IHit hit = hits.getHitList().getFirst();
             return baseAggregationResultResolver.getSupportFieldResolveResultResolver().resolveHit(hit, type);
         }
     }

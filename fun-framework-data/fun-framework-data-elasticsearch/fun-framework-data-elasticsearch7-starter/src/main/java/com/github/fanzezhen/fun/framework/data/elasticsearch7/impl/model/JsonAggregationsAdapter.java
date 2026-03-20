@@ -161,6 +161,11 @@ public class JsonAggregationsAdapter implements IAggregationsAdapter {
         }
 
         @Override
+        public JSONObject getBucketJson() {
+            return bucketJson;
+        }
+
+        @Override
         public int getInt(BucketFieldEnum aggregationField) {
             return bucketJson.getIntValue(aggregationField.getKey());
         }

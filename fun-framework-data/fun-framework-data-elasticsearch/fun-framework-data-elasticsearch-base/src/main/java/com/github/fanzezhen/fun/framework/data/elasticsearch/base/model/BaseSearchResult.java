@@ -24,12 +24,12 @@ public abstract class BaseSearchResult<T, R> implements ISearchResult<T> {
 
     protected final List<IResponseDeserializer> responseResolverList;
 
-    protected final Class<T> tClass;
+    protected final Class<T> documentClass;
 
-    protected BaseSearchResult(Class<T> tClass) {
+    protected BaseSearchResult(Class<T> documentClass) {
         this.resultResolverList = FunElasticsearchAutoConfiguration.getStaticResultDeserializerList();
         this.responseResolverList = FunElasticsearchAutoConfiguration.getStaticResponseDeserializerList();
-        this.tClass = tClass;
+        this.documentClass = documentClass;
     }
 
     /**
@@ -37,7 +37,7 @@ public abstract class BaseSearchResult<T, R> implements ISearchResult<T> {
      */
     @Override
     public List<T> asDocumentList() {
-        return asList(tClass);
+        return asList(documentClass);
     }
 
     /**
@@ -47,7 +47,7 @@ public abstract class BaseSearchResult<T, R> implements ISearchResult<T> {
      */
     @Override
     public List<T> asList() {
-        return asList(tClass);
+        return asList(documentClass);
     }
 
     /**
@@ -66,12 +66,12 @@ public abstract class BaseSearchResult<T, R> implements ISearchResult<T> {
                     return resultResolver.deserialize(getResponseAdapter(), vClass);
                 }
             }
+            return Collections.emptyList();
         } catch (Exception e) {
             log.warn("elasticsearch数据结果解析失败：{}", ITemplate.getTable(vClass), e);
             throw new ServiceException(FunCoreDataExceptionEnum.DATA_RESULT_DESERIALIZE_FAILED, 
                 "elasticsearch", e.getLocalizedMessage());
         }
-        return Collections.emptyList();
     }
 
     /**
@@ -84,7 +84,7 @@ public abstract class BaseSearchResult<T, R> implements ISearchResult<T> {
     @Override
     public T asAggregations() {
         final List<T> list = this.asList();
-        return CollUtil.isNotEmpty(list) ? list.get(0): null ;
+        return CollUtil.isNotEmpty(list) ? list.getFirst(): null ;
     }
 
     /**
@@ -93,7 +93,7 @@ public abstract class BaseSearchResult<T, R> implements ISearchResult<T> {
     @Override
     public T asDocument() {
         final List<T> list = asDocumentList();
-        return CollUtil.isNotEmpty(list) ? list.get(0): null ;
+        return CollUtil.isNotEmpty(list) ? list.getFirst(): null ;
     }
 
     /**

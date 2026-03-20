@@ -4,6 +4,8 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.TypeUtil;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.core.data.util.ObjUtil;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IAggregationAdapter;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.BucketAdapter;
@@ -12,6 +14,8 @@ import com.github.fanzezhen.fun.framework.data.elasticsearch.base.constant.Bucke
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.impl.BaseAggregationResultDeserializer;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,29 +39,37 @@ public class BucketFieldAnnotationSupportFieldDeserializer extends AbstractAggre
     @Override
     public Object deserialize(Field targetField, List<BucketAdapter> adapters) {
         // 获取类型，如果是List则获取泛型
-        Class<?> tClass = targetField.getType();
+        Class<?> targetFieldClass = targetField.getType();
         if (CollUtil.isEmpty(adapters)) {
-            return ObjUtil.empty(tClass);
+            return ObjUtil.empty(targetFieldClass);
         }
         if (targetField.getType().isAssignableFrom(List.class)) {
-            tClass = (Class<?>) TypeUtil.getTypeArgument(targetField.getGenericType());
+            Type typeArgument = TypeUtil.getTypeArgument(targetField.getGenericType());
+            if (typeArgument instanceof ParameterizedType parameterizedType){
+                targetFieldClass = (Class<?>) parameterizedType.getRawType();
+            }else {
+                targetFieldClass = (Class<?>) typeArgument;
+            }
+        } else if (targetField.getType().isAssignableFrom(JSONArray.class)) {
+            targetFieldClass = JSONObject.class;
         } else {
             //如果不是List，取第一个
-            adapters = Collections.singletonList(adapters.get(0));
+            adapters = Collections.singletonList(adapters.getFirst());
         }
-
-        return resolve(adapters, tClass);
+        return resolve(adapters, targetFieldClass);
     }
 
     /**
      * 遍历 bucketAdapters 将每一个 bucket 属性赋值到 Class 对象中，转化为 Class list
      */
-    private List<Object> resolve(List<BucketAdapter> adapters, Class tClass) {
+    private List<Object> resolve(List<BucketAdapter> adapters, Class<?> hitClass) {
+        if (hitClass.isAssignableFrom(JSONObject.class)){
+            return new JSONArray().fluentAddAll(adapters.stream().map(BucketAdapter::getBucketJson).toList());
+        }
         List<Object> result = new ArrayList<>(adapters.size());
-        //解析到对象中
-        final Field[] fields = ReflectUtil.getFields(tClass);
+        final Field[] fields = ReflectUtil.getFields(hitClass);
         for (BucketAdapter bucketAdapter : adapters) {
-            final Object instance = ReflectUtil.newInstance(tClass);
+            final Object instance = ReflectUtil.newInstance(hitClass);
             for (Field field : fields) {
                 Object value = resolveField(bucketAdapter, field, field.getType());
                 if (Objects.nonNull(value)) {
@@ -75,11 +87,11 @@ public class BucketFieldAnnotationSupportFieldDeserializer extends AbstractAggre
      *
      * @param bucketAdapter bucket适配器
      * @param field         字段
-     * @param clazz         解析类型（如果字段是List，则为List的泛型）
      */
-    private Object resolveField(BucketAdapter bucketAdapter, Field field, Class clazz) {
+    private Object resolveField(BucketAdapter bucketAdapter, Field field, Class<?> hitClass) {
         final BucketField bucketField = field.getAnnotation(BucketField.class);
         final String fieldName = field.getName();
+        Class<?> clazz = field.getType();
 
         if (Objects.isNull(bucketField)) {
             final IAggregationAdapter aggregation = bucketAdapter.getAggregation(fieldName);
@@ -118,7 +130,7 @@ public class BucketFieldAnnotationSupportFieldDeserializer extends AbstractAggre
     /**
      * 解析普通字段
      */
-    private Object resolveSimpleField(BucketAdapter bucketAdapter, String bucketName, Class clazz) {
+    private Object resolveSimpleField(BucketAdapter bucketAdapter, String bucketName, Class<?> clazz) {
         // 驼峰命名转换为下划线命名方式，例如：userName->user_name
         bucketName = CharSequenceUtil.toUnderlineCase(bucketName);
         return bucketAdapter.get(bucketName, clazz);

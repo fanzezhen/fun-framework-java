@@ -1,9 +1,11 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch.base.template;
 
 import cn.hutool.core.lang.func.Func1;
+import com.github.fanzezhen.fun.framework.core.data.model.NestedAggregationCondition;
 import com.github.fanzezhen.fun.framework.core.data.template.ITemplate;
-import com.github.fanzezhen.fun.framework.core.model.bucket.AggregationCondition;
+import com.github.fanzezhen.fun.framework.core.data.model.AggregationCondition;
 import com.github.fanzezhen.fun.framework.core.model.bucket.Bucket;
+import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.HitsBucket;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.ISearchResult;
 
 import java.util.Collection;
@@ -14,7 +16,7 @@ import java.util.List;
  *
  */
 public interface IElasticsearchTemplate extends ITemplate<String> {
-     String ELASTICSEARCH_MARK = "（elasticsearch）" ;
+    String ELASTICSEARCH_MARK = "（elasticsearch）";
 
     /**
      * 高级查询,查询条件与searchList类似,但可以通过{@link ISearchResult}获取其他结果
@@ -24,8 +26,9 @@ public interface IElasticsearchTemplate extends ITemplate<String> {
      * es7或es8  co.elastic.clients.elasticsearch.core.SearchRequest.Builder 作为入参
      *
      * @param requestBuilder 查询条件
-     * @param clz     文档类型
-     * @param <T>     返回文档类型
+     * @param clz            文档类型
+     * @param <T>            返回文档类型
+     *
      * @return SearchResult对象
      */
     <T> ISearchResult<T> search(Object requestBuilder, Class<T> clz);
@@ -39,6 +42,7 @@ public interface IElasticsearchTemplate extends ITemplate<String> {
      * @param request 查询条件
      * @param clz     文档类型
      * @param <T>     返回文档类型
+     *
      * @return 查询结果列表
      */
     <T> T searchOne(Object request, Class<T> clz);
@@ -52,21 +56,38 @@ public interface IElasticsearchTemplate extends ITemplate<String> {
      * @param request 查询条件
      * @param clz     文档类型
      * @param <T>     返回文档类型
+     *
      * @return 查询结果列表
      */
     <T> List<T> searchList(Object request, Class<T> clz);
 
     /**
-     * 查询多个文档
-     * es6       org.elasticsearch.search.builder.SearchSourceBuilder 作为入参
-     * <p>
-     * es7或es8  co.elastic.clients.elasticsearch.core.SearchRequest.Builder 作为入参
-     *
-     * @param requestBuilder 查询条件
-     * @param clz     文档类型
-     * @return 查询结果列表
+     * 查询分组聚合近似结果
      */
-    <T> List<Bucket> searchBucketList(Object requestBuilder, Class<T> clz, AggregationCondition aggregationCondition);
+    <T> List<Bucket> searchTermsAggregationBucketList(Object requestBuilder,
+                                                      Class<T> clz,
+                                                      AggregationCondition aggregationCondition);
+
+    /**
+     * 查询分组聚合精确结果，占用的空间和查询条件过滤后的key集成正比，不适合key数量过多的场景
+     */
+    <T> List<Bucket> searchScriptedMetricAggregationBucketList(Object requestBuilder,
+                                                               Class<T> clz,
+                                                               AggregationCondition aggregationCondition);
+
+    /**
+     * 查询分组聚合近似结果
+     */
+    <T> List<HitsBucket<T>> searchTermsAggregationHitsBucketList(Object requestBuilder,
+                                                                 Class<T> clz,
+                                                                 NestedAggregationCondition aggregationCondition);
+
+    /**
+     * 查询分组聚合精确结果，占用的空间和查询条件过滤后的key集成正比，不适合key数量过多的场景
+     */
+    <T> List<HitsBucket<T>> searchScriptedMetricAggregationHitsBucketList(Object requestBuilder,
+                                                                   Class<T> clz,
+                                                                   NestedAggregationCondition aggregationCondition);
 
     /**
      * 游标查询，通过{@link ISearchResult}获取其他结果
@@ -76,10 +97,11 @@ public interface IElasticsearchTemplate extends ITemplate<String> {
      * <p>
      * es7或es8  co.elastic.clients.elasticsearch.core.SearchRequest.Builder 作为入参
      *
-     * @param requestBuilder     查询条件
-     * @param clz         文档类型
-     * @param timeSeconds 游标id查询的有效时间（单位：分钟）
-     * @param <T>         返回文档类型
+     * @param requestBuilder 查询条件
+     * @param clz            文档类型
+     * @param timeSeconds    游标id查询的有效时间（单位：分钟）
+     * @param <T>            返回文档类型
+     *
      * @return SearchResult对象
      */
     <T> ISearchResult<T> scrollSearchByRequestBuilder(Object requestBuilder, Class<T> clz, Long timeSeconds);
@@ -96,15 +118,17 @@ public interface IElasticsearchTemplate extends ITemplate<String> {
      * @param scrollId    游标id(第一次查询时游标id可为空)
      * @param timeSeconds 游标id查询的有效时间（单位：分钟）
      * @param <T>         返回文档类型
+     *
      * @return SearchResult对象
      */
     <T> ISearchResult<T> scrollSearchByScrollId(String scrollId, Class<T> clz, Long timeSeconds);
-    
+
     /**
      * 清除滚动搜索的scroll上下文
      *
-     * @param clz             文档类型
+     * @param clz       文档类型
      * @param scrollIds 需要清除的一个或多个scroll ID
+     *
      * @return 如果清除操作成功则返回true，否则返回false
      */
     <T> boolean clearScroll(Class<T> clz, String scrollId, String... scrollIds);
@@ -121,17 +145,19 @@ public interface IElasticsearchTemplate extends ITemplate<String> {
      * @param scrollId    游标id
      * @param timeSeconds 游标id查询的有效时间（单位：分钟）
      * @param <T>         返回文档类型
+     *
      * @return SearchResult对象
      */
     default <T> List<T> scrollSearchList(String scrollId, Class<T> clz, Long timeSeconds) {
         return scrollSearchByScrollId(scrollId, clz, timeSeconds).asList();
     }
-    
+
     /**
      * esMsearch,对按照请求返回多个结果
      *
      * @param requestBuilders 多个不同的请求build co.elastic.clients.elasticsearch.core.SearchRequest.Builder
      * @param clz             文档类型
+     *
      * @return 按照requestBuilders的顺序逐一包装的返回结果，如果某个request没有值，也会有一个空对象
      */
     <T> List<ISearchResult<T>> mSearch(Collection<?> requestBuilders, Class<T> clz);
@@ -143,7 +169,7 @@ public interface IElasticsearchTemplate extends ITemplate<String> {
 
     /**
      * 计算不重复值的数量（精确值，可能会有性能问题）
-     */ 
+     */
     <T> int distinctCount(Object requestBuilder, Func1<T, ?> column, Class<T> clz);
 
 }
