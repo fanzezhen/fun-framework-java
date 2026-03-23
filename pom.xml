@@ -23,7 +23,7 @@
     <com.alibaba.druid.version>1.2.24</com.alibaba.druid.version>
     <com.alibaba.fastjson2.version>2.0.60</com.alibaba.fastjson2.version>
     <com.baomidou.version>3.5.16</com.baomidou.version>
-    <com.fasterxml.jackson.core.version>2.20.1</com.fasterxml.jackson.core.version>
+    <com.fasterxml.jackson.core.version>2.21.1</com.fasterxml.jackson.core.version>
     <com.fasterxml.jackson.core.jackson-annotations.version>2.20</com.fasterxml.jackson.core.jackson-annotations.version>
     <com.fasterxml.jackson.datatype.version>2.20.1</com.fasterxml.jackson.datatype.version>
     <com.fasterxml.jackson.module.version>2.20.1</com.fasterxml.jackson.module.version>
