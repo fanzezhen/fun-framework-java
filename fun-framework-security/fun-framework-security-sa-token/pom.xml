@@ -11,6 +11,7 @@
   </parent>
 
   <artifactId>fun-framework-security-sa-token</artifactId>
+  <name>${project.artifactId}</name>
 
   <dependencies>
     <dependency>

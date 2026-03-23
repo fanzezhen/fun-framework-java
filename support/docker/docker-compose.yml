@@ -337,7 +337,7 @@ services:
       --spring.datasource.url=jdbc:mysql://mysql/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
       --spring.datasource.username=root
       --spring.datasource.password=root
-      --spring.mail.username=842618916@qq.com
+      --spring.mail.username=fanzezhen@foxmail.com
       --spring.mail.password=
       --xxl.job.accessToken='  #代码里面需要指定的token
     depends_on:

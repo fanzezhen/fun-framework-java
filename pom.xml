@@ -13,7 +13,7 @@
     <org.springframework.boot.version>4.0.3</org.springframework.boot.version>
     <org.springframework.cloud.version>2025.1.1</org.springframework.cloud.version>
     <org.springframework.cloud.spring-cloud-starter-gateway.version>4.3.3</org.springframework.cloud.spring-cloud-starter-gateway.version>
-    <revision>${org.springframework.boot.version}.20260316</revision>
+    <revision>${org.springframework.boot.version}</revision>
     <app.server>-tomcat</app.server>
     <cn.dev33.version>1.45.0</cn.dev33.version>
     <cn.hutool.version>5.8.44</cn.hutool.version>
@@ -664,7 +664,7 @@
   <developers>
     <developer>
       <name>fanzezhen</name>
-      <email>842618916@qq.com</email>
+      <email>fanzezhen@foxmail.com</email>
       <roles>
         <role>owner</role>
       </roles>
@@ -705,6 +705,18 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>com.mycila</groupId>
+            <artifactId>license-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>none</phase> <!-- 设置为 none 表示不执行 -->
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
             <executions>
@@ -718,16 +730,12 @@
             </executions>
           </plugin>
           <plugin>
-            <groupId>com.mycila</groupId>
-            <artifactId>license-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <phase>none</phase> <!-- 设置为 none 表示不执行 -->
-                <goals>
-                  <goal>check</goal>
-                </goals>
-              </execution>
-            </executions>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>flatten-maven-plugin</artifactId>
+            <configuration>
+              <!-- 开发环境跳过flatten -->
+              <skip>true</skip>
+            </configuration>
           </plugin>
         </plugins>
       </build>
@@ -742,9 +750,9 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
         <gpg.executable>gpg</gpg.executable>
-        <gpg.executable>C:/Program Files (x86)/Gpg4win/../GnuPG/bin/gpg.exe</gpg.executable>
+        <gpg.executable>C:\software\gnupg-w32-2.5.18_20260224\bin\gpg.exe</gpg.executable>
         <!-- 前面pom.xml中配置了gpg的maven插件，这个目录就是你本地机器存放gpg秘钥的目录 -->
-        <gpg.homedir>C:\Users\fanzezhen\AppData\Roaming\gnupg</gpg.homedir>
+        <gpg.homedir>C:\Users\zezhen_fan\AppData\Roaming\gnupg</gpg.homedir>
       </properties>
     </profile>
   </profiles>
@@ -762,15 +770,14 @@
             <quiet>false</quiet>
             <failIfMissing>true</failIfMissing>
             <aggregate>false</aggregate>
+            <strictCheck>true</strictCheck>
+            <failIfMissing>true</failIfMissing>
+            <strictCheck>true</strictCheck>
             <useDefaultExcludes>true</useDefaultExcludes>
             <useDefaultMapping>true</useDefaultMapping>
             <mapping>
               <java>SLASHSTAR_STYLE</java>
             </mapping>
-            <strictCheck>true</strictCheck>
-            <failIfMissing>true</failIfMissing>
-            <aggregate>true</aggregate>
-            <strictCheck>true</strictCheck>
             <encoding>${project.build.sourceEncoding}</encoding>
             <licenseSets>
               <licenseSet>
@@ -789,14 +796,30 @@
             </licenseSets>
             <properties>
               <owner>fanzezhen</owner>
-              <email>842618916@qq.com</email>
-              <year>2025</year>
+              <email>fanzezhen@foxmail.com</email>
+              <year>2018-2026</year>
             </properties>
           </configuration>
           <executions>
             <execution>
+              <id>license-format-before-package</id>
+              <phase>prepare-package</phase>
+              <goals>
+                <goal>format</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>license-check-before-deploy</id>
+              <phase>verify</phase>
               <goals>
                 <goal>check</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>license-remove-after-deploy</id>
+              <phase>deploy</phase>
+              <goals>
+                <goal>remove</goal>
               </goals>
             </execution>
           </executions>
@@ -994,12 +1017,15 @@
             </execution>
           </executions>
         </plugin>
-
         <!--gpg加密，用于生成.asc-->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
           <version>${plugin.maven-gpg-plugin.version}</version>
+          <configuration>
+            <keyname>B60572CDACA0261E573B86A3C1B7A150A41D5181</keyname>
+            <executable>${gpg.executable}</executable>
+          </configuration>
           <executions>
             <execution>
               <id>sign-artifacts</id>
