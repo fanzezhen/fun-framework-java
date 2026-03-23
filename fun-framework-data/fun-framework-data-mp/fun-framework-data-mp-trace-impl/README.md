@@ -1,6 +1,6 @@
 fun-framework-data-mp-trace-impl
 ------------------------------------------
-错误码前缀 1212
+错误码格式 1212
 
 - [fun-framework-data-mp-trace](..%2Ffun-framework-data-mp-trace)的默认实现
 - 不属于核心模块，需要单独引入依赖，引入依赖自动生效

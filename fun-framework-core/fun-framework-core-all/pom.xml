@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-core-all</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>核心模块聚合包，用于简化引用所有核心组件，包含模型、异常、缓存、线程、上下文、数据、日志、验证、Web 等基础功能</description>
 
   <dependencies>
     <dependency>

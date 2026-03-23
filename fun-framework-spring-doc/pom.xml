@@ -10,7 +10,9 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fun-framework-spring-doc</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>接口文档组件，基于 SpringDoc 生成 OpenAPI/Swagger 文档，访问路径为/swagger-ui/index.html</description>
 
   <dependencies>
     <dependency>

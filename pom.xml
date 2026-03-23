@@ -752,7 +752,7 @@
         <gpg.executable>gpg</gpg.executable>
         <gpg.executable>C:\software\gnupg-w32-2.5.18_20260224\bin\gpg.exe</gpg.executable>
         <!-- 前面pom.xml中配置了gpg的maven插件，这个目录就是你本地机器存放gpg秘钥的目录 -->
-        <gpg.homedir>C:\Users\zezhen_fan\AppData\Roaming\gnupg</gpg.homedir>
+        <gpg.homedir>C:\Users\fanzezhen\AppData\Roaming\gnupg</gpg.homedir>
       </properties>
     </profile>
   </profiles>

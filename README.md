@@ -23,7 +23,7 @@ fun-framework-java
 
 详见各模块中的 README.md
 
-| 模块类          | 模块名                                                                                                                                        | 描述                   | 错误码前缀 | 手册                                                                                                                   |
+| 模块类          | 模块名                                                                                                                                        | 描述                   | 错误码格式 | 手册                                                                                                                   |
 |--------------|--------------------------------------------------------------------------------------------------------------------------------------------|----------------------|-------|----------------------------------------------------------------------------------------------------------------------|
 | 核心模型         | [fun-framework-core-model](fun-framework-core/fun-framework-core-model)                                                                    | 各种数据模型和静态变量          | 900   | [README.md](fun-framework-core/fun-framework-core-model/README.md)                                                   |
 | 异常处理         | [fun-framework-core-exception](fun-framework-core/fun-framework-core-exception)                                                            | 常见异常的处理类和相关工具类       | 901   | [README.md](fun-framework-core/fun-framework-core-exception/README.md)                                               |

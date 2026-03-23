@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-proxy-orika</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>Orika 代理组件，在使用 Orika 对象复制时对标注@ProxyField 的字段进行地址代理</description>
 
   <dependencies>
     <dependency>

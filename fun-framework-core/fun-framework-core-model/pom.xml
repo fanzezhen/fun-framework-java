@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-core-model</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>核心模型组件，提供各种数据模型（BaseEntity、BaseBO 等）和静态变量定义</description>
 
   <dependencies>
     <dependency>

@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-jasypt</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>配置加密组件，支持 RSA/SM2 非对称加密、SM4 对称加密和自定义 Bean 加解密，用于对配置文件中的敏感信息加密</description>
 
   <dependencies>
     <dependency>

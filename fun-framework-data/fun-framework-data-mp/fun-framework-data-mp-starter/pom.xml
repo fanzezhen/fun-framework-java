@@ -10,7 +10,9 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fun-framework-data-mp-starter</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>MyBatis-Plus 配置模块，提供基础实体类（BaseEntity、BaseGenericEntity 等）和代码生成器功能</description>
 
   <dependencies>
     <dependency>

@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-core-log-web</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>Web 日志组件，在日志基础组件上增加 Web 相关功能，包含 FunLogTraceIdFilter 和 FunLogPrintFilter</description>
 
   <dependencies>
     <dependency>

@@ -10,8 +10,10 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>fun-framework-security-spring-security</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
-  
+  <description>基于 Spring Security 的安全组件，提供企业级的权限认证和授权解决方案</description>
+
   <dependencies>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>

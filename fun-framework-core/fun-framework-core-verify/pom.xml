@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-core-verify</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>验证组件，提供参数校验相关功能和配置</description>
 
   <dependencies>
     <dependency>

@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-proxy-fastjson</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>Fastjson 代理组件，使用 ProxyFastJsonSerializeValueFilter 实现字段序列化和地址代理</description>
 
   <dependencies>
     <dependency>

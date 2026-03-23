@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-core-thread</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>线程组件，提供线程池工具 PoolExecutors 和异步执行工具 ExecutorHolder，支持自定义线程池和任务装饰器</description>
 
   <dependencies>
     <dependency>

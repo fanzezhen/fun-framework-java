@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-data-mp-trace-impl</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>fun-framework-data-mp-trace 的默认实现，提供痕迹收集功能的开箱即用支持</description>
 
   <dependencies>
     <dependency>

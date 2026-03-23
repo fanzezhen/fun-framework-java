@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-core-log-base</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>日志基础组件，自动生成 traceId、自动打印接口日志，支持多级日志配置（trace/debug/info/warn/error）</description>
 
   <dependencies>
     <dependency>

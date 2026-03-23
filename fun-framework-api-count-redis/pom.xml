@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-api-count-redis</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>基于 Redis 的接口字段统计组件，使用 AOP 切面统计 Controller 接口请求，记录各字段空值率，支持从 YApi 导出数据报告</description>
 
   <dependencies>
     <dependency>

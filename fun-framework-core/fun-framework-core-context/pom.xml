@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-core-context</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>上下文组件，提供 Web 请求头数据自动提取、ContextHolder 上下文管理、注解+AOP 上下文校验功能</description>
 
   <dependencies>
     <dependency>

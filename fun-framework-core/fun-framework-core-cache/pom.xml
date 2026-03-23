@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-core-cache</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>缓存组件，定义 CacheService 和 LockService 接口，提供基于内存的缓存实现和 HuToolCacheManager</description>
 
   <dependencies>
     <dependency>

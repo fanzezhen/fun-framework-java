@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-core-exception</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>异常处理组件，提供常见异常的处理类、全局异常处理器和相关工具类</description>
 
   <dependencies>
     <dependency>

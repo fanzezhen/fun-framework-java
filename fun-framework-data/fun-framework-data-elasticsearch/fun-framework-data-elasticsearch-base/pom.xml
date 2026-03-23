@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-data-elasticsearch-base</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>Elasticsearch 基础组件，提供 ES 操作的基础接口和服务</description>
 
   <dependencies>
     <dependency>

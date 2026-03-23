@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-proxy-core</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>静态资源代理基础组件，提供代理核心功能和@ProxyField 注解支持</description>
 
   <dependencies>
     <dependency>

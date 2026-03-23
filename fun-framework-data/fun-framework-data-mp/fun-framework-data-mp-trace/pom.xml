@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-data-mp-trace</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>基于 MyBatis-Plus 拦截器的痕迹收集组件，记录数据变更的主体和明细字段，需实现 IFunTraceService 接口</description>
 
   <dependencies>
     <dependency>

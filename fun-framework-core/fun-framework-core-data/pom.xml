@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-core-data</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>数据组件，提供各种数据相关的工具类和 Jackson 序列化配置</description>
 
   <dependencies>
     <dependency>

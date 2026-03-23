@@ -10,7 +10,10 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>fun-framework-security-base</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>安全基础组件，提供安全认证和授权的基础接口和服务</description>
+
     <dependencies>
         <dependency>
             <groupId>com.github.fanzezhen</groupId>

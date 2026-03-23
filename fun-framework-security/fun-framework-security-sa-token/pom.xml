@@ -11,7 +11,9 @@
   </parent>
 
   <artifactId>fun-framework-security-sa-token</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>基于 Sa-Token 的安全组件，提供轻量级的权限认证和授权功能</description>
 
   <dependencies>
     <dependency>

@@ -10,7 +10,9 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fun-framework-core-web</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>Web 组件，提供 Web 应用的基础配置和支持，通过@EnableCommonWebConfig 启用</description>
 
   <dependencies>
     <dependency>

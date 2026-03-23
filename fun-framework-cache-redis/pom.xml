@@ -10,7 +10,9 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fun-framework-cache-redis</artifactId>
+  <packaging>jar</packaging>
   <name>${project.artifactId}</name>
+  <description>基于 Redis 的缓存组件，实现 CacheService 接口，基于 Redisson 实现 LockService 分布式锁功能</description>
 
   <dependencies>
     <dependency>
