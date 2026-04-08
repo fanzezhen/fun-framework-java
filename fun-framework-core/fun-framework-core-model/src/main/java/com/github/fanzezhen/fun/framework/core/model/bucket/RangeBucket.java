@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- *
+ *范围桶
  */
 @Data
 @Accessors(chain = true)

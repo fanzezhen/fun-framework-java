@@ -1,4 +1,4 @@
-package com.github.fanzezhen.fun.framework.swagger.config;
+package com.github.fanzezhen.fun.framework.doc;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @author fanzezhen
  */
 @Configuration
-public class CommonSwaggerConfig {
+public class FunDocSwaggerConfig {
 
     private Info info() {
         return new Info();

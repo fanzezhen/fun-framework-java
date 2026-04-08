@@ -1,4 +1,4 @@
-package com.github.fanzezhen.fun.framework.swagger.config;
+package com.github.fanzezhen.fun.framework.doc;
 
 import org.springframework.context.annotation.Import;
 
@@ -12,6 +12,6 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Import({SwaggerSpringConfig.class})
+@Import({FunDocAutoConfiguration.class})
 public @interface EnableSpringDocConfig {
 }

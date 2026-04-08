@@ -1,4 +1,4 @@
-package com.github.fanzezhen.fun.framework.swagger;
+package com.github.fanzezhen.fun.framework.doc;
 
 import io.swagger.v3.oas.models.parameters.Parameter;
 import lombok.Data;
@@ -13,7 +13,14 @@ import java.util.List;
 @Data
 @Component
 @ConfigurationProperties(prefix = "fun.spring-doc")
-public class SwaggerProperty {
-    private boolean headerParameterCommonDisabled;
-    private List<Parameter> headerParameterList;
+public class FunDocProperties {
+    /**
+     * 是否禁用fun的header参数
+     */
+    private Header header;
+    @Data
+    public static class Header{
+        private boolean disabledFunDefaultParameter;
+        private List<Parameter> parameters;
+    }
 }

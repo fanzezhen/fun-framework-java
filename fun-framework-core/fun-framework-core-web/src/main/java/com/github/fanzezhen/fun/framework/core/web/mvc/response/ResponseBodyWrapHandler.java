@@ -39,7 +39,9 @@ public class ResponseBodyWrapHandler implements HandlerMethodReturnValueHandler 
                                   @Nonnull MethodParameter returnType,
                                   @Nonnull ModelAndViewContainer mavContainer,
                                   @Nonnull NativeWebRequest webRequest) throws Exception {
-        if (responseBodyWrapper.isWrapped(returnValue)) {
+        if (responseBodyWrapper.isWrapped(returnValue) || 
+            funCoreWebProperties.getResponseWrapper() == null ||
+            !funCoreWebProperties.getResponseWrapper().enabled()) {
             delegate.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
             return;
         }
@@ -53,7 +55,8 @@ public class ResponseBodyWrapHandler implements HandlerMethodReturnValueHandler 
             // 对特殊的URL不进行统一包装结果处理
             AntPathMatcher antPathMatcher = new AntPathMatcher();
             String finalRequestUri = requestUri;
-            if (funCoreWebProperties.getResponseIgnoreWrapPaths().stream().noneMatch(ignore -> antPathMatcher.match(ignore, finalRequestUri))) {
+            if (funCoreWebProperties.getResponseWrapper().getIgnorePaths()
+                .stream().noneMatch(ignore -> antPathMatcher.match(ignore, finalRequestUri))) {
                 delegate.handleReturnValue(responseBodyWrapper.wrap(returnValue), returnType, mavContainer, webRequest);
             } else {
                 delegate.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
