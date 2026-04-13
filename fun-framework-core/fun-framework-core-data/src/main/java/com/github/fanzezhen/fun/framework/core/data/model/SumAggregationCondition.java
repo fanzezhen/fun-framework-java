@@ -5,36 +5,25 @@ import com.github.fanzezhen.fun.framework.core.data.template.ITemplate;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import javax.swing.*;
-
 /**
  *
  */
 @Data
 @Accessors(chain = true)
-public class AggregationCondition {
+public class SumAggregationCondition extends AggregationCondition{
 
     /**
      * 字段名
      */
-    private String fieldName;
+    private String sumFieldName;
 
-    /**
-     * 排序
-     */
-    private SortOrder sortOrder;
-
-    /**
-     * 限量
-     */
-    private Integer limit = 10000;
-
-    public <T> AggregationCondition setFieldName(Func1<T, ?> column) {
-        this.fieldName = ITemplate.getColumnName(column);
+    public <T> SumAggregationCondition setSumFieldName(Func1<T, ?> column) {
+        this.sumFieldName = ITemplate.getColumnName(column);
         return this;
     }
 
+    @Override
     public String getNumberColumnName() {
-        return "doc_count";
+        return "doc_sum";
     }
 }

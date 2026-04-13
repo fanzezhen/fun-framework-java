@@ -1,11 +1,13 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch.base.template;
 
 import cn.hutool.core.lang.func.Func1;
+import com.github.fanzezhen.fun.framework.core.data.model.SumAggregationCondition;
 import com.github.fanzezhen.fun.framework.core.data.model.NestedAggregationCondition;
 import com.github.fanzezhen.fun.framework.core.data.template.ITemplate;
 import com.github.fanzezhen.fun.framework.core.data.model.AggregationCondition;
-import com.github.fanzezhen.fun.framework.core.model.bucket.Bucket;
-import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.HitsBucket;
+import com.github.fanzezhen.fun.framework.core.model.bucket.CountBucket;
+import com.github.fanzezhen.fun.framework.core.model.bucket.SumBucket;
+import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.bucket.HitsCountBucket;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.ISearchResult;
 
 import java.util.Collection;
@@ -64,30 +66,37 @@ public interface IElasticsearchTemplate extends ITemplate<String> {
     /**
      * 查询分组聚合近似结果
      */
-    <T> List<Bucket> searchTermsAggregationBucketList(Object requestBuilder,
-                                                      Class<T> clz,
-                                                      AggregationCondition aggregationCondition);
+    <T> List<CountBucket> searchTermsAggregationBucketList(Object requestBuilder,
+                                                           Class<T> clz,
+                                                           AggregationCondition aggregationCondition);
 
     /**
      * 查询分组聚合精确结果，占用的空间和查询条件过滤后的key集成正比，不适合key数量过多的场景
      */
-    <T> List<Bucket> searchScriptedMetricAggregationBucketList(Object requestBuilder,
-                                                               Class<T> clz,
-                                                               AggregationCondition aggregationCondition);
+    <T> List<CountBucket> searchScriptedMetricAggregationCountBucketList(Object requestBuilder,
+                                                                         Class<T> clz,
+                                                                         AggregationCondition aggregationCondition);
+
+    /**
+     * 查询分组聚合精确结果，占用的空间和查询条件过滤后的key集成正比，不适合key数量过多的场景
+     */
+    <T> List<SumBucket> searchScriptedMetricAggregationSumBucketList(Object requestBuilder,
+                                                                     Class<T> clz,
+                                                                     SumAggregationCondition aggregationCondition);
 
     /**
      * 查询分组聚合近似结果
      */
-    <T> List<HitsBucket<T>> searchTermsAggregationHitsBucketList(Object requestBuilder,
-                                                                 Class<T> clz,
-                                                                 NestedAggregationCondition aggregationCondition);
+    <T> List<HitsCountBucket<T>> searchTermsAggregationHitsBucketList(Object requestBuilder,
+                                                                      Class<T> clz,
+                                                                      NestedAggregationCondition aggregationCondition);
 
     /**
      * 查询分组聚合精确结果，占用的空间和查询条件过滤后的key集成正比，不适合key数量过多的场景
      */
-    <T> List<HitsBucket<T>> searchScriptedMetricAggregationHitsBucketList(Object requestBuilder,
-                                                                   Class<T> clz,
-                                                                   NestedAggregationCondition aggregationCondition);
+    <T> List<HitsCountBucket<T>> searchScriptedMetricAggregationHitsBucketList(Object requestBuilder,
+                                                                               Class<T> clz,
+                                                                               NestedAggregationCondition aggregationCondition);
 
     /**
      * 游标查询，通过{@link ISearchResult}获取其他结果

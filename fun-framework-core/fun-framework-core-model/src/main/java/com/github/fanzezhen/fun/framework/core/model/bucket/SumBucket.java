@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Bucket {
+public class SumBucket implements IBucket{
 
     /**
      * 键
@@ -22,5 +22,10 @@ public class Bucket {
     /**
      * 数量
      */
-    private Long docCount;
+    private Long docSum;
+
+    @Override
+    public Long getNumber() {
+        return docSum;
+    }
 }

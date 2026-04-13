@@ -7,7 +7,10 @@ package com.github.fanzezhen.fun.framework.data.elasticsearch.base.constant;
  *
  * @author fanzezhen
  */
-public interface ElasticsearchKeywordConstant{
-    String PREFIX_GROUP_COUNT = "group_count_";
+public final class ElasticsearchKeywordConstants {
+    private ElasticsearchKeywordConstants() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
+    public static final String PREFIX_GROUP_COUNT = "group_count_";
     
 }

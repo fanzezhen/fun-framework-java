@@ -1,7 +1,7 @@
-package com.github.fanzezhen.fun.framework.data.elasticsearch.base.model;
+package com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.bucket;
 
 import cn.hutool.core.collection.CollUtil;
-import com.github.fanzezhen.fun.framework.core.model.bucket.Bucket;
+import com.github.fanzezhen.fun.framework.core.model.bucket.CountBucket;
 import com.github.fanzezhen.fun.framework.core.model.constant.Constant;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.annotation.AggregationField;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.annotation.BucketField;
@@ -16,12 +16,12 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class HitsBucket<T> extends Bucket {
+public class HitsCountBucket<T> extends CountBucket {
     @BucketField(aggregationName = Constant.RECORDS)
     @AggregationField(AggregationFieldEnum.HITS)
     private List<T> hitList;
 
-    public HitsBucket(String key, Long docCount) {
+    public HitsCountBucket(String key, Long docCount) {
         super(key, docCount);
     }
     public T getHit() {

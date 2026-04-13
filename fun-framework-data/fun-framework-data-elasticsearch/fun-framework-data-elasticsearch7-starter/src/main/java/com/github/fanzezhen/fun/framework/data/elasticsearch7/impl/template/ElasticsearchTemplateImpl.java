@@ -51,23 +51,26 @@ import com.alibaba.fastjson2.JSONObject;
 import com.github.fanzezhen.fun.framework.core.data.annotation.Column;
 import com.github.fanzezhen.fun.framework.core.data.annotation.Entity;
 import com.github.fanzezhen.fun.framework.core.data.model.NestedAggregationCondition;
+import com.github.fanzezhen.fun.framework.core.data.model.SumAggregationCondition;
 import com.github.fanzezhen.fun.framework.core.data.template.ITemplate;
 import com.github.fanzezhen.fun.framework.core.log.base.support.FunLogHelper;
 import com.github.fanzezhen.fun.framework.core.data.model.AggregationCondition;
-import com.github.fanzezhen.fun.framework.core.model.bucket.Bucket;
+import com.github.fanzezhen.fun.framework.core.model.bucket.CountBucket;
+import com.github.fanzezhen.fun.framework.core.model.bucket.SumBucket;
 import com.github.fanzezhen.fun.framework.core.model.constant.Constant;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.model.entity.IEntity;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.config.FunElasticsearchAutoConfiguration;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.config.FunElasticsearchProperties;
-import com.github.fanzezhen.fun.framework.data.elasticsearch.base.constant.ElasticsearchKeywordConstant;
-import com.github.fanzezhen.fun.framework.data.elasticsearch.base.constant.ElasticsearchScriptConstant;
+import com.github.fanzezhen.fun.framework.data.elasticsearch.base.constant.ElasticsearchKeywordConstants;
+import com.github.fanzezhen.fun.framework.data.elasticsearch.base.constant.ElasticsearchScriptConstants;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.IElasticsearchResultDeserializer;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.IResponseDeserializer;
-import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.BucketAggregation;
+import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.bucket.CountBucketsAggregation;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.DocumentData;
-import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.HitsBucket;
+import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.bucket.HitsCountBucket;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.ISearchResult;
+import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.bucket.SumBucketsAggregation;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.serializer.IDocumentSerializer;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.template.BaseElasticsearchTemplate;
 import com.github.fanzezhen.fun.framework.data.elasticsearch7.impl.model.JsonResponseAdapterV7;
@@ -306,17 +309,17 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
      * 查询分组聚合近似结果
      */
     @Override
-    public <T> List<Bucket> searchTermsAggregationBucketList(Object requestBuilder,
-                                                             Class<T> clz,
-                                                             AggregationCondition aggregationCondition) {
+    public <T> List<CountBucket> searchTermsAggregationBucketList(Object requestBuilder,
+                                                                  Class<T> clz,
+                                                                  AggregationCondition aggregationCondition) {
         if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
             throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
         }
-        String key = ElasticsearchKeywordConstant.PREFIX_GROUP_COUNT + aggregationCondition.getFieldName();
+        String key = ElasticsearchKeywordConstants.PREFIX_GROUP_COUNT + aggregationCondition.getFieldName();
         searchRequestBuilder.aggregations(key, agg -> aggregationsContainerBuilder(agg, aggregationCondition));
         searchRequestBuilder.size(0);
-        ISearchResult<BucketAggregation> searchResult = search(searchRequestBuilder, BucketAggregation.class, getIndexName(clz));
-        BucketAggregation aggregations = searchResult.asAggregations();
+        ISearchResult<CountBucketsAggregation> searchResult = search(searchRequestBuilder, CountBucketsAggregation.class, getIndexName(clz));
+        CountBucketsAggregation aggregations = searchResult.asAggregations();
         return aggregations != null ? aggregations.getBucketList() : null;
     }
 
@@ -324,19 +327,34 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
      * 查询分组聚合结果，占用的空间和查询条件过滤后的key集成正比，不适合key数量过多的场景
      */
     @Override
-    public <T> List<Bucket> searchScriptedMetricAggregationBucketList(Object requestBuilder,
-                                                                      Class<T> clz,
-                                                                      AggregationCondition aggregationCondition) {
+    public <T> List<CountBucket> searchScriptedMetricAggregationCountBucketList(Object requestBuilder,
+                                                                                Class<T> clz,
+                                                                                AggregationCondition aggregationCondition) {
         if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
             throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
         }
-        String key = ElasticsearchKeywordConstant.PREFIX_GROUP_COUNT + aggregationCondition.getFieldName();
+        String key = ElasticsearchKeywordConstants.PREFIX_GROUP_COUNT + aggregationCondition.getFieldName();
         Function<Aggregation.Builder, ObjectBuilder<Aggregation>> builderScriptedMetricBuilderFunction =
             buildScriptedMetricAggregation(aggregationCondition);
         searchRequestBuilder.aggregations(key, builderScriptedMetricBuilderFunction);
         searchRequestBuilder.size(0);
-        ISearchResult<BucketAggregation> searchResult = search(searchRequestBuilder, BucketAggregation.class, getIndexName(clz));
-        BucketAggregation aggregations = searchResult.asAggregations();
+        ISearchResult<CountBucketsAggregation> searchResult = search(searchRequestBuilder, CountBucketsAggregation.class, getIndexName(clz));
+        CountBucketsAggregation aggregations = searchResult.asAggregations();
+        return aggregations != null ? aggregations.getBucketList() : null;
+    }
+
+    @Override
+    public <T> List<SumBucket> searchScriptedMetricAggregationSumBucketList(Object requestBuilder, Class<T> clz, SumAggregationCondition aggregationCondition) {
+        if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
+            throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
+        }
+        String key = ElasticsearchKeywordConstants.PREFIX_GROUP_COUNT + aggregationCondition.getFieldName();
+        Function<Aggregation.Builder, ObjectBuilder<Aggregation>> builderScriptedMetricBuilderFunction =
+            buildScriptedMetricAggregation(aggregationCondition);
+        searchRequestBuilder.aggregations(key, builderScriptedMetricBuilderFunction);
+        searchRequestBuilder.size(0);
+        ISearchResult<SumBucketsAggregation> searchResult = search(searchRequestBuilder, SumBucketsAggregation.class, getIndexName(clz));
+        SumBucketsAggregation aggregations = searchResult.asAggregations();
         return aggregations != null ? aggregations.getBucketList() : null;
     }
 
@@ -344,50 +362,50 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
      * 查询分组聚合近似结果
      */
     @Override
-    public <T> List<HitsBucket<T>> searchTermsAggregationHitsBucketList(Object requestBuilder,
-                                                                        Class<T> clz,
-                                                                        NestedAggregationCondition aggregationCondition) {
+    public <T> List<HitsCountBucket<T>> searchTermsAggregationHitsBucketList(Object requestBuilder,
+                                                                             Class<T> clz,
+                                                                             NestedAggregationCondition aggregationCondition) {
         if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
             throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
         }
-        String key = ElasticsearchKeywordConstant.PREFIX_GROUP_COUNT + aggregationCondition.getFieldName();
-        searchRequestBuilder.aggregations(key, agg -> 
+        String key = ElasticsearchKeywordConstants.PREFIX_GROUP_COUNT + aggregationCondition.getFieldName();
+        searchRequestBuilder.aggregations(key, agg ->
             aggregationsContainerBuilder(agg, aggregationCondition)
-            .aggregations(Constant.RECORDS, child ->
-                child.topHits(topHitsBuilder -> {
-                    if (aggregationCondition.getHitsLimit() != null) {
-                        topHitsBuilder.size(aggregationCondition.getHitsLimit());
-                    }
-                    if (aggregationCondition.getHitsOrder() != null) {
-                        co.elastic.clients.elasticsearch._types.SortOrder hitsSortOrder =
-                            Direction.DESC.equals(aggregationCondition.getHitsOrder().getDirection()) ?
-                                co.elastic.clients.elasticsearch._types.SortOrder.Desc :
-                                co.elastic.clients.elasticsearch._types.SortOrder.Asc;
-                        topHitsBuilder.sort(sortBuilder -> sortBuilder.field(b -> b
-                            .field(aggregationCondition.getHitsOrder().getField())
-                            .order(hitsSortOrder)));
-                    }
-                    if (aggregationCondition.needFilterHitSource()) {
-                        topHitsBuilder.source(sourceBuilder -> sourceBuilder.filter(builder -> {
-                            if (aggregationCondition.getHitSourceIncludes() != null) {
-                                if (aggregationCondition.getHitSourceIncludes() instanceof List<String> includes) {
-                                    builder.includes(includes);
-                                } else {
-                                    builder.includes(new ArrayList<>(aggregationCondition.getHitSourceIncludes()));
+                .aggregations(Constant.RECORDS, child ->
+                    child.topHits(topHitsBuilder -> {
+                        if (aggregationCondition.getHitsLimit() != null) {
+                            topHitsBuilder.size(aggregationCondition.getHitsLimit());
+                        }
+                        if (aggregationCondition.getHitsOrder() != null) {
+                            co.elastic.clients.elasticsearch._types.SortOrder hitsSortOrder =
+                                Direction.DESC.equals(aggregationCondition.getHitsOrder().getDirection()) ?
+                                    co.elastic.clients.elasticsearch._types.SortOrder.Desc :
+                                    co.elastic.clients.elasticsearch._types.SortOrder.Asc;
+                            topHitsBuilder.sort(sortBuilder -> sortBuilder.field(b -> b
+                                .field(aggregationCondition.getHitsOrder().getField())
+                                .order(hitsSortOrder)));
+                        }
+                        if (aggregationCondition.needFilterHitSource()) {
+                            topHitsBuilder.source(sourceBuilder -> sourceBuilder.filter(builder -> {
+                                if (aggregationCondition.getHitSourceIncludes() != null) {
+                                    if (aggregationCondition.getHitSourceIncludes() instanceof List<String> includes) {
+                                        builder.includes(includes);
+                                    } else {
+                                        builder.includes(new ArrayList<>(aggregationCondition.getHitSourceIncludes()));
+                                    }
                                 }
-                            }
-                            if (aggregationCondition.getHitSourceExcludes() != null) {
-                                if (aggregationCondition.getHitSourceExcludes() instanceof List<String> excludes) {
-                                    builder.excludes(excludes);
-                                } else {
-                                    builder.includes(new ArrayList<>(aggregationCondition.getHitSourceExcludes()));
+                                if (aggregationCondition.getHitSourceExcludes() != null) {
+                                    if (aggregationCondition.getHitSourceExcludes() instanceof List<String> excludes) {
+                                        builder.excludes(excludes);
+                                    } else {
+                                        builder.includes(new ArrayList<>(aggregationCondition.getHitSourceExcludes()));
+                                    }
                                 }
-                            }
-                            return builder;
-                        }));
-                    }
-                    return topHitsBuilder;
-                })));
+                                return builder;
+                            }));
+                        }
+                        return topHitsBuilder;
+                    })));
         searchRequestBuilder.size(0);
         SearchRequest searchRequest = SearchRequest.of(builder -> searchRequestBuilder.index(getIndexName(clz)));
         final SearchResponse<JSONObject> response = executeByLog(
@@ -395,7 +413,7 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
             request -> elasticsearchClient.search(request, JSONObject.class)
         );
         return response.aggregations().get(key).sterms().buckets().array().stream().map(stringTermsBucket -> {
-            HitsBucket<T> hitsBucket = new HitsBucket<>(stringTermsBucket.key().stringValue(), stringTermsBucket.docCount());
+            HitsCountBucket<T> hitsBucket = new HitsCountBucket<>(stringTermsBucket.key().stringValue(), stringTermsBucket.docCount());
             JSONArray hits = new JSONArray(aggregationCondition.getHitsLimit());
             for (Hit<JsonData> hit : stringTermsBucket.aggregations().get(Constant.RECORDS).topHits().hits().hits()) {
                 JsonData source = hit.source();
@@ -424,7 +442,7 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
             });
     }
 
-    private static <T> List<T> deserializer(List<?> hits,Class<T> clz) {
+    private static <T> List<T> deserializer(List<?> hits, Class<T> clz) {
         JsonResponseAdapterV7 hitsResponseAdapter = new JsonResponseAdapterV7(new JSONObject().fluentPut("hits", new JSONObject().fluentPut("hits", hits)));
         List<T> list = Collections.emptyList();
         for (IElasticsearchResultDeserializer deserializer :
@@ -451,9 +469,9 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
      * 查询分组聚合精确结果，占用的空间和查询条件过滤后的key集成正比，不适合key数量过多的场景
      */
     @Override
-    public <T> List<HitsBucket<T>> searchScriptedMetricAggregationHitsBucketList(Object requestBuilder,
-                                                                                 Class<T> clz,
-                                                                                 NestedAggregationCondition aggregationCondition) {
+    public <T> List<HitsCountBucket<T>> searchScriptedMetricAggregationHitsBucketList(Object requestBuilder,
+                                                                                      Class<T> clz,
+                                                                                      NestedAggregationCondition aggregationCondition) {
         if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
             throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
         }
@@ -461,11 +479,11 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         Integer limit = aggregationCondition.getLimit();
         Integer hitsLimit = aggregationCondition.getHitsLimit();
         Order hitsOrder = aggregationCondition.getHitsOrder();
-        String mapScriptDoc = ElasticsearchScriptConstant.MAP_SCRIPT_DEFAULT_DOC;
+        String mapScriptDoc = ElasticsearchScriptConstants.MAP_SCRIPT_DEFAULT_DOC;
         if (aggregationCondition.needFilterHitSource()) {
             if (CollUtil.isNotEmpty(aggregationCondition.getHitSourceIncludes())) {
                 mapScriptDoc = aggregationCondition.getHitSourceIncludes().stream()
-                    .map(s -> String.format(ElasticsearchScriptConstant.MAP_SCRIPT_DOC_ITEM_TEMPLATE, s, s))
+                    .map(s -> String.format(ElasticsearchScriptConstants.MAP_SCRIPT_DOC_ITEM_TEMPLATE, s, s))
                     .collect(Collectors.joining());
             }
             if (CollUtil.isNotEmpty(aggregationCondition.getHitSourceExcludes())) {
@@ -477,37 +495,37 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         String hitSortScript = CharSequenceUtil.EMPTY;
         if (hitsOrder != null) {
             if (Direction.DESC.equals(hitsOrder.getDirection())) {
-                hitSortScript = String.format(ElasticsearchScriptConstant.SCRIPT_HIT_SORT_TEMPLATE, hitsOrder.getField(),
-                    hitsOrder.getField(), ElasticsearchScriptConstant.OBJECT_SORT_DESC_SCRIPT, hitsLimit);
+                hitSortScript = String.format(ElasticsearchScriptConstants.SCRIPT_HIT_SORT_TEMPLATE, hitsOrder.getField(),
+                    hitsOrder.getField(), ElasticsearchScriptConstants.OBJECT_SORT_DESC_SCRIPT, hitsLimit);
             } else if (Direction.ASC.equals(hitsOrder.getDirection())) {
-                hitSortScript = String.format(ElasticsearchScriptConstant.SCRIPT_HIT_SORT_TEMPLATE, hitsOrder.getField(), 
-                    hitsOrder.getField(), ElasticsearchScriptConstant.OBJECT_SORT_ASC_SCRIPT, hitsLimit);
+                hitSortScript = String.format(ElasticsearchScriptConstants.SCRIPT_HIT_SORT_TEMPLATE, hitsOrder.getField(),
+                    hitsOrder.getField(), ElasticsearchScriptConstants.OBJECT_SORT_ASC_SCRIPT, hitsLimit);
             }
-            mapScriptHitSortScript = String.format(ElasticsearchScriptConstant.MAP_SCRIPT_HIT_SORT_TEMPLATE, hitSortScript);
+            mapScriptHitSortScript = String.format(ElasticsearchScriptConstants.MAP_SCRIPT_HIT_SORT_TEMPLATE, hitSortScript);
         }
-        String mapScript = String.format(ElasticsearchScriptConstant.MAP_SCRIPT_COUNT_DOC_TEMPLATE, fieldName, fieldName,
+        String mapScript = String.format(ElasticsearchScriptConstants.MAP_SCRIPT_COUNT_DOC_TEMPLATE, fieldName, fieldName,
             mapScriptDoc, hitsLimit, mapScriptHitSortScript);
         String combineScript = "return state.groupMap;";
         String reduceScriptSort = CharSequenceUtil.EMPTY;
         if (SortOrder.DESCENDING.equals(aggregationCondition.getSortOrder())) {
-            reduceScriptSort = ElasticsearchScriptConstant.REDUCE_SCRIPT_SORT_DESC_TEMPLATE;
+            reduceScriptSort = ElasticsearchScriptConstants.REDUCE_SCRIPT_SORT_DESC_TEMPLATE;
         } else if (SortOrder.ASCENDING.equals(aggregationCondition.getSortOrder())) {
-            reduceScriptSort = ElasticsearchScriptConstant.REDUCE_SCRIPT_SORT_ASC_TEMPLATE;
+            reduceScriptSort = ElasticsearchScriptConstants.REDUCE_SCRIPT_SORT_ASC_TEMPLATE;
         }
         String reduceScriptLimit = CharSequenceUtil.EMPTY;
         if (limit != null) {
-            reduceScriptLimit = String.format(ElasticsearchScriptConstant.REDUCE_SCRIPT_LIMIT_TEMPLATE, limit, limit);
+            reduceScriptLimit = String.format(ElasticsearchScriptConstants.REDUCE_SCRIPT_LIMIT_TEMPLATE, limit, limit);
         }
-        String reduceScript = String.format(ElasticsearchScriptConstant.REDUCE_SCRIPT_TEMPLATE, hitsLimit, hitSortScript,
+        String reduceScript = String.format(ElasticsearchScriptConstants.REDUCE_SCRIPT_TEMPLATE, hitsLimit, hitSortScript,
             hitsLimit, hitsLimit, reduceScriptSort, reduceScriptLimit);
-        String key = ElasticsearchKeywordConstant.PREFIX_GROUP_COUNT + fieldName;
+        String key = ElasticsearchKeywordConstants.PREFIX_GROUP_COUNT + fieldName;
         searchRequestBuilder.aggregations(key, agg -> agg
             .scriptedMetric(scriptedMetricBuilder -> {
                 scriptedMetricBuilder
-                    .initScript(s -> s.inline(in -> in.source(ElasticsearchScriptConstant.INIT_SCRIPT).lang(ElasticsearchScriptConstant.PAINLESS)))
-                    .mapScript(s -> s.inline(in -> in.source(mapScript).lang(ElasticsearchScriptConstant.PAINLESS)))
-                    .combineScript(s -> s.inline(in -> in.source(combineScript).lang(ElasticsearchScriptConstant.PAINLESS)))
-                    .reduceScript(s -> s.inline(in -> in.source(reduceScript).lang(ElasticsearchScriptConstant.PAINLESS)));
+                    .initScript(s -> s.inline(in -> in.source(ElasticsearchScriptConstants.INIT_SCRIPT).lang(ElasticsearchScriptConstants.PAINLESS)))
+                    .mapScript(s -> s.inline(in -> in.source(mapScript).lang(ElasticsearchScriptConstants.PAINLESS)))
+                    .combineScript(s -> s.inline(in -> in.source(combineScript).lang(ElasticsearchScriptConstants.PAINLESS)))
+                    .reduceScript(s -> s.inline(in -> in.source(reduceScript).lang(ElasticsearchScriptConstants.PAINLESS)));
                 return scriptedMetricBuilder;
             }));
         searchRequestBuilder.size(0);
@@ -518,7 +536,7 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         );
         return response.aggregations().get(key).scriptedMetric().value().toJson().asJsonArray().stream().map(jsonValue -> {
             JsonObject jsonValueObject = jsonValue.asJsonObject();
-            HitsBucket<T> hitsBucket = new HitsBucket<>(jsonValueObject.getString("key"), (long) jsonValueObject.getInt("doc_count"));
+            HitsCountBucket<T> hitsBucket = new HitsCountBucket<>(jsonValueObject.getString("key"), (long) jsonValueObject.getInt("doc_count"));
             List<JSONObject> hitList = jsonValueObject.getJsonArray("hits").stream().map(o -> {
                 JsonObject jsonObject = o.asJsonObject();
                 return new JSONObject().fluentPut("_id", jsonObject.getString("id")).fluentPut("_source", jsonObject);
@@ -889,16 +907,6 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 精确去重脚本，占用的空间和查询条件过滤后的数据集成正比
-     *
-     * @return ScriptedMetricAggregation,使用此不需要lambda表达式
-     */
-    public static Function<Aggregation.Builder, ObjectBuilder<Aggregation>> buildScriptedMetricAggregation(
-        AggregationCondition aggregationCondition) {
-        return builder -> builder.scriptedMetric(scriptedMetricAggregation(aggregationCondition));
-    }
-
-    /**
      * 精确去重脚本，占用的空间和查询条件过滤后的数据集成正比，适合中大型数据量
      *
      * @param fieldName 需要去重的字段
@@ -917,12 +925,14 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         return scriptedMetricAggregation(builder, initScript, mapScript, combineScript, reduceScript);
     }
 
-    private static ScriptedMetricAggregation scriptedMetricAggregation(ScriptedMetricAggregation.Builder builder, String initScript, String mapScript, String combineScript, String reduceScript) {
-        builder.initScript(s -> s.inline(in -> in.source(initScript).lang(ElasticsearchScriptConstant.PAINLESS)))
-            .mapScript(s -> s.inline(in -> in.source(mapScript).lang(ElasticsearchScriptConstant.PAINLESS)))
-            .combineScript(s -> s.inline(in -> in.source(combineScript).lang(ElasticsearchScriptConstant.PAINLESS)))
-            .reduceScript(s -> s.inline(in -> in.source(reduceScript).lang(ElasticsearchScriptConstant.PAINLESS)));
-        return builder.build();
+    /**
+     * 精确去重脚本，占用的空间和查询条件过滤后的数据集成正比
+     *
+     * @return ScriptedMetricAggregation,使用此不需要lambda表达式
+     */
+    public static Function<Aggregation.Builder, ObjectBuilder<Aggregation>> buildScriptedMetricAggregation(
+        AggregationCondition aggregationCondition) {
+        return builder -> builder.scriptedMetric(scriptedMetricAggregation(aggregationCondition));
     }
 
     /**
@@ -936,16 +946,33 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         int limit = aggregationCondition.getLimit();
         ScriptedMetricAggregation.Builder builder = new ScriptedMetricAggregation.Builder();
         String initScript = "state.statistics = new HashMap();";
-        String mapScript = String.format(ElasticsearchScriptConstant.MAP_SCRIPT_COUNT_TEMPLATE, fieldName, fieldName);
-        String combineScript = "return state.statistics;";
-        String reduceScriptTemplate = ElasticsearchScriptConstant.REDUCE_SCRIPT_UNSORTED_TEMPLATE;
-        if (SortOrder.DESCENDING.equals(sortOrder)) {
-            reduceScriptTemplate = ElasticsearchScriptConstant.REDUCE_SCRIPT_DESCENDING_TEMPLATE;
-        } else if (SortOrder.ASCENDING.equals(sortOrder)) {
-            reduceScriptTemplate = ElasticsearchScriptConstant.REDUCE_SCRIPT_ASCENDING_TEMPLATE;
+        String mapScriptTemplate;
+        Object[] args;
+        if (aggregationCondition instanceof SumAggregationCondition sumAggregationCondition) {
+            mapScriptTemplate = ElasticsearchScriptConstants.MAP_SCRIPT_SUM_TEMPLATE;
+            args = new String[]{fieldName, sumAggregationCondition.getSumFieldName(), fieldName, sumAggregationCondition.getSumFieldName()};
+        } else {
+            mapScriptTemplate = ElasticsearchScriptConstants.MAP_SCRIPT_COUNT_TEMPLATE;
+            args = new String[]{fieldName, fieldName};
         }
-        String reduceScript = String.format(reduceScriptTemplate, limit, limit);
+        String mapScript = String.format(mapScriptTemplate, args);
+        String combineScript = "return state.statistics;";
+        String reduceScriptTemplate = ElasticsearchScriptConstants.REDUCE_SCRIPT_UNSORTED_TEMPLATE;
+        if (SortOrder.DESCENDING.equals(sortOrder)) {
+            reduceScriptTemplate = ElasticsearchScriptConstants.REDUCE_SCRIPT_DESCENDING_TEMPLATE;
+        } else if (SortOrder.ASCENDING.equals(sortOrder)) {
+            reduceScriptTemplate = ElasticsearchScriptConstants.REDUCE_SCRIPT_ASCENDING_TEMPLATE;
+        }
+        String reduceScript = String.format(reduceScriptTemplate, limit, limit).replace("doc_count", aggregationCondition.getNumberColumnName());
         return scriptedMetricAggregation(builder, initScript, mapScript, combineScript, reduceScript);
+    }
+
+    private static ScriptedMetricAggregation scriptedMetricAggregation(ScriptedMetricAggregation.Builder builder, String initScript, String mapScript, String combineScript, String reduceScript) {
+        builder.initScript(s -> s.inline(in -> in.source(initScript).lang(ElasticsearchScriptConstants.PAINLESS)))
+            .mapScript(s -> s.inline(in -> in.source(mapScript).lang(ElasticsearchScriptConstants.PAINLESS)))
+            .combineScript(s -> s.inline(in -> in.source(combineScript).lang(ElasticsearchScriptConstants.PAINLESS)))
+            .reduceScript(s -> s.inline(in -> in.source(reduceScript).lang(ElasticsearchScriptConstants.PAINLESS)));
+        return builder.build();
     }
 
 }

@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class RangeBucket extends Bucket{
+public class RangeCountBucket extends CountBucket {
 
     /**
      * 起始值
