@@ -57,7 +57,7 @@ import com.github.fanzezhen.fun.framework.core.log.base.support.FunLogHelper;
 import com.github.fanzezhen.fun.framework.core.data.model.AggregationCondition;
 import com.github.fanzezhen.fun.framework.core.model.bucket.CountBucket;
 import com.github.fanzezhen.fun.framework.core.model.bucket.SumBucket;
-import com.github.fanzezhen.fun.framework.core.model.constant.Constant;
+import com.github.fanzezhen.fun.framework.core.model.constant.StrConstant;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.model.entity.IEntity;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.config.FunElasticsearchAutoConfiguration;
@@ -371,7 +371,7 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         String key = ElasticsearchKeywordConstants.PREFIX_GROUP_COUNT + aggregationCondition.getFieldName();
         searchRequestBuilder.aggregations(key, agg ->
             aggregationsContainerBuilder(agg, aggregationCondition)
-                .aggregations(Constant.RECORDS, child ->
+                .aggregations(StrConstant.RECORDS, child ->
                     child.topHits(topHitsBuilder -> {
                         if (aggregationCondition.getHitsLimit() != null) {
                             topHitsBuilder.size(aggregationCondition.getHitsLimit());
@@ -415,7 +415,7 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         return response.aggregations().get(key).sterms().buckets().array().stream().map(stringTermsBucket -> {
             HitsCountBucket<T> hitsBucket = new HitsCountBucket<>(stringTermsBucket.key().stringValue(), stringTermsBucket.docCount());
             JSONArray hits = new JSONArray(aggregationCondition.getHitsLimit());
-            for (Hit<JsonData> hit : stringTermsBucket.aggregations().get(Constant.RECORDS).topHits().hits().hits()) {
+            for (Hit<JsonData> hit : stringTermsBucket.aggregations().get(StrConstant.RECORDS).topHits().hits().hits()) {
                 JsonData source = hit.source();
                 hits.add(new JSONObject().fluentPut("_source", source != null ? source.toJson().asJsonObject() : MapUtil.empty()).fluentPut("_id", hit.id()));
             }
@@ -433,7 +433,7 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
             .terms(b -> {
                 TermsAggregation.Builder builder = b.field(aggregationCondition.getFieldName());
                 if (sortOrder != null) {
-                    builder.order(NamedValue.of(Constant.UNDERLINE_COUNT, sortOrder));
+                    builder.order(NamedValue.of(StrConstant.UNDERLINE_COUNT, sortOrder));
                 }
                 if (aggregationCondition.getLimit() != null) {
                     builder.size(aggregationCondition.getLimit());
@@ -558,7 +558,7 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         searchRequestBuilder.index(indexName);
         searchRequestBuilder.size(0);
         String columnName = ITemplate.getColumnName(column);
-        String key = "cardinality_" + columnName + Constant.UNDERLINE_COUNT;
+        String key = "cardinality_" + columnName + StrConstant.UNDERLINE_COUNT;
         searchRequestBuilder.aggregations(key, agg -> agg.cardinality(b -> b.field(columnName)));
         SearchRequest searchRequest = searchRequestBuilder.build();
         final SearchResponse<JSONObject> response = executeByLog(
@@ -585,7 +585,7 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         searchRequestBuilder.index(indexName);
         searchRequestBuilder.size(0);
         String columnName = ITemplate.getColumnName(column);
-        String key = "distinct_" + columnName + Constant.UNDERLINE_COUNT;
+        String key = "distinct_" + columnName + StrConstant.UNDERLINE_COUNT;
         searchRequestBuilder.aggregations(key, buildScriptedMetricAggregation(columnName));
         SearchRequest searchRequest = searchRequestBuilder.build();
         final SearchResponse<JSONObject> response = executeByLog(
