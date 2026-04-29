@@ -65,8 +65,9 @@
     <plugin.maven-resources-plugin.version>3.4.0</plugin.maven-resources-plugin.version>
     <plugin.maven-scm-plugin.version>2.2.1</plugin.maven-scm-plugin.version>
     <plugin.maven-shade-plugin.version>3.6.1</plugin.maven-shade-plugin.version>
+    <plugin.maven-surefire-plugin.version>3.5.5</plugin.maven-surefire-plugin.version>
     <plugin.nexus-staging-maven-plugin.version>1.7.0</plugin.nexus-staging-maven-plugin.version>
-    
+
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>21</java.version>
