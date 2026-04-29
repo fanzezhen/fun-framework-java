@@ -1,0 +1,21 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.test.config": {
+        "vmArgs": [
+            "-Dfile.encoding=UTF-8",
+            "-Dconsole.encoding=UTF-8",
+            "-Dstdout.encoding=UTF-8",
+            "-Dstderr.encoding=UTF-8"
+        ]
+    },
+    "java.debug.settings.vmArgs": "-Dfile.encoding=UTF-8 -Dconsole.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8",
+    "java.debug.settings.console": "integratedTerminal",
+    "terminal.integrated.defaultProfile.windows": "Command Prompt",
+    "terminal.integrated.profiles.windows": {
+        "Command Prompt": {
+            "path": "cmd.exe",
+            "args": ["/K", "chcp 65001"]
+        }
+    }
+}
