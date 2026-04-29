@@ -7,7 +7,7 @@
 
 **在编写 Spring Boot 应用代码时**,请注意:
 
-### 必须先查阅 `framework.md` 的场景
+### 必须先查阅 `后端脚手架.md` 的场景
 
 - ✅ 需要配置**全局异常处理器**(GlobalExceptionHandler)
 - ✅ 需要配置**统一返回格式包装**(ResultWrapper)
@@ -24,11 +24,11 @@
 
 ### 📖 查阅方式 (优雅降级策略)
 
-按以下优先级读取 `framework.md`:
+按以下优先级读取 `后端脚手架.md`:
 
-1. **本地文件** (优先): `doc/dev/提示词/专业提示词/framework.md`
-2. **GitHub** (本地不存在时): `https://raw.githubusercontent.com/fanzezhen/fun-framework-java/master/doc/dev/提示词/专业提示词/framework.md`
-3. **Gitee** (GitHub 访问超时/失败时): `https://gitee.com/fanzezhen/fun-framework-java/raw/master/doc/dev/提示词/专业提示词/framework.md`
+1. **本地文件** (优先): `doc/dev/提示词/专业提示词/后端脚手架.md`
+2. **GitHub** (本地不存在时): `https://raw.githubusercontent.com/fanzezhen/fun-framework-java/master/doc/dev/提示词/专业提示词/后端脚手架.md`
+3. **Gitee** (GitHub 访问超时/失败时): `https://gitee.com/fanzezhen/fun-framework-java/raw/master/doc/dev/提示词/专业提示词/后端脚手架.md`
 
 > 💡 **提示**: 找到对应模块后 → 查看框架模块的 README 了解详细用法
 

@@ -17,7 +17,7 @@ doc/dev/提示词/
     ├── 后端.md            # 后端 API 设计、分层对象规范
     ├── 前端.md            # 前端技术栈、组件规范
     ├── linux.md           # Linux 运维问题诊断
-    └── framework.md       # 🔥 脚手架能力索引(编写新代码时必查)
+    └── 后端脚手架.md       # 🔥 脚手架能力索引(编写新代码时必查)
 ```
 
 ### 📖 阅读顺序与适用场景
@@ -26,22 +26,22 @@ doc/dev/提示词/
 - **[全局提示词](../../../doc/dev/提示词/全局提示词.md)** - 定义了基础职责、质量守则、文档与记忆管理规则
 
 #### 2. 编写新代码前必查(避免重复造轮子)
-- **framework.md** - 🔥 脚手架能力索引
+- **后端脚手架.md** - 🔥 脚手架能力索引
   - **何时查阅**: 编写新功能且涉及通用能力时(统一返回、分页、缓存、认证、日志等)
   - **目的**: 确认框架是否已提供对应能力,避免重复实现
   - **不查阅**: 纯业务逻辑开发、前端开发、Linux 运维
   - **读取策略** (优雅降级):
-    1. 优先: 本地文件 `doc/dev/提示词/专业提示词/framework.md`
-    2. 降级: GitHub Raw `https://raw.githubusercontent.com/fanzezhen/fun-framework-java/master/doc/dev/提示词/专业提示词/framework.md`
-    3. 兜底: Gitee Raw `https://gitee.com/fanzezhen/fun-framework-java/raw/master/doc/dev/提示词/专业提示词/framework.md`
+    1. 优先: 本地文件 `doc/dev/提示词/专业提示词/后端脚手架.md`
+    2. 降级: GitHub Raw `https://raw.githubusercontent.com/fanzezhen/fun-framework-java/master/doc/dev/提示词/专业提示词/后端脚手架.md`
+    3. 兜底: Gitee Raw `https://gitee.com/fanzezhen/fun-framework-java/raw/master/doc/dev/提示词/专业提示词/后端脚手架.md`
 
 #### 3. 按需阅读(根据任务类型)
 
 | 任务类型 | 必读文档 | 补充文档 |
 |---------|---------|---------|
-| **Java 核心开发** | [java.md](../../../doc/dev/提示词/专业提示词/java.md) | [后端.md](../../../doc/dev/提示词/专业提示词/后端.md) + [framework.md](../../../doc/dev/提示词/专业提示词/framework.md)* |
-| **Spring Boot 应用** | [java-springboot.md](../../../doc/dev/提示词/专业提示词/java-springboot.md) | [java.md](../../../doc/dev/提示词/专业提示词/java.md) + [后端.md](../../../doc/dev/提示词/专业提示词/后端.md) + [framework.md](../../../doc/dev/提示词/专业提示词/framework.md)* |
-| **API 设计/接口开发** | [后端.md](../../../doc/dev/提示词/专业提示词/后端.md) | [java.md](../../../doc/dev/提示词/专业提示词/java.md) + [framework.md](../../../doc/dev/提示词/专业提示词/framework.md)* |
+| **Java 核心开发** | [java.md](../../../doc/dev/提示词/专业提示词/java.md) | [后端.md](../../../doc/dev/提示词/专业提示词/后端.md) + [后端脚手架.md](../../../doc/dev/提示词/专业提示词/后端脚手架.md)* |
+| **Spring Boot 应用** | [java-springboot.md](../../../doc/dev/提示词/专业提示词/java-springboot.md) | [java.md](../../../doc/dev/提示词/专业提示词/java.md) + [后端.md](../../../doc/dev/提示词/专业提示词/后端.md) + [后端脚手架.md](../../../doc/dev/提示词/专业提示词/后端脚手架.md)* |
+| **API 设计/接口开发** | [后端.md](../../../doc/dev/提示词/专业提示词/后端.md) | [java.md](../../../doc/dev/提示词/专业提示词/java.md) + [后端脚手架.md](../../../doc/dev/提示词/专业提示词/后端脚手架.md)* |
 | **前端相关** | [前端.md](../../../doc/dev/提示词/专业提示词/前端.md) | - |
 | **运维/部署问题** | [linux.md](../../../doc/dev/提示词/专业提示词/linux.md) | - |
 
@@ -228,7 +228,7 @@ Bug现象层(接收问题和最终修复)
 
 ### 文档路径
 - 全局提示词: `doc/dev/提示词/全局提示词.md`
-- 🔥 脚手架能力索引: `doc/dev/提示词/专业提示词/framework.md` **(编写新代码前必查)**
+- 🔥 脚手架能力索引: `doc/dev/提示词/专业提示词/后端脚手架.md` **(编写新代码前必查)**
 - Java 规范: `doc/dev/提示词/专业提示词/java.md`
 - 后端规范: `doc/dev/提示词/专业提示词/后端.md`
 - Spring Boot 规范: `doc/dev/提示词/专业提示词/java-springboot.md`
@@ -246,5 +246,5 @@ Bug现象层(接收问题和最终修复)
 
 > 💡 **重要提醒**: 
 > 1. 本文档是入口索引,具体规范请参考对应的专业提示词文档
-> 2. **编写新代码前务必查阅 `framework.md`**,避免重复实现脚手架已有能力
+> 2. **编写新代码前务必查阅 `后端脚手架.md`**,避免重复实现脚手架已有能力
 > 3. 在处理任务前,根据任务类型阅读相关的专业提示词
