@@ -1,6 +1,6 @@
 fun-framework-data-mp-trace
 ------------------------------------------
-错误码格式 1211
+错误码格式 1211*
 
 -
 基于Mybatis-plus拦截器实现了痕迹收集功能，启动前需要实现[IFunTraceService](..%2Ffun-framework-data-mp-trace%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Ftrace%2Fservice%2FIFunTraceService.java)

@@ -1,0 +1,559 @@
+# fun-framework-java 脚手架能力索引
+
+> **重要说明**: 本文档是 fun-framework-java 脚手架的能力索引,专门为使用此脚手架的项目提供 AI 辅助开发参考。
+>
+> **阅读场景**: 仅在**编写新代码且有需要时读取**,用于快速查找框架是否已提供对应功能,避免重复实现。
+
+---
+
+## 📍 脚手架信息
+
+- **GitHub 仓库**: https://github.com/fanzezhen/fun-framework-java
+- **Gitee 镜像**: https://gitee.com/fanzezhen/fun-framework-java
+- **当前版本**: 动态(基于 Spring Boot 4.x+)
+- **Java 版本**: 21+
+- **查看最新版本**: 参考框架根目录 `pom.xml` 中的 `<version>` 和 `<properties>` 节点
+
+### 📖 本文档访问方式 (供其他项目引用)
+
+如果你的项目使用 `fun-framework-java` 作为父级脚手架,AI 应按以下优先级读取本文档:
+
+1. **本地文件** (优先): `doc/dev/提示词/专业提示词/framework.md`
+2. **GitHub Raw** (本地不存在时): `https://raw.githubusercontent.com/fanzezhen/fun-framework-java/master/doc/dev/提示词/专业提示词/framework.md`
+3. **Gitee Raw** (GitHub 访问超时时): `https://gitee.com/fanzezhen/fun-framework-java/raw/master/doc/dev/提示词/专业提示词/framework.md`
+
+> 💡 **提示**: 优雅降级策略确保即使本地文件缺失,也能从远程仓库获取最新文档
+
+## 🎯 使用原则
+
+### ⚠️ 核心规则(使用此脚手架的项目必读)
+
+1. **先查后写**: 编写新功能前,**必须先查阅本文档**,确认框架是否已提供对应能力
+2. **深入文档**: 每个框架模块都有独立的 README.md,必须查阅以了解详细用法和最佳实践
+3. **依赖继承**: 依赖版本由框架父 POM 统一管理,项目只需继承,**禁止覆盖版本号**
+4. **不确定时询问**: 如果不确定框架是否提供某功能,优先询问用户或查阅框架文档,而非自行实现
+
+### 📖 开发流程建议
+
+```
+编写新功能需求
+    ↓
+查阅本文档(快速索引)
+    ↓
+找到对应模块 → 阅读框架模块的 README.md
+    ↓
+查看框架源码中的测试用例(理解用法)
+    ↓
+在当前项目中编写代码(复用框架能力)
+```
+
+---
+
+## 🏗️ 框架模块总览
+
+### 1. 核心基础模块 (fun-framework-core)
+
+#### 1.1 核心模型 (fun-framework-core-model)
+- **错误码**: 10***
+- **功能**: 各种数据模型和静态变量
+- **文档**: [README.md](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-core/fun-framework-core-model/README.md)
+- **常用内容**:
+  - 统一返回结果 `Result<T>` (包含 code、message、data)
+  - 分页模型 `PageModel<T>`
+  - 树形结构模型
+  - 常用枚举和常量
+
+**💡 使用场景**: 
+- 分页查询返回对象
+- 树形菜单/组织结构数据
+- 业务逻辑层内部数据传递
+
+**⚠️ 注意**: Controller 返回的数据会被 `ResponseBodyWrapper` **自动封装**为 `Result<T>` 格式,无需手动调用 `Result.success()`
+
+#### 1.2 异常处理 (fun-framework-core-exception)
+- **错误码**: 10***
+- **功能**: 常见异常的处理类和相关工具类
+- **文档**: [README.md](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-core/fun-framework-core-exception/README.md)
+- **常用内容**:
+  - 业务异常 BusinessException
+  - 统一异常处理器 GlobalExceptionHandler
+  - 异常错误码管理
+
+**💡 使用场景**:
+- 业务校验失败抛出异常
+- 全局异常统一处理
+- 错误码标准化管理
+
+#### 1.3 缓存组件 (fun-framework-core-cache / fun-framework-cache-redis)
+- **错误码**: 10*** (核心) / 11*** (Redis)
+- **功能**: 缓存抽象和 Redis 实现
+- **文档**: 
+  - [core-cache README](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-core/fun-framework-core-cache/README.md)
+  - [cache-redis README](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-cache-redis/README.md)
+- **常用内容**:
+  - 缓存注解支持
+  - Redis 工具类
+  - 分布式锁
+
+**💡 使用场景**:
+- 热点数据缓存
+- 分布式锁
+- 会话管理
+
+#### 1.4 线程组件 (fun-framework-core-thread)
+- **错误码**: 10***
+- **功能**: 线程池管理和异步任务
+- **文档**: [README.md](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-core/fun-framework-core-thread/README.md)
+- **常用内容**:
+  - 线程池配置
+  - 异步任务执行器
+  - 线程上下文传递
+
+**💡 使用场景**:
+- 异步任务处理
+- 并发任务执行
+- 线程池统一管理
+
+#### 1.5 上下文组件 (fun-framework-core-context)
+- **错误码**: 10***
+- **功能**: 全局上下文管理
+- **文档**: [README.md](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-core/fun-framework-core-context/README.md)
+- **常用内容**:
+  - 用户上下文
+  - 租户上下文
+  - 请求上下文
+
+**💡 使用场景**:
+- 获取当前登录用户
+- 多租户数据隔离
+- 跨层传递上下文信息
+
+#### 1.6 数据基础组件 (fun-framework-core-data)
+- **错误码**: 10***
+- **功能**: 数据处理通用工具
+- **文档**: [README.md](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-core/fun-framework-core-data/README.md)
+- **常用内容**:
+  - 数据转换工具
+  - 数据校验工具
+  - 数据脱敏工具
+
+**💡 使用场景**:
+- DTO/VO/Entity 转换
+- 数据格式校验
+- 敏感信息脱敏
+
+#### 1.7 日志组件 (fun-framework-core-log)
+- **错误码**: 10***
+- **功能**: 日志记录和管理
+- **文档**: 
+  - [log-base README](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-core/fun-framework-core-log/fun-framework-core-log-base/README.md)
+  - [log-web README](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-core/fun-framework-core-log/fun-framework-core-log-web/README.md)
+- **常用内容**:
+  - 操作日志注解
+  - 访问日志记录
+  - 日志追踪 TraceId
+
+**💡 使用场景**:
+- 业务操作日志
+- HTTP 请求日志
+- 分布式链路追踪
+
+#### 1.8 验证组件 (fun-framework-core-verify)
+- **错误码**: 10***
+- **功能**: 数据验证工具
+- **文档**: [README.md](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-core/fun-framework-core-verify/README.md)
+- **常用内容**:
+  - 自定义校验注解
+  - 校验工具类
+  - 分组校验
+
+**💡 使用场景**:
+- 参数校验
+- 业务规则校验
+- 复杂校验逻辑
+
+#### 1.9 Web 组件 (fun-framework-core-web)
+- **错误码**: 10***
+- **功能**: Web 层通用功能
+- **文档**: [README.md](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-core/fun-framework-core-web/README.md)
+- **常用内容**:
+  - `ResponseBodyWrapper`: **自动封装** Controller 返回值为 `Result<T>` 格式
+  - `GlobalExceptionHandler`: 全局异常统一处理
+  - 请求响应拦截器
+  - 跨域配置 (CORS)
+
+**💡 使用场景**:
+- Controller 层基础配置
+- 自动统一响应格式 (无需手动封装)
+- 请求日志记录
+
+**⚠️ 重要**: `ResponseBodyWrapper` 会自动将 Controller 返回的数据封装为:
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": { /* Controller 返回的实际数据 */ }
+}
+```
+因此 **Controller 直接返回业务对象即可**,无需手动调用 `Result.success(data)`
+
+---
+
+### 2. 数据持久化模块 (fun-framework-data)
+
+#### 2.1 MyBatis-Plus 增强 (fun-framework-data-mp-starter)
+- **错误码**: 120**
+- **功能**: MyBatis-Plus 增强配置
+- **文档**: [README.md](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-data/fun-framework-data-mp/fun-framework-data-mp-starter/README.md)
+- **常用内容**:
+  - 自动填充配置
+  - 逻辑删除支持
+  - 多租户支持
+  - 分页插件配置
+
+**💡 使用场景**:
+- 数据库 CRUD 操作
+- 自动填充创建时间/更新时间
+- 逻辑删除
+- 多租户数据隔离
+
+#### 2.2 MyBatis-Plus 操作日志 (fun-framework-data-mp-trace)
+- **错误码**: 121** (1211* / 1212*)
+- **功能**: 数据库操作日志追踪
+- **文档**: 
+  - [mp-trace README](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-data/fun-framework-data-mp/fun-framework-data-mp-trace/README.md)
+  - [mp-trace-impl README](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-data/fun-framework-data-mp/fun-framework-data-mp-trace-impl/README.md)
+- **常用内容**:
+  - SQL 执行日志
+  - 操作审计
+  - 数据变更记录
+
+**💡 使用场景**:
+- 审计日志
+- 数据变更追踪
+- 性能分析
+
+#### 2.3 Elasticsearch 组件 (fun-framework-data-elasticsearch)
+- **错误码**: 122**
+- **功能**: Elasticsearch 集成
+- **文档**: 
+  - [elasticsearch-base README](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-data/fun-framework-data-elasticsearch/fun-framework-data-elasticsearch-base/README.md)
+  - [elasticsearch7-starter README](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-data/fun-framework-data-elasticsearch/fun-framework-data-elasticsearch7-starter/README.md)
+- **常用内容**:
+  - ES 操作工具类
+  - 索引管理
+  - 全文检索
+
+**💡 使用场景**:
+- 全文搜索
+- 日志存储和分析
+- 复杂查询
+
+---
+
+### 3. 安全认证模块 (fun-framework-security)
+
+#### 3.1 安全基础 (fun-framework-security-base)
+- **错误码**: 150**
+- **功能**: 安全认证基础组件
+- **文档**: [README.md](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-security/fun-framework-security-base/README.md)
+
+#### 3.2 Sa-Token 集成 (fun-framework-security-sa-token)
+- **错误码**: 151**
+- **功能**: Sa-Token 安全框架集成
+- **文档**: [README.md](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-security/fun-framework-security-sa-token/README.md)
+- **常用内容**:
+  - 登录认证
+  - 权限校验
+  - Token 管理
+  - 单点登录
+
+**💡 使用场景**:
+- 用户登录认证
+- 权限控制
+- Token 生成和校验
+- SSO 单点登录
+
+#### 3.3 Spring Security 集成 (fun-framework-security-spring-security)
+- **错误码**: 152**
+- **功能**: Spring Security 集成
+- **文档**: [README.md](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-security/fun-framework-security-spring-security/README.md)
+
+**💡 使用场景**:
+- 传统 Spring Security 认证
+- OAuth2 集成
+- RBAC 权限模型
+
+---
+
+### 4. 工具类模块
+
+#### 4.1 配置加密 (fun-framework-jasypt)
+- **错误码**: 14***
+- **功能**: 配置文件加密
+- **文档**: [README.md](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-jasypt/README.md)
+- **常用内容**:
+  - 数据库密码加密
+  - API 密钥加密
+  - 敏感配置加密
+
+**💡 使用场景**:
+- 生产环境配置加密
+- 敏感信息保护
+
+#### 4.2 代理组件 (fun-framework-proxy)
+- **错误码**: 18*** (180**~183**)
+- **功能**: 各种框架的代理增强
+- **子模块**:
+  - proxy-core: 代理基础 (180**)
+  - proxy-fastjson: FastJSON 代理 (181**)
+  - proxy-mybatis: MyBatis 代理 (182**)
+  - proxy-orika: Orika 对象映射 (183**)
+
+**💡 使用场景**:
+- 对象属性拷贝
+- JSON 序列化增强
+- MyBatis 扩展
+
+#### 4.3 流量防控 (fun-framework-sentinel)
+- **错误码**: 16***
+- **功能**: Sentinel 流量防控
+- **文档**: [README.md](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-sentinel/README.md)
+- **常用内容**:
+  - 限流规则
+  - 熔断降级
+  - 热点参数限流
+
+**💡 使用场景**:
+- 接口限流
+- 服务降级
+- 系统保护
+
+#### 4.4 接口文档 (fun-framework-spring-doc)
+- **错误码**: 17***
+- **功能**: SpringDoc 接口文档生成
+- **文档**: [README.md](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-spring-doc/README.md)
+- **常用内容**:
+  - Swagger UI 配置
+  - 接口文档注解
+  - 分组配置
+
+**💡 使用场景**:
+- 自动生成 API 文档
+- 在线接口测试
+- 接口调试
+
+#### 4.5 API 调用计数 (fun-framework-api-count-redis)
+- **错误码**: 13***
+- **功能**: 基于 Redis 的 API 调用次数统计
+- **文档**: [README.md](https://github.com/fanzezhen/fun-framework-java/blob/master/fun-framework-api-count-redis/README.md)
+
+**💡 使用场景**:
+- API 调用统计
+- 接口访问频率分析
+
+---
+
+## 🔧 技术栈版本
+
+从框架 pom.xml 中可以看到主要依赖版本：
+
+| 技术栈 | 版本 | 说明 |
+|-------|------|------|
+| Spring Boot | 4.0.5 | 核心框架 |
+| Spring Cloud | 2025.1.1 | 微服务框架 |
+| MyBatis-Plus | 3.5.16 | ORM 框架 |
+| Sa-Token | 1.45.0 | 认证框架 |
+| Hutool | 5.8.44 | Java 工具类库 |
+| FastJSON2 | 2.0.60 | JSON 处理 |
+| Druid | 1.2.24 | 数据库连接池 |
+| Redisson | 4.1.0 | Redis 客户端 |
+| SpringDoc | 3.0.1 | 接口文档 |
+| MySQL | 9.5.0 | 数据库驱动 |
+| Guava | 33.5.0-jre | Google 工具库 |
+
+---
+
+## 🚨 常见错误与最佳实践
+
+### ❌ 错误示例 1: 手动封装返回格式
+
+```java
+// ❌ 错误：手动封装 Result (框架已自动封装)
+import cn.fanzezhen.fun.framework.core.model.Result;
+
+@GetMapping("/user/{id}")
+public Result<UserBO> getUser(@PathVariable Long id) {
+    UserBO user = userService.getById(id);
+    return Result.success(user);  // ❌ 多余的封装,ResponseBodyWrapper 会再次封装
+}
+
+// ✅ 正确：直接返回业务对象
+@GetMapping("/user/{id}")
+public UserBO getUser(@PathVariable Long id) {
+    UserBO user = userService.getById(id);
+    return user;  // ✅ ResponseBodyWrapper 会自动封装为 Result<UserBO>
+}
+
+// 最终返回给前端的格式:
+// {
+//   "code": 200,
+//   "message": "success",
+//   "data": { /* UserBO 数据 */ }
+// }
+```
+
+### ❌ 错误示例 2: 脱离框架独立实现异常处理
+
+```java
+// ❌ 错误：不使用框架的统一异常处理
+@GetMapping("/user")
+public Map<String, Object> getUser() {
+    Map<String, Object> result = new HashMap<>();
+    try {
+        // ...业务逻辑
+        result.put("code", 200);
+        result.put("data", user);
+    } catch (Exception e) {
+        result.put("code", 500);
+        result.put("message", e.getMessage());
+    }
+    return result;
+}
+
+// ✅ 正确：直接返回业务对象,异常由 GlobalExceptionHandler 统一处理
+@GetMapping("/user/{id}")
+public UserBO getUser(@PathVariable Long id) {
+    UserBO user = userService.getById(id);
+    if (user == null) {
+        throw new BusinessException("用户不存在");  // GlobalExceptionHandler 会捕获并返回标准错误格式
+    }
+    return user;  // ResponseBodyWrapper 自动封装为 Result<UserBO>
+}
+```
+
+### ❌ 错误示例 3: 覆盖框架依赖版本
+
+```xml
+<!-- ❌ 错误：在项目 pom.xml 中覆盖框架版本 -->
+<properties>
+    <mybatis-plus.version>3.5.10</mybatis-plus.version>  <!-- 与框架冲突 -->
+</properties>
+
+<!-- ✅ 正确：直接继承框架父 POM -->
+<parent>
+    <groupId>cn.fanzezhen</groupId>
+    <artifactId>fun-framework-parent</artifactId>
+    <version>4.0.5</version>
+</parent>
+<!-- 框架已统一管理所有依赖版本,无需覆盖 -->
+```
+
+### ✅ 正确流程总结
+
+1. **编写功能前**: 先查本文档 → 找对应模块 → 读 README
+2. **遇到问题时**: 先查框架文档 → 查看测试用例 → 询问用户
+3. **依赖管理**: 继承框架父 POM → 不覆盖版本 → 保持一致性
+
+---
+
+## 💡 使用建议
+
+### 何时查阅本文档
+
+- ✅ **需要实现通用功能时**(如: 统一返回格式、分页、缓存、日志等) - **必读**
+- ✅ **集成第三方服务时**(如: Redis、Elasticsearch、Sa-Token 等) - **必读**
+- ✅ **不确定某功能是否需要自己实现时** - **必读**
+- ❌ **业务逻辑开发**(与框架能力无关) - 无需读取
+- ❌ **前端相关开发** - 无需读取
+
+### 查阅流程
+
+1. **快速定位**: 通过[快速查询表](#-快速查询表)或[模块总览](#-框架模块总览)找到对应模块
+2. **深入理解**: 点击模块文档链接,阅读框架对应模块的 README.md
+3. **查看示例**: 查看框架源码中的测试用例,了解具体用法
+4. **项目实现**: 在当前项目中编写代码,复用框架能力
+
+---
+
+## 📖 快速查询表
+
+| 需求 | 使用模块 | 关键类/注解 | 说明 |
+|-----|---------|-----------|------|
+| 统一返回格式 | core-web | ResponseBodyWrapper | ⚠️ **自动封装**,Controller 直接返回业务对象 |
+| 分页查询 | core-model + data-mp | PageModel, IPage | - |
+| 业务异常 | core-exception | BusinessException | 直接抛出,GlobalExceptionHandler 统一处理 |
+| 全局异常处理 | core-web | GlobalExceptionHandler | **自动处理**所有异常 |
+| 缓存 | cache-redis | @Cacheable, RedisUtil | - |
+| 分布式锁 | cache-redis | RedisLock | - |
+| 异步任务 | core-thread | @Async | - |
+| 获取当前用户 | core-context | UserContext | - |
+| 数据库操作 | data-mp | BaseMapper, IService | - |
+| 自动填充 | data-mp | MetaObjectHandler | - |
+| 逻辑删除 | data-mp | @TableLogic | - |
+| 操作日志 | core-log-web | @OperLog | - |
+| 参数校验 | core-verify | @Valid, @Validated | - |
+| 登录认证 | security-sa-token | StpUtil | - |
+| 权限校验 | security-sa-token | @SaCheckPermission | - |
+| 配置加密 | jasypt | @EncryptableProperty | - |
+| 对象拷贝 | proxy-orika | OrikaMapper | - |
+| 接口限流 | sentinel | @SentinelResource | - |
+| 接口文档 | spring-doc | @Operation, @Schema | - |
+| ES 操作 | data-elasticsearch7 | ElasticsearchTemplate | - |
+
+---
+
+## 💡 最佳实践建议
+
+### 1. 开始新功能前
+- ✅ 先查本文档看框架是否提供
+- ✅ 阅读对应模块 README
+- ✅ 查看框架测试用例
+- ❌ 直接开始写代码
+
+### 2. 使用框架功能时
+- ✅ 理解设计思想
+- ✅ 遵循框架约定
+- ✅ 添加清晰注释
+- ❌ 盲目复制代码
+
+### 3. 遇到问题时
+- ✅ 查看框架 README
+- ✅ 查看源码实现
+- ✅ 查看测试用例
+- ❌ 绕过框架自己实现
+
+### 4. 编写演示代码时
+- ✅ 展示完整使用流程
+- ✅ 包含配置示例
+- ✅ 添加中文注释
+- ✅ 说明注意事项
+- ❌ 只写代码片段
+
+---
+
+---
+
+## 📌 重要提醒
+
+> ⚠️ **关键原则**:
+>
+> 1. **本文档的定位**: 这是脚手架能力索引,不是开发规范文档
+> 2. **阅读时机**: 仅在编写新代码且需要查找框架能力时读取
+> 3. **避免重复造轮子**: 编写任何通用功能前,**务必先查本文档**
+> 4. **保持同步**: 框架版本升级后,需检查本文档是否需要更新
+
+---
+
+## 🔄 版本升级注意事项
+
+当框架 `fun-framework-java` 升级版本时:
+
+1. **更新项目依赖**: 修改项目 `pom.xml` 中的 `<parent>` 版本号
+2. **检查 API 变更**: 查看框架 CHANGELOG 或 git 提交记录
+3. **测试兼容性**: 运行项目测试用例,确保无破坏性变更
+4. **更新本文档**: 如框架新增模块或功能,补充到本文档对应章节
+
+---
+
+> 💡 **最后提醒**: 使用此脚手架的项目,在编写新代码前,请养成"先查 framework.md"的习惯,避免重复实现框架已有能力!

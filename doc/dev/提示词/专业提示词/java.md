@@ -1,6 +1,38 @@
 # Java后端补充规范
 *(与全局提示词配合使用)*
 
+---
+
+## 🔗 框架能力查询
+
+**在编写 Java 后端代码前,请先确认是否需要查阅脚手架能力索引**:
+
+### 必须查阅 `framework.md` 的场景
+
+- ✅ 需要实现**统一返回格式**(⚠️ 框架已自动封装,Controller 直接返回业务对象)
+- ✅ 需要**全局异常处理**或抛出业务异常 (⚠️ 框架自动处理 BusinessException)
+- ✅ 需要**分页查询**、**数据校验**、**对象转换**
+- ✅ 需要**缓存**、**分布式锁**、**异步任务**
+- ✅ 需要**用户上下文**(获取当前登录用户)、**租户隔离**
+- ✅ 需要**数据库操作**(MyBatis-Plus 增强功能)
+- ✅ 需要**日志记录**(操作日志、访问日志、链路追踪)
+- ✅ 需要**认证鉴权**(Sa-Token、Spring Security)
+
+### 无需查阅的场景
+
+- ❌ 纯业务逻辑实现(与通用框架能力无关)
+- ❌ 已确认使用框架能力,正在编写具体代码
+
+### 📖 查阅方式 (优雅降级策略)
+
+按以下优先级读取 `framework.md`:
+
+1. **本地文件** (优先): `doc/dev/提示词/专业提示词/framework.md`
+2. **GitHub** (本地不存在时): `https://raw.githubusercontent.com/fanzezhen/fun-framework-java/master/doc/dev/提示词/专业提示词/framework.md`
+3. **Gitee** (GitHub 访问超时/失败时): `https://gitee.com/fanzezhen/fun-framework-java/raw/master/doc/dev/提示词/专业提示词/framework.md`
+
+---
+
 ## 🌊 典型问题的三层穿梭示例
 
 ### 示例1：空指针异常（NPE）
