@@ -1023,6 +1023,14 @@
             </execution>
           </executions>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${plugin.maven-surefire-plugin.version}</version>
+          <configuration>
+            <argLine>-Dfile.encoding=UTF-8 -Dconsole.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8</argLine>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
