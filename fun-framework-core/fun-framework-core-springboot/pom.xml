@@ -2,56 +2,57 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
   <parent>
+    <artifactId>fun-framework-core</artifactId>
     <groupId>com.github.fanzezhen</groupId>
-    <artifactId>fun-framework-proxy</artifactId>
     <version>${revision}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-
-  <artifactId>fun-framework-proxy-orika</artifactId>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>fun-framework-core-springboot</artifactId>
   <packaging>jar</packaging>
   <name>${project.artifactId}</name>
-  <description>Orika 代理组件，在使用 Orika 对象复制时对标注@ProxyField 的字段进行地址代理</description>
+  <description></description>
 
   <dependencies>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-proxy-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.fanzezhen</groupId>
       <artifactId>fun-framework-core-model</artifactId>
     </dependency>
+    <!-- 对象映射工具：MapperFacadeUtil 所需依赖 -->
     <dependency>
       <groupId>ma.glasnost.orika</groupId>
       <artifactId>orika-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
     </dependency>
-    <!-- Test dependencies -->
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <scope>test</scope>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
+      <!-- Orika 在 Java 9+ 环境下需要开放 java.base 模块的反射访问权限 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <argLine>
-            --add-opens java.base/java.lang=ALL-UNNAMED
-            --add-opens java.base/java.util=ALL-UNNAMED
-          </argLine>
+          <argLine>-Dfile.encoding=UTF-8 --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED</argLine>
         </configuration>
       </plugin>
     </plugins>
   </build>
+
 </project>

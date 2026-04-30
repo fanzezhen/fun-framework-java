@@ -190,6 +190,11 @@
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-core-springboot</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-core-verify</artifactId>
         <version>${revision}</version>
       </dependency>

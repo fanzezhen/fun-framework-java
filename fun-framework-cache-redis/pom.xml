@@ -24,6 +24,10 @@
       <artifactId>redisson</artifactId>
       <optional>true</optional>
     </dependency>
+    <dependency>
+      <groupId>com.github.fanzezhen</groupId>
+      <artifactId>fun-framework-core-springboot</artifactId>
+    </dependency>
     <!--springboot中的redis依赖-->
     <dependency>
       <groupId>org.springframework.boot</groupId>

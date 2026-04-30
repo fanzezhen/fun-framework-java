@@ -8,6 +8,8 @@ import lombok.experimental.Accessors;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 分页查询结果
@@ -94,5 +96,73 @@ public class PageResult<T> {
     @SuppressWarnings("unchecked")
     public static <T> PageResult<T> empty() {
         return (PageResult<T>) EMPTY;
+    }
+
+    /**
+     * 转换分页数据中的行记录类型
+     * <p>
+     * 使用提供的转换函数将当前分页结果中的 rowList 从类型 T 转换为类型 R，
+     * 保持分页元数据（currentPage、pageSize、total、totalTime）不变。
+     * </p>
+     *
+     * @param converter 行记录转换函数
+     * @param <R>       目标类型
+     * @return 转换后的分页结果，如果当前 rowList 为空则返回空列表的分页结果
+     */
+    @SuppressWarnings("java:S6204") // 需要可变列表以支持后续修改操作
+    public <R> PageResult<R> convert(Function<T, R> converter) {
+        PageResult<R> result = new PageResult<>();
+        result.setCurrentPage(this.currentPage);
+        result.setPageSize(this.pageSize);
+        result.setTotal(this.total);
+        result.setTotalTime(this.totalTime);
+
+        if (this.rowList != null && !this.rowList.isEmpty()) {
+            result.setRowList(this.rowList.stream()
+                    .map(converter)
+                    .collect(Collectors.toList()));
+        } else {
+            result.setRowList(Collections.emptyList());
+        }
+
+        return result;
+    }
+
+    /**
+     * 使用对象映射器转换分页数据（用于与 Orika MapperFacade 集成）
+     * <p>
+     * 此方法设计用于与 Orika MapperFacade 集成，通过提供源类型和目标类型信息进行批量对象转换。
+     * sourceClass 参数用于类型推断和编译时类型安全，但在运行时不参与实际转换。
+     * </p>
+     *
+     * @param sourceClass 源类型（用于类型推断）
+     * @param targetClass 目标类型
+     * @param mapper      对象映射器（如 Orika MapperFacade）
+     * @param <R>         目标类型
+     * @return 转换后的分页结果
+     */
+    public <R> PageResult<R> convert(Class<T> sourceClass, Class<R> targetClass, Object mapper) {
+        PageResult<R> result = new PageResult<>();
+        result.setCurrentPage(this.currentPage);
+        result.setPageSize(this.pageSize);
+        result.setTotal(this.total);
+        result.setTotalTime(this.totalTime);
+
+        if (this.rowList != null && !this.rowList.isEmpty()) {
+            // 使用反射调用 mapper 的 mapAsList 方法
+            try {
+                @SuppressWarnings("unchecked")
+                List<R> convertedList = (List<R>) mapper.getClass()
+                        .getMethod("mapAsList", Iterable.class, Class.class)
+                        .invoke(mapper, this.rowList, targetClass);
+                result.setRowList(convertedList);
+            } catch (Exception e) {
+                throw new IllegalArgumentException("对象映射失败: " + e.getMessage(), e);
+            }
+        } else {
+            result.setRowList(Collections.emptyList());
+        }
+
+        return result;
     }
 }

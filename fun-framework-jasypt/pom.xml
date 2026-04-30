@@ -21,6 +21,10 @@
       <artifactId>fun-framework-core-model</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.github.fanzezhen</groupId>
+      <artifactId>fun-framework-core-springboot</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.github.ulisesbocchio</groupId>
       <artifactId>jasypt-spring-boot-starter</artifactId>
     </dependency>

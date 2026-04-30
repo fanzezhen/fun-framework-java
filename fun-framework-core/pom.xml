@@ -24,6 +24,7 @@
     <module>fun-framework-core-log</module>
     <module>fun-framework-core-verify</module>
     <module>fun-framework-core-web</module>
+      <module>fun-framework-core-springboot</module>
   </modules>
 
   <dependencies>
