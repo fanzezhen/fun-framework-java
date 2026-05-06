@@ -24,7 +24,7 @@ public abstract class BaseTenantGenericDTO<P extends Serializable> extends BaseG
      * 租户id
      */
     @Schema(name = "租户id")
-    protected String tenantId;
+    protected P tenantId;
 
     public BaseTenantGenericDTO<P> init(BaseTenantGenericDTO<P> dto) {
         super.init(dto);

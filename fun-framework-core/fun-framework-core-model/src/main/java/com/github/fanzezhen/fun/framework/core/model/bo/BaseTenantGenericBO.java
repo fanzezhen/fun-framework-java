@@ -24,7 +24,7 @@ public abstract class BaseTenantGenericBO<P extends Serializable> extends BaseGe
      * 租户id
      */
     @Schema(name = "租户id")
-    protected String tenantId;
+    protected P tenantId;
 
     public void init(BaseTenantGenericBO<P> dto) {
         super.init(dto);
