@@ -5,7 +5,7 @@
 [![GitHub license](https://img.shields.io/github/license/fanzezhen/fun-framework-java)](https://github.com/fanzezhen/fun-framework-java/blob/master/LICENSE)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.5-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html)
-[![Maven Central](https://img.shields.io/badge/Maven%20Central-4.0.5.20260331-blue.svg)](https://search.maven.org/search?q=g:com.github.fanzezhen)
+[![Maven Central](https://img.shields.io/badge/Maven)](https://search.maven.org/search?q=g:com.github.fanzezhen)
 
 基于 Spring Boot 4.0.5 的企业级通用功能组件库，提供开箱即用的后端基础设施解决方案
 
@@ -64,7 +64,6 @@ Fun Framework Java 是一个持续迭代的开源企业级 Java 后端组件库�
 <dependency>
     <groupId>com.github.fanzezhen</groupId>
     <artifactId>fun-framework-core-all</artifactId>
-    <version>4.0.5.20260331</version>
 </dependency>
 ```
 
