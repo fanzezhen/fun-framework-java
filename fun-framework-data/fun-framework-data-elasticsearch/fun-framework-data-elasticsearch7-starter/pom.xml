@@ -16,7 +16,7 @@
   <description>Elasticsearch 7 Starter 组件，提供 Elasticsearch 7 的自动配置和启动支持</description>
 
   <properties>
-    <elasticsearch.version>7.17.29</elasticsearch.version>
+    <elasticsearch.version>8.19.8</elasticsearch.version>
   </properties>
 
   <dependencies>
