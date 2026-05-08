@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.annotation.Resource;
 
 /**
- * @author fanzezhen
  */
 @Slf4j
 @RestController

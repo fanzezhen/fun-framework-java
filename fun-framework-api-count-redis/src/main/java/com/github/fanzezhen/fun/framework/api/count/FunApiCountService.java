@@ -5,7 +5,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.alibaba.fastjson2.JSONObject;
-import com.github.fanzezhen.fun.framework.core.model.YApiModel;
+import com.github.fanzezhen.fun.framework.core.model.common.YApiModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.Cursor;
@@ -29,7 +29,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * @author fanzezhen
  * @since 3.4.3.3
  */
 @Slf4j
@@ -40,6 +39,18 @@ public class FunApiCountService {
     @Value("${spring.application.name}")
     private String springApplicationName;
 
+    /**
+     * 扫描Redis获取所有API调用统计数据
+     * <p>
+     * 性能警告：使用SCAN命令遍历Redis，key数量较多时（>10万）可能导致：
+     * - Redis单线程阻塞数秒（影响其他请求）
+     * - 网络传输大量数据（数MB级别）
+     * - 方法响应时间从毫秒级变为秒级
+     * <p>
+     * 建议：
+     * - 生产环境仅用于定时任务（如每日凌晨统计），禁止在实时接口中调用
+     * - key数量超过10万时考虑使用Redis从库或定期归档
+     */
     public Map<String, LinkedHashMap<String, Integer>> map() {
         Map<String, LinkedHashMap<String, Integer>> result = new HashMap<>();
         String keyPrefix = FunApiCountAop.getKeyPrefix(springApplicationName);

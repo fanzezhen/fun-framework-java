@@ -10,7 +10,6 @@ import jakarta.annotation.Resource;
 /**
  * mybatis字段解析器配置
  *
- * @author fanzezhen
  * @since 3.4.3.5
  */
 @Configuration

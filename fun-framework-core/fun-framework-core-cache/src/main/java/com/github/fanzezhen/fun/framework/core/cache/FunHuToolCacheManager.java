@@ -14,9 +14,18 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 
 /**
- * 基于HuTool的缓存实现
+ * 基于HuTool的Spring缓存管理器实现
+ * <p>
+ * 当没有其他CacheManager实现时作为降级方案，使用HuTool的TimedCache实现Spring Cache抽象。
+ * 支持自动过期和定期清理，适用于单机环境。
+ * <p>
+ * <b>性能特性：</b>
+ * <ul>
+ *   <li>默认缓存12小时过期</li>
+ *   <li>每小时执行一次过期数据清理</li>
+ *   <li>使用弱引用缓存避免OOM</li>
+ * </ul>
  *
- * @author fanzezhen
  * @since 3.1.8
  */
 @Component

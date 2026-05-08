@@ -11,8 +11,11 @@ import java.util.*;
 
 /**
  * 矩阵工具类
+ * <p>
+ * 提供矩阵数据的读取、变换和写入功能，支持从Excel文件读取矩阵并按指定比例随机改变元素值。
+ * <p>
+ * <b>使用场景：</b>数据脱敏、测试数据生成、矩阵扰动算法验证
  *
- * @author fanzezhen
  */
 @Slf4j
 public class MatrixUtil {

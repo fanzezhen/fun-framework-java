@@ -2,7 +2,7 @@ package com.github.fanzezhen.fun.framework.core.model.condition;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
-import com.github.fanzezhen.fun.framework.core.model.IHolder;
+import com.github.fanzezhen.fun.framework.core.model.common.IHolder;
 import com.github.fanzezhen.fun.framework.core.model.util.ValidUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;

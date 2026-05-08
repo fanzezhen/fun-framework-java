@@ -10,7 +10,6 @@ import jakarta.annotation.Resource;
 
 /**
  * 接口注册
- * @author fanzezhen
  */
 @Component
 @ConditionalOnExpression("${fun.core.web.register.flag:null} != null")

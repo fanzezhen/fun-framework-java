@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 /**
  * 公共业务模型类
  *
- * @author fanzezhen
  */
 @Data
 @NoArgsConstructor

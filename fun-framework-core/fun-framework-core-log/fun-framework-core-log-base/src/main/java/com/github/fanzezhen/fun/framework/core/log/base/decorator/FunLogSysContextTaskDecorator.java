@@ -14,7 +14,6 @@ import java.util.UUID;
 /**
  * 日志版系统上下文多线程适配器
  *
- * @author fanzezhen
  * @since 3.1.7
  */
 @Order(Integer.MAX_VALUE - 1)

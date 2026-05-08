@@ -9,7 +9,6 @@ import java.util.concurrent.Callable;
 /**
  * 基于HuTool的缓存实现
  *
- * @author fanzezhen
  * @since 3.1.8
  */
 public class HuToolCache extends AbstractValueAdaptingCache {

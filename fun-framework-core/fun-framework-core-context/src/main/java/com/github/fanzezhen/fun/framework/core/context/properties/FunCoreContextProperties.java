@@ -4,7 +4,13 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author fanzezhen
+ * 上下文配置属性
+ * <p>
+ * 配置前缀：fun.core.context
+ * <p>
+ * 定义上下文中使用的请求头Key名称（如token、tenantId、userId等），
+ * 支持自定义前缀以适配不同的业务系统规范。
+ *
  */
 @Data
 @ConfigurationProperties(prefix = "fun.core.context")

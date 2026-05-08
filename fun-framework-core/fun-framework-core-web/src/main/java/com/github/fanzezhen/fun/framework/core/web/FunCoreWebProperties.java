@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * @author fanzezhen
  */
 @Data
 @ConfigurationProperties(prefix = "fun.core.web")

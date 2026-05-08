@@ -27,7 +27,17 @@ import jakarta.annotation.Resource;
 import java.util.Arrays;
 
 /**
- * 禁止重复提交
+ * 防重复提交切面
+ * <p>
+ * 配合 @NoRepeat 注解使用，通过缓存实现幂等性校验，防止短时间内重复提交。
+ * 使用 CacheService.setIfAbsent 实现分布式场景下的原子性检查。
+ * <p>
+ * <b>执行时机：</b>方法执行前（@Before），校验失败时抛出ServiceException
+ * <p>
+ * <b>使用场景：</b>表单提交、支付接口、积分扣减等需要防重复的操作
+ * <p>
+ * <b>依赖条件：</b>容器中必须存在CacheService实现（如Redis缓存）
+ *
  */
 @Slf4j
 @Aspect

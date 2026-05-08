@@ -1,7 +1,6 @@
 package com.github.fanzezhen.fun.framework.core.data.util;
 
 /**
- * @author fanzezhen
  * Desc:
  */
 public class SortUtil {
@@ -10,14 +9,9 @@ public class SortUtil {
 
     /**
      * 冒泡排序
-     * 时间复杂度：o(n^2)
-     * 空间复杂度：o(1)
      * 稳定性：稳定
-     * 优点：简单，易实现，不需要额外空间
-     * 缺点：效率低
-     *
-     * @param arr 待排序数组
-     * @return 排序后数组
+     * 时间复杂度：O(n²)，最优O(n)（已排序）
+     * 空间复杂度：O(1)
      */
     public static int[] bubbleSort(int[] arr) {
         if (arr == null || arr.length <= 1) {
@@ -48,8 +42,8 @@ public class SortUtil {
      * 小于Pivot的元素
      * 枢轴元素Pivot（选定的比较值）
      * 大于Pivot的元素
-     * 时间复杂度：o(nlogn)
-     * 空间复杂度：o(logn)
+     * 时间复杂度：平均O(n log n)，最坏O(n²)（已排序或逆序）
+     * 空间复杂度：o(log n)
      * 稳定性：不稳定（在排序之前有两个数相等，但是在排序结束之后，它们两个有可能改变顺序，这就是说明该排序算法具有不稳定性。）
      * 优点：排序速度最快
      *

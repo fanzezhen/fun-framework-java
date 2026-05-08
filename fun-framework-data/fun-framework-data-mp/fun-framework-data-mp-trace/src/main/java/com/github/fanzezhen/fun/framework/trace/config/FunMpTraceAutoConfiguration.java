@@ -13,7 +13,6 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 
 /**
- * @author fanzezhen
  */
 @Configuration
 @ComponentScan("com.github.fanzezhen.fun.framework.trace")

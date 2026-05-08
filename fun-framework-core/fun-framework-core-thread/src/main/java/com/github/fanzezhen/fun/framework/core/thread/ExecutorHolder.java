@@ -12,9 +12,31 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 /**
- * 线程池工具
+ * 并发任务编排工具，简化批量异步任务的提交和结果收集
+ * <p>
+ * 典型使用场景：
+ * - 批量调用RPC接口（如批量查询用户信息）
+ * - 并行处理独立任务（如同时导出多个报表）
+ * - 聚合查询（如同时查询订单、库存、物流状态）
+ * <p>
+ * 线程池复用策略：默认使用全局共享的 {@link PoolExecutors#defaultThreadPoolTaskExecutor()}，
+ * 避免频繁创建销毁线程池。如有隔离需求（如长时间任务），可通过 {@link #create(ExecutorService)} 指定独立线程池。
+ * <p>
+ * 使用示例：
+ * <pre>{@code
+ * // 立即执行模式（默认）
+ * List<User> users = ExecutorHolder.<User>create()
+ *     .addTask(userService::getById, 1L, 2L, 3L)
+ *     .get();
  *
- * @author fanzezhen
+ * // 延迟执行模式（所有任务添加完后统一提交，适用于需要提前计算任务总数的场景）
+ * List<Result> results = ExecutorHolder.<Result>create()
+ *     .waitToStart()  // 标记为延迟执行
+ *     .addTask(task1)
+ *     .addTask(task2)
+ *     .get();  // 此时才真正提交所有任务
+ * }</pre>
+ *
  * @since 3
  */
 @SuppressWarnings({"unchecked", "unused"})
@@ -24,7 +46,15 @@ public class ExecutorHolder<R> {
     private final List<Task<R>> tasks;
     private final Map<Task<R>, CompletableFuture<R>> futureMap;
     private final Map<Task<R>, R> result;
+    /**
+     * 延迟执行标记：true时addTask不立即提交，而是等到get()时统一提交。
+     * 适用于需要提前知道任务总数或批量优化提交的场景。
+     */
     private boolean waitToStart;
+    /**
+     * 异常传播开关：true时任何子任务失败都会抛出ServiceException，false时忽略异常继续收集成功结果。
+     * 默认false，适用于"尽力而为"的场景（如批量查询允许部分失败）。
+     */
     private boolean throwAllowed;
 
     public ExecutorHolder(Executor executor, int size) {
@@ -64,11 +94,20 @@ public class ExecutorHolder<R> {
         return new ExecutorHolder<>(executor);
     }
 
+    /**
+     * 切换为延迟执行模式，任务将在调用get()时统一提交而非addTask时立即执行。
+     * 适用场景：需要提前计算任务总数用于进度展示，或批量优化任务提交以减少线程池调度开销。
+     */
     public ExecutorHolder<R> waitToStart() {
         waitToStart = true;
         return this;
     }
 
+    /**
+     * 启用异常传播，任何子任务失败时get()将抛出ServiceException而非默默忽略。
+     * 适用场景：所有子任务必须全部成功才能继续（如分布式事务的并行预检查），
+     * 默认false适用于"尽力而为"场景（如批量导出允许部分失败）。
+     */
     public ExecutorHolder<R> throwAllowed() {
         throwAllowed = true;
         return this;

@@ -14,7 +14,13 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * @author fanzezhen
+ * 基于Redisson的分布式锁服务实现
+ * <p>
+ * 使用Redisson的RLock实现分布式锁功能，支持自动重试和超时控制。
+ * 只有在容器中存在RedissonClient Bean时才会启用此实现。
+ * <p>
+ * <b>线程安全性：</b>通过Redisson内部的锁机制保证多实例环境下的互斥访问。
+ *
  */
 @Slf4j
 @Service

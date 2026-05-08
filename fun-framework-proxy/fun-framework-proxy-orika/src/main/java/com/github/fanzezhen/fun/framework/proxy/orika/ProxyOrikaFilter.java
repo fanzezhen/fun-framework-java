@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 /**
  * Orika转换器
  *
- * @author fanzezhen
  * @since 3.4.3.5
  */
 @Slf4j

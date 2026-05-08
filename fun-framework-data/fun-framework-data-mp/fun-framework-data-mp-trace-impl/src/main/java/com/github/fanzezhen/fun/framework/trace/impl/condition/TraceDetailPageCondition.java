@@ -12,7 +12,6 @@ import java.io.Serializable;
 /**
  * 痕迹明细表
  *
- * @author fanzezhen
  * @since 3.4.3.1
  */
 @EqualsAndHashCode(callSuper = true)

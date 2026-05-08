@@ -17,7 +17,6 @@ import java.util.Set;
 /**
  * 接口注册
  *
- * @author fanzezhen
  */
 @Slf4j
 public class FunRequestMappingHandlerMapping extends RequestMappingHandlerMapping {

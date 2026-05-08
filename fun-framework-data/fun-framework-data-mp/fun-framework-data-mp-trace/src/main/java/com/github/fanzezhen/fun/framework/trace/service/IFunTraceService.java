@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 /**
  * 痕迹表 服务类
  *
- * @author fanzezhen
  * @since 3.4.3.1
  */
 public interface IFunTraceService<P extends Serializable, A extends IGenericEntity<P>, B extends IGenericEntity<P>> {

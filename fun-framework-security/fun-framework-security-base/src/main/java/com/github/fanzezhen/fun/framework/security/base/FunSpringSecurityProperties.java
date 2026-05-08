@@ -7,6 +7,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.Collections;
 import java.util.Set;
 
+/**
+ * 安全模块配置属性
+ * <p>
+ * 配置前缀：fun.security
+ * <p>
+ * 提供接口白名单、登录页配置、微服务路由规则、CAS/OAuth单点登录等功能的配置支持。
+ *
+ */
 @Data
 @ConfigurationProperties(prefix = "fun.security")
 public class FunSpringSecurityProperties {

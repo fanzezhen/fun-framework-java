@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author fanzezhen
  */
 @Component
 public class ResponseBodyWrapFactoryBean implements InitializingBean {

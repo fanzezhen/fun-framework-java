@@ -66,7 +66,7 @@ public class PoolExecutors { // 实现DisposableBean，应用关闭时销毁线�
             DEFAULT_MAX_SIZE,
             DEFAULT_KEEP_ALIVE_TIME,
             DEFAULT_TIME_UNIT,
-            new LinkedBlockingQueue<>(0),
+            new SynchronousQueue<>(),
             DEFAULT_REJECTED_EXECUTION_HANDLER);
     }
 

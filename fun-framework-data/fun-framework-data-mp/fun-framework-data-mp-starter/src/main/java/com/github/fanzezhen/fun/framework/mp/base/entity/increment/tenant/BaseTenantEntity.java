@@ -13,7 +13,6 @@ import lombok.experimental.Accessors;
 /**
  * 数据库租户实体类
  *
- * @author fanzezhen
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -26,7 +25,6 @@ public abstract class BaseTenantEntity extends BaseEntity {
      * 租户id
      */
     @Schema(name = "租户id")
-    @TableField(value = "TENANT_ID")
     protected Integer tenantId;
 
     public static String[] getFieldNames() {

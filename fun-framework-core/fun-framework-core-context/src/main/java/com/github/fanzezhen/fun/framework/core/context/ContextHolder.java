@@ -9,7 +9,7 @@ import com.github.fanzezhen.fun.framework.core.context.properties.ContextConstan
 import com.github.fanzezhen.fun.framework.core.context.properties.FunCoreContextProperties;
 import com.github.fanzezhen.fun.framework.core.model.util.ValidUtil;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
-import com.github.fanzezhen.fun.framework.core.model.IUser;
+import com.github.fanzezhen.fun.framework.core.model.common.IUser;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
@@ -23,7 +23,19 @@ import java.util.Map;
 import java.util.TimeZone;
 
 /**
- * @author fanzezhen
+ * 线程上下文管理器，用于在请求链路中传递用户、租户、追踪等信息
+ * <p>
+ * 基于ThreadLocal实现，保证线程隔离。适用场景：
+ * - HTTP请求链路中传递登录用户、租户ID等上下文信息
+ * - 微服务调用时透传traceId、nodeId等追踪信息
+ * - 跨层级方法调用时避免参数传递
+ * <p>
+ * 线程安全性：ThreadLocal保证线程隔离，但需要注意：
+ * - 请求结束后必须调用 {@link #clean()} 清理，避免内存泄漏（通常由Filter/Interceptor自动处理）
+ * - 使用线程池时需手动传递上下文（参考 {@link #toHeaders()}）
+ * <p>
+ * 容量限制：单个key/value不超过1000字符，总容量不超过100个键值对，防止上下文膨胀导致内存问题
+ *
  */
 @Slf4j
 @SuppressWarnings("unused")
@@ -32,7 +44,7 @@ public class ContextHolder {
     }
 
     /**
-     * 上下文数据
+     * 上下文数据存储（ThreadLocal隔离，请求结束后务必调用clean()清理）
      */
     private static final ThreadLocal<Context> CONTEXT_MAP = new ThreadLocal<>();
     /**
@@ -98,6 +110,10 @@ public class ContextHolder {
         getContext().clear();
     }
 
+    /**
+     * 限制单个key/value为1000字符，因为上下文用于传递轻量元数据（userId、traceId等），
+     * 过大的值（如完整JSON文档）会导致跨服务调用时HTTP Header膨胀，甚至超出服务器限制（Nginx默认8KB）
+     */
     public static void put(String key, Object value) {
         if (key == null) {
             log.warn("key is null, can't set it into the context map");

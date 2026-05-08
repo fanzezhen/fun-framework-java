@@ -13,7 +13,6 @@ import java.util.Map;
 /**
  * 痕迹配置参数
  *
- * @author fanzezhen
  * @since 3.4.3.1
  */
 @Slf4j

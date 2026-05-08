@@ -30,7 +30,6 @@ import java.util.Map;
 /**
  * 代理接口
  *
- * @author fanzezhen
  * @since 3.4.3.5
  */
 @Slf4j

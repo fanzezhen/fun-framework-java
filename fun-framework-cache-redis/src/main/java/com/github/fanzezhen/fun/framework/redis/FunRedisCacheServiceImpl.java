@@ -11,7 +11,11 @@ import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author fanzezhen
+ * Redis缓存服务实现类
+ * <p>
+ * 基于StringRedisTemplate实现的缓存服务，所有value以String形式存储。
+ * 使用@Order注解提升Bean加载优先级，优先使用Redis缓存而非内存缓存。
+ *
  */
 @Order
 @Service

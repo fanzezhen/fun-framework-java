@@ -10,7 +10,6 @@ import lombok.Getter;
 /**
  * 状态是否启用
  *
- * @author fanzezhen
  */
 public enum StatusEnum {
     /**

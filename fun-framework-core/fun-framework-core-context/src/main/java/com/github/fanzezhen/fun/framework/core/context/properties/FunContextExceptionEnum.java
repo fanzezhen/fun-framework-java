@@ -6,7 +6,6 @@ import lombok.Getter;
 /**
  * 异常枚举
  *
- * @author fanzezhen
  * @since 3
  */
 @Getter

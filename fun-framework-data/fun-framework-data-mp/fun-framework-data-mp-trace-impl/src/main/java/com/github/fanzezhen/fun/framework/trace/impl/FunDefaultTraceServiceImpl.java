@@ -20,7 +20,6 @@ import java.util.Collection;
 /**
  * 痕迹表 服务实现类
  *
- * @author fanzezhen
  * @since 3.4.3.1
  */
 @Slf4j

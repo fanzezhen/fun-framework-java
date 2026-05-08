@@ -10,7 +10,6 @@ import java.io.File;
 import java.util.Collections;
 
 /**
- * @author fanzezhen
  */
 public class GeneratorTool {
     private GeneratorTool() {

@@ -22,7 +22,15 @@ import jakarta.annotation.Resource;
 import java.util.Arrays;
 
 /**
- * 禁止并发
+ * 防并发切面
+ * <p>
+ * 配合 @NoConcurrent 注解使用，通过分布式锁防止相同请求并发执行。
+ * 锁的Key由应用名、类名、方法名、参数和请求头组合而成，支持环境隔离。
+ * <p>
+ * <b>使用场景：</b>防止用户重复点击、防止同一参数的请求并发处理
+ * <p>
+ * <b>依赖条件：</b>容器中必须存在LockService实现（如Redis分布式锁）
+ *
  */
 @Slf4j
 @Aspect

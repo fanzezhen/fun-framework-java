@@ -13,7 +13,13 @@ import jakarta.servlet.http.HttpServletRequest;
 
 
 /**
- * @author fanzezhen
+ * 响应体统一包装处理器
+ * <p>
+ * 通过代理原生的HandlerMethodReturnValueHandler，在返回值序列化前自动包装为统一格式（如ActionResult）。
+ * 支持通过配置忽略特定URL（如/actuator、/swagger-ui等）。
+ * <p>
+ * <b>执行时机：</b>Controller方法执行完成后，ResponseBody序列化前
+ *
  */
 public class ResponseBodyWrapHandler implements HandlerMethodReturnValueHandler {
 

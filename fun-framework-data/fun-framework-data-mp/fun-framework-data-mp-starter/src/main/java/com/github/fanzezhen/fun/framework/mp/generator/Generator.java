@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 /**
  * 代码生成器
  *
- * @author fanzezhen
  * @since 3.1.8
  */
 public class Generator {

@@ -13,8 +13,14 @@ import jakarta.annotation.Resource;
 
 /**
  * JWT拦截器
+ * <p>
+ * 拦截HTTP请求并校验JWT令牌的有效性，支持通过配置忽略指定URI。
+ * 仅在容器中存在JwtService时生效。
+ * <p>
+ * <b>执行时机：</b>preHandle阶段，在Controller方法执行前校验令牌
+ * <p>
+ * <b>性能考虑：</b>忽略URI采用PatternMatchUtils.simpleMatch进行快速匹配，避免正则开销
  *
- * @author fanzezhen
  */
 @Component
 @ConditionalOnBean(JwtService.class)

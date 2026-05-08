@@ -23,7 +23,13 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 /**
- * @author fanzezhen
+ * 文件字符串处理工具类
+ * <p>
+ * 提供文件内容的按行替换、匹配行提取、多规则匹配等功能。
+ * 支持对文件或目录进行批量处理。
+ * <p>
+ * <b>使用场景：</b>日志文件解析、配置文件批量替换、文本数据采集
+ *
  */
 @Slf4j
 @SuppressWarnings("unused")

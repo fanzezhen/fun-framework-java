@@ -3,7 +3,7 @@ package com.github.fanzezhen.fun.framework.core.model.util;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.CharSequenceUtil;
-import com.github.fanzezhen.fun.framework.core.model.IHolder;
+import com.github.fanzezhen.fun.framework.core.model.common.IHolder;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -23,7 +23,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author fanzezhen
+ * 参数校验工具类
+ * <p>
+ * 提供Bean Validation校验、图片格式校验、对象空值判断等功能。
+ * 所有校验方法失败时会抛出异常，不会返回布尔值（除isXxx方法外）。
+ *
  */
 @Slf4j
 @SuppressWarnings("unused")
@@ -169,10 +173,25 @@ public class ValidUtil {
         return false;
     }
 
+    /**
+     * 判断对象是否为空
+     * <p>
+     * 支持多种类型的空值判断：null、空字符串、空集合、空Map、空数组、IHolder.isEmpty()
+     *
+     * @param o 待判断的对象
+     * @return true表示为空
+     */
     public static boolean isEmpty(Object o) {
         return isEmpty(o, false);
     }
 
+    /**
+     * 判断对象是否为空（可选是否trim字符串）
+     *
+     * @param o       待判断的对象
+     * @param isStrip 是否对字符串进行trim后再判断（true时" "也会被认为是空）
+     * @return true表示为空
+     */
     public static boolean isEmpty(Object o, boolean isStrip) {
         if (o == null) {
             return true;
@@ -199,6 +218,11 @@ public class ValidUtil {
         return !isBlank(o);
     }
 
+    /**
+     * 判断对象是否为空白（会trim字符串）
+     * <p>
+     * 与isEmpty的区别：会对字符串进行trim，" "会被认为是空
+     */
     public static boolean isBlank(Object o) {
         return isEmpty(o, true);
     }

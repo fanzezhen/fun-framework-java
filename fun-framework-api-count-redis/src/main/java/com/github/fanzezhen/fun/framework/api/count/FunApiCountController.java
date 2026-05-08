@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.api.count;
 
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
-import com.github.fanzezhen.fun.framework.core.model.YApiModel;
+import com.github.fanzezhen.fun.framework.core.model.common.YApiModel;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -25,7 +25,6 @@ import java.util.Map;
 /**
  * 接口统计 接口
  *
- * @author fanzezhen
  * @since 3.4.3.3
  */
 @Slf4j

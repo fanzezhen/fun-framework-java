@@ -1,4 +1,4 @@
-package com.github.fanzezhen.fun.framework.core.model;
+package com.github.fanzezhen.fun.framework.core.model.common;
 
 import lombok.SneakyThrows;
 

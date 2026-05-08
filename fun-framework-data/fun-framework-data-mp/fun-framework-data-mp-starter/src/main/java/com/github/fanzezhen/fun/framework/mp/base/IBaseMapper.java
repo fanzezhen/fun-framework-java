@@ -17,7 +17,6 @@ import java.util.List;
 /**
  * 基于mybatis-plus的基础dao层
  *
- * @author fanzezhen
  */
 @SuppressWarnings({"unchecked", "unused"})
 public interface IBaseMapper<T extends IGenericEntity> extends com.baomidou.mybatisplus.core.mapper.BaseMapper<T> {

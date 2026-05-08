@@ -5,9 +5,13 @@ import lombok.SneakyThrows;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 常规锁相关接口
+ * 分布式锁服务接口
+ * <p>
+ * 提供基于回调的锁操作，自动管理锁的获取和释放。
+ * 适用于需要原子性执行的业务场景。
+ * <p>
+ * <b>注意：</b>使用FunSupplier而非标准Supplier以支持受检异常传播
  *
- * @author fanzezhen
  */
 public interface LockService {
     /**

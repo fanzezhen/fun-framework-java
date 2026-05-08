@@ -8,6 +8,11 @@ import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 
 /**
+ * MyBatis工具类
+ * <p>
+ * 提供SQL解析功能，将MyBatis的BoundSql转换为JSQLParser的Statement对象，
+ * 用于SQL改写、分析等高级场景（如分表路由、权限过滤）。
+ *
  */
 @Slf4j
 public class MybatisUtil {

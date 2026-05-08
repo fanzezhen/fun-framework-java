@@ -8,7 +8,6 @@ import lombok.Getter;
 /**
  * 异常码
  *
- * @author fanzezhen
  */
 @Getter
 public enum ExceptionCodeEnum implements IExceptionCode<ExceptionCodeEnum> {

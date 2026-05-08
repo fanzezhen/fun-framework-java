@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
 /**
  * 静态资源代理修饰器
  *
- * @author fanzezhen
  * @since 3.4.3.5
  */
 @SuppressWarnings({"unused", "unchecked"})

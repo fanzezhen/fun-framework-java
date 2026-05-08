@@ -10,10 +10,10 @@
   <version>${revision}</version>
 
   <properties>
-    <org.springframework.boot.version>4.0.5</org.springframework.boot.version>
+    <org.springframework.boot.version>4.0.6</org.springframework.boot.version>
     <org.springframework.cloud.version>2025.1.1</org.springframework.cloud.version>
     <org.springframework.cloud.spring-cloud-starter-gateway.version>4.3.3</org.springframework.cloud.spring-cloud-starter-gateway.version>
-    <revision>${org.springframework.boot.version}.20260506</revision>
+    <revision>${org.springframework.boot.version}.20260507</revision>
     <app.server>-tomcat</app.server>
     <cn.dev33.version>1.45.0</cn.dev33.version>
     <cn.hutool.version>5.8.44</cn.hutool.version>
@@ -91,7 +91,7 @@
       </dependency>
       <dependency>
         <groupId>cn.dev33</groupId>
-        <artifactId>sa-token-spring-boot3-starter</artifactId>
+        <artifactId>sa-token-spring-boot4-starter</artifactId>
         <version>${cn.dev33.version}</version>
       </dependency>
       <dependency>
@@ -357,7 +357,7 @@
       </dependency>
       <dependency>
         <groupId>com.baomidou</groupId>
-        <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+        <artifactId>mybatis-plus-spring-boot4-starter</artifactId>
         <version>${com.baomidou.version}</version>
       </dependency>
       <dependency>

@@ -9,7 +9,6 @@ import java.lang.reflect.Type;
 /**
  * 代理字段解析器（fastjson2 版本）
  *
- * @author fanzezhen
  * @since 3.4.3.5
  */
 public class ProxyFieldWriter implements ObjectWriter<Object> {

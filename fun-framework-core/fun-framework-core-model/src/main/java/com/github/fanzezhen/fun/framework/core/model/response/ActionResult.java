@@ -15,9 +15,19 @@ import java.util.List;
 
 
 /**
- * 响应信息主体
+ * 统一响应结构，用于封装API返回结果
+ * <p>
+ * 设计意图：
+ * - 前端可通过 success 字段快速判断接口调用成功与否，无需解析 HTTP 状态码
+ * - 失败时通过 errors 列表提供详细错误信息（支持多字段校验错误）
+ * - 成功时通过 data 字段返回业务数据
+ * <p>
+ * 典型响应格式：
+ * <pre>{@code
+ * // 成功：{"success": true, "data": {...}}
+ * // 失败：{"success": false, "errors": [{"code": "400", "message": "参数错误"}]}
+ * }</pre>
  *
- * @author fanzezhen
  */
 @Data
 @ToString

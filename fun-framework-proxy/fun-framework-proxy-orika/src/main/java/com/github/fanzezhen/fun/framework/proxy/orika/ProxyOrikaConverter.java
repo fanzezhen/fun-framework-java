@@ -11,9 +11,11 @@ import org.springframework.context.annotation.Configuration;
 import jakarta.annotation.Resource;
 
 /**
- * Orika转换器
+ * Orika字符串代理转换器
+ * <p>
+ * 在Orika对象映射过程中自动对字符串字段进行代理处理（如脱敏、加密等）。
+ * 仅在fun.proxy.enabled=true且存在ProxyHelper时生效。
  *
- * @author fanzezhen
  * @since 3.4.3.5
  */
 @Configuration

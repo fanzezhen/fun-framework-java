@@ -14,7 +14,6 @@ import java.io.IOException;
 /**
  * TraceId 过滤器
  *
- * @author fanzezhen
  * @since 3.1.7
  */
 @Slf4j

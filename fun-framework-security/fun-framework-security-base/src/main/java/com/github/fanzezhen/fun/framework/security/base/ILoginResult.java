@@ -1,6 +1,6 @@
 package com.github.fanzezhen.fun.framework.security.base;
 
-import com.github.fanzezhen.fun.framework.core.model.IUser;
+import com.github.fanzezhen.fun.framework.core.model.common.IUser;
 
 import java.io.Serializable;
 

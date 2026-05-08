@@ -8,7 +8,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @author fanzezhen
  */
 @Slf4j
 @Disabled

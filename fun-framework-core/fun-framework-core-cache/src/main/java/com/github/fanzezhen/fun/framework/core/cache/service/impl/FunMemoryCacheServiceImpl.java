@@ -10,7 +10,13 @@ import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author fanzezhen
+ * 基于内存的缓存服务实现
+ * <p>
+ * 使用HuTool的TimedCache实现，适用于单机环境的轻量级缓存需求。
+ * 当没有Redis等分布式缓存时作为降级方案。
+ * <p>
+ * <b>线程安全性：</b>setIfAbsent方法通过synchronized保证原子性
+ *
  */
 @Slf4j
 public class FunMemoryCacheServiceImpl implements CacheService {

@@ -13,7 +13,6 @@ import java.lang.reflect.Field;
 /**
  * 静态资源代理序列化过滤器
  *
- * @author fanzezhen
  * @since 2.19.6
  */
 @Component

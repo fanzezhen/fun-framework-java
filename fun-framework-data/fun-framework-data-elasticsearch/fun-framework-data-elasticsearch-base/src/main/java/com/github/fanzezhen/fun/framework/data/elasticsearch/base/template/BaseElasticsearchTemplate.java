@@ -3,7 +3,7 @@ package com.github.fanzezhen.fun.framework.data.elasticsearch.base.template;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.github.fanzezhen.fun.framework.core.data.template.ITemplate;
 import com.github.fanzezhen.fun.framework.core.log.base.support.FunLogHelper;
-import com.github.fanzezhen.fun.framework.core.model.FunFunction;
+import com.github.fanzezhen.fun.framework.core.model.common.FunFunction;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.config.FunElasticsearchProperties;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.IResponseDeserializer;

@@ -2,7 +2,6 @@ package com.github.fanzezhen.fun.framework.core.model.constant;
 
 /**
  * Servlet常量
- * @author fanzezhen
  */
 public class ServletConstant {
     private ServletConstant() {

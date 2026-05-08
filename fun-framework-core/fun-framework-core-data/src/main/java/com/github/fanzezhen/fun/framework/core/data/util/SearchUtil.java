@@ -1,18 +1,14 @@
 package com.github.fanzezhen.fun.framework.core.data.util;
 
 /**
- * @author fanzezhen
  */
 public class SearchUtil {
     private SearchUtil() {
     }
 
     /**
-     * 二分查找
-     *
-     * @param arr 查找的数组
-     * @param k   需要查找的元素
-     * @return 要查找的元素在数组中的位置（-1即数组中不存在该元素）
+     * 前置条件：arr必须已排序（升序），否则结果不可预测
+     * 时间复杂度：O(log n)
      */
     public static int binarySearch(int[] arr, int k) {
         if (arr == null) {

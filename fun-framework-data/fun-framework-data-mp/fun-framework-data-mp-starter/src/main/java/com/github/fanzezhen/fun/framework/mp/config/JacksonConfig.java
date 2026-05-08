@@ -22,7 +22,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * @author fanzezhen
  */
 @Configuration
 public class JacksonConfig {

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * 权限类型枚举类
- * @author fanzezhen
  */
 public enum PermissionTypeEnum {
     /**

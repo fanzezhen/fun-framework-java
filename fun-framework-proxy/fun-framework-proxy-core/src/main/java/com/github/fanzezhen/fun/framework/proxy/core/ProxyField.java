@@ -10,7 +10,6 @@ import java.lang.annotation.Target;
 /**
  * 代理字段
  *
- * @author fanzezhen
  * @since 3.4.3.5
  */
 @Inherited

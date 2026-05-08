@@ -13,7 +13,6 @@ import jakarta.annotation.Resource;
 import java.util.List;
 
 /**
- * @author fanzezhen
  */
 @Component
 public class FunDocGlobalOperationCustomizer implements GlobalOperationCustomizer {

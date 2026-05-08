@@ -11,7 +11,6 @@ import java.util.Map;
 /**
  * 痕迹规则
  *
- * @author fanzezhen
  * @since 3.4.3.1
  */
 @EqualsAndHashCode(callSuper = true)

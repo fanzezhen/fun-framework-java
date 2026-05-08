@@ -11,9 +11,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 存储工具类
+ * 存储单位转换工具类
+ * <p>
+ * 提供字节数与人类可读格式（B/K/M/G/T等）之间的相互转换，
+ * 以及字符串按字节数/字符数截断的功能。
+ * <p>
+ * <b>使用场景：</b>文件大小展示、数据库TEXT字段长度限制、日志内容截断
  *
- * @author fanzezhen
  */
 @Slf4j
 public class StorageUtil {

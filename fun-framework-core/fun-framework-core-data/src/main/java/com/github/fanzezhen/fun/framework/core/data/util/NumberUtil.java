@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author fanzezhen
  */
 public class NumberUtil {
     private NumberUtil() {
@@ -16,12 +15,6 @@ public class NumberUtil {
     static final String CHINESE_TEN = "一十";
     static final String CHINESE_TEN_ZERO = "一十零";
 
-    /**
-     * 阿拉伯数字转中文数字
-     *
-     * @param string 数字字符串
-     * @return 汉字数字字符串
-     */
     public static String numToChinese(String string) {
         String[] s1 = {"零", "一", "二", "三", "四", "五", "六", "七", "八", "九"};
         String[] s2 = {"十", "百", "千", "万", "十", "百", "千", "亿", "十", "百", "千"};
@@ -43,12 +36,6 @@ public class NumberUtil {
         return result.toString();
     }
 
-    /**
-     * 中文數字转阿拉伯数组【十万九千零六十  --> 109060】
-     *
-     * @param chineseNumber 中文數字
-     * @return 阿拉伯数
-     */
     @SuppressWarnings("unused")
     public static Integer chineseNumberToInteger(String chineseNumber) {
         if (CharSequenceUtil.isEmpty(chineseNumber)) {

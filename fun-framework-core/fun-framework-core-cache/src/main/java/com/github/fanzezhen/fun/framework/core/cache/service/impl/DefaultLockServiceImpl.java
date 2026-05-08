@@ -10,7 +10,17 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author fanzezhen
+ * 基于缓存服务的默认锁实现
+ * <p>
+ * 通过CacheService的setIfAbsent实现简单的分布式锁功能。
+ * 适用于对锁精度要求不高的场景，生产环境建议使用RedissonClient实现。
+ * <p>
+ * <b>限制：</b>
+ * <ul>
+ *   <li>不支持锁续期，最大持锁时间1小时</li>
+ *   <li>依赖缓存实现的原子性保证</li>
+ * </ul>
+ *
  */
 @Slf4j
 public record DefaultLockServiceImpl(CacheService cacheService) implements LockService {

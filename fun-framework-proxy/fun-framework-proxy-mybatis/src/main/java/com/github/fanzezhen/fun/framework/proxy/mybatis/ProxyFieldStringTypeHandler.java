@@ -10,7 +10,6 @@ import java.sql.SQLException;
 /**
  * 代理字段类型解析器
  *
- * @author fanzezhen
  * @since 3.4.3.5
  */
 public class ProxyFieldStringTypeHandler extends StringTypeHandler {

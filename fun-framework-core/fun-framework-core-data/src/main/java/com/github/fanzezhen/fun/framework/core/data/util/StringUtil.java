@@ -8,8 +8,10 @@ import java.util.Comparator;
 
 /**
  * 字符串工具类
+ * <p>
+ * 扩展Hutool的CharSequenceUtil，提供更灵活的前缀/后缀移除功能。
+ * 支持移除第一个匹配、移除最长匹配、忽略大小写匹配等多种策略。
  *
- * @author fanzezhen
  * @since 3.4.3.5
  */
 @SuppressWarnings("unused")

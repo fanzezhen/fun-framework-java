@@ -9,7 +9,6 @@ import java.lang.reflect.Type;
 /**
  * 代理字段反序列化器（fastjson2 版本）
  *
- * @author fanzezhen
  * @since 3.4.3.5
  */
 public class ProxyFieldReader implements ObjectReader<String> {

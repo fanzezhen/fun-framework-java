@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
- * @author fanzezhen
  */
 @Slf4j
 @Disabled

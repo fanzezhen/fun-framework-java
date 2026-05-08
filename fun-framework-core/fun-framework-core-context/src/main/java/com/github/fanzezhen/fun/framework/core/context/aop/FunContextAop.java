@@ -18,7 +18,16 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 /**
- * @author fanzezhen
+ * 上下文请求头校验和隐藏切面
+ * <p>
+ * 配合 {@link ContextHeader} 注解使用，提供两种能力：
+ * <ul>
+ *   <li>required: 校验必需的请求头是否存在，缺失时抛出ServiceException</li>
+ *   <li>hidden: 临时隐藏指定请求头，方法执行完成后自动恢复</li>
+ * </ul>
+ * <p>
+ * <b>使用场景：</b>防止内部方法调用时污染上下文（如移除traceId避免重复记录）
+ *
  */
 @Slf4j
 @Aspect
@@ -34,13 +43,14 @@ public class FunContextAop {
     }
 
     /**
-     * 在调用上面 @Pointcut标注的方法前执行以下方法
+     * 前置校验：检查必需的请求头是否存在
      *
-     * @param joinPoint JoinPoint
+     * @param joinPoint 切点信息
+     * @throws ServiceException 当required中指定的请求头不存在时抛出
      */
     @Before("cut()")
     public void doBefore(JoinPoint joinPoint) {
-        
+
         ContextHeader annotation = ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(ContextHeader.class);
         if (annotation.required()!=null){
             for (String header : annotation.required()) {
@@ -51,6 +61,16 @@ public class FunContextAop {
             }
         }
     }
+
+    /**
+     * 环绕处理：临时隐藏指定请求头，方法执行完成后恢复
+     * <p>
+     * 执行流程：移除hidden指定的请求头 → 执行业务方法 → 恢复请求头
+     *
+     * @param joinPoint 切点信息
+     * @return 业务方法返回值
+     * @throws Throwable 业务方法抛出的异常
+     */
     @Around("cut()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         ContextHeader annotation = ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(ContextHeader.class);

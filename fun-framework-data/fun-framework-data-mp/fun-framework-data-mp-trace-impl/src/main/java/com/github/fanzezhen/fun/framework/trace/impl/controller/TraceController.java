@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 痕迹表 接口
  *
- * @author fanzezhen
  * @since 3.4.3.1
  */
 @Slf4j

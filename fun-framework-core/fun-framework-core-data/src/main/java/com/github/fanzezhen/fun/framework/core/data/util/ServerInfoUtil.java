@@ -9,8 +9,11 @@ import java.util.List;
 
 /**
  * 服务器信息工具类
+ * <p>
+ * 提供服务器资源使用情况的查询功能，包括内存使用率和磁盘使用率。
+ * <p>
+ * <b>注意：</b>磁盘扫描方法仅支持Windows系统（A-Z盘符遍历）
  *
- * @author fanzezhen
  */
 public class ServerInfoUtil {
     private ServerInfoUtil() {

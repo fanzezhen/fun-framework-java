@@ -6,7 +6,6 @@ import cn.hutool.cache.impl.TimedCache;
 /**
  * 缓存的key 常量
  *
- * @author fanzezhen
  */
 public interface CacheConstant {
 

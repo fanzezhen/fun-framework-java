@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author fanzezhen
  */
 @Data
 @ConfigurationProperties(prefix = "fun.core.verify")

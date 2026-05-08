@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 /**
  * 公共业务常规模型类
  *
- * @author fanzezhen
  */
 @Getter
 @Setter

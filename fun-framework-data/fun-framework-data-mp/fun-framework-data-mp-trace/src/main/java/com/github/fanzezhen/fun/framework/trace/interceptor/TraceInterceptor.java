@@ -22,7 +22,20 @@ import org.springframework.stereotype.Component;
 import jakarta.annotation.Resource;
 
 /**
- * @author fanzezhen
+ * 数据变更追踪拦截器
+ * <p>
+ * 拦截MyBatis的INSERT操作，根据配置的追踪规则自动记录数据变更历史。
+ * 追踪任务在独立线程池中异步执行，不阻塞主业务流程。
+ * <p>
+ * <b>拦截点：</b>Executor.update方法（仅处理SqlCommandType.INSERT）
+ * <p>
+ * <b>性能考虑：</b>
+ * <ul>
+ *   <li>异步执行追踪任务，不影响插入操作的响应时间</li>
+ *   <li>追踪失败仅记录warn日志，不抛出异常</li>
+ *   <li>通过TraceRuleBO缓存表级追踪规则，避免重复查询</li>
+ * </ul>
+ *
  * @since 3.4.3.1
  */
 @Slf4j

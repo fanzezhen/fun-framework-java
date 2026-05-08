@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 /**
- * @author fanzezhen
  */
 public enum OperationTypeEnum {
     /**

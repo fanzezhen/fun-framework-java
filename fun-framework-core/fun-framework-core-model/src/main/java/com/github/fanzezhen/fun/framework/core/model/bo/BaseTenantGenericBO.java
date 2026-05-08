@@ -12,7 +12,6 @@ import java.io.Serializable;
 /**
  * 公共业务租户常规模型类
  *
- * @author fanzezhen
  */
 @Getter
 @Setter

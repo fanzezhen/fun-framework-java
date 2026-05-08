@@ -3,11 +3,10 @@
 <div align=”center”>
 
 [![GitHub license](https://img.shields.io/github/license/fanzezhen/fun-framework-java)](https://github.com/fanzezhen/fun-framework-java/blob/master/LICENSE)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.5-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html)
 [![Maven Central](https://img.shields.io/badge/Maven)](https://search.maven.org/search?q=g:com.github.fanzezhen)
 
-基于 Spring Boot 4.0.5 的企业级通用功能组件库，提供开箱即用的后端基础设施解决方案
+基于 Spring Boot 的通用功能组件库，提供开箱即用的后端基础设施解决方案
 
 [快速开始](#快速开始) • [文档](doc/dev/提示词) • [示例项目](https://github.com/fanzezhen/demo) • [问题反馈](https://github.com/fanzezhen/fun-framework-java/issues)
 
@@ -17,17 +16,17 @@
 
 ## 📖 项目简介
 
-Fun Framework Java 是一个持续迭代的开源企业级 Java 后端组件库，旨在将常用的通用功能组件化，减少实际工作中的重复开发任务。项目专注于后端组件实现，不包含 Web 前端页面。
+Fun Framework Java 是一个持续迭代的开源企业级 Java 后端组件库，提供开箱即用的基础设施解决方案。
 
 ### ✨ 核心特性
 
-- 🚀 **现代技术栈**: 基于 Spring Boot 4.0.5、MyBatis Plus 3.5.16 等最新稳定版本
-- 🔧 **开箱即用**: 提供缓存、日志、安全、数据访问等 20+ 个开箱即用的组件模块
-- 🎯 **分层设计**: 遵循企业级分层架构规范 (Entity/BO/VO/Condition)
-- 🔐 **安全增强**: 集成 Spring Security、Sa-Token 等多种安全框架支持
-- 📊 **可观测性**: 内置日志追踪、操作审计、流量监控等能力
-- 🌐 **云原生**: 支持 Nacos、Sentinel、Redis、Elasticsearch 等主流中间件
-- 📦 **模块化**: 灵活的模块依赖管理，按需引入组件
+- 🚀 **现代技术栈**: 基于 Spring Boot、Java、MyBatis Plus 最新稳定版本
+- 🎯 **分层解耦**: 完整的分层模型体系 (PageRequest/PageCondition/PageDTO，禁止 MyBatis 侵入 Service)
+- 🔧 **开箱即用**: 统一返回、分页、对象映射、异常处理等 20+ 组件
+- 🔐 **安全认证**: Spring Security、Sa-Token 多框架支持
+- 📊 **可观测性**: 日志追踪、操作审计、流量监控
+- 🌐 **云原生**: Nacos、Sentinel、Redis、Elasticsearch 集成
+- 📦 **模块化**: 按需引入，灵活组合
 
 ### 🎯 适用场景
 
@@ -38,23 +37,7 @@ Fun Framework Java 是一个持续迭代的开源企业级 Java 后端组件库�
 
 ---
 
-## 🌿 分支说明
-
-| 分支名      | 说明                                             | 状态    |
-|----------|------------------------------------------------|-------|
-| master   | 主分支，基于 Spring Boot 4.0.5 持续迭代                 | ✅ 稳定 |
-| lasted   | 最新实验分支，追踪 Spring Boot 最新版本                    | 🧪 实验 |
-| backup/* | 历史版本备份，如 `backup/jdk8-before-upgrade` 为 JDK 8 版本 | 📦 归档 |
-
----
-
 ## 🚀 快速开始
-
-### 环境要求
-
-- JDK 21+
-- Maven 3.8+
-- Spring Boot 4.0.5
 
 ### Maven 依赖
 
@@ -129,9 +112,28 @@ fun-framework-java
 
 ---
 
+## 🎉 最近更新
+
+**核心重构**:
+- 🔥 **分层模型重构**: 新增 `PageRequest`/`PageCondition`/`PageDTO`，实现完整的分层解耦
+- 🔥 **分页工具类**: 新增 `PageUtil` 用于 MyBatis `IPage` ↔ 框架 `PageDTO` 转换
+- 🔥 **泛型化支持**: BaseEntity/BaseBO/BaseDTO 全面支持泛型主键 (`<P extends Serializable>`)
+- 📦 **包结构优化**: 将通用接口移至 `core.model.common` 包 (`IPage`/`IHolder`/`IUser` 等)
+
+**架构优化**:
+- ✅ Service 层禁止依赖 MyBatis-Plus 的 `Page`/`IPage`，通过 `PageUtil` 在 DAO 层转换
+- ✅ 统一 BO/DTO 基类泛型设计，tenantId 类型与主键类型一致
+- ✅ 移除 `PageDto` (旧)，统一使用 `PageDTO` (新)
+
+**文档更新**:
+- 📖 新增[后端脚手架提示词文档](doc/dev/提示词/专业提示词/后端脚手架.md)，为 AI Agent 提供框架使用规范
+- 📖 更新分层设计规范，明确各层对象使用规则
+
+---
+
 ## 📦 模块详解
 
-详见各模块中的 README.md
+详见各模块 README.md 或[脚手架文档](doc/dev/提示词/专业提示词/后端脚手架.md)
 
 ### 核心模块 (fun-framework-core-*)
 
@@ -193,13 +195,13 @@ fun-framework-java
 
 ### 核心框架
 
-| 框架                 | 版本      | 说明                  |
-|--------------------|---------|---------------------|
-| Spring Boot        | 4.0.5   | 核心应用框架              |
-| Spring Cloud       | 2025.1.1 | 微服务基础设施             |
-| MyBatis Plus       | 3.5.16  | 持久层增强框架             |
-| Sa-Token           | 1.45.0  | 轻量级认证授权框架           |
-| Sentinel           | 1.8.9   | 流量防控和熔断降级           |
+| 框架                 | 说明                  |
+|--------------------|---------------------|
+| Spring Boot        | 核心应用框架              |
+| Spring Cloud       | 微服务基础设施             |
+| MyBatis Plus       | 持久层增强框架             |
+| Sa-Token           | 轻量级认证授权框架           |
+| Sentinel           | 流量防控和熔断降级           |
 
 ### 中间件支持
 

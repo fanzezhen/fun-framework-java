@@ -1,7 +1,6 @@
 package com.github.fanzezhen.fun.framework.core.verify.jwt.service;
 
 /**
- * @author fanzezhen
  */
 public interface JwtService {
 

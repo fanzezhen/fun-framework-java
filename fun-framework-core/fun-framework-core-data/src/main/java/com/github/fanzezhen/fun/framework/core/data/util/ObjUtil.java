@@ -16,6 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 对象处理工具类
+ * <p>
+ * 提供对象类型转换、字段值解析、Java原生类型判断等功能。
+ * 支持List/Map泛型解析和JSON字符串反序列化。
+ *
  */
 @Slf4j
 public class ObjUtil {
@@ -44,10 +49,18 @@ public class ObjUtil {
     }
     /**
      * 将value解析为targetField的值
+     * <p>
+     * 根据目标字段的类型自动进行类型转换：
+     * <ul>
+     *   <li>List类型：解析泛型并转换为List（支持JSON字符串）</li>
+     *   <li>JSONObject：从Map或JSON字符串构建</li>
+     *   <li>自定义类：从JSON字符串反序列化</li>
+     *   <li>原生类型：原样返回</li>
+     * </ul>
      *
      * @param targetField 目标属性
-     * @param value       目标值
-     * @return 解析结果
+     * @param value       原始值
+     * @return 解析后的值，类型匹配targetField
      */
     public static Object resolveByField(Field targetField, Object value) {
         final Class<?> targetFieldClass = targetField.getType();
@@ -58,7 +71,7 @@ public class ObjUtil {
             Class<?> actualType = (Class<?>) TypeUtil.getTypeArgument(targetField.getGenericType());
             if (value instanceof List) {
                 return Convert.toList(actualType, value);
-            } 
+            }
             if (value instanceof String) {
                 try {
                     return JSON.parseArray(value.toString(), actualType);
@@ -85,8 +98,12 @@ public class ObjUtil {
     }
 
     /**
-     * 判断类型是否为java原生类型
+     * 判断类型是否为Java原生类型
+     * <p>
+     * 通过ClassLoader是否为null判断，原生类（如String、Integer等）的ClassLoader为null
      *
+     * @param clz 待判断的类
+     * @return true表示为原生类型
      */
     public static boolean isNativeClass(Class<?> clz) {
         return clz != null && clz.getClassLoader() == null;

@@ -24,7 +24,6 @@ import java.util.Map;
 
 /**
  * Servlet工具类
- * @author fanzezhen
  */
 @Slf4j
 public class ServletUtil {
@@ -35,7 +34,16 @@ public class ServletUtil {
     static String localhostIp = "127.0.0.1";
 
     /**
-     * 获取发起请求的IP地址
+     * 获取发起请求的真实IP地址（支持代理场景）
+     * <p>
+     * 代理头优先级顺序：
+     * 1. X-Forwarded-For - 标准HTTP代理头，格式为"客户端IP, 代理1, 代理2"，取第一个IP
+     * 2. Proxy-Client-IP - Apache服务器代理头
+     * 3. WL-Proxy-Client-IP - WebLogic服务器代理头
+     * 4. request.getRemoteAddr() - 直连场景或所有代理头为空时的兜底方案
+     * <p>
+     * 优先级基于实际部署中的常见架构（Nginx → Spring Boot），
+     * X-Forwarded-For最常见且最接近真实客户端IP。
      */
     public static String getIp(HttpServletRequest request) {
         String ip = getHeader(request, ServletConstant.X_FORWARDED_FOR);

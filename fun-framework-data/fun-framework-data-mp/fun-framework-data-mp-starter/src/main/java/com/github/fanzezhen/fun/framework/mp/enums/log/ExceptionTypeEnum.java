@@ -8,7 +8,6 @@ import lombok.Getter;
 
 /**
  * 异常类型枚举
- * @author fanzezhen
  */
 public enum ExceptionTypeEnum {
     /**

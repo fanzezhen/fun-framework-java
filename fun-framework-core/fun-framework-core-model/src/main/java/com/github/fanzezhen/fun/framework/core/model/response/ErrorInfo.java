@@ -10,7 +10,11 @@ import org.springframework.web.ErrorResponseException;
 import java.io.Serializable;
 
 /**
- * @author fanzezhen
+ * 统一错误信息模型
+ * <p>
+ * 用于在HTTP响应中封装错误码和错误消息。
+ * 支持从多种异常类型（ServiceException、ErrorResponseException）和枚举构建。
+ *
  */
 @Data
 @NoArgsConstructor

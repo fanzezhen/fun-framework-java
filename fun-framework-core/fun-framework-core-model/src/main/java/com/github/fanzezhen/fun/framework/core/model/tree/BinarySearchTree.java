@@ -1,7 +1,13 @@
 package com.github.fanzezhen.fun.framework.core.model.tree;
 
 /**
- * @author fanzezhen
+ * 二叉搜索树实现
+ * <p>
+ * 提供插入和查询操作的基础实现。不支持删除操作和平衡调整，
+ * 最坏情况下会退化为链表（时间复杂度O(n)）。
+ * <p>
+ * <b>限制：</b>不支持重复元素插入
+ *
  */
 @SuppressWarnings("unused")
 public class BinarySearchTree<T extends Comparable<T>> {

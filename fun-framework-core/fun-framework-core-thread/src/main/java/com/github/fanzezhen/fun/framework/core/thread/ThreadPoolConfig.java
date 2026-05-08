@@ -16,9 +16,13 @@ import jakarta.annotation.PostConstruct;
 import java.util.List;
 
 /**
- * 线程配置
+ * 线程池配置类
+ * <p>
+ * 自动注册默认线程池，并组合所有ThreadPoolTaskDecorator实现类形成装饰器链，
+ * 用于实现上下文传递、日志增强、性能监控等横切关注点。
+ * <p>
+ * <b>生命周期：</b>实现DisposableBean，在容器销毁时自动关闭线程池
  *
- * @author fanzezhen
  * @since 3.1.7
  */
 @Slf4j

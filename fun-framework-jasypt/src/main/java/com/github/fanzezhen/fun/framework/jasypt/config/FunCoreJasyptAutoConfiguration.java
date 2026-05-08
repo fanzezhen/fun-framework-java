@@ -13,7 +13,16 @@ import org.springframework.context.annotation.Configuration;
 import jakarta.annotation.Resource;
 
 /**
- * @author fanzezhen
+ * Jasypt加密模块自动配置类
+ * <p>
+ * 根据配置属性 jasypt.encryptor.bean 动态注册加密器：
+ * <ul>
+ *   <li>funSM2StringEncryptor - 国密SM2加密器</li>
+ *   <li>funSM4StringEncryptor - 国密SM4加密器</li>
+ *   <li>funRSAStringEncryptor - RSA加密器</li>
+ * </ul>
+ * 用于配置文件中敏感信息的加解密，配合jasypt-spring-boot使用。
+ *
  */
 @Configuration
 @EnableConfigurationProperties({FunJasyptEncryptorProperties.class, JasyptEncryptorConfigurationProperties.class})

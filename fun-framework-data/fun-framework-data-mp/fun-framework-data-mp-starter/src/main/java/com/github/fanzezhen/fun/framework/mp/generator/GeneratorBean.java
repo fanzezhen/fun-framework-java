@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * @author fanzezhen
  */
 @Slf4j
 @Accessors(chain = true)

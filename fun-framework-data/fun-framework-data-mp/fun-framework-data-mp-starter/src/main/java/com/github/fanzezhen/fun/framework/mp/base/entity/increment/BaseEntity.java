@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 /**
  * 公共数据库实体类
  *
- * @author fanzezhen
  */
 @Data
 @NoArgsConstructor
@@ -26,21 +25,21 @@ public abstract class BaseEntity implements IGenericEntity<Integer> {
     /**
      * 自增主键，请确保数据库设置了 ID自增
      */
-    @TableId(value = "ID", type = IdType.AUTO)
+    @TableId(type = IdType.AUTO)
     @Schema(name = "主键ID")
     protected Integer id;
 
     /**
      * 创建时间
      */
-    @TableField(value = "CREATE_TIME", fill = FieldFill.INSERT)
+    @TableField(fill = FieldFill.INSERT)
     @Schema(name = "创建时间")
     protected LocalDateTime createTime;
 
     /**
      * 创建人ID
      */
-    @TableField(value = "CREATE_USER_ID", fill = FieldFill.INSERT)
+    @TableField(fill = FieldFill.INSERT)
     @Schema(name = "创建人ID")
     protected Integer createUserId;
 

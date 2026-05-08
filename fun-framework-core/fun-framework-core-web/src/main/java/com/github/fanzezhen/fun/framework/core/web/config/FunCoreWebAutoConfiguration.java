@@ -12,7 +12,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 
 /**
- * @author fanzezhen
+ * Web模块自动配置类
+ * <p>
+ * 仅在Servlet类型的Web应用中生效，提供统一响应包装、跨域处理、请求日志等功能。
+ * 默认注册 {@link ResponseBodyWrapper} 实现，将Controller返回值包装为 {@link ActionResult}。
+ *
  */
 @Configuration
 @EnableConfigurationProperties(FunCoreWebProperties.class)

@@ -19,21 +19,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 全局的异常处理器
+ * 全局异常处理器，将各类异常统一转换为 ActionResult 格式返回给前端
  *
- * @author fanzezhen
  */
 @Slf4j
 @Hidden
 @RestControllerAdvice
 @SuppressWarnings("unused")
 public class DefaultExceptionHandler {
-    /**
-     * 全局异常.
-     *
-     * @param e the e
-     * @return R
-     */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)
     public ActionResult<Object> exception(Exception e) {
@@ -41,43 +34,25 @@ public class DefaultExceptionHandler {
         return ActionResult.failed(ExceptionCodeEnum.SERVICE_ERROR);
     }
 
-    /**
-     * validation exception
-     *
-     * @param exception 异常
-     * @return R
-     */
     @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
     @ResponseStatus(HttpStatus.OK)
     public ActionResult<Object> bodyValidExceptionHandler(MethodArgumentNotValidException exception) {
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
-        log.error("validation exception", exception);
+        log.error("参数校验异常", exception);
         return ActionResult.failed(fieldErrors);
     }
 
-    /**
-     * validation exception
-     *
-     * @param exception 异常
-     * @return R
-     */
     @ExceptionHandler({ConstraintViolationException.class})
     @ResponseStatus(HttpStatus.OK)
     public ActionResult<Object> bodyValidExceptionHandler(ConstraintViolationException exception) {
-        log.error("validation exception：{}", exception.getMessage(), exception);
+        log.error("约束校验异常：{}", exception.getMessage(), exception);
         return ActionResult.failed(exception);
     }
 
-    /**
-     * validation exception
-     *
-     * @param exception 异常
-     * @return R
-     */
     @ExceptionHandler({ValidationException.class})
     @ResponseStatus(HttpStatus.OK)
     public ActionResult<Object> bodyValidExceptionHandler(ValidationException exception) {
-        log.error("validation exception：{}", exception.getMessage(), exception);
+        log.error("校验异常：{}", exception.getMessage(), exception);
         return ActionResult.failed(exception.getMessage());
     }
 

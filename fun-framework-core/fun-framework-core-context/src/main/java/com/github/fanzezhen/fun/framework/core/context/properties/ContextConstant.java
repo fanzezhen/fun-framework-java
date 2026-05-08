@@ -3,7 +3,6 @@ package com.github.fanzezhen.fun.framework.core.context.properties;
 import java.util.Locale;
 
 /**
- * @author fanzezhen
  */
 public class ContextConstant {
 

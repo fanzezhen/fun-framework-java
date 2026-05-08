@@ -5,7 +5,6 @@ import lombok.Getter;
 /**
  * 文件类型
  *
- * @author fanzezhen
  * @since 3.0.0
  */
 @Getter

@@ -9,7 +9,6 @@ import java.lang.annotation.Target;
 /**
  * 请求头校验
  *
- * @author fanzezhen
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

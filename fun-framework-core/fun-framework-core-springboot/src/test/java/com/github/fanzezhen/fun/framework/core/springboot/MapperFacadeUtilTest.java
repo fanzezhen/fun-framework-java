@@ -1,6 +1,6 @@
 package com.github.fanzezhen.fun.framework.core.springboot;
 
-import com.github.fanzezhen.fun.framework.core.model.result.PageResult;
+import com.github.fanzezhen.fun.framework.core.model.dto.PageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * MapperFacadeUtil 单元测试
  *
- * @author fanzezhen
  * @since 4.0.5
  */
 class MapperFacadeUtilTest {
@@ -118,27 +117,27 @@ class MapperFacadeUtilTest {
     @Test
     void testPage_NullSource() {
         // 测试空分页对象转换
-        PageResult<UserBO> result = com.github.fanzezhen.fun.framework.core.model.util.MapperFacadeUtil.page(null, UserEntity.class, UserBO.class);
+        PageDTO<UserBO> result = com.github.fanzezhen.fun.framework.core.model.util.MapperFacadeUtil.page(null, UserEntity.class, UserBO.class);
         assertNull(result);
     }
 
     @Test
     void testPage_EmptyRowList() {
         // 测试空数据列表的分页对象
-        PageResult<UserEntity> entityPage = new PageResult<>();
-        entityPage.setCurrentPage(1L);
-        entityPage.setPageSize(10L);
+        PageDTO<UserEntity> entityPage = new PageDTO<>();
+        entityPage.setCurrent(1);
+        entityPage.setSize(10);
         entityPage.setTotal(0L);
-        entityPage.setRowList(Arrays.asList());
+        entityPage.setRecords(Arrays.asList());
 
-        PageResult<UserBO> boPage = com.github.fanzezhen.fun.framework.core.model.util.MapperFacadeUtil.page(entityPage, UserEntity.class, UserBO.class);
+        PageDTO<UserBO> boPage = com.github.fanzezhen.fun.framework.core.model.util.MapperFacadeUtil.page(entityPage, UserEntity.class, UserBO.class);
 
         assertNotNull(boPage);
-        assertEquals(1L, boPage.getCurrentPage());
-        assertEquals(10L, boPage.getPageSize());
+        assertEquals(1L, boPage.getCurrent());
+        assertEquals(10L, boPage.getSize());
         assertEquals(0L, boPage.getTotal());
-        assertNotNull(boPage.getRowList());
-        assertTrue(boPage.getRowList().isEmpty());
+        assertNotNull(boPage.getRecords());
+        assertTrue(boPage.getRecords().isEmpty());
     }
 
     @Test
@@ -149,22 +148,22 @@ class MapperFacadeUtilTest {
                 new UserEntity(2L, "李四", "pwd2", 30)
         );
 
-        PageResult<UserEntity> entityPage = new PageResult<>();
-        entityPage.setCurrentPage(1L);
-        entityPage.setPageSize(10L);
+        PageDTO<UserEntity> entityPage = new PageDTO<>();
+        entityPage.setCurrent(1);
+        entityPage.setSize(10);
         entityPage.setTotal(2L);
         entityPage.setTotalTime(0.123);
-        entityPage.setRowList(entities);
+        entityPage.setRecords(entities);
 
-        PageResult<UserBO> boPage = com.github.fanzezhen.fun.framework.core.model.util.MapperFacadeUtil.page(entityPage, UserEntity.class, UserBO.class);
+        PageDTO<UserBO> boPage = com.github.fanzezhen.fun.framework.core.model.util.MapperFacadeUtil.page(entityPage, UserEntity.class, UserBO.class);
 
         assertNotNull(boPage);
-        assertEquals(1L, boPage.getCurrentPage());
-        assertEquals(10L, boPage.getPageSize());
+        assertEquals(1L, boPage.getCurrent());
+        assertEquals(10L, boPage.getSize());
         assertEquals(2L, boPage.getTotal());
         assertEquals(0.123, boPage.getTotalTime());
 
-        List<UserBO> bos = boPage.getRowList();
+        List<UserBO> bos = boPage.getRecords();
         assertNotNull(bos);
         assertEquals(2, bos.size());
 
@@ -180,17 +179,17 @@ class MapperFacadeUtilTest {
     @Test
     void testPage_PreservesMetadata() {
         // 测试分页元数据保持不变
-        PageResult<UserEntity> entityPage = new PageResult<>();
-        entityPage.setCurrentPage(3L);
-        entityPage.setPageSize(20L);
+        PageDTO<UserEntity> entityPage = new PageDTO<>();
+        entityPage.setCurrent(3);
+        entityPage.setSize(20);
         entityPage.setTotal(100L);
         entityPage.setTotalTime(0.567);
-        entityPage.setRowList(Arrays.asList(new UserEntity(1L, "测试", "pwd", 20)));
+        entityPage.setRecords(Arrays.asList(new UserEntity(1L, "测试", "pwd", 20)));
 
-        PageResult<UserBO> boPage = com.github.fanzezhen.fun.framework.core.model.util.MapperFacadeUtil.page(entityPage, UserEntity.class, UserBO.class);
+        PageDTO<UserBO> boPage = com.github.fanzezhen.fun.framework.core.model.util.MapperFacadeUtil.page(entityPage, UserEntity.class, UserBO.class);
 
-        assertEquals(3L, boPage.getCurrentPage());
-        assertEquals(20L, boPage.getPageSize());
+        assertEquals(3L, boPage.getCurrent());
+        assertEquals(20L, boPage.getSize());
         assertEquals(100L, boPage.getTotal());
         assertEquals(0.567, boPage.getTotalTime());
         assertEquals(5L, boPage.getPageCount()); // (100 / 20) = 5

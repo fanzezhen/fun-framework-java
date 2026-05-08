@@ -3,7 +3,7 @@ package com.github.fanzezhen.fun.framework.core.data;
 import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson2.JSON;
 import com.github.fanzezhen.fun.framework.core.data.util.YApiUtil;
-import com.github.fanzezhen.fun.framework.core.model.YApiModel;
+import com.github.fanzezhen.fun.framework.core.model.common.YApiModel;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;

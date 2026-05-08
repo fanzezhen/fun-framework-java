@@ -10,7 +10,18 @@ import lombok.extern.slf4j.Slf4j;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @author fanzezhen
+ * JWT Token服务默认实现
+ * <p>
+ * 基于Hutool的JWT工具实现Token生成和校验，支持多账户体系（通过code区分）。
+ * 使用MD5+时间戳进行密钥校验，防止密钥泄露后的重放攻击。
+ * <p>
+ * <b>安全特性：</b>
+ * <ul>
+ *   <li>支持Token过期校验（可配置超时时间）</li>
+ *   <li>密钥变更后旧Token自动失效</li>
+ *   <li>时间戳校验防止重放</li>
+ * </ul>
+ *
  */
 @Slf4j
 public class FunDefaultJwtServiceImpl implements JwtService {

@@ -10,7 +10,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author fanzezhen
  * @since 3.4.3.1
  */
 @Slf4j

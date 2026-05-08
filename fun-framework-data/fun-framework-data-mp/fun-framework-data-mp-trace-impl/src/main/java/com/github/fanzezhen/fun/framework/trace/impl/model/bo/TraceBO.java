@@ -10,7 +10,6 @@ import org.apache.ibatis.mapping.SqlCommandType;
 /**
  * 痕迹表
  *
- * @author fanzezhen
  * @since 3.4.3.1
  */
 @EqualsAndHashCode(callSuper = true)

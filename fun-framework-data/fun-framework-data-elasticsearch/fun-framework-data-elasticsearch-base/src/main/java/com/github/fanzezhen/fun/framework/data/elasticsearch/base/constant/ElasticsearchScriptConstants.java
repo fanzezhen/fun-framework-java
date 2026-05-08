@@ -5,7 +5,6 @@ package com.github.fanzezhen.fun.framework.data.elasticsearch.base.constant;
  * <p>提供 Elasticsearch Painless 脚本相关的常量和模板</p>
  * <p>所有脚本均使用 Painless 脚本语言编写,这是 Elasticsearch 官方推荐的安全高效脚本语言</p>
  *
- * @author fanzezhen
  */
 public final class ElasticsearchScriptConstants {
 

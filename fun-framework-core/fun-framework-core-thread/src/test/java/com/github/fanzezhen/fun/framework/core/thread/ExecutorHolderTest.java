@@ -10,7 +10,6 @@ import java.time.Duration;
 import java.util.List;
 
 /**
- * @author fanzezhen
  */
 @Slf4j
 class ExecutorHolderTest {

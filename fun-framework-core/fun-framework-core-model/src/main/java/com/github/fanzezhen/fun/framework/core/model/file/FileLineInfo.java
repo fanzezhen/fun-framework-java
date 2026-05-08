@@ -8,7 +8,6 @@ import lombok.experimental.Accessors;
 /**
  * 文件行信息
  *
- * @author fanzezhen
  * @since 3.4.3.5
  */
 @Data

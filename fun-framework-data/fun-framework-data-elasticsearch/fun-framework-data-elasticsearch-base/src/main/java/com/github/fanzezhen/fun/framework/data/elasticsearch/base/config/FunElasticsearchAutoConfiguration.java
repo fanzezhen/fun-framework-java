@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author fanzezhen
  */
 @Configuration
 @EnableConfigurationProperties(FunElasticsearchProperties.class)

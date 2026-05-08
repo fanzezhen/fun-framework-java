@@ -11,7 +11,15 @@ import java.util.Set;
 
 
 /**
- * @author fanzezhen
+ * 上下文数据容器，用于存储请求链路中的元数据（用户ID、租户ID、traceId等）
+ * <p>
+ * key大小写不敏感：使用 {@link CaseInsensitiveMap} 保证 "userId" 和 "USERID" 指向同一个值，
+ * 避免因大小写不一致导致的取值失败（常见于HTTP Header和配置文件场景）。
+ * <p>
+ * 容量限制原因：
+ * - MAX_SIZE(1024)：单个key/value限制，防止存储大对象（如完整JSON文档）导致跨服务调用时HTTP Header超限
+ * - MAX_CAPACITY(100)：键值对总数限制，防止上下文无限膨胀导致内存泄漏
+ *
  */
 @Slf4j
 @SuppressWarnings("unused")
@@ -19,11 +27,11 @@ public class Context {
     protected final JSONObject contextMap = new JSONObject(new CaseInsensitiveMap<>());
 
     /**
-     * context map 最大容量
+     * 最多允许100个键值对，防止上下文无限膨胀
      */
     public static final Integer MAX_CAPACITY = 100;
     /**
-     * context map key 或者 value 最大值
+     * 单个key/value最大1024字符，防止HTTP Header超限（Nginx默认8KB）
      */
     public static final Integer MAX_SIZE = 1024;
 

@@ -11,7 +11,6 @@ import jakarta.annotation.Resource;
 /**
  * mybatis-plus父类缓存配置，选择使用SqlSessionFactory实现时不能与ISqlInjector放在同一个bean中
  *
- * @author fanzezhen
  * @since 3.4.3.1
  */
 @Configuration

@@ -24,7 +24,6 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * jackson 配置
- * @author fanzezhen
  */
 @Configuration
 public class FunJacksonConfig {

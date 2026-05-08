@@ -11,7 +11,13 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * @author fanzezhen
+ * 代理配置属性
+ * <p>
+ * 配置前缀：fun.proxy
+ * <p>
+ * 用于配置静态资源地址映射，将内网地址自动转换为外网可访问地址。
+ * 支持HTTP/HTTPS协议的自动匹配和正则模式匹配。
+ *
  * @since 3.4.3.5
  */
 @Slf4j

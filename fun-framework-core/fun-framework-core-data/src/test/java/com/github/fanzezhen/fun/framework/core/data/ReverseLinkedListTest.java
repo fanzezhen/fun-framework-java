@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * @author fanzezhen
  */
 @Slf4j
 @Disabled

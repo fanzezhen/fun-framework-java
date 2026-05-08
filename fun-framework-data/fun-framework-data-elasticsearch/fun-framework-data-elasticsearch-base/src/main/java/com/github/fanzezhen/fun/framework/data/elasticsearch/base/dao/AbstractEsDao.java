@@ -12,6 +12,13 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * Elasticsearch DAO基类
+ * <p>
+ * 提供ES文档的基础CRUD和查询操作，封装了elasticsearchTemplate的调用。
+ * 子类需实现getDocumentClass()方法指定文档实体类型。
+ * <p>
+ * <b>版本兼容：</b>支持ES6、ES7、ES8，查询方法的入参根据ES版本自动适配
+ *
  */
 public abstract class AbstractEsDao<T extends IEntity<String>>  {
 

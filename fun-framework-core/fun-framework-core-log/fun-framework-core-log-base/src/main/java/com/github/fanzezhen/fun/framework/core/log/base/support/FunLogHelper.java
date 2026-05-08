@@ -5,7 +5,7 @@ import ch.qos.logback.classic.Logger;
 import com.alibaba.fastjson2.JSON;
 import com.github.fanzezhen.fun.framework.core.log.base.config.FunLogProperties;
 import com.github.fanzezhen.fun.framework.core.log.base.serializer.IPrintSerializer;
-import com.github.fanzezhen.fun.framework.core.model.FunFunction;
+import com.github.fanzezhen.fun.framework.core.model.common.FunFunction;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.SneakyThrows;
@@ -21,6 +21,19 @@ import java.util.Objects;
 import java.util.WeakHashMap;
 
 /**
+ * 动态日志级别管理工具，支持运行时调整指定模块的日志级别（无需重启应用）
+ * <p>
+ * 典型场景：
+ * - 生产环境临时开启DEBUG日志排查问题后恢复INFO级别
+ * - 按模块分级记录日志（如核心接口用INFO，辅助功能用WARN）
+ * - AOP切面记录方法入参出参，根据配置动态控制日志输出
+ * <p>
+ * 线程安全性：{@link #setLogLevel} 和 {@link #initLogLevel} 使用synchronized保证写入安全，
+ * {@link #getOrGenerateLevelLogger} 使用 {@code computeIfAbsent} 保证并发读取时单次计算。
+ * <p>
+ * WeakHashMap 选择原因：防止长期运行的应用中Logger对象累积导致内存泄漏。
+ * 当外部不再持有某个模块名的引用时，其对应的LevelLogger会被GC自动回收，
+ * 适用于动态加载类场景（如热部署、插件系统）。
  *
  */
 @Slf4j
@@ -33,6 +46,10 @@ public class FunLogHelper {
     private static final LevelLogger errorLogger = log::error;
     private static final LevelLogger traceLogger = log::trace;
     private static LevelLogger defaultLevelLogger;
+    /**
+     * 使用WeakHashMap防止内存泄漏：当模块名（如"com.example.TempPlugin"）不再被引用时，
+     * 对应的LevelLogger会被GC自动清理，避免动态类加载场景下Logger对象无限累积。
+     */
     static final WeakHashMap<String, LevelLogger> levelLoggerMap = new WeakHashMap<>();
 
     @Resource

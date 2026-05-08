@@ -18,9 +18,15 @@ import org.springframework.stereotype.Component;
 import jakarta.annotation.Resource;
 
 /**
- * 静态资源代理拦截器
+ * MyBatis查询结果代理拦截器
+ * <p>
+ * 拦截MyBatis的查询方法，通过ProxyHelper对查询结果进行装饰处理，
+ * 实现字段值的自动代理（如将内网图片URL转换为外网可访问URL）。
+ * <p>
+ * <b>拦截点：</b>Executor.query方法（所有查询操作）
+ * <p>
+ * <b>性能考虑：</b>仅处理查询结果的装饰，不影响SQL执行，但会遍历结果对象的字段
  *
- * @author fanzezhen
  * @since 3.4.3.5
  */
 @Slf4j

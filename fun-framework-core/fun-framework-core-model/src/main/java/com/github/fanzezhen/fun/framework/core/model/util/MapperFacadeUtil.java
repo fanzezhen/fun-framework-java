@@ -1,6 +1,6 @@
 package com.github.fanzezhen.fun.framework.core.model.util;
 
-import com.github.fanzezhen.fun.framework.core.model.result.PageResult;
+import com.github.fanzezhen.fun.framework.core.model.dto.PageDTO;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 import ma.glasnost.orika.metadata.Type;
@@ -33,7 +33,6 @@ import java.util.List;
  * PageResult<UserBO> boPage = MapperFacadeUtil.page(entityPage, UserEntity.class, UserBO.class);
  * }</pre>
  *
- * @author fanzezhen
  * @since 4.0.5
  */
 public class MapperFacadeUtil {
@@ -134,7 +133,7 @@ public class MapperFacadeUtil {
     /**
      * 转换分页结果对象
      * <p>
-     * 将 {@link PageResult} 中的数据列表从源类型转换为目标类型，保持分页元数据不变。
+     * 将 {@link PageDTO} 中的数据列表从源类型转换为目标类型，保持分页元数据不变。
      * </p>
      *
      * @param fromPage     源分页对象
@@ -145,7 +144,7 @@ public class MapperFacadeUtil {
      * @return 转换后的分页对象，如果 fromPage 为 null 则返回 null
      */
     @SuppressWarnings("java:S1168") // 返回 null 以区分"分页对象不存在"与"空分页对象"的语义
-    public static <F, R> PageResult<R> page(PageResult<F> fromPage, Class<F> sourceClass, Class<R> targetClass) {
+    public static <F, R> PageDTO<R> page(PageDTO<F> fromPage, Class<F> sourceClass, Class<R> targetClass) {
         if (fromPage == null) {
             return null;
         }

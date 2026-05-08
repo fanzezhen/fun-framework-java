@@ -18,7 +18,6 @@ import java.util.Base64;
 /**
  * StringEncryptor单元测试
  *
- * @author fanzezhen
  */
 @Slf4j
 class StringEncryptorTest {

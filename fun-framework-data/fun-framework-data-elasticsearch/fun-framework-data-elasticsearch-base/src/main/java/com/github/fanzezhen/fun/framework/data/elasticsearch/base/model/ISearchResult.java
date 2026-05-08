@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch.base.model;
 
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.annotation.Aggregation;
-import com.github.fanzezhen.fun.framework.core.model.result.PageResult;
+import com.github.fanzezhen.fun.framework.core.model.dto.PageDTO;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IResponseAdapter;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public interface ISearchResult<T> {
     /**
      * 转换为分页对象
      */
-    PageResult<T> asPageResult(Long currentPage, Long pageSize);
+    PageDTO<T> asPageResult(int currentPage, int pageSize);
 
     /**
      * 转换为list

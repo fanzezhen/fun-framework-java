@@ -14,7 +14,6 @@ import jakarta.annotation.PostConstruct;
  * 使其能够在任何地方通过静态方法调用进行对象映射。
  * </p>
  *
- * @author fanzezhen
  * @since 4.0.5
  */
 @Configuration

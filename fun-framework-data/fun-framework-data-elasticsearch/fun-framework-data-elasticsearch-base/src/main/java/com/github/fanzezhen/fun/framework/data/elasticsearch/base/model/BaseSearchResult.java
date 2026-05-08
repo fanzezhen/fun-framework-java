@@ -5,7 +5,7 @@ import com.github.fanzezhen.fun.framework.data.elasticsearch.base.annotation.Agg
 import com.github.fanzezhen.fun.framework.core.data.enums.FunCoreDataExceptionEnum;
 import com.github.fanzezhen.fun.framework.core.data.template.ITemplate;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
-import com.github.fanzezhen.fun.framework.core.model.result.PageResult;
+import com.github.fanzezhen.fun.framework.core.model.dto.PageDTO;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IAggregationsAdapter;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IHitsAdapter;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IResponseAdapter;
@@ -100,14 +100,14 @@ public abstract class BaseSearchResult<T, R> implements ISearchResult<T> {
      * 转换为分页对象
      */
     @Override
-    public PageResult<T> asPageResult(Long currentPage, Long pageSize) {
-        PageResult<T> pageResult = new PageResult<>();
-        pageResult.setCurrentPage(currentPage);
-        pageResult.setPageSize(pageSize);
-        pageResult.setTotalTime(this.getTotalTime());
-        pageResult.setTotal(this.getTotalHits());
-        pageResult.setRowList(this.asDocumentList());
-        return pageResult;
+    public PageDTO<T> asPageResult(int currentPage, int pageSize) {
+        PageDTO<T> pageDTO = new PageDTO<>();
+        pageDTO.setCurrent(currentPage);
+        pageDTO.setSize(pageSize);
+        pageDTO.setTotalTime(this.getTotalTime());
+        pageDTO.setTotal(this.getTotalHits());
+        pageDTO.setRecords(this.asDocumentList());
+        return pageDTO;
     }
 
     public static <T> ISearchResult<T> empty(Class<T> clz) {

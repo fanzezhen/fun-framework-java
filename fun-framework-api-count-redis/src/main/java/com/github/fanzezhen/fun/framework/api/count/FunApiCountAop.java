@@ -31,6 +31,15 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Controller切面：统计所有接口参数空置率
+ * <p>
+ * 通过AOP拦截所有Controller方法，异步统计接口请求次数和响应字段的填充情况，
+ * 数据存储在Redis的ZSet中，Key有效期365天。
+ * <p>
+ * <b>性能考虑：</b>
+ * <ul>
+ *   <li>前置任务和后置任务均在独立线程池中异步执行，不阻塞主请求</li>
+ *   <li>统计失败不影响业务逻辑，只记录warn日志</li>
+ * </ul>
  */
 @Slf4j
 @Aspect
@@ -92,6 +101,15 @@ public class FunApiCountAop {
         incrementKey(key, hashKey, 1);
     }
 
+    /**
+     * 增加ZSet中指定成员的分数
+     * <p>
+     * 每次调用会自动刷新Key的过期时间为365天
+     *
+     * @param key     Redis ZSet的Key
+     * @param hashKey ZSet的成员（如字段名或@Request）
+     * @param delta   增量值
+     */
     public void incrementKey(String key, String hashKey, long delta) {
         ZSetOperations<String, Object> operations = redisTemplate.opsForZSet();
         operations.incrementScore(key, hashKey, delta);

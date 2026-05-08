@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 /**
  * SaToken系统上下文多线程修饰器
  *
- * @author fanzezhen
  * @since 3.1.7
  */
 @Order(Integer.MAX_VALUE - 1)
