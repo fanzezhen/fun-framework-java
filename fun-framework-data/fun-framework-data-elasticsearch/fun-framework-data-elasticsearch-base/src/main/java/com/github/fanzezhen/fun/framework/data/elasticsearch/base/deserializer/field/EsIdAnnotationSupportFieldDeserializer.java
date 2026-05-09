@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.field;
 
 
-import com.github.fanzezhen.fun.framework.core.data.annotation.Column;
+import com.github.fanzezhen.fun.framework.core.model.annotation.Column;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IHit;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;

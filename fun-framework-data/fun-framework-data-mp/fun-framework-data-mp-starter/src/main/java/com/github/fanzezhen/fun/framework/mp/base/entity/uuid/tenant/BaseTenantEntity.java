@@ -1,9 +1,7 @@
 package com.github.fanzezhen.fun.framework.mp.base.entity.uuid.tenant;
 
 import cn.hutool.core.util.ArrayUtil;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.github.fanzezhen.fun.framework.mp.base.entity.uuid.BaseEntity;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,7 +22,6 @@ public abstract class BaseTenantEntity extends BaseEntity {
     /**
      * 租户id
      */
-    @Schema(name = "租户id")
     protected String tenantId;
 
     public static String[] getFieldNames() {

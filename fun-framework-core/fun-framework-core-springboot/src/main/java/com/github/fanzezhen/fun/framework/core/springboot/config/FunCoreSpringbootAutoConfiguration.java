@@ -3,6 +3,7 @@ package com.github.fanzezhen.fun.framework.core.springboot.config;
 import com.github.fanzezhen.fun.framework.core.model.util.MapperFacadeUtil;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import jakarta.annotation.PostConstruct;
@@ -17,6 +18,7 @@ import jakarta.annotation.PostConstruct;
  * @since 4.0.5
  */
 @Configuration
+@ComponentScan("com.github.fanzezhen.fun.framework.core.springboot")
 public class FunCoreSpringbootAutoConfiguration {
 
     private final MapperFacade mapperFacade;

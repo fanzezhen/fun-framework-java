@@ -5,6 +5,9 @@ Spring Boot 自动配置核心组件
 ## 功能
 
 - **MapperFacade 自动注入** - 将 Orika MapperFacade 自动注入到 `MapperFacadeUtil`
+- **线程池管理** - 提供 `ThreadPoolTaskExecutorRepository` 用于管理 Spring 线程池，自动集成上下文传递
+- **异常处理** - 提供 `DefaultExceptionHandler` 全局异常处理器
+- **Jackson 配置** - 提供 `FunJacksonConfig` 统一 JSON 序列化配置
 - **零配置启动** - 添加依赖后自动生效
 
 ## 快速开始
@@ -17,16 +20,26 @@ Spring Boot 自动配置核心组件
     <artifactId>fun-framework-core-springboot</artifactId>
 </dependency>
 
-<!-- 对象映射需额外引入 Orika -->
+<!-- 对象映射需额外引入 Orika（可选） -->
 <dependency>
     <groupId>ma.glasnost.orika</groupId>
     <artifactId>orika-core</artifactId>
+</dependency>
+
+<!-- 线程池上下文传递（可选） -->
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>transmittable-thread-local</artifactId>
 </dependency>
 ```
 
 ### 自动配置原理
 
-通过 `spring.factories` 自动加载 `FunCoreSpringbootAutoConfiguration`，检测并注入容器中的 `MapperFacade` Bean 到 `MapperFacadeUtil`
+通过 `spring.factories` 自动加载 `FunCoreSpringbootAutoConfiguration`：
+- 检测并注入容器中的 `MapperFacade` Bean 到 `MapperFacadeUtil`
+- 自动配置 `FunJacksonConfig` 用于 JSON 序列化
+- 自动配置 `DefaultExceptionHandler` 用于全局异常处理
+- 通过 `FunCoreThreadAutoConfiguration` 自动配置线程池管理
 
 ## 使用示例
 
@@ -66,6 +79,51 @@ public class OrikaConfig {
 }
 ```
 
+### ThreadPoolTaskExecutorRepository 线程池管理
+
+```java
+import com.github.fanzezhen.fun.framework.core.springboot.thread.ThreadPoolTaskExecutorRepository;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+// 创建线程池（自动集成上下文传递）
+ThreadPoolTaskExecutor executor = ThreadPoolTaskExecutorRepository.newThreadPoolTaskExecutor(
+    "myThreadPool", 
+    5,  // 核心线程数
+    10  // 最大线程数
+);
+
+// 创建带队列容量的线程池
+ThreadPoolTaskExecutor executorWithQueue = ThreadPoolTaskExecutorRepository.computeThreadPoolTaskExecutor(
+    "myThreadPool",
+    5,   // 核心线程数
+    10,  // 最大线程数
+    100  // 队列容量
+);
+
+// 获取已注册的线程池
+ThreadPoolTaskExecutor registeredExecutor = ThreadPoolTaskExecutorRepository.get("myThreadPool");
+
+// 检查线程池是否存在
+boolean exists = ThreadPoolTaskExecutorRepository.contains("myThreadPool");
+
+// 获取所有线程池名称
+Set<String> poolNames = ThreadPoolTaskExecutorRepository.getPoolNames();
+
+// 销毁指定线程池（优雅关闭，等待 10 秒）
+boolean destroyed = ThreadPoolTaskExecutorRepository.destroy("myThreadPool", 10);
+
+// 销毁所有线程池
+ThreadPoolTaskExecutorRepository.destroy(10);
+```
+
+**线程池生命周期管理**：
+
+`destroy` 方法实现了优雅关闭策略：
+1. **停止接收新任务** - 调用 `shutdown()` 方法
+2. **等待任务完成** - 等待指定时间（如 10 秒）
+3. **强制关闭** - 超时后调用 `shutdownNow()` 中断正在执行的任务
+4. **资源释放** - 调用 Spring 的 `destroy()` 释放线程池资源
+
 ### 非 Spring 环境
 
 `MapperFacadeUtil` 支持非 Spring 环境，使用内置默认 MapperFacade
@@ -92,6 +150,8 @@ java --add-opens java.base/java.lang=ALL-UNNAMED \
 - MapperFacade 注入在 `@PostConstruct` 阶段，应用启动完成后才可用
 - Orika 依赖可选 (`optional=true`)，不使用对象映射可不引入
 - 线程安全由 Orika 保证
+- 使用 `ThreadPoolTaskExecutorRepository` 创建的线程池会自动配置 `ThreadPoolTaskDecorator`，支持上下文传递
+- 建议配合 `fun-framework-core-context` 使用，实现完整的上下文管理
 
 ## 相关模块
 

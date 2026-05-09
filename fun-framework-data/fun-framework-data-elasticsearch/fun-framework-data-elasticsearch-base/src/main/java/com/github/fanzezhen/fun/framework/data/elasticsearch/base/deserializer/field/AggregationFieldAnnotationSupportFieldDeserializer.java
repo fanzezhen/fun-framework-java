@@ -3,7 +3,7 @@ package com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.TypeUtil;
-import com.github.fanzezhen.fun.framework.core.data.util.ObjUtil;
+import com.github.fanzezhen.fun.framework.core.model.util.ObjUtil;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IAggregationAdapter;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.BucketAdapter;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IHitsAdapter;

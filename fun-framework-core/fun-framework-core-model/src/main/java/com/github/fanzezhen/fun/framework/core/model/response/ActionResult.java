@@ -8,9 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.ConstraintViolationException;
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.springframework.validation.FieldError;
-
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -97,12 +95,11 @@ public class ActionResult<T> {
         return new ActionResult<>(errorInfo);
     }
 
-    public static <T> ActionResult<T> failed(List<FieldError> fieldErrors) {
-        if (CollUtil.isEmpty(fieldErrors)) {
+    public static <T> ActionResult<T> failed(Collection<String> errormessages) {
+        if (CollUtil.isEmpty(errormessages)) {
             return failed();
         }
-        List<ErrorInfo> errorList = new ArrayList<>();
-        fieldErrors.forEach(fieldError -> errorList.add(new ErrorInfo(String.valueOf(fieldError))));
+        List<ErrorInfo> errorList = errormessages.stream().map(ErrorInfo::new).toList();
         return new ActionResult<>(errorList);
     }
 

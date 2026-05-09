@@ -3,7 +3,7 @@ package com.github.fanzezhen.fun.framework.data.elasticsearch.base.config;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrPool;
 import com.alibaba.fastjson2.JSON;
-import com.github.fanzezhen.fun.framework.core.data.constant.FunFrameworkCoreDataConstant;
+import com.github.fanzezhen.fun.framework.core.model.constant.FunFrameworkCoreDataConstant;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;

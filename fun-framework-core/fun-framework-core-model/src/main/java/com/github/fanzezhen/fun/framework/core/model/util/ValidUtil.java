@@ -12,7 +12,6 @@ import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -38,10 +37,12 @@ public class ValidUtil {
 
     private ValidUtil() {
     }
+
     static final String EMPTY_ERROR_MESSAGE = "图片文件不能为空";
 
     /**
      * 验证对象的约束条件
+     *
      * @param bean 要验证的对象
      */
     public static <T> void validate(T bean) {
@@ -50,9 +51,10 @@ public class ValidUtil {
 
     /**
      * 验证对象的约束条件，并添加自定义的错误信息
-     * @param bean 要验证的对象
+     *
+     * @param bean     要验证的对象
      * @param startMsg 错误信息的前缀
-     * @param endMsg 错误信息的后缀
+     * @param endMsg   错误信息的后缀
      */
     public static <T> void validate(T bean, String startMsg, String endMsg) {
         Set<ConstraintViolation<T>> violations = loadViolationSet(bean);
@@ -64,11 +66,13 @@ public class ValidUtil {
 
     /**
      * 加载对象的约束违规集合
+     *
      * @param bean 要验证的对象
+     *
      * @return 约束违规集合
      */
     public static <T> Set<ConstraintViolation<T>> loadViolationSet(T bean) {
-        try(ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
             Validator validator = factory.getValidator();
             return validator.validate(bean);
         }
@@ -76,12 +80,13 @@ public class ValidUtil {
 
     /**
      * 验证文件是否为有效的图片
+     *
      * @param imageFile 要验证的图片文件
      */
     public static void validateImage(File imageFile) {
         try {
             BufferedImage image = ImageIO.read(imageFile);
-            if (isBlank(image)){
+            if (isBlank(image)) {
                 throw new ServiceException(EMPTY_ERROR_MESSAGE);
             }
         } catch (Exception exception) {
@@ -92,7 +97,9 @@ public class ValidUtil {
 
     /**
      * 判断文件是否为图片
+     *
      * @param imageFile 要判断的图片文件
+     *
      * @return 如果是图片返回true，否则返回false
      */
     public static boolean isImage(File imageFile) {
@@ -108,46 +115,14 @@ public class ValidUtil {
     }
 
     /**
-     * 验证MultipartFile是否为有效的图片
-     * @param imageMultipartFile 要验证的图片文件
-     */
-    public static void validateImage(MultipartFile imageMultipartFile) {
-        try {
-            BufferedImage image = ImageIO.read(imageMultipartFile.getInputStream());
-            if (isBlank(image)){
-                throw new ServiceException(EMPTY_ERROR_MESSAGE);
-            }
-        } catch (Exception throwable) {
-            log.warn(IMG_ERR_MSG, throwable);
-            throw new ValidationException(IMG_ERR_MSG);
-        }
-    }
-
-    /**
-     * 判断MultipartFile是否为图片
-     * @param imageMultipartFile 要判断的图片文件
-     * @return 如果是图片返回true，否则返回false
-     */
-    public static boolean isImage(MultipartFile imageMultipartFile) {
-        try {
-            BufferedImage image = ImageIO.read(imageMultipartFile.getInputStream());
-            if (image != null) {
-                return true;
-            }
-        } catch (Exception e) {
-            throw new ServiceException(IMG_PATTERN_ERR_MSG);
-        }
-        return false;
-    }
-
-    /**
      * 验证InputStream是否为有效的图片
+     *
      * @param inputStream 要验证的图片输入流
      */
     public static void validateImage(InputStream inputStream) {
         try {
             BufferedImage image = ImageIO.read(inputStream);
-            if (isBlank(image)){
+            if (isBlank(image)) {
                 throw new ServiceException(EMPTY_ERROR_MESSAGE);
             }
         } catch (Exception throwable) {
@@ -158,7 +133,9 @@ public class ValidUtil {
 
     /**
      * 判断InputStream是否为图片
+     *
      * @param inputStream 要判断的图片输入流
+     *
      * @return 如果是图片返回true，否则返回false
      */
     public static boolean isImage(InputStream inputStream) {
@@ -179,6 +156,7 @@ public class ValidUtil {
      * 支持多种类型的空值判断：null、空字符串、空集合、空Map、空数组、IHolder.isEmpty()
      *
      * @param o 待判断的对象
+     *
      * @return true表示为空
      */
     public static boolean isEmpty(Object o) {
@@ -190,6 +168,7 @@ public class ValidUtil {
      *
      * @param o       待判断的对象
      * @param isStrip 是否对字符串进行trim后再判断（true时" "也会被认为是空）
+     *
      * @return true表示为空
      */
     public static boolean isEmpty(Object o, boolean isStrip) {

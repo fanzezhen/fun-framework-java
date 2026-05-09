@@ -1,6 +1,5 @@
 package com.github.fanzezhen.fun.framework.core.model.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,6 @@ public abstract class BaseTenantGenericDTO<P extends Serializable> extends BaseG
     /**
      * 租户id
      */
-    @Schema(name = "租户id")
     protected P tenantId;
 
     public BaseTenantGenericDTO<P> init(BaseTenantGenericDTO<P> dto) {

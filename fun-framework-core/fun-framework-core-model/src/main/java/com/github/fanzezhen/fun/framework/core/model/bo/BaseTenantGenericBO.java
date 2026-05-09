@@ -1,6 +1,5 @@
 package com.github.fanzezhen.fun.framework.core.model.bo;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,6 @@ public abstract class BaseTenantGenericBO<P extends Serializable> extends BaseGe
     /**
      * 租户id
      */
-    @Schema(name = "租户id")
     protected P tenantId;
 
     public void init(BaseTenantGenericBO<P> dto) {

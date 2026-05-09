@@ -19,7 +19,7 @@ import java.util.function.*;
  * - 并行处理独立任务（如同时导出多个报表）
  * - 聚合查询（如同时查询订单、库存、物流状态）
  * <p>
- * 线程池复用策略：默认使用全局共享的 {@link PoolExecutors#defaultThreadPoolTaskExecutor()}，
+ * 线程池复用策略：默认使用全局共享的 {@link ThreadPoolExecutorRepository#defaultThreadPoolExecutor()}，
  * 避免频繁创建销毁线程池。如有隔离需求（如长时间任务），可通过 {@link #create(ExecutorService)} 指定独立线程池。
  * <p>
  * 使用示例：
@@ -72,14 +72,14 @@ public class ExecutorHolder<R> {
     }
 
     public ExecutorHolder(int taskSize) {
-        this.executor = PoolExecutors.defaultThreadPoolTaskExecutor();
+        this.executor = ThreadPoolExecutorRepository.defaultThreadPoolExecutor();
         this.tasks = new ArrayList<>(taskSize);
         this.futureMap = Collections.synchronizedMap(new LinkedHashMap<>(taskSize, 1f));
         this.result = Collections.synchronizedMap(new LinkedHashMap<>(taskSize, 1f));
     }
 
     public ExecutorHolder() {
-        this(PoolExecutors.defaultThreadPoolTaskExecutor());
+        this(ThreadPoolExecutorRepository.defaultThreadPoolExecutor());
     }
 
     public static void asyncExec(Runnable... runnableArr) {

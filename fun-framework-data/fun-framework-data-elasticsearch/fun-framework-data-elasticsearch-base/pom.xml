@@ -18,14 +18,6 @@
   <dependencies>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-core-data</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-core-exception</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.fanzezhen</groupId>
       <artifactId>fun-framework-core-log-base</artifactId>
     </dependency>
     <dependency>

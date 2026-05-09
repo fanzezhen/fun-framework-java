@@ -1,6 +1,6 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.field;
 
-import com.github.fanzezhen.fun.framework.core.data.model.IColumnDeserializer;
+import com.github.fanzezhen.fun.framework.core.model.common.IColumnDeserializer;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 

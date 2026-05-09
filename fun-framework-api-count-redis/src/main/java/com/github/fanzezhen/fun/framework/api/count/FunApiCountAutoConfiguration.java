@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.api.count;
 
 import com.github.fanzezhen.fun.framework.core.model.response.ActionResult;
-import com.github.fanzezhen.fun.framework.core.thread.PoolExecutors;
+import com.github.fanzezhen.fun.framework.core.springboot.thread.ThreadPoolTaskExecutorRepository;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,7 +26,7 @@ public class FunApiCountAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(name = "funApiCountThreadPoolTaskExecutor")
     public ThreadPoolTaskExecutor funApiCountThreadPoolTaskExecutor() {
-        return PoolExecutors.newThreadPoolTaskExecutor("funApiCountThreadPoolTaskExecutor", 1, 10);
+        return ThreadPoolTaskExecutorRepository.newThreadPoolTaskExecutor("funApiCountThreadPoolTaskExecutor", 1, 10);
     }
 
     /**

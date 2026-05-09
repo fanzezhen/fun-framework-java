@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.github.fanzezhen.fun.framework.core.model.entity.IGenericEntity;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,21 +25,18 @@ public abstract class BaseEntity implements IGenericEntity<Long> {
      * 主键，基于雪花算法，只有当插入对象ID为空才自动填充
      */
     @TableId(type = IdType.ASSIGN_ID)
-    @Schema(name = "主键ID")
     protected Long id;
 
     /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    @Schema(name = "创建时间")
     protected LocalDateTime createTime;
 
     /**
      * 创建人ID
      */
     @TableField(fill = FieldFill.INSERT)
-    @Schema(name = "创建人ID")
     protected Long createUserId;
 
     public void init(BaseEntity baseVarEntry) {

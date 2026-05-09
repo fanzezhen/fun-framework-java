@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
-import com.github.fanzezhen.fun.framework.core.data.util.StringUtil;
+import com.github.fanzezhen.fun.framework.core.model.util.StringUtil;
 import com.github.fanzezhen.fun.framework.mp.base.IBaseMapper;
 import com.github.fanzezhen.fun.framework.mp.base.entity.increment.BaseEntity;
 import com.github.fanzezhen.fun.framework.mp.base.entity.increment.BaseGenericEntity;

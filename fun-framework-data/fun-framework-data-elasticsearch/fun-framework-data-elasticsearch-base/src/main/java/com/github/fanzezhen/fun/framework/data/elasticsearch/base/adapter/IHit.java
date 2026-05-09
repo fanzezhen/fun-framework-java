@@ -1,6 +1,6 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter;
 
-import com.github.fanzezhen.fun.framework.core.data.model.IRow;
+import com.github.fanzezhen.fun.framework.core.model.common.IRow;
 
 import java.util.List;
 import java.util.Map;

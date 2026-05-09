@@ -32,7 +32,7 @@ class StoryTest {
         FileReader fileReader = new FileReader(originFilename);
         List<String> readLines = fileReader.readLines();
         List<String> writeLines = new ArrayList<>(readLines);
-        ExecutorService threadPoolExecutor = PoolExecutors.defaultThreadPoolExecutor();
+        ExecutorService threadPoolExecutor = ThreadPoolExecutorRepository.defaultThreadPoolExecutor();
         CountDownLatch countDownLatch = new CountDownLatch(readLines.size());
         for (int i = 0, readLinesSize = readLines.size(); i < readLinesSize; i++) {
             int finalI = i;

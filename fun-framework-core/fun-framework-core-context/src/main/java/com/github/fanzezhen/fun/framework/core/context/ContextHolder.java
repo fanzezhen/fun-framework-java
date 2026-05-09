@@ -5,6 +5,7 @@ import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.ArrayUtil;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.ttl.TransmittableThreadLocal;
 import com.github.fanzezhen.fun.framework.core.context.properties.ContextConstant;
 import com.github.fanzezhen.fun.framework.core.context.properties.FunCoreContextProperties;
 import com.github.fanzezhen.fun.framework.core.model.util.ValidUtil;
@@ -46,7 +47,7 @@ public class ContextHolder {
     /**
      * 上下文数据存储（ThreadLocal隔离，请求结束后务必调用clean()清理）
      */
-    private static final ThreadLocal<Context> CONTEXT_MAP = new ThreadLocal<>();
+    private static final TransmittableThreadLocal<Context> CONTEXT_MAP = new TransmittableThreadLocal<>();
     /**
      * 上下文参数配置
      */

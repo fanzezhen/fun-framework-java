@@ -6,7 +6,7 @@ import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.TypeUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.github.fanzezhen.fun.framework.core.data.util.ObjUtil;
+import com.github.fanzezhen.fun.framework.core.model.util.ObjUtil;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IAggregationAdapter;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.BucketAdapter;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.annotation.BucketField;

@@ -2,7 +2,6 @@ package com.github.fanzezhen.fun.framework.mp.base.entity.uuid;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.github.fanzezhen.fun.framework.core.model.entity.IGenericEntity;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,21 +22,18 @@ public abstract class BaseEntity implements IGenericEntity<String> {
      * 主键，使用不含“-”的UUID，只有当插入对象ID为空才自动填充
      */
     @TableId(type = IdType.ASSIGN_UUID)
-    @Schema(name = "主键ID")
     protected String id;
 
     /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    @Schema(name = "创建时间")
     protected LocalDateTime createTime;
 
     /**
      * 创建人ID
      */
     @TableField(fill = FieldFill.INSERT)
-    @Schema(name = "创建人ID")
     protected String createUserId;
 
     public void init(BaseEntity baseVarEntry) {

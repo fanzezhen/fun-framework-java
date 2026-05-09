@@ -35,6 +35,7 @@ support/docker/app/nacos/standalone-logs
 
 # log
 logs/
+CHANGELOG*
 
 # mongo
 .dbshell

@@ -1,6 +1,5 @@
 package com.github.fanzezhen.fun.framework.core.model.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,13 +23,11 @@ public abstract class BaseGenericDTO<P extends Serializable> extends BaseDTO<P> 
     /**
      * 更新时间
      */
-    @Schema(name = "更新时间")
     protected LocalDateTime updateTime;
 
     /**
      * 更新者ID
      */
-    @Schema(name = "更新者ID")
     protected P updateUserId;
 
     public void init(BaseGenericDTO<P> dto) {

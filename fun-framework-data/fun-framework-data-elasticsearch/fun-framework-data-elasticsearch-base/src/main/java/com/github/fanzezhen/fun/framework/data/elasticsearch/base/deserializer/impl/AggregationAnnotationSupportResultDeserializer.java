@@ -2,7 +2,7 @@ package com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.
 
 import cn.hutool.core.util.ReflectUtil;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.annotation.Aggregation;
-import com.github.fanzezhen.fun.framework.core.data.util.ObjUtil;
+import com.github.fanzezhen.fun.framework.core.model.util.ObjUtil;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IAggregationAdapter;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IAggregationsAdapter;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IResponseAdapter;

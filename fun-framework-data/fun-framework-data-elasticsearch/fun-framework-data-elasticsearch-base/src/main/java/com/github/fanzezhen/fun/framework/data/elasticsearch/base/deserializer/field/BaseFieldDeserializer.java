@@ -1,8 +1,8 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.field;
 
-import com.github.fanzezhen.fun.framework.core.data.model.IColumnDeserializer;
-import com.github.fanzezhen.fun.framework.core.data.model.IRow;
-import com.github.fanzezhen.fun.framework.core.data.util.ObjUtil;
+import com.github.fanzezhen.fun.framework.core.model.common.IColumnDeserializer;
+import com.github.fanzezhen.fun.framework.core.model.common.IRow;
+import com.github.fanzezhen.fun.framework.core.model.util.ObjUtil;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IHit;
 
 import java.lang.reflect.Field;

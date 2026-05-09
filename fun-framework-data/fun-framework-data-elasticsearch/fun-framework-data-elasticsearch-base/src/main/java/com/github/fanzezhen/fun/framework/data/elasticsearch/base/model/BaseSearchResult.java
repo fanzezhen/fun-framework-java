@@ -2,8 +2,8 @@ package com.github.fanzezhen.fun.framework.data.elasticsearch.base.model;
 
 import cn.hutool.core.collection.CollUtil;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.annotation.Aggregation;
-import com.github.fanzezhen.fun.framework.core.data.enums.FunCoreDataExceptionEnum;
-import com.github.fanzezhen.fun.framework.core.data.template.ITemplate;
+import com.github.fanzezhen.fun.framework.core.model.enums.FunCoreDataExceptionEnum;
+import com.github.fanzezhen.fun.framework.core.model.template.ITemplate;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.model.dto.PageDTO;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IAggregationsAdapter;

@@ -21,6 +21,10 @@
       <artifactId>jakarta.annotation-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>transmittable-thread-local</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.github.fanzezhen</groupId>
       <artifactId>fun-framework-core-model</artifactId>
     </dependency>

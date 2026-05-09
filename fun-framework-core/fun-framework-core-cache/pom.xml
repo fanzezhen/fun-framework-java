@@ -18,7 +18,7 @@
   <dependencies>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-core-exception</artifactId>
+      <artifactId>fun-framework-core-springboot</artifactId>
     </dependency>
     <dependency>
       <groupId>jakarta.annotation</groupId>

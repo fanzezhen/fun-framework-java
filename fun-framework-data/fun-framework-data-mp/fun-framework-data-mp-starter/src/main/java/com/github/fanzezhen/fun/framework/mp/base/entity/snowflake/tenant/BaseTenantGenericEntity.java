@@ -1,10 +1,8 @@
 package com.github.fanzezhen.fun.framework.mp.base.entity.snowflake.tenant;
 
 import cn.hutool.core.util.ArrayUtil;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.github.fanzezhen.fun.framework.mp.base.entity.snowflake.BaseEntity;
 import com.github.fanzezhen.fun.framework.mp.base.entity.snowflake.BaseGenericEntity;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +23,6 @@ public abstract class BaseTenantGenericEntity extends BaseGenericEntity {
     /**
      * 租户id
      */
-    @Schema(name = "租户id")
     protected Long tenantId;
 
     public static String[] getFieldNames() {

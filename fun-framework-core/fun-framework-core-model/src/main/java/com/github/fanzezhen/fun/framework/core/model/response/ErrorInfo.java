@@ -5,7 +5,6 @@ import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.ErrorResponseException;
 
 import java.io.Serializable;
 
@@ -45,10 +44,5 @@ public class ErrorInfo implements Serializable {
     public ErrorInfo(ServiceException serviceException) {
         this.code = serviceException.getCode();
         this.message = serviceException.getMessage();
-    }
-
-    public ErrorInfo(ErrorResponseException errorResponseException) {
-        this.code = errorResponseException.getStatusCode().value();
-        this.message = errorResponseException.getMessage();
     }
 }

@@ -12,7 +12,12 @@ web过滤器，用于自动提取WEB请求头数据放入[ContextHolder](src%2Fm
 
 ### [ContextHolder.java](src%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fcore%2Fcontext%2FContextHolder.java)
 
-使用ThreadLocal存储上下文数据，并内置了一些方法如：getUserId、getToken 等
+使用 `TransmittableThreadLocal` 存储上下文数据，支持父子线程间的上下文传递。内置了一些方法如：getUserId、getToken 等。
+
+**特性**：
+- 基于阿里巴巴 `TransmittableThreadLocal` 实现，支持线程池场景下的上下文传递
+- 自动在异步任务中保留父线程的上下文信息（如用户ID、租户ID、traceId等）
+- 与 `fun-framework-core-thread` 的线程池装饰器无缝集成
 
 ## 注解+AOP 实现上下文校验
 
@@ -28,10 +33,15 @@ web过滤器，用于自动提取WEB请求头数据放入[ContextHolder](src%2Fm
 核心依赖
 
 ```xml
-
 <dependency>
   <groupId>com.github.fanzezhen</groupId>
   <artifactId>fun-framework-core-context</artifactId>
+</dependency>
+
+<!-- TransmittableThreadLocal 支持（自动传递上下文到子线程） -->
+<dependency>
+  <groupId>com.alibaba</groupId>
+  <artifactId>transmittable-thread-local</artifactId>
 </dependency>
 ```
 

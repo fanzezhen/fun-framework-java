@@ -26,11 +26,7 @@
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-core-exception</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-core-thread</artifactId>
+      <artifactId>fun-framework-core-springboot</artifactId>
     </dependency>
   </dependencies>
 </project>

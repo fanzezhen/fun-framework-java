@@ -1,10 +1,10 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch.base.template;
 
 import cn.hutool.core.lang.func.Func1;
-import com.github.fanzezhen.fun.framework.core.data.model.SumAggregationCondition;
-import com.github.fanzezhen.fun.framework.core.data.model.NestedAggregationCondition;
-import com.github.fanzezhen.fun.framework.core.data.template.ITemplate;
-import com.github.fanzezhen.fun.framework.core.data.model.AggregationCondition;
+import com.github.fanzezhen.fun.framework.core.model.common.SumAggregationCondition;
+import com.github.fanzezhen.fun.framework.core.model.common.NestedAggregationCondition;
+import com.github.fanzezhen.fun.framework.core.model.template.ITemplate;
+import com.github.fanzezhen.fun.framework.core.model.common.AggregationCondition;
 import com.github.fanzezhen.fun.framework.core.model.bucket.CountBucket;
 import com.github.fanzezhen.fun.framework.core.model.bucket.SumBucket;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.bucket.HitsCountBucket;

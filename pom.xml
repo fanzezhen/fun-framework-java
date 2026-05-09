@@ -13,7 +13,7 @@
     <org.springframework.boot.version>4.0.6</org.springframework.boot.version>
     <org.springframework.cloud.version>2025.1.1</org.springframework.cloud.version>
     <org.springframework.cloud.spring-cloud-starter-gateway.version>4.3.3</org.springframework.cloud.spring-cloud-starter-gateway.version>
-    <revision>${org.springframework.boot.version}.20260507</revision>
+    <revision>${org.springframework.boot.version}.20260509</revision>
     <app.server>-tomcat</app.server>
     <cn.dev33.version>1.45.0</cn.dev33.version>
     <cn.hutool.version>5.8.44</cn.hutool.version>
@@ -140,22 +140,12 @@
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-core-data</artifactId>
-        <version>${revision}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-data-elasticsearch-base</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-data-elasticsearch7-starter</artifactId>
-        <version>${revision}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-core-exception</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
@@ -306,6 +296,11 @@
         <version>${com.alibaba.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>transmittable-thread-local</artifactId>
+        <version>2.14.5</version>
+      </dependency>
+      <dependency>
         <groupId>com.alibaba.cloud</groupId>
         <artifactId>spring-cloud-alibaba-sentinel-datasource</artifactId>
         <version>${com.alibaba.cloud.version}</version>
@@ -379,6 +374,7 @@
         <groupId>com.baomidou</groupId>
         <artifactId>mybatis-plus-generator</artifactId>
         <version>${com.baomidou.version}</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>com.github.gavlyukovskiy</groupId>
@@ -435,21 +431,25 @@
         <groupId>javax.persistence</groupId>
         <artifactId>javax.persistence-api</artifactId>
         <version>${javax.persistence.version}</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>javax.servlet-api</artifactId>
         <version>${javax.servlet.version}</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>javax.validation</groupId>
         <artifactId>validation-api</artifactId>
         <version>2.0.1.Final</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>javax.annotation</groupId>
         <artifactId>javax.annotation-api</artifactId>
         <version>${javax.annotation.version}</version>
+        <scope>provided</scope>
       </dependency>
       <!--io-->
       <dependency>
@@ -535,6 +535,7 @@
         <artifactId>cas-server-webapp${app.server}</artifactId>
         <version>${org.apereo.cas.version}</version>
         <type>war</type>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.bouncycastle</groupId>
@@ -561,6 +562,7 @@
         <groupId>org.apache.velocity</groupId>
         <artifactId>velocity-engine-core</artifactId>
         <version>${org.apache.velocity.version}</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.aspectj</groupId>
@@ -571,6 +573,7 @@
         <groupId>org.freemarker</groupId>
         <artifactId>freemarker</artifactId>
         <version>${org.freemarker.version}</version>
+        <scope>provided</scope>
       </dependency>
       <!--thymeleaf-->
       <dependency>
@@ -684,6 +687,10 @@
           <plugin>
             <groupId>com.mycila</groupId>
             <artifactId>license-maven-plugin</artifactId>
+            <configuration>
+              <!-- 开发环境跳过flatten -->
+              <skip>true</skip>
+            </configuration>
             <executions>
               <execution>
                 <phase>none</phase> <!-- 设置为 none 表示不执行 -->
@@ -705,14 +712,6 @@
                 </goals>
               </execution>
             </executions>
-          </plugin>
-          <plugin>
-            <groupId>com.mycila</groupId>
-            <artifactId>license-maven-plugin</artifactId>
-            <configuration>
-              <!-- 开发环境跳过flatten -->
-              <skip>true</skip>
-            </configuration>
           </plugin>
         </plugins>
       </build>
