@@ -35,8 +35,10 @@ public class ThreadPoolTaskExecutorRepository {
 
     public static synchronized void addDecorator(ThreadPoolTaskDecorator decorator) {
         log.info("线程池装饰器【{}】开始添加", decorator.getName());
+        // 保存旧装饰器到不可变局部变量，避免闭包捕获可变静态字段引发递归
+        TaskDecorator oldDecorator = taskDecorator;
         taskDecorator = runnable -> {
-            runnable = decorator.decorate(decorator.decorate(runnable));
+            runnable = decorator.decorate(oldDecorator.decorate(runnable));
             return runnable;
         };
         log.info("线程池装饰器【{}】已添加，开始启动异步任务清理旧装饰器", decorator.getName());

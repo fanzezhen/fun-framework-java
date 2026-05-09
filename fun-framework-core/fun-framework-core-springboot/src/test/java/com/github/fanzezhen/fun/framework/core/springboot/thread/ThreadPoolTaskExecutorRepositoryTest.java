@@ -1,5 +1,6 @@
 package com.github.fanzezhen.fun.framework.core.springboot.thread;
 
+import com.github.fanzezhen.fun.framework.core.thread.decorator.ThreadPoolTaskDecorator;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -288,5 +289,60 @@ class ThreadPoolTaskExecutorRepositoryTest {
 
         // 等待所有任务完成
         latch.await(5, TimeUnit.SECONDS);
+    }
+
+    @Test
+    void testAddMultipleDecorators_ShouldNotCauseStackOverflow() throws InterruptedException {
+        // 测试修复后的装饰器链不会引发 StackOverflowError
+        AtomicInteger decoratorCallCount = new AtomicInteger(0);
+
+        // 添加多个装饰器，模拟实际场景
+        for (int i = 0; i < 5; i++) {
+            final int decoratorId = i;
+            ThreadPoolTaskExecutorRepository.addDecorator(new ThreadPoolTaskDecorator() {
+                @Override
+                public String getName() {
+                    return "test-decorator-" + decoratorId;
+                }
+
+                @Override
+                public Runnable decorate(Runnable runnable) {
+                    decoratorCallCount.incrementAndGet();
+                    return () -> {
+                        log.info("装饰器 {} 执行前", decoratorId);
+                        runnable.run();
+                        log.info("装饰器 {} 执行后", decoratorId);
+                    };
+                }
+            });
+            // 等待异步销毁任务完成
+            Thread.sleep(100);
+        }
+
+        // 等待所有销毁任务完成
+        Thread.sleep(2000);
+
+        // 创建新线程池验证装饰器链正常工作
+        ThreadPoolTaskExecutor executor = ThreadPoolTaskExecutorRepository.newThreadPoolTaskExecutor(
+            "decorated-pool",
+            2,
+            5
+        );
+
+        CountDownLatch taskLatch = new CountDownLatch(1);
+        AtomicInteger taskExecuted = new AtomicInteger(0);
+
+        // 执行任务，验证不会栈溢出
+        executor.execute(() -> {
+            taskExecuted.incrementAndGet();
+            taskLatch.countDown();
+        });
+
+        // 等待任务完成
+        assertTrue(taskLatch.await(10, TimeUnit.SECONDS), "任务应在 10 秒内完成");
+        assertEquals(1, taskExecuted.get(), "任务应成功执行一次");
+
+        // 验证装饰器确实被调用（至少应用了最后一个装饰器）
+        assertTrue(decoratorCallCount.get() > 0, "装饰器应被调用");
     }
 }
