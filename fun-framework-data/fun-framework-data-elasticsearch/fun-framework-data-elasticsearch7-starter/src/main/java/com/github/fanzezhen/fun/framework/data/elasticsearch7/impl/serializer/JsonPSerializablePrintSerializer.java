@@ -2,7 +2,7 @@ package com.github.fanzezhen.fun.framework.data.elasticsearch7.impl.serializer;
 
 import co.elastic.clients.json.JsonpSerializable;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
-import com.github.fanzezhen.fun.framework.core.log.base.serializer.impl.DefaultPrintSerializer;
+import com.github.fanzezhen.fun.framework.core.log.serializer.impl.DefaultPrintSerializer;
 import com.github.fanzezhen.fun.framework.data.elasticsearch7.config.FunElasticsearch7AutoConfiguration;
 import jakarta.json.stream.JsonGenerator;
 import lombok.extern.slf4j.Slf4j;

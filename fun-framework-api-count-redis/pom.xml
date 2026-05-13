@@ -26,7 +26,7 @@
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-core-springboot</artifactId>
+      <artifactId>fun-framework-springboot-web</artifactId>
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>

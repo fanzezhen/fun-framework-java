@@ -10,10 +10,11 @@
   <version>${revision}</version>
 
   <properties>
+    <org.springframework.ai.version>2.0.0-M6</org.springframework.ai.version>
     <org.springframework.boot.version>4.0.6</org.springframework.boot.version>
     <org.springframework.cloud.version>2025.1.1</org.springframework.cloud.version>
     <org.springframework.cloud.spring-cloud-starter-gateway.version>4.3.3</org.springframework.cloud.spring-cloud-starter-gateway.version>
-    <revision>${org.springframework.boot.version}.20260509</revision>
+    <revision>${org.springframework.boot.version}</revision>
     <app.server>-tomcat</app.server>
     <cn.dev33.version>1.45.0</cn.dev33.version>
     <cn.hutool.version>5.8.44</cn.hutool.version>
@@ -100,6 +101,13 @@
         <version>${cn.dev33.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.springframework.ai</groupId>
+        <artifactId>spring-ai-bom</artifactId>
+        <version>${org.springframework.ai.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
         <version>${org.springframework.boot.version}</version>
@@ -160,16 +168,6 @@
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-core-log-base</artifactId>
-        <version>${revision}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-core-log-web</artifactId>
-        <version>${revision}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-core-model</artifactId>
         <version>${revision}</version>
       </dependency>
@@ -185,12 +183,22 @@
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-core-verify</artifactId>
+        <artifactId>fun-framework-springboot</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
-        <artifactId>fun-framework-core-web</artifactId>
+        <artifactId>fun-framework-springboot-ai</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-springboot-web</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-core-verify</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
@@ -622,6 +630,7 @@
     <module>fun-framework-sentinel</module>
     <module>fun-framework-spring-doc</module>
     <module>fun-framework-proxy</module>
+    <module>fun-framework-springboot</module>
   </modules>
 
   <name>${project.artifactId}</name>
@@ -717,7 +726,7 @@
       </build>
     </profile>
     <profile>
-      <id>oss</id>
+      <id>oss-fanzezhen</id>
       <activation>
         <jdk>${java.version}</jdk>
       </activation>
@@ -729,6 +738,21 @@
         <gpg.executable>C:\software\gnupg-w32-2.5.18_20260224\bin\gpg.exe</gpg.executable>
         <!-- 前面pom.xml中配置了gpg的maven插件，这个目录就是你本地机器存放gpg秘钥的目录 -->
         <gpg.homedir>C:\Users\fanzezhen\AppData\Roaming\gnupg</gpg.homedir>
+      </properties>
+    </profile>
+    <profile>
+      <id>oss-zezhen_fan</id>
+      <activation>
+        <jdk>${java.version}</jdk>
+      </activation>
+      <properties>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
+        <gpg.executable>gpg</gpg.executable>
+        <gpg.executable>C:\software\gnupg-w32-2.5.18_20260224\bin\gpg.exe</gpg.executable>
+        <!-- 前面pom.xml中配置了gpg的maven插件，这个目录就是你本地机器存放gpg秘钥的目录 -->
+        <gpg.homedir>C:\Users\zezhen_fan\AppData\Roaming\gnupg</gpg.homedir>
       </properties>
     </profile>
   </profiles>

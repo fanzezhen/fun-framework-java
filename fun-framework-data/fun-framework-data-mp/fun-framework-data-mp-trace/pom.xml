@@ -22,7 +22,7 @@
     </dependency>
     <dependency>
       <groupId>com.github.fanzezhen</groupId>
-      <artifactId>fun-framework-core-log-base</artifactId>
+      <artifactId>fun-framework-core-log</artifactId>
     </dependency>
   </dependencies>
 </project>

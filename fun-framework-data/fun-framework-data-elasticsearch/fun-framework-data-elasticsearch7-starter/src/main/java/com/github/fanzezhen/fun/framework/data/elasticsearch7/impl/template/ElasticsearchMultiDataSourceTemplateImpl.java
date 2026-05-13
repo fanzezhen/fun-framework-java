@@ -1,6 +1,6 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch7.impl.template;
 
-import com.github.fanzezhen.fun.framework.core.log.base.support.FunLogHelper;
+import com.github.fanzezhen.fun.framework.core.log.support.FunLogHelper;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.config.FunElasticsearchProperties;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.IResponseDeserializer;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.serializer.IDocumentSerializer;

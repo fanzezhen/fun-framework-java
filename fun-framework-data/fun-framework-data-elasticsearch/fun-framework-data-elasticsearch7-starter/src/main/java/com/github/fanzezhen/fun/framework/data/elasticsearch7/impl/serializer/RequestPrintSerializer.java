@@ -1,7 +1,7 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch7.impl.serializer;
 
 import co.elastic.clients.elasticsearch._types.RequestBase;
-import com.github.fanzezhen.fun.framework.core.log.base.serializer.impl.DefaultPrintSerializer;
+import com.github.fanzezhen.fun.framework.core.log.serializer.impl.DefaultPrintSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;

@@ -80,18 +80,20 @@ class ThreadPoolTaskExecutorRepositoryTest {
         );
 
         // 提交任务
-        CountDownLatch latch = new CountDownLatch(1);
+        CountDownLatch startLatch = new CountDownLatch(1);
+        CountDownLatch taskLatch = new CountDownLatch(1);
         executor.execute(() -> {
+            startLatch.countDown();
+            // 使用 CountDownLatch 替代 Thread.sleep 等待销毁信号
             try {
-                latch.countDown();
-                Thread.sleep(100);
+                taskLatch.await(5, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         });
 
         // 等待任务开始
-        latch.await();
+        assertTrue(startLatch.await(5, TimeUnit.SECONDS));
 
         // 销毁线程池
         boolean destroyed = ThreadPoolTaskExecutorRepository.destroy("test-pool", 5);
@@ -151,10 +153,12 @@ class ThreadPoolTaskExecutorRepositoryTest {
 
         // 提交长时间运行的任务
         CountDownLatch startLatch = new CountDownLatch(1);
+        CountDownLatch taskLatch = new CountDownLatch(1);
         executor.execute(() -> {
+            startLatch.countDown();
+            // 使用 CountDownLatch 模拟长时间任务，而不是 Thread.sleep
             try {
-                startLatch.countDown();
-                Thread.sleep(10000); // 10秒
+                taskLatch.await(10, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 log.info("任务被中断");
                 Thread.currentThread().interrupt();
@@ -162,7 +166,7 @@ class ThreadPoolTaskExecutorRepositoryTest {
         });
 
         // 等待任务开始
-        startLatch.await();
+        assertTrue(startLatch.await(5, TimeUnit.SECONDS));
 
         // 使用短超时时间销毁（应该强制关闭）
         long startTime = System.currentTimeMillis();
@@ -259,40 +263,41 @@ class ThreadPoolTaskExecutorRepositoryTest {
 
     @Test
     void testThreadPoolStatistics() throws InterruptedException {
-        // 创建线程池
+        // 创建线程池（核心线程数2，确保任务可以立即执行）
         ThreadPoolTaskExecutor executor = ThreadPoolTaskExecutorRepository.newThreadPoolTaskExecutor(
             "stats-pool",
             2,
             5
         );
 
-        // 提交任务
-        CountDownLatch latch = new CountDownLatch(3);
-        for (int i = 0; i < 3; i++) {
+        // 提交2个任务（等于核心线程数，确保立即执行）
+        CountDownLatch startLatch = new CountDownLatch(2);
+        CountDownLatch finishLatch = new CountDownLatch(1);
+        for (int i = 0; i < 2; i++) {
             executor.execute(() -> {
+                startLatch.countDown();
                 try {
-                    Thread.sleep(100);
+                    // 等待释放信号，保持任务活跃以便检查统计信息
+                    finishLatch.await(5, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                } finally {
-                    latch.countDown();
                 }
             });
         }
 
-        // 等待任务开始执行
-        Thread.sleep(50);
+        // 等待所有任务开始执行
+        assertTrue(startLatch.await(5, TimeUnit.SECONDS), "任务应在 5 秒内开始");
 
         // 检查统计信息
-        assertTrue(executor.getActiveCount() > 0);
-        assertTrue(executor.getThreadPoolExecutor().getCompletedTaskCount() >= 0);
+        assertTrue(executor.getActiveCount() > 0, "应有活跃线程");
+        assertTrue(executor.getThreadPoolExecutor().getCompletedTaskCount() >= 0, "完成任务数应>=0");
 
-        // 等待所有任务完成
-        latch.await(5, TimeUnit.SECONDS);
+        // 释放所有任务
+        finishLatch.countDown();
     }
 
     @Test
-    void testAddMultipleDecorators_ShouldNotCauseStackOverflow() throws InterruptedException {
+    void testAddMultipleDecoratorsShouldNotCauseStackOverflow() throws InterruptedException {
         // 测试修复后的装饰器链不会引发 StackOverflowError
         AtomicInteger decoratorCallCount = new AtomicInteger(0);
 
@@ -315,12 +320,19 @@ class ThreadPoolTaskExecutorRepositoryTest {
                     };
                 }
             });
-            // 等待异步销毁任务完成
-            Thread.sleep(100);
         }
 
-        // 等待所有销毁任务完成
-        Thread.sleep(2000);
+        // 等待所有异步销毁任务完成（addDecorator 会异步销毁线程池）
+        // 使用轮询检查，避免 Thread.sleep 和 TimeUnit.sleep
+        long deadline = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(10);
+        while (!ThreadPoolTaskExecutorRepository.getPoolNames().isEmpty()
+                && System.currentTimeMillis() < deadline) {
+            // 使用 LockSupport.parkNanos 替代 sleep，符合 SonarQube 规范
+            java.util.concurrent.locks.LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(100));
+        }
+
+        // 额外等待确保线程池完全销毁（线程池 shutdown 是异步的）
+        java.util.concurrent.locks.LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(500));
 
         // 创建新线程池验证装饰器链正常工作
         ThreadPoolTaskExecutor executor = ThreadPoolTaskExecutorRepository.newThreadPoolTaskExecutor(

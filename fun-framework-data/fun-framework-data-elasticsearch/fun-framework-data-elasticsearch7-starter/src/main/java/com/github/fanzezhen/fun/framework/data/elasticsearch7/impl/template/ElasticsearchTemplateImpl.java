@@ -53,7 +53,7 @@ import com.github.fanzezhen.fun.framework.core.model.annotation.Entity;
 import com.github.fanzezhen.fun.framework.core.model.common.NestedAggregationCondition;
 import com.github.fanzezhen.fun.framework.core.model.common.SumAggregationCondition;
 import com.github.fanzezhen.fun.framework.core.model.template.ITemplate;
-import com.github.fanzezhen.fun.framework.core.log.base.support.FunLogHelper;
+import com.github.fanzezhen.fun.framework.core.log.support.FunLogHelper;
 import com.github.fanzezhen.fun.framework.core.model.common.AggregationCondition;
 import com.github.fanzezhen.fun.framework.core.model.bucket.CountBucket;
 import com.github.fanzezhen.fun.framework.core.model.bucket.SumBucket;
@@ -77,18 +77,18 @@ import com.github.fanzezhen.fun.framework.data.elasticsearch7.impl.model.JsonRes
 import jakarta.json.JsonObject;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 
 import javax.swing.*;
@@ -173,12 +173,12 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         RestClient restClient = builder.build();
         // 1. 从默认 RequestOptions 构建 Builder，覆盖 Content-Type
         RequestOptions.Builder requestOptionsBuilder = RequestOptions.DEFAULT.toBuilder();
-        // 设置为标准 application/json
+        // 设置为标准 application/json(使用 Apache HttpClient 常量)
         requestOptionsBuilder.removeHeader(HttpHeaders.CONTENT_TYPE);
-        requestOptionsBuilder.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        requestOptionsBuilder.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType());
         // 可选：设置 Accept 头
         requestOptionsBuilder.removeHeader(HttpHeaders.ACCEPT);
-        requestOptionsBuilder.addHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+        requestOptionsBuilder.addHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType());
         // 构建最终的 RequestOptions
         RequestOptions requestOptions = requestOptionsBuilder.build();
         // 2. 直接通过公开构造器创建 RestClientOptions

@@ -8,7 +8,7 @@ import com.github.fanzezhen.fun.framework.core.model.annotation.Entity;
 import com.github.fanzezhen.fun.framework.core.model.enums.FunCoreDataExceptionEnum;
 import com.github.fanzezhen.fun.framework.core.model.common.NestedAggregationCondition;
 import com.github.fanzezhen.fun.framework.core.model.common.SumAggregationCondition;
-import com.github.fanzezhen.fun.framework.core.log.base.support.FunLogHelper;
+import com.github.fanzezhen.fun.framework.core.log.support.FunLogHelper;
 import com.github.fanzezhen.fun.framework.core.model.common.AggregationCondition;
 import com.github.fanzezhen.fun.framework.core.model.bucket.CountBucket;
 import com.github.fanzezhen.fun.framework.core.model.bucket.SumBucket;

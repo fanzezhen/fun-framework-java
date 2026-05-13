@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>fun-framework-java</artifactId>
+    <groupId>com.github.fanzezhen</groupId>
+    <version>${revision}</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <modules>
+    <module>fun-framework-springboot-web</module>
+    <module>fun-framework-springboot-ai</module>
+  </modules>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>fun-framework-springboot</artifactId>
+  <packaging>pom</packaging>
+  <name>${project.artifactId}</name>
+  <description>Fun Framework Spring Boot 集成模块聚合包，提供 Web、AI 等 Spring Boot 生态集成</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.github.fanzezhen</groupId>
+      <artifactId>fun-framework-core-springboot</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>

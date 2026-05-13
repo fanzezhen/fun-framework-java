@@ -2,7 +2,7 @@ package com.github.fanzezhen.fun.framework.data.elasticsearch7.config;
 
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import com.github.fanzezhen.fun.framework.core.model.common.IColumnDeserializer;
-import com.github.fanzezhen.fun.framework.core.log.base.support.FunLogHelper;
+import com.github.fanzezhen.fun.framework.core.log.support.FunLogHelper;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.config.FunElasticsearchProperties;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.IElasticsearchResultDeserializer;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.deserializer.IResponseDeserializer;

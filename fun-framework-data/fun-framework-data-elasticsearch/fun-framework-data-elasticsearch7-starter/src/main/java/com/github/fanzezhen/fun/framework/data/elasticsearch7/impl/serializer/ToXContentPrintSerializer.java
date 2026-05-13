@@ -1,6 +1,6 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch7.impl.serializer;
 
-import com.github.fanzezhen.fun.framework.core.log.base.serializer.impl.DefaultPrintSerializer;
+import com.github.fanzezhen.fun.framework.core.log.serializer.impl.DefaultPrintSerializer;
 import org.elasticsearch.common.Strings;
 import org.elasticsearch.xcontent.ToXContent;
 import org.springframework.core.annotation.Order;
