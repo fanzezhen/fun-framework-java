@@ -13,22 +13,32 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
- * 支持 @Aggregation 注解 的字段解析器
+ * 聚合注解支持字段反序列化器
+ * <p>
+ * 用于反序列化被 {@link Aggregation} 注解标记的字段，将聚合集合中的数据映射到 Java 对象
  */
 public class AggregationAnnotationSupportFieldDeserializer extends AbstractAggregationFieldDeserializer<IAggregationsAdapter> {
 
-    public AggregationAnnotationSupportFieldDeserializer(BaseAggregationResultDeserializer baseAggregationResultResolver) {
+    /**
+     * 构造函数
+     *
+     * @param baseAggregationResultResolver 基础聚合结果反序列化器
+     */
+    public AggregationAnnotationSupportFieldDeserializer(final BaseAggregationResultDeserializer baseAggregationResultResolver) {
         super(baseAggregationResultResolver);
     }
 
     /**
-     * 解析field在聚合中的值
+     * 反序列化聚合字段值
+     * <p>
+     * 根据 {@link Aggregation} 注解配置获取对应的聚合，并将其映射到目标字段
      *
-     * @param targetField 目标对象的属性
-     * @param adapter     聚合适配器
+     * @param targetField 目标对象的属性字段
+     * @param adapter     聚合集合适配器
+     * @return 反序列化后的字段值
      */
     @Override
-    public Object deserialize(Field targetField, IAggregationsAdapter adapter) {
+    public Object deserialize(final Field targetField, final IAggregationsAdapter adapter) {
         if (Objects.isNull(adapter)) {
             return ObjUtil.empty(targetField.getType());
         }
@@ -50,7 +60,16 @@ public class AggregationAnnotationSupportFieldDeserializer extends AbstractAggre
         return resolveField(targetField, aggregationAdapter);
     }
 
-    public Object resolveField(Field targetField, IAggregationAdapter aggregationAdapter) {
+    /**
+     * 解析聚合对象中的字段
+     * <p>
+     * 将聚合适配器中的数据映射到目标对象的各个字段
+     *
+     * @param targetField        目标字段
+     * @param aggregationAdapter 聚合适配器
+     * @return 反序列化后的对象
+     */
+    public Object resolveField(final Field targetField, final IAggregationAdapter aggregationAdapter) {
         final Object instance = ReflectUtil.newInstance(targetField.getType());
         final Field[] fields = ReflectUtil.getFields(targetField.getType());
         for (Field field : fields) {

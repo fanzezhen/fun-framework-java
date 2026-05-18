@@ -1,33 +1,39 @@
 package com.github.fanzezhen.fun.framework.security.sa.token.oauth;
 
 /**
- * Sa-Token-SSO 单点登录模块 工具类
+ * Sa-Token OAuth2.0 单点登录模块工具类。
+ * <p>
+ * 提供 OAuth2.0 模板对象的访问和设置方法。
  */
+@SuppressWarnings("lombok")
 public final class SaOauthUtil {
 
-
     /**
-     * 底层 SaSsoTemplate 对象
+     * OAuth2.0 模板对象。
      */
     private static SaOauthTemplate oauthTemplate = new SaOauthTemplate();
 
     /**
-     * 构造函数私有化
+     * 私有构造方法，禁止实例化。
      */
     private SaOauthUtil() {
     }
 
     /**
-     * 获取SaSsoTemplate 对象
+     * 获取 OAuth2.0 模板对象。
+     *
+     * @return OAuth2.0 模板对象
      */
     public static SaOauthTemplate getOauthTemplate() {
         return oauthTemplate;
     }
 
     /**
-     * 设置SaSsoTemplate 对象
+     * 设置 OAuth2.0 模板对象。
+     *
+     * @param template OAuth2.0 模板对象
      */
-    public static void setOauthTemplate(SaOauthTemplate template) {
+    public static void setOauthTemplate(final SaOauthTemplate template) {
         oauthTemplate = template;
     }
 

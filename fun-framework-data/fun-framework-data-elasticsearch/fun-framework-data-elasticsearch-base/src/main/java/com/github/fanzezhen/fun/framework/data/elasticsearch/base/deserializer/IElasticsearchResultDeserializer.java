@@ -5,21 +5,30 @@ import com.github.fanzezhen.fun.framework.data.elasticsearch.base.adapter.IRespo
 import java.util.List;
 
 /**
- * 结果反序列化解析器
+ * Elasticsearch 结果反序列化器接口
+ * <p>
+ * 用于将 Elasticsearch 响应适配器中的数据反序列化为 Java 对象列表
  */
 public interface IElasticsearchResultDeserializer {
 
     /**
-     * 是否可以解析
+     * 判断是否支持反序列化为指定类型
      *
-     * @param vClass 返回值接收的java泛型
+     * @param response 响应适配器
+     * @param vClass   目标 Java 类型
+     * @param <V>      泛型类型
+     * @return 如果支持反序列化则返回 true，否则返回 false
      */
-    <V> boolean isSupport(IResponseAdapter response, Class<V> vClass);
+    <V> boolean isSupport(final IResponseAdapter response, final Class<V> vClass);
 
     /**
-     * 将es返回值解析成SearchResult
+     * 将响应适配器中的数据反序列化为对象列表
      *
+     * @param response 响应适配器
+     * @param vClass   目标 Java 类型
+     * @param <V>      泛型类型
+     * @return 反序列化后的对象列表
      */
-    <V> List<V> deserialize(IResponseAdapter response, Class<V> vClass);
+    <V> List<V> deserialize(final IResponseAdapter response, final Class<V> vClass);
 
 }

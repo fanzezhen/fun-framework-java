@@ -8,15 +8,28 @@ import lombok.extern.slf4j.Slf4j;
 import java.lang.reflect.Type;
 
 /**
- * FastJson2枚举反序列化器
+ * FastJson2 枚举反序列化器
  * <p>
- * 支持从整数或字符串数字解析为ICodeEnum枚举。
- * 当code不匹配任何枚举值时返回null而非抛出异常，保证反序列化鲁棒性。
- *
+ * 支持从整数或字符串数字解析为 ICodeEnum 枚举。
+ * 当 code 不匹配任何枚举值时返回 null 而非抛出异常，保证反序列化鲁棒性。
+ * </p>
  */
 @Slf4j
 public class CodeEnumReader implements ObjectReader<ICodeEnum<?>> {
 
+    /**
+     * 反序列化 ICodeEnum 枚举
+     * <p>
+     * 支持从整数或字符串数字形式的 code 值解析为枚举对象。
+     * 当输入为 null、空字符串或不匹配任何枚举值时返回 null。
+     * </p>
+     *
+     * @param reader    JSON 读取器
+     * @param fieldType 字段类型（枚举类型）
+     * @param fieldName 字段名称
+     * @param features  特性标志
+     * @return 枚举对象，解析失败时返回 null
+     */
     @Override
     @SuppressWarnings("unchecked")
     public ICodeEnum<?> readObject(JSONReader reader, Type fieldType, Object fieldName, long features) {

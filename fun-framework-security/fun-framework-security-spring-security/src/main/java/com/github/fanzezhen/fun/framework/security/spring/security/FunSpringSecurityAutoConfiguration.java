@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
  * <p>
  * 加载Spring Security相关组件（过滤器、认证配置等），
  * 并启用Servlet组件扫描以支持自定义Filter。
- *
  */
 @Configuration
 @ComponentScan("com.github.fanzezhen.fun.framework.security.spring.security")

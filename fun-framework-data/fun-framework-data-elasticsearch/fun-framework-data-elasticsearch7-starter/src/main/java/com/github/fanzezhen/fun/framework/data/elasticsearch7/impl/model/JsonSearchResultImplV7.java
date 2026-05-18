@@ -7,18 +7,41 @@ import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.BaseSear
 import java.util.Optional;
 
 /**
- * 解析es的json返回格式，适配于es7版本，和6的区别在于total取值逻辑
+ * ES7 JSON 查询结果实现
+ *
+ * <p>解析 ES 的 JSON 返回格式，适配于 ES7 版本，和 ES6 的区别在于 total 取值逻辑。
+ *
+ * @param <T> 文档泛型类型
  */
 public class JsonSearchResultImplV7<T> extends BaseSearchResult<T, JSONObject> {
 
+    /**
+     * 响应适配器
+     */
     private final JsonResponseAdapterV7 responseAdapter;
 
+    /**
+     * 总命中数
+     */
     private final long totalHits;
 
+    /**
+     * 总耗时
+     */
     private final double totalTime;
+
+    /**
+     * 游标 ID
+     */
     private final String scrollId;
 
-    public JsonSearchResultImplV7(Class<T> tClass, JSONObject jsonObject) {
+    /**
+     * 构造函数
+     *
+     * @param tClass 文档类型
+     * @param jsonObject JSON 对象
+     */
+    public JsonSearchResultImplV7(final Class<T> tClass, final JSONObject jsonObject) {
         super(tClass);
         this.responseAdapter = new JsonResponseAdapterV7(jsonObject);
 

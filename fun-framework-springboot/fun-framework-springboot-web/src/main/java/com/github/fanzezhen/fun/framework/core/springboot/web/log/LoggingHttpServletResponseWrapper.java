@@ -14,23 +14,60 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * HTTP响应包装器，支持多次读取响应体.
+ * <p>
+ * 将响应体缓存到内存中，允许读取响应内容用于日志记录等场景。
+ * 同时支持记录响应中设置的Cookie信息。
+ */
 public class LoggingHttpServletResponseWrapper extends HttpServletResponseWrapper {
+    /**
+     * 响应中设置的Cookie列表.
+     */
     @Getter
     private final List<Cookie> cookies = new ArrayList<>();
+
+    /**
+     * 响应体缓冲区.
+     */
     private final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+    /**
+     * 输出流.
+     */
     private ServletOutputStream outputStream;
+
+    /**
+     * 字符输出流.
+     */
     private PrintWriter writer;
 
-    public LoggingHttpServletResponseWrapper(HttpServletResponse response) {
+    /**
+     * 构造函数.
+     *
+     * @param response 原始HTTP响应
+     */
+    public LoggingHttpServletResponseWrapper(final HttpServletResponse response) {
         super(response);
     }
 
+    /**
+     * 添加Cookie并记录到列表.
+     *
+     * @param cookie Cookie对象
+     */
     @Override
-    public void addCookie(Cookie cookie) {
+    public void addCookie(final Cookie cookie) {
         super.addCookie(cookie);
         cookies.add(cookie);
     }
 
+    /**
+     * 获取响应输出流.
+     *
+     * @return 响应输出流
+     * @throws IOException IO异常
+     */
     @Override
     public ServletOutputStream getOutputStream() throws IOException {
         if (writer != null) {
@@ -40,7 +77,7 @@ public class LoggingHttpServletResponseWrapper extends HttpServletResponseWrappe
         if (outputStream == null) {
             outputStream = new ServletOutputStream() {
                 @Override
-                public void write(int b) throws IOException {
+                public void write(final int b) throws IOException {
                     buffer.write(b);
                 }
 
@@ -50,8 +87,8 @@ public class LoggingHttpServletResponseWrapper extends HttpServletResponseWrappe
                 }
 
                 @Override
-                public void setWriteListener(WriteListener listener) {
-                    // Do nothing  
+                public void setWriteListener(final WriteListener listener) {
+                    // Do nothing
                 }
             };
         }
@@ -59,6 +96,12 @@ public class LoggingHttpServletResponseWrapper extends HttpServletResponseWrappe
         return outputStream;
     }
 
+    /**
+     * 获取字符输出流.
+     *
+     * @return 字符输出流
+     * @throws IOException IO异常
+     */
     @Override
     public PrintWriter getWriter() throws IOException {
         if (outputStream != null) {
@@ -72,6 +115,11 @@ public class LoggingHttpServletResponseWrapper extends HttpServletResponseWrappe
         return writer;
     }
 
+    /**
+     * 刷新输出缓冲区.
+     *
+     * @throws IOException IO异常
+     */
     @Override
     public void flushBuffer() throws IOException {
         if (writer != null) {
@@ -81,6 +129,12 @@ public class LoggingHttpServletResponseWrapper extends HttpServletResponseWrappe
         }
     }
 
+    /**
+     * 获取缓存的响应体字节数组.
+     *
+     * @return 响应体字节数组
+     * @throws IOException IO异常
+     */
     public byte[] toByteArray() throws IOException {
         flushBuffer();
         return buffer.toByteArray();

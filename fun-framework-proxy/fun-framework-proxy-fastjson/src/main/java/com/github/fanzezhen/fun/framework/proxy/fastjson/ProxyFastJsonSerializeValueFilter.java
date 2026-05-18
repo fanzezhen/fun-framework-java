@@ -12,6 +12,8 @@ import java.lang.reflect.Field;
 
 /**
  * 静态资源代理序列化过滤器
+ * <p>
+ * 在 FastJson 序列化过程中，对标记了 {@link ProxyField} 注解的字段进行代理处理
  *
  * @since 2.19.6
  */
@@ -21,8 +23,16 @@ public class ProxyFastJsonSerializeValueFilter implements ValueFilter {
     @Resource
     private ProxyHelper proxyHelper;
 
+    /**
+     * 应用值过滤器
+     *
+     * @param object 所属对象
+     * @param name   字段名称
+     * @param value  字段值
+     * @return 处理后的值
+     */
     @Override
-    public Object apply(Object object, String name, Object value) {
+    public Object apply(final Object object, final String name, final Object value) {
         if (object == null) {
             return null;
         }

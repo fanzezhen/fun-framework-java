@@ -8,29 +8,31 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 注入 Sa-Token-Oauth 所需要的Bean
+ * Sa-Token OAuth2.0 模块 Bean 注入配置类。
+ * <p>
+ * 自动注入 OAuth2.0 配置对象和模板对象到全局管理器中。
  */
 @Configuration
 @ConditionalOnClass(SaOauthManager.class)
 public class SaOauthBeanInject {
 
     /**
-     * 注入 Sa-Token-Oauth 配置Bean
+     * 注入 OAuth2.0 配置对象。
      *
-     * @param saOAuth2Config 配置对象
+     * @param saOAuth2Config OAuth2.0 配置对象
      */
     @Autowired(required = false)
-    public void setSaOAuth2Config(SaOauthConfig saOAuth2Config) {
+    public void setSaOAuth2Config(final SaOauthConfig saOAuth2Config) {
         SaOauthManager.setConfig(saOAuth2Config);
     }
 
     /**
-     * 注入 Sa-Token-Oauth 单点登录模块 Bean
+     * 注入 OAuth2.0 模板对象。
      *
-     * @param oauthTemplate oauthTemplate对象
+     * @param oauthTemplate OAuth2.0 模板对象
      */
     @Autowired(required = false)
-    public void setSaOauthTemplate(SaOauthTemplate oauthTemplate) {
+    public void setSaOauthTemplate(final SaOauthTemplate oauthTemplate) {
         SaOauthUtil.setOauthTemplate(oauthTemplate);
     }
 

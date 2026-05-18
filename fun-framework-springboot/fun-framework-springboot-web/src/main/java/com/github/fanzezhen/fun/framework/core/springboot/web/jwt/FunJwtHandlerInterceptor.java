@@ -13,7 +13,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import jakarta.annotation.Resource;
 
 /**
- * JWT拦截器
+ * JWT拦截器.
  * <p>
  * 拦截HTTP请求并校验JWT令牌的有效性，支持通过配置忽略指定URI。
  * 仅在容器中存在JwtService时生效。
@@ -21,18 +21,33 @@ import jakarta.annotation.Resource;
  * <b>执行时机：</b>preHandle阶段，在Controller方法执行前校验令牌
  * <p>
  * <b>性能考虑：</b>忽略URI采用PatternMatchUtils.simpleMatch进行快速匹配，避免正则开销
- *
  */
 @Component
 @ConditionalOnBean(JwtService.class)
 public class FunJwtHandlerInterceptor implements HandlerInterceptor {
+    /**
+     * JWT服务.
+     */
     @Resource
     private JwtService jwtService;
+
+    /**
+     * Web配置属性.
+     */
     @Resource
     private FunSpringbootWebProperties funSpringbootWebProperties;
 
+    /**
+     * 前置处理，校验JWT令牌.
+     *
+     * @param request HTTP请求
+     * @param response HTTP响应
+     * @param handler 处理器
+     * @return true表示继续处理，false表示拦截
+     * @throws Exception 处理异常
+     */
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) throws Exception {
         FunSpringbootWebProperties.Jwt jwt = funSpringbootWebProperties.getJwt();
         if (PatternMatchUtils.simpleMatch(jwt.getIgnoreUris().toArray(new String[]{}), request.getRequestURI())) {
             return true;

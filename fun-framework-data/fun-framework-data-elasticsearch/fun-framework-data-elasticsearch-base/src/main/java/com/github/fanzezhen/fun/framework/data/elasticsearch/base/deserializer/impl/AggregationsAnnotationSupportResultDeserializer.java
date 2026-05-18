@@ -15,23 +15,50 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * 支持 @Aggregations 注解 的结果解析器
+ * 聚合集合注解支持结果反序列化器
+ * <p>
+ * 用于反序列化被 {@link Aggregations} 注解标记的类，将聚合集合结果映射到 Java 对象
  */
 @Order(Short.MIN_VALUE + 100)
 @Component
 public class AggregationsAnnotationSupportResultDeserializer extends BaseAggregationResultDeserializer {
 
-    public AggregationsAnnotationSupportResultDeserializer(SupportFieldDeserializerResultDeserializer supportFieldResolveResultResolver) {
+    /**
+     * 构造函数
+     *
+     * @param supportFieldResolveResultResolver 支持字段反序列化的结果反序列化器
+     */
+    public AggregationsAnnotationSupportResultDeserializer(final SupportFieldDeserializerResultDeserializer supportFieldResolveResultResolver) {
         super(supportFieldResolveResultResolver);
     }
 
+    /**
+     * 判断是否支持反序列化为指定类型
+     * <p>
+     * 支持被 {@link Aggregations} 注解标记的类
+     *
+     * @param response 响应适配器
+     * @param vClass   目标 Java 类型
+     * @param <V>      泛型类型
+     * @return 如果类被标记则返回 true，否则返回 false
+     */
     @Override
-    public <V> boolean isSupport(IResponseAdapter response, Class<V> vClass) {
+    public <V> boolean isSupport(final IResponseAdapter response, final Class<V> vClass) {
         return Objects.nonNull(AnnotationUtils.findAnnotation(vClass, Aggregations.class));
     }
 
+    /**
+     * 将响应适配器中的聚合集合数据反序列化为对象列表
+     * <p>
+     * 遍历对象的所有字段，使用聚合注解支持字段反序列化器将聚合数据映射到各个字段
+     *
+     * @param response 响应适配器
+     * @param vClass   目标 Java 类型
+     * @param <V>      泛型类型
+     * @return 包含单个对象的列表
+     */
     @Override
-    public <V> List<V> deserialize(IResponseAdapter response, Class<V> vClass) {
+    public <V> List<V> deserialize(final IResponseAdapter response, final Class<V> vClass) {
         final V instance = ReflectUtil.newInstance(vClass);
         final Field[] fields = ReflectUtil.getFields(vClass);
         final IAggregationsAdapter aggregationsAdapter = response.getAggregationsAdapter();

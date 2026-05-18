@@ -19,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 静态资源代理修饰器
+ * 静态资源代理修饰器。
  *
  * @since 3.4.3.5
  */
@@ -27,25 +27,48 @@ import java.util.regex.Pattern;
 @Component
 @ConditionalOnProperty(value = "fun.proxy.enabled", havingValue = "true")
 public class ProxyDecorator {
+    /**
+     * 代理配置属性。
+     */
     @Resource
     private ProxyProperties proxyProperties;
 
-    public String decorate(String s) {
+    /**
+     * 装饰字符串，将字符串中的URL地址进行代理转换。
+     *
+     * @param s 待装饰的字符串
+     * @return 装饰后的字符串
+     */
+    public String decorate(final String s) {
         return replaceStr(s, null);
     }
 
-    public <R> R decorate(@NotNull Supplier<R> supplier, AtomicBoolean changed) {
+    /**
+     * 装饰对象，递归处理对象中的所有字符串字段。
+     *
+     * @param supplier 对象供应器
+     * @param changed  输出参数，如果对象内容实际发生变化
+     *                 则设为true
+     * @param <R>      对象类型
+     * @return 装饰后的对象
+     */
+    public <R> R decorate(@NotNull final Supplier<R> supplier,
+                          final AtomicBoolean changed) {
         R r = supplier.get();
         return process(r, changed);
     }
 
-    private <R> R process(R object, AtomicBoolean atomicBoolean) {
+    private <R> R process(final R object,
+                          final AtomicBoolean atomicBoolean) {
         if (object instanceof List) {
-            return (R) processList((List<?>) object, atomicBoolean);
+            return (R) processList(
+                    (List<?>) object, atomicBoolean);
         } else if (object instanceof Map) {
-            return (R) processMap((Map<?, ?>) object, atomicBoolean);
+            return (R) processMap(
+                    (Map<?, ?>) object, atomicBoolean);
         } else if (object instanceof String) {
-            return (R) replaceStr((String) object, atomicBoolean);
+            return (R) replaceStr(
+                    (String) object, atomicBoolean);
         } else if (!object.getClass().isPrimitive()) {
             return processObject(object, atomicBoolean);
         }
@@ -53,29 +76,38 @@ public class ProxyDecorator {
     }
 
     @SneakyThrows
-    private <R> R processObject(@NotNull R object, AtomicBoolean atomicBoolean) {
+    private <R> R processObject(@NotNull final R object,
+                                 final AtomicBoolean atomicBoolean) {
         Class<?> clazz = object.getClass();
         Field[] fields = clazz.getDeclaredFields();
         AtomicBoolean fieldValueChanged = new AtomicBoolean(false);
         for (Field field : fields) {
             fieldValueChanged.set(false);
-            Object value = ReflectUtil.getFieldValue(object, field);
+            Object value =
+                    ReflectUtil.getFieldValue(object, field);
             if (value instanceof String strValue) {
-                String newValue = replaceStr((String) value, fieldValueChanged);
+                String newValue =
+                        replaceStr((String) value, fieldValueChanged);
                 if (fieldValueChanged.get()) {
-                    ReflectUtil.setFieldValue(object, field, newValue);
+                    ReflectUtil.setFieldValue(
+                            object, field, newValue);
                 }
             } else if (value instanceof Map) {
-                Map<?, ?> newValue = processMap((Map<?, ?>) value, fieldValueChanged);
+                Map<?, ?> newValue = processMap(
+                        (Map<?, ?>) value, fieldValueChanged);
                 ReflectUtil.setFieldValue(object, field, newValue);
             } else if (value instanceof List) {
-                List<?> newValue = processList((List<?>) value, fieldValueChanged);
+                List<?> newValue = processList(
+                        (List<?>) value, fieldValueChanged);
                 ReflectUtil.setFieldValue(object, field, newValue);
-            } else if (value != null && BeanUtil.isBean(value.getClass())) {
+            } else if (value != null
+                    && BeanUtil.isBean(value.getClass())) {
                 // 对非基本类型递归处理
-                Object newValue = process(value, fieldValueChanged);
+                Object newValue =
+                        process(value, fieldValueChanged);
                 if (fieldValueChanged.get()) {
-                    ReflectUtil.setFieldValue(object, field, newValue);
+                    ReflectUtil.setFieldValue(
+                            object, field, newValue);
                 }
             }
             if (fieldValueChanged.get()) {
@@ -85,7 +117,8 @@ public class ProxyDecorator {
         return object;
     }
 
-    private <T> List<T> processList(List<T> list, AtomicBoolean atomicBoolean) {
+    private <T> List<T> processList(final List<T> list,
+                                     final AtomicBoolean atomicBoolean) {
         if (CollUtil.isEmpty(list)) {
             return list;
         }
@@ -101,7 +134,8 @@ public class ProxyDecorator {
         return list;
     }
 
-    private <K, V> Map<K, V> processMap(@NotNull Map<K, V> map, AtomicBoolean atomicBoolean) {
+    private <K, V> Map<K, V> processMap(@NotNull final Map<K, V> map,
+                                         final AtomicBoolean atomicBoolean) {
         AtomicBoolean entryChanged = new AtomicBoolean();
         for (Map.Entry<K, V> entry : map.entrySet()) {
             entryChanged.set(false);
@@ -116,53 +150,86 @@ public class ProxyDecorator {
         return map;
     }
 
-    public <R> R decorate(@NotNull Supplier<R> supplier, AtomicBoolean changed, AtomicBoolean isAnnotation) {
+    /**
+     * 装饰对象，仅处理带有 {@link ProxyField} 注解的字段。
+     *
+     * @param supplier     对象供应器
+     * @param changed      输出参数，如果对象内容实际发生变化
+     *                     则设为true
+     * @param isAnnotation 标记是否进入了注解字段的处理分支
+     * @param <R>          对象类型
+     * @return 装饰后的对象
+     */
+    public <R> R decorate(@NotNull final Supplier<R> supplier,
+                          final AtomicBoolean changed,
+                          final AtomicBoolean isAnnotation) {
         R r = supplier.get();
         return process(r, changed, isAnnotation);
     }
 
-    private <R> R process(R object, AtomicBoolean atomicBoolean, AtomicBoolean isAnnotation) {
+    private <R> R process(final R object,
+                          final AtomicBoolean atomicBoolean,
+                          final AtomicBoolean isAnnotation) {
         if (object instanceof List) {
-            return (R) processList((List<?>) object, atomicBoolean, isAnnotation);
+            return (R) processList(
+                    (List<?>) object, atomicBoolean, isAnnotation);
         } else if (object instanceof Map) {
-            return (R) processMap((Map<?, ?>) object, atomicBoolean, isAnnotation);
+            return (R) processMap(
+                    (Map<?, ?>) object, atomicBoolean, isAnnotation);
         } else if (object instanceof String) {
-            return (R) replaceStr((String) object, atomicBoolean);
+            return (R) replaceStr(
+                    (String) object, atomicBoolean);
         } else if (!object.getClass().isPrimitive()) {
-            return processObject(object, atomicBoolean, isAnnotation);
+            return processObject(
+                    object, atomicBoolean, isAnnotation);
         }
         return object;
     }
 
     @SneakyThrows
-    private <R> R processObject(@NotNull R object, AtomicBoolean atomicBoolean, AtomicBoolean isAnnotation) {
+    private <R> R processObject(@NotNull final R object,
+                                 final AtomicBoolean atomicBoolean,
+                                 final AtomicBoolean isAnnotation) {
         Class<?> clazz = object.getClass();
         Field[] fields = clazz.getDeclaredFields();
         AtomicBoolean fieldValueChanged = new AtomicBoolean(false);
         for (Field field : fields) {
             fieldValueChanged.set(false);
-            if (!isAnnotation.get() && field.isAnnotationPresent(ProxyField.class)) {
+            if (!isAnnotation.get()
+                    && field.isAnnotationPresent(ProxyField.class)) {
                 isAnnotation.set(true);
             }
-            Object value = ReflectUtil.getFieldValue(object, field);
+            Object value =
+                    ReflectUtil.getFieldValue(object, field);
             if (value instanceof String strValue) {
                 if (isAnnotation.get()) {
-                    String newValue = replaceStr(strValue, fieldValueChanged);
+                    String newValue =
+                            replaceStr(strValue, fieldValueChanged);
                     if (fieldValueChanged.get()) {
-                        ReflectUtil.setFieldValue(object, field, newValue);
+                        ReflectUtil.setFieldValue(
+                                object, field, newValue);
                     }
                 }
-            } else if (value instanceof Map mapValue) {
-                Map<?, ?> newValue = processMap((Map<?, ?>) value, fieldValueChanged, isAnnotation);
-                ReflectUtil.setFieldValue(object, field, newValue);
+            } else if (value instanceof Map) {
+                Map<?, ?> newValue = processMap(
+                        (Map<?, ?>) value,
+                        fieldValueChanged, isAnnotation);
+                ReflectUtil.setFieldValue(
+                        object, field, newValue);
             } else if (value instanceof List) {
-                List<?> newValue = processList((List<?>) value, fieldValueChanged, isAnnotation);
-                ReflectUtil.setFieldValue(object, field, newValue);
-            } else if (value != null && BeanUtil.isBean(value.getClass())) {
+                List<?> newValue = processList(
+                        (List<?>) value,
+                        fieldValueChanged, isAnnotation);
+                ReflectUtil.setFieldValue(
+                        object, field, newValue);
+            } else if (value != null
+                    && BeanUtil.isBean(value.getClass())) {
                 // 对非基本类型递归处理
-                Object newValue = process(value, fieldValueChanged, isAnnotation);
+                Object newValue = process(
+                        value, fieldValueChanged, isAnnotation);
                 if (fieldValueChanged.get()) {
-                    ReflectUtil.setFieldValue(object, field, newValue);
+                    ReflectUtil.setFieldValue(
+                            object, field, newValue);
                 }
             }
             if (fieldValueChanged.get()) {
@@ -172,7 +239,9 @@ public class ProxyDecorator {
         return object;
     }
 
-    private <T> List<T> processList(List<T> list, AtomicBoolean atomicBoolean, AtomicBoolean isAnnotation) {
+    private <T> List<T> processList(final List<T> list,
+                                     final AtomicBoolean atomicBoolean,
+                                     final AtomicBoolean isAnnotation) {
         if (CollUtil.isEmpty(list)) {
             return list;
         }
@@ -188,7 +257,10 @@ public class ProxyDecorator {
         return list;
     }
 
-    private <K, V> Map<K, V> processMap(@NotNull Map<K, V> map, AtomicBoolean atomicBoolean, AtomicBoolean isAnnotation) {
+    private <K, V> Map<K, V> processMap(
+            @NotNull final Map<K, V> map,
+            final AtomicBoolean atomicBoolean,
+            final AtomicBoolean isAnnotation) {
         AtomicBoolean entryChanged = new AtomicBoolean();
         for (Map.Entry<K, V> entry : map.entrySet()) {
             entryChanged.set(false);
@@ -204,33 +276,37 @@ public class ProxyDecorator {
     }
 
     /**
-     * 替换链接
+     * 替换链接。
      *
      * @param value   需要替换的链接
      * @param changed 是否发生变更
-     *
      * @return 替换后的链接
      */
-    private String replaceStr(String value, AtomicBoolean changed) {
-        for (ProxyProperties.Address address : proxyProperties.getAddressList()) {
+    private String replaceStr(final String value,
+                              final AtomicBoolean changed) {
+        String result = value;
+        for (ProxyProperties.Address address :
+                proxyProperties.getAddressList()) {
             for (Pattern pattern : address.getPatterns()) {
                 boolean currentChanged = false;
-                Matcher matcher = pattern.matcher(value);
+                Matcher matcher = pattern.matcher(result);
                 StringBuffer sb = new StringBuffer();
                 while (matcher.find()) {
-                    String replacement = proxyProperties.getApi() + matcher.group(2) + "?url=" + matcher.group();
+                    String replacement = proxyProperties.getApi()
+                            + matcher.group(2) + "?url="
+                            + matcher.group();
                     matcher.appendReplacement(sb, replacement);
                     currentChanged = true;
                 }
                 matcher.appendTail(sb);
                 if (currentChanged) {
-                    value = sb.toString();
+                    result = sb.toString();
                     if (changed != null) {
                         changed.set(true);
                     }
                 }
             }
         }
-        return value;
+        return result;
     }
 }

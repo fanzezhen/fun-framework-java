@@ -15,23 +15,32 @@ import java.util.*;
  * 提供矩阵数据的读取、变换和写入功能，支持从Excel文件读取矩阵并按指定比例随机改变元素值。
  * <p>
  * <b>使用场景：</b>数据脱敏、测试数据生成、矩阵扰动算法验证
- *
  */
 @Slf4j
 public class MatrixUtil {
+    /**
+     * 随机数生成器
+     */
     static Random rand = new Random();
 
-    // 添加私有构造函数
+    /**
+     * 工具类不允许实例化
+     */
     private MatrixUtil() {
         throw new UnsupportedOperationException("Utility class");
     }
 
     /**
-     * 使矩阵中的元素变乱
+     * 按指定比例随机改变矩阵元素值
+     * <p>
+     * 从Excel读取矩阵数据，随机选择指定比例的元素进行值变换（0变1，1变0），
+     * 然后将变换后的矩阵写入新的Excel文件。
+     * </p>
      *
-     * @param rateOfChange   变错百分比
-     * @param originFilePath 原矩阵Excel文件位置
-     * @param targetFilePath 错矩阵Excel文件位置
+     * @param rateOfChange   变化比例（0.0-1.0），如0.3表示30%的元素会改变
+     * @param originFilePath 原矩阵Excel文件路径
+     * @param targetFilePath 目标矩阵Excel文件路径
+     * @return true 表示处理成功，false 表示处理失败
      */
     public static boolean shuffle(double rateOfChange, String originFilePath, String targetFilePath) {
         // 需要改变的百分比取反，用于判断应该从不变的元素入手还是变错的元素入手

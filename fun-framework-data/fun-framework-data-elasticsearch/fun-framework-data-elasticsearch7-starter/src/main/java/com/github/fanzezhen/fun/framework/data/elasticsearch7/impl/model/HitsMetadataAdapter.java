@@ -13,17 +13,33 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ * 命中元数据适配器
  *
+ * <p>将 Elasticsearch 的 HitsMetadata 适配为统一的 IHitsAdapter 接口。
  */
 public class HitsMetadataAdapter implements IHitsAdapter {
 
+    /**
+     * 命中列表
+     */
     private final List<IHit> hitList;
 
+    /**
+     * 总命中数
+     */
     private final Long total;
 
+    /**
+     * 最大评分
+     */
     private final Double maxScore;
 
-    public HitsMetadataAdapter(HitsMetadata<?> hitsMetadata) {
+    /**
+     * 构造函数
+     *
+     * @param hitsMetadata 命中元数据
+     */
+    public HitsMetadataAdapter(final HitsMetadata<?> hitsMetadata) {
         this.hitList = Optional.ofNullable(hitsMetadata)
             .map(HitsMetadata::hits)
             .map(Collection::stream)

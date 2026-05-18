@@ -19,7 +19,7 @@ import java.util.concurrent.*;
 /**
  */
 @Slf4j
-@Disabled
+@Disabled("手动调用")
 class StoryTest {
 
     @Test

@@ -6,11 +6,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 验证模块自动配置类
+ * 验证模块自动配置类.
  * <p>
- * 加载验证相关组件：JWT令牌验证、防重复提交（@NoRepeat）、防并发（@NoConcurrent）等功能。
- * 当容器中不存在自定义JwtService时，注册默认的JWT服务实现。
- *
+ * 加载验证相关组件：JWT令牌验证、防重复提交（@NoRepeat）、防并发（@NoConcurrent）等功能.
+ * 当容器中不存在自定义JwtService时，注册默认的JWT服务实现.
  */
 @Configuration
 @EnableConfigurationProperties(FunCoreVerifyProperties.class)

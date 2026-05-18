@@ -19,14 +19,29 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
+ * MultiSearch 响应适配器
+ *
+ * <p>将 Elasticsearch 的 MultiSearchResponseItem 响应适配为统一的 IResponseAdapter 接口。
  */
 @Slf4j
 public class MultiSearchResponseAdapter implements IResponseAdapter {
 
+    /**
+     * 聚合适配器
+     */
     private final IAggregationsAdapter aggregationsAdapter;
+
+    /**
+     * 命中数据适配器
+     */
     private final IHitsAdapter hitsAdapter;
 
-    public MultiSearchResponseAdapter(MultiSearchResponseItem<JSONObject> response) {
+    /**
+     * 构造函数
+     *
+     * @param response MultiSearch 响应项
+     */
+    public MultiSearchResponseAdapter(final MultiSearchResponseItem<JSONObject> response) {
         if (Objects.isNull(response)) {
             this.aggregationsAdapter = null;
             this.hitsAdapter = null;

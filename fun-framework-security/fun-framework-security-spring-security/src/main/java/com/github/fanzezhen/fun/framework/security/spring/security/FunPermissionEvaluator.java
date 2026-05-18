@@ -3,6 +3,7 @@ package com.github.fanzezhen.fun.framework.security.spring.security;
 import cn.hutool.core.collection.CollUtil;
 import com.github.fanzezhen.fun.framework.security.base.FunSecurityFacade;
 import com.github.fanzezhen.fun.framework.security.base.FunSpringSecurityProperties;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Resource;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
@@ -55,7 +56,9 @@ public class FunPermissionEvaluator implements PermissionEvaluator {
      * @return 是否有权限
      */
     @Override
-    public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
+    public boolean hasPermission(@Nonnull final Authentication authentication,
+                                 @Nonnull final Object targetDomainObject,
+                                 @Nonnull final Object permission) {
         // 判断用户是否已登录（Principal 是否为 UserDetails 实例）
         if (!(authentication.getPrincipal() instanceof UserDetails userDetails)) {
             return false;
@@ -101,7 +104,8 @@ public class FunPermissionEvaluator implements PermissionEvaluator {
             List<String> holdUriList = funPermissionFacade.holdUriList(serviceCode, username);
 
             // 判断用户是否拥有该接口权限
-            return holdUriList != null && holdUriList.stream().anyMatch(uri -> PatternMatchUtils.simpleMatch(uri, requestUri));
+            return holdUriList != null &&
+                holdUriList.stream().anyMatch(uri -> PatternMatchUtils.simpleMatch(uri, requestUri));
         }
 
         // 默认允许访问
@@ -128,7 +132,10 @@ public class FunPermissionEvaluator implements PermissionEvaluator {
      * @return 是否有权限
      */
     @Override
-    public boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
+    public boolean hasPermission(@Nonnull final Authentication authentication,
+                                 @Nonnull final Serializable targetId,
+                                 @Nonnull final String targetType,
+                                 @Nonnull final Object permission) {
         return false;
     }
 }

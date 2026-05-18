@@ -81,8 +81,7 @@ docker-compose up -d
 ```
 fun-framework-java
 ├── fun-framework-core           # 核心模块集合
-│   ├── fun-framework-core-model        # 数据模型和静态变量
-│   ├── fun-framework-core-exception    # 异常处理
+│   ├── fun-framework-core-model        # 数据模型和异常处理
 │   ├── fun-framework-core-cache        # 缓存抽象
 │   ├── fun-framework-core-thread       # 线程组件
 │   ├── fun-framework-core-context      # 上下文管理
@@ -139,14 +138,12 @@ fun-framework-java
 
 | 模块名                                                                                                           | 描述                | 错误码      | 文档                                                                                   |
 |---------------------------------------------------------------------------------------------------------------|-------------------|----------|--------------------------------------------------------------------------------------|
-| [fun-framework-core-model](fun-framework-core/fun-framework-core-model)                                       | 数据模型和静态变量         | 10***    | [📖](fun-framework-core/fun-framework-core-model/README.md)                           |
-| [fun-framework-core-exception](fun-framework-core/fun-framework-core-exception)                               | 异常处理和工具类          | 10***    | [📖](fun-framework-core/fun-framework-core-exception/README.md)                       |
+| [fun-framework-core-model](fun-framework-core/fun-framework-core-model)                                       | 数据模型、异常处理和静态变量    | 10***    | [📖](fun-framework-core/fun-framework-core-model/README.md)                           |
 | [fun-framework-core-cache](fun-framework-core/fun-framework-core-cache)                                       | 缓存抽象接口            | 10***    | [📖](fun-framework-core/fun-framework-core-cache/README.md)                           |
 | [fun-framework-core-thread](fun-framework-core/fun-framework-core-thread)                                     | 线程池和异步任务          | 10***    | [📖](fun-framework-core/fun-framework-core-thread/README.md)                          |
 | [fun-framework-core-context](fun-framework-core/fun-framework-core-context)                                   | 上下文管理 (用户、租户等)   | 10***    | [📖](fun-framework-core/fun-framework-core-context/README.md)                         |
 | [fun-framework-core-data](fun-framework-core/fun-framework-core-data)                                         | 数据访问基础设施          | 10***    | [📖](fun-framework-core/fun-framework-core-data/README.md)                            |
-| [fun-framework-core-log-base](fun-framework-core/fun-framework-core-log/fun-framework-core-log-base)          | 日志增强基础            | 10***    | [📖](fun-framework-core/fun-framework-core-log/fun-framework-core-log-base/README.md) |
-| [fun-framework-core-log-web](fun-framework-core/fun-framework-core-log/fun-framework-core-log-web)            | Web 日志拦截和追踪       | 10***    | [📖](fun-framework-core/fun-framework-core-log/fun-framework-core-log-web/README.md)  |
+| [fun-framework-core-log](fun-framework-core/fun-framework-core-log)                                           | 日志增强和追踪           | 10***    | [📖](fun-framework-core/fun-framework-core-log/README.md)                            |
 | [fun-framework-core-verify](fun-framework-core/fun-framework-core-verify)                                     | 参数验证和校验           | 10***    | [📖](fun-framework-core/fun-framework-core-verify/README.md)                          |
 | [fun-framework-core-web](fun-framework-core/fun-framework-core-web)                                           | Web 基础能力 (统一响应等)  | 10***    | [📖](fun-framework-core/fun-framework-core-web/README.md)                             |
 | [fun-framework-core-all](fun-framework-core/fun-framework-core-all)                                           | 核心模块全家桶 (一站式引入)   | 10***    | [📖](fun-framework-core/fun-framework-core-all/README.md)                             |

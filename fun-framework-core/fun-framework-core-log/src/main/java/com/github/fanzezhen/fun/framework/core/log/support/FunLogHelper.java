@@ -21,47 +21,81 @@ import java.util.Objects;
 import java.util.WeakHashMap;
 
 /**
- * 动态日志级别管理工具，支持运行时调整指定模块的日志级别（无需重启应用）
+ * 动态日志级别管理助手.
+ * <p>
+ * 支持在运行时调整特定模块的日志级别，无需重启。
  * <p>
  * 典型场景：
- * - 生产环境临时开启DEBUG日志排查问题后恢复INFO级别
- * - 按模块分级记录日志（如核心接口用INFO，辅助功能用WARN）
- * - AOP切面记录方法入参出参，根据配置动态控制日志输出
+ * - 在生产环境中临时启用 DEBUG 日志以进行故障排查
+ * - 按模块使用不同级别的日志（核心模块使用 INFO，辅助模块使用 WARN）
+ * - 基于 AOP 的方法入参/出参日志记录，支持动态控制
  * <p>
- * 线程安全性：{@link #setLogLevel} 和 {@link #initLogLevel} 使用synchronized保证写入安全，
- * {@link #getOrGenerateLevelLogger} 使用 {@code computeIfAbsent} 保证并发读取时单次计算。
+ * 线程安全：{@link #setLogLevel} 和 {@link #initLogLevel} 使用
+ * synchronized 确保写入安全；{@link #getOrGenerateLevelLogger} 使用
+ * {@code computeIfAbsent} 确保读取时的单次计算。
  * <p>
- * WeakHashMap 选择原因：防止长期运行的应用中Logger对象累积导致内存泄漏。
- * 当外部不再持有某个模块名的引用时，其对应的LevelLogger会被GC自动回收，
- * 适用于动态加载类场景（如热部署、插件系统）。
- *
+ * WeakHashMap 原理：防止长时间运行的应用程序中累积 Logger 对象导致的内存泄漏。
+ * 当模块名称不再被引用时，LevelLogger 会被 GC 回收，适用于动态类加载场景。
  */
 @Slf4j
 @Component
 @SuppressWarnings("unused")
 public class FunLogHelper {
-    private static final LevelLogger debugLogger = log::debug;
-    private static final LevelLogger infoLogger = log::info;
-    private static final LevelLogger warnLogger = log::warn;
-    private static final LevelLogger errorLogger = log::error;
-    private static final LevelLogger traceLogger = log::trace;
+    /**
+     * DEBUG 级别日志记录器.
+     */
+    private static final LevelLogger DEBUG_LOGGER = log::debug;
+    /**
+     * INFO 级别日志记录器.
+     */
+    private static final LevelLogger INFO_LOGGER = log::info;
+    /**
+     * WARN 级别日志记录器.
+     */
+    private static final LevelLogger WARN_LOGGER = log::warn;
+    /**
+     * ERROR 级别日志记录器.
+     */
+    private static final LevelLogger ERROR_LOGGER = log::error;
+    /**
+     * TRACE 级别日志记录器.
+     */
+    private static final LevelLogger TRACE_LOGGER = log::trace;
+    /**
+     * 默认级别日志记录器.
+     */
     private static LevelLogger defaultLevelLogger;
     /**
-     * 使用WeakHashMap防止内存泄漏：当模块名（如"com.example.TempPlugin"）不再被引用时，
-     * 对应的LevelLogger会被GC自动清理，避免动态类加载场景下Logger对象无限累积。
+     * WeakHashMap 防止内存泄漏.
+     * <p>
+     * 当模块名称不再被引用时，它们的 LevelLogger 会被自动 GC 回收，
+     * 避免在动态类加载中累积 Logger。
      */
-    static final WeakHashMap<String, LevelLogger> levelLoggerMap = new WeakHashMap<>();
+    static final WeakHashMap<String, LevelLogger> LEVEL_LOGGER_MAP = new WeakHashMap<>();
 
+    /**
+     * 打印序列化器列表.
+     */
     @Resource
     private List<IPrintSerializer> printSerializerList;
+    /**
+     * 日志配置属性.
+     */
     @Resource
     private FunLogProperties funLogProperties;
 
     /**
-     * 执行并打印日志
+     * 执行函数并记录输入/输出参数.
+     *
+     * @param module 用于记录日志的模块名称
+     * @param invoker 要调用的函数
+     * @param requestParam 请求参数
+     * @param <T> 输入类型
+     * @param <R> 返回类型
+     * @return 函数结果
      */
     @SneakyThrows
-    public <T, R> R executeByLog(String module, FunFunction<T, R> invoker, T requestParam) {
+    public <T, R> R executeByLog(final String module, final FunFunction<T, R> invoker, final T requestParam) {
         long startTime = System.currentTimeMillis();
         LevelLogger logger = null;
         try {
@@ -92,7 +126,13 @@ public class FunLogHelper {
     }
 
 
-    public String resolveArgs(Object... args) {
+    /**
+     * 将多个参数解析为 JSON 字符串.
+     *
+     * @param args 要解析的参数
+     * @return 解析后的 JSON 字符串
+     */
+    public String resolveArgs(final Object... args) {
         if (Objects.isNull(args) || args.length == 0) {
             return "";
         }
@@ -107,8 +147,13 @@ public class FunLogHelper {
         }
     }
 
-
-    public String resolveArg(Object arg) {
+    /**
+     * 使用已注册的序列化器解析单个参数.
+     *
+     * @param arg 要解析的参数
+     * @return 解析后的字符串表示
+     */
+    public String resolveArg(final Object arg) {
         for (IPrintSerializer argResolve : printSerializerList) {
             if (argResolve.isSupport(arg)) {
                 return argResolve.serialize(arg);
@@ -117,7 +162,14 @@ public class FunLogHelper {
         return "'不支持的类型：" + arg.getClass().getName() + "'";
     }
 
-    private static LevelLogger generateLevelLogger(Logger logger, LogLevel level) {
+    /**
+     * 为给定的日志记录器和级别生成级别日志记录器.
+     *
+     * @param logger 日志记录器实例
+     * @param level 日志级别
+     * @return 级别日志记录器
+     */
+    private static LevelLogger generateLevelLogger(final Logger logger, final LogLevel level) {
         return switch (level) {
             case OFF -> LevelLogger.EMPTY;
             case TRACE -> log.isTraceEnabled() ? logger::trace : LevelLogger.EMPTY;
@@ -128,67 +180,128 @@ public class FunLogHelper {
         };
     }
 
-    private static LevelLogger findLevelLogger(LogLevel level) {
+    /**
+     * 查找给定级别的级别日志记录器.
+     *
+     * @param level 日志级别
+     * @return 级别日志记录器，如果未启用则返回 null
+     */
+    private static LevelLogger findLevelLogger(final LogLevel level) {
         if (LogLevel.DEBUG.equals(level)) {
-            return !log.isDebugEnabled() ? null : debugLogger;
+            return !log.isDebugEnabled() ? null : DEBUG_LOGGER;
         } else if (LogLevel.INFO.equals(level)) {
-            return !log.isInfoEnabled() ? null : infoLogger;
+            return !log.isInfoEnabled() ? null : INFO_LOGGER;
         } else if (LogLevel.WARN.equals(level)) {
-            return !log.isWarnEnabled() ? null : warnLogger;
+            return !log.isWarnEnabled() ? null : WARN_LOGGER;
         } else if (LogLevel.ERROR.equals(level)) {
-            return !log.isErrorEnabled() ? null : errorLogger;
+            return !log.isErrorEnabled() ? null : ERROR_LOGGER;
         } else if (LogLevel.TRACE.equals(level)) {
-            return !log.isTraceEnabled() ? null : traceLogger;
+            return !log.isTraceEnabled() ? null : TRACE_LOGGER;
         }
         return null;
     }
 
-    public static Logger getLogger(String loggerName) {
+    /**
+     * 根据名称获取日志记录器.
+     *
+     * @param loggerName 日志记录器名称
+     * @return 日志记录器实例
+     */
+    public static Logger getLogger(final String loggerName) {
         final ILoggerFactory loggerFactory = LoggerFactory.getILoggerFactory();
         return (Logger) loggerFactory.getLogger(loggerName);
     }
 
-    public static LevelLogger generateLevelLogger(String loggerName, LogLevel level) {
+    /**
+     * 为给定的日志记录器名称和级别生成级别日志记录器.
+     *
+     * @param loggerName 日志记录器名称
+     * @param level 日志级别
+     * @return 级别日志记录器
+     */
+    public static LevelLogger generateLevelLogger(final String loggerName, final LogLevel level) {
         Logger logger = getLogger(loggerName);
         logger.setLevel(Level.toLevel(level.name()));
         return generateLevelLogger(logger, level);
     }
 
-    public static LevelLogger setLogLevel(String loggerName, LogLevel level) {
+    /**
+     * 设置日志记录器的日志级别.
+     *
+     * @param loggerName 日志记录器名称
+     * @param level 日志级别
+     * @return 级别日志记录器
+     */
+    public static LevelLogger setLogLevel(final String loggerName, final LogLevel level) {
         LevelLogger levelLogger = generateLevelLogger(loggerName, level);
-        levelLoggerMap.put(loggerName, levelLogger);
+        LEVEL_LOGGER_MAP.put(loggerName, levelLogger);
         return levelLogger;
     }
-    
-    
 
-    public static void initLogLevel(Map<String, LogLevel> levelMap) {
-        synchronized (levelLoggerMap) {
-            levelLoggerMap.clear();
+    /**
+     * 从给定的级别映射初始化日志级别.
+     *
+     * @param levelMap 级别映射
+     */
+    public static void initLogLevel(final Map<String, LogLevel> levelMap) {
+        synchronized (LEVEL_LOGGER_MAP) {
+            LEVEL_LOGGER_MAP.clear();
             levelMap.forEach(FunLogHelper::setLogLevel);
         }
     }
 
-    public static LevelLogger getLevelLogger(String loggerName) {
-        return levelLoggerMap.get(loggerName);
+    /**
+     * 获取给定日志记录器名称的级别日志记录器.
+     *
+     * @param loggerName 日志记录器名称
+     * @return 级别日志记录器，如果未找到则返回 null
+     */
+    public static LevelLogger getLevelLogger(final String loggerName) {
+        return LEVEL_LOGGER_MAP.get(loggerName);
     }
 
-    private static void setDefaultLevelLogger(LevelLogger defaultLevelLogger) {
-        FunLogHelper.defaultLevelLogger = defaultLevelLogger;
+    /**
+     * 设置默认级别日志记录器.
+     *
+     * @param newDefaultLevelLogger 默认级别日志记录器
+     */
+    private static void setDefaultLevelLogger(final LevelLogger newDefaultLevelLogger) {
+        defaultLevelLogger = newDefaultLevelLogger;
     }
 
-    public LevelLogger generateLevelLogger(String loggerName) {
+    /**
+     * 使用配置的级别生成级别日志记录器.
+     *
+     * @param loggerName 日志记录器名称
+     * @return 级别日志记录器
+     */
+    public LevelLogger generateLevelLogger(final String loggerName) {
         return generateLevelLogger(loggerName, funLogProperties.matchLevel(loggerName));
     }
 
-    public LevelLogger getOrGenerateLevelLogger(String loggerName) {
-        return levelLoggerMap.computeIfAbsent(loggerName, this::generateLevelLogger);
+    /**
+     * 获取或生成给定日志记录器名称的级别日志记录器.
+     *
+     * @param loggerName 日志记录器名称
+     * @return 级别日志记录器
+     */
+    public LevelLogger getOrGenerateLevelLogger(final String loggerName) {
+        return LEVEL_LOGGER_MAP.computeIfAbsent(loggerName, this::generateLevelLogger);
     }
 
-    public boolean isDisabled(String loggerName) {
+    /**
+     * 检查给定日志记录器名称的日志记录是否已禁用.
+     *
+     * @param loggerName 日志记录器名称
+     * @return 如果日志记录已禁用则返回 true，否则返回 false
+     */
+    public boolean isDisabled(final String loggerName) {
         return LevelLogger.EMPTY.equals(getOrGenerateLevelLogger(loggerName));
     }
 
+    /**
+     * 在 bean 构造后初始化默认级别日志记录器.
+     */
     @PostConstruct
     public void init() {
         setDefaultLevelLogger(findLevelLogger(funLogProperties.getRootLevel()));

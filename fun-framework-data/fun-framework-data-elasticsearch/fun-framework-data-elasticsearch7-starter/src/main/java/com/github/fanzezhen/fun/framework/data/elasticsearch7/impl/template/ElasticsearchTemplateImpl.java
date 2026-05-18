@@ -57,7 +57,7 @@ import com.github.fanzezhen.fun.framework.core.log.support.FunLogHelper;
 import com.github.fanzezhen.fun.framework.core.model.common.AggregationCondition;
 import com.github.fanzezhen.fun.framework.core.model.bucket.CountBucket;
 import com.github.fanzezhen.fun.framework.core.model.bucket.SumBucket;
-import com.github.fanzezhen.fun.framework.core.model.constant.StrConstant;
+import com.github.fanzezhen.fun.framework.core.model.constant.NormalTypeConstant;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.model.entity.IEntity;
 import com.github.fanzezhen.fun.framework.data.elasticsearch.base.config.FunElasticsearchAutoConfiguration;
@@ -109,26 +109,49 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * es Template 实现类
+ * Elasticsearch 7.x 模板实现类
  *
+ * <p>提供完整的 Elasticsearch 7.x 操作功能，包括查询、聚合、滚动查询、批量操作等。
+ * 支持多种查询方式和聚合类型，自动处理响应结果的转换和序列化。
  */
 @Slf4j
 public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
 
+    /**
+     * Jackson JSON 映射器
+     */
     private final JacksonJsonpMapper jacksonJsonpMapper;
 
+    /**
+     * Elasticsearch 客户端实例
+     */
     private ElasticsearchClient elasticsearchClient;
 
-    public ElasticsearchTemplateImpl(FunElasticsearchProperties.Config config,
-                                     FunLogHelper funLogHelper,
-                                     JacksonJsonpMapper jacksonJsonpMapper,
-                                     List<IDocumentSerializer> documentSerializerList,
-                                     List<IResponseDeserializer> responseDeserializerList) {
+    /**
+     * 构造函数
+     *
+     * @param config Elasticsearch 配置
+     * @param funLogHelper 日志辅助类
+     * @param jacksonJsonpMapper Jackson JSON 映射器
+     * @param documentSerializerList 文档序列化器列表
+     * @param responseDeserializerList 响应反序列化器列表
+     */
+    public ElasticsearchTemplateImpl(final FunElasticsearchProperties.Config config,
+                                     final FunLogHelper funLogHelper,
+                                     final JacksonJsonpMapper jacksonJsonpMapper,
+                                     final List<IDocumentSerializer> documentSerializerList,
+                                     final List<IResponseDeserializer> responseDeserializerList) {
         super(config, funLogHelper, documentSerializerList, responseDeserializerList);
         this.jacksonJsonpMapper = jacksonJsonpMapper;
         initElasticsearchClient();
     }
 
+    /**
+     * 初始化 Elasticsearch 客户端
+     *
+     * <p>根据配置创建 RestClient 和 ElasticsearchClient 实例，
+     * 配置认证信息、超时参数和 Content-Type 头。
+     */
     @SuppressWarnings("unchecked")
     private void initElasticsearchClient() {
         // ========== 原有逻辑（uri、认证、RestClientBuilder）保持不变 ==========
@@ -215,19 +238,19 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 高级查询,查询条件与searchList类似,但可以通过{@link ISearchResult}获取其他结果
-     * <p>
-     * es6       org.elasticsearch.search.builder.SearchSourceBuilder 作为入参
-     * <p>
-     * es7或es8  co.elastic.clients.elasticsearch.core.SearchRequest.Builder 作为入参
+     * 高级查询，查询条件与 searchList 类似，但可以通过 {@link ISearchResult} 获取其他结果
      *
-     * @param requestBuilder 查询条件
-     * @param clz            文档类型
+     * <p>ES6 使用 org.elasticsearch.search.builder.SearchSourceBuilder 作为入参
+     * <p>ES7 或 ES8 使用 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 作为入参
      *
-     * @return SearchResult对象
+     * @param requestBuilder 查询条件构建器
+     * @param clz 文档类型
+     * @param indexName 索引名称
+     * @param <T> 文档泛型类型
+     * @return SearchResult 对象
      */
     @Override
-    public <T> ISearchResult<T> search(Object requestBuilder, Class<T> clz, String indexName) {
+    public <T> ISearchResult<T> search(final Object requestBuilder, final Class<T> clz, final String indexName) {
         if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
             throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
         }
@@ -240,15 +263,15 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * esMSearch,对按照请求返回多个结果
+     * 批量查询，按照请求顺序返回多个结果
      *
-     * @param requestBuilders 多个不同的请求build co.elastic.clients.elasticsearch.core.SearchRequest.Builder
-     * @param clz             文档类型
-     *
-     * @return 按照requestBuilders的顺序逐一包装的返回结果，如果某个request没有值，也会有一个空对象
+     * @param requestBuilders 多个不同的请求构建器集合（co.elastic.clients.elasticsearch.core.SearchRequest.Builder）
+     * @param clz 文档类型
+     * @param <T> 文档泛型类型
+     * @return 按照 requestBuilders 的顺序逐一包装的返回结果，如果某个 request 没有值，也会有一个空对象
      */
     @Override
-    public <T> List<ISearchResult<T>> mSearch(Collection<?> requestBuilders, Class<T> clz) {
+    public <T> List<ISearchResult<T>> mSearch(final Collection<?> requestBuilders, final Class<T> clz) {
         if (null == requestBuilders || requestBuilders.isEmpty()) {
             return new ArrayList<>(0);
         }
@@ -307,11 +330,19 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
 
     /**
      * 查询分组聚合近似结果
+     *
+     * <p>使用 terms 聚合进行分组统计，结果为近似值。
+     *
+     * @param requestBuilder 查询条件构建器
+     * @param clz 文档类型
+     * @param aggregationCondition 聚合条件
+     * @param <T> 文档泛型类型
+     * @return 分组统计桶列表
      */
     @Override
-    public <T> List<CountBucket> searchTermsAggregationBucketList(Object requestBuilder,
-                                                                  Class<T> clz,
-                                                                  AggregationCondition aggregationCondition) {
+    public <T> List<CountBucket> searchTermsAggregationBucketList(final Object requestBuilder,
+                                                                  final Class<T> clz,
+                                                                  final AggregationCondition aggregationCondition) {
         if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
             throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
         }
@@ -324,12 +355,21 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 查询分组聚合结果，占用的空间和查询条件过滤后的key集成正比，不适合key数量过多的场景
+     * 查询分组聚合结果（精确值）
+     *
+     * <p>使用脚本化度量聚合进行分组统计，占用的空间和查询条件过滤后的 key 数量成正比，
+     * 不适合 key 数量过多的场景。
+     *
+     * @param requestBuilder 查询条件构建器
+     * @param clz 文档类型
+     * @param aggregationCondition 聚合条件
+     * @param <T> 文档泛型类型
+     * @return 分组统计桶列表
      */
     @Override
-    public <T> List<CountBucket> searchScriptedMetricAggregationCountBucketList(Object requestBuilder,
-                                                                                Class<T> clz,
-                                                                                AggregationCondition aggregationCondition) {
+    public <T> List<CountBucket> searchScriptedMetricAggregationCountBucketList(final Object requestBuilder,
+                                                                                final Class<T> clz,
+                                                                                final AggregationCondition aggregationCondition) {
         if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
             throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
         }
@@ -343,8 +383,21 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         return aggregations != null ? aggregations.getBucketList() : null;
     }
 
+    /**
+     * 查询分组求和聚合结果（精确值）
+     *
+     * <p>使用脚本化度量聚合进行分组求和统计。
+     *
+     * @param requestBuilder 查询条件构建器
+     * @param clz 文档类型
+     * @param aggregationCondition 求和聚合条件
+     * @param <T> 文档泛型类型
+     * @return 分组求和桶列表
+     */
     @Override
-    public <T> List<SumBucket> searchScriptedMetricAggregationSumBucketList(Object requestBuilder, Class<T> clz, SumAggregationCondition aggregationCondition) {
+    public <T> List<SumBucket> searchScriptedMetricAggregationSumBucketList(final Object requestBuilder,
+                                                                             final Class<T> clz,
+                                                                             final SumAggregationCondition aggregationCondition) {
         if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
             throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
         }
@@ -359,19 +412,27 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 查询分组聚合近似结果
+     * 查询分组聚合近似结果（包含命中文档）
+     *
+     * <p>使用 terms 聚合进行分组统计，并返回每个分组的 top hits 文档。
+     *
+     * @param requestBuilder 查询条件构建器
+     * @param clz 文档类型
+     * @param aggregationCondition 嵌套聚合条件
+     * @param <T> 文档泛型类型
+     * @return 包含命中文档的分组统计桶列表
      */
     @Override
-    public <T> List<HitsCountBucket<T>> searchTermsAggregationHitsBucketList(Object requestBuilder,
-                                                                             Class<T> clz,
-                                                                             NestedAggregationCondition aggregationCondition) {
+    public <T> List<HitsCountBucket<T>> searchTermsAggregationHitsBucketList(final Object requestBuilder,
+                                                                             final Class<T> clz,
+                                                                             final NestedAggregationCondition aggregationCondition) {
         if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
             throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
         }
         String key = ElasticsearchKeywordConstants.PREFIX_GROUP_COUNT + aggregationCondition.getFieldName();
         searchRequestBuilder.aggregations(key, agg ->
             aggregationsContainerBuilder(agg, aggregationCondition)
-                .aggregations(StrConstant.RECORDS, child ->
+                .aggregations(NormalTypeConstant.STR_RECORDS, child ->
                     child.topHits(topHitsBuilder -> {
                         if (aggregationCondition.getHitsLimit() != null) {
                             topHitsBuilder.size(aggregationCondition.getHitsLimit());
@@ -415,7 +476,7 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         return response.aggregations().get(key).sterms().buckets().array().stream().map(stringTermsBucket -> {
             HitsCountBucket<T> hitsBucket = new HitsCountBucket<>(stringTermsBucket.key().stringValue(), stringTermsBucket.docCount());
             JSONArray hits = new JSONArray(aggregationCondition.getHitsLimit());
-            for (Hit<JsonData> hit : stringTermsBucket.aggregations().get(StrConstant.RECORDS).topHits().hits().hits()) {
+            for (Hit<JsonData> hit : stringTermsBucket.aggregations().get(NormalTypeConstant.STR_RECORDS).topHits().hits().hits()) {
                 JsonData source = hit.source();
                 hits.add(new JSONObject().fluentPut("_source", source != null ? source.toJson().asJsonObject() : MapUtil.empty()).fluentPut("_id", hit.id()));
             }
@@ -424,16 +485,23 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         }).toList();
     }
 
+    /**
+     * 构建聚合容器
+     *
+     * @param agg 聚合构建器
+     * @param aggregationCondition 聚合条件
+     * @return 聚合容器构建器
+     */
     @SuppressWarnings("unchecked")
     private static Aggregation.Builder.ContainerBuilder aggregationsContainerBuilder(
-        Aggregation.Builder agg,
-        AggregationCondition aggregationCondition) {
+        final Aggregation.Builder agg,
+        final AggregationCondition aggregationCondition) {
         co.elastic.clients.elasticsearch._types.SortOrder sortOrder = getSortOrder(aggregationCondition.getSortOrder());
         return agg
             .terms(b -> {
                 TermsAggregation.Builder builder = b.field(aggregationCondition.getFieldName());
                 if (sortOrder != null) {
-                    builder.order(NamedValue.of(StrConstant.UNDERLINE_COUNT, sortOrder));
+                    builder.order(NamedValue.of(NormalTypeConstant.STR_UNDERLINE_COUNT, sortOrder));
                 }
                 if (aggregationCondition.getLimit() != null) {
                     builder.size(aggregationCondition.getLimit());
@@ -442,7 +510,15 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
             });
     }
 
-    private static <T> List<T> deserializer(List<?> hits, Class<T> clz) {
+    /**
+     * 反序列化命中文档列表
+     *
+     * @param hits 命中文档列表
+     * @param clz 文档类型
+     * @param <T> 文档泛型类型
+     * @return 反序列化后的文档列表
+     */
+    private static <T> List<T> deserializer(final List<?> hits, final Class<T> clz) {
         JsonResponseAdapterV7 hitsResponseAdapter = new JsonResponseAdapterV7(new JSONObject().fluentPut("hits", new JSONObject().fluentPut("hits", hits)));
         List<T> list = Collections.emptyList();
         for (IElasticsearchResultDeserializer deserializer :
@@ -455,7 +531,13 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         return list;
     }
 
-    private static co.elastic.clients.elasticsearch._types.SortOrder getSortOrder(SortOrder aggregationCondition) {
+    /**
+     * 获取排序顺序
+     *
+     * @param aggregationCondition 排序条件
+     * @return Elasticsearch 排序顺序
+     */
+    private static co.elastic.clients.elasticsearch._types.SortOrder getSortOrder(final SortOrder aggregationCondition) {
         co.elastic.clients.elasticsearch._types.SortOrder sortOrder;
         switch (aggregationCondition) {
             case DESCENDING -> sortOrder = co.elastic.clients.elasticsearch._types.SortOrder.Desc;
@@ -466,12 +548,21 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 查询分组聚合精确结果，占用的空间和查询条件过滤后的key集成正比，不适合key数量过多的场景
+     * 查询分组聚合精确结果（包含命中文档）
+     *
+     * <p>使用脚本化度量聚合进行分组统计，并返回每个分组的命中文档。
+     * 占用的空间和查询条件过滤后的 key 数量成正比，不适合 key 数量过多的场景。
+     *
+     * @param requestBuilder 查询条件构建器
+     * @param clz 文档类型
+     * @param aggregationCondition 嵌套聚合条件
+     * @param <T> 文档泛型类型
+     * @return 包含命中文档的分组统计桶列表
      */
     @Override
-    public <T> List<HitsCountBucket<T>> searchScriptedMetricAggregationHitsBucketList(Object requestBuilder,
-                                                                                      Class<T> clz,
-                                                                                      NestedAggregationCondition aggregationCondition) {
+    public <T> List<HitsCountBucket<T>> searchScriptedMetricAggregationHitsBucketList(final Object requestBuilder,
+                                                                                      final Class<T> clz,
+                                                                                      final NestedAggregationCondition aggregationCondition) {
         if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
             throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
         }
@@ -548,9 +639,17 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
 
     /**
      * 计算不重复值的数量（近似值）
+     *
+     * <p>使用 cardinality 聚合计算字段的去重数量，结果为近似值。
+     *
+     * @param requestBuilder 查询条件构建器
+     * @param column 列选择函数
+     * @param clz 文档类型
+     * @param <T> 文档泛型类型
+     * @return 不重复值的数量
      */
     @Override
-    public <T> int cardinalityCount(Object requestBuilder, Func1<T, ?> column, Class<T> clz) {
+    public <T> int cardinalityCount(final Object requestBuilder, final Func1<T, ?> column, final Class<T> clz) {
         if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
             throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
         }
@@ -558,7 +657,7 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         searchRequestBuilder.index(indexName);
         searchRequestBuilder.size(0);
         String columnName = ITemplate.getColumnName(column);
-        String key = "cardinality_" + columnName + StrConstant.UNDERLINE_COUNT;
+        String key = "cardinality_" + columnName + NormalTypeConstant.STR_UNDERLINE_COUNT;
         searchRequestBuilder.aggregations(key, agg -> agg.cardinality(b -> b.field(columnName)));
         SearchRequest searchRequest = searchRequestBuilder.build();
         final SearchResponse<JSONObject> response = executeByLog(
@@ -575,9 +674,17 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
 
     /**
      * 计算不重复值的数量（精确值）
+     *
+     * <p>使用脚本化度量聚合计算字段的去重数量，结果为精确值。
+     *
+     * @param requestBuilder 查询条件构建器
+     * @param column 列选择函数
+     * @param clz 文档类型
+     * @param <T> 文档泛型类型
+     * @return 不重复值的数量
      */
     @Override
-    public <T> int distinctCount(Object requestBuilder, Func1<T, ?> column, Class<T> clz) {
+    public <T> int distinctCount(final Object requestBuilder, final Func1<T, ?> column, final Class<T> clz) {
         if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
             throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
         }
@@ -585,7 +692,7 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         searchRequestBuilder.index(indexName);
         searchRequestBuilder.size(0);
         String columnName = ITemplate.getColumnName(column);
-        String key = "distinct_" + columnName + StrConstant.UNDERLINE_COUNT;
+        String key = "distinct_" + columnName + NormalTypeConstant.STR_UNDERLINE_COUNT;
         searchRequestBuilder.aggregations(key, buildScriptedMetricAggregation(columnName));
         SearchRequest searchRequest = searchRequestBuilder.build();
         final SearchResponse<JSONObject> response = executeByLog(
@@ -601,21 +708,22 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 游标查询，通过{@link ISearchResult}获取其他结果
-     * scrollId 游标id用于获取下一批数据的标记，第一次查询游标id为空
-     * <p>
-     * es6       org.elasticsearch.search.builder.SearchSourceBuilder 作为入参
-     * <p>
-     * es7或es8  co.elastic.clients.elasticsearch.core.SearchRequest.Builder 作为入参
+     * 游标查询（首次查询）
      *
-     * @param requestBuilder 查询条件
-     * @param clz            文档类型
-     * @param timeSeconds    游标id查询的有效时间（单位：分钟）
+     * <p>通过 {@link ISearchResult} 获取其他结果。scrollId 游标 ID 用于获取下一批数据的标记，第一次查询游标 ID 为空。
+     * <p>ES6 使用 org.elasticsearch.search.builder.SearchSourceBuilder 作为入参
+     * <p>ES7 或 ES8 使用 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 作为入参
      *
-     * @return SearchResult对象
+     * @param requestBuilder 查询条件构建器
+     * @param clz 文档类型
+     * @param timeSeconds 游标 ID 查询的有效时间（单位：秒）
+     * @param <T> 文档泛型类型
+     * @return SearchResult 对象
      */
     @Override
-    public <T> ISearchResult<T> scrollSearchByRequestBuilder(Object requestBuilder, Class<T> clz, Long timeSeconds) {
+    public <T> ISearchResult<T> scrollSearchByRequestBuilder(final Object requestBuilder,
+                                                              final Class<T> clz,
+                                                              final Long timeSeconds) {
         String indexName = getIndexName(clz);
         if (!(requestBuilder instanceof SearchRequest.Builder searchRequestBuilder)) {
             throw new ElasticsearchException("request 入参必须为 co.elastic.clients.elasticsearch.core.SearchRequest.Builder 类型");
@@ -636,21 +744,20 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 游标查询，通过{@link ISearchResult}获取其他结果
-     * scrollId 游标id用于获取下一批数据的标记，第一次查询游标id为空
-     * <p>
-     * es6       org.elasticsearch.search.builder.SearchSourceBuilder 作为入参
-     * <p>
-     * es7或es8  co.elastic.clients.elasticsearch.core.SearchRequest.Builder 作为入参
+     * 游标查询（续查）
      *
-     * @param clz         文档类型
-     * @param scrollId    游标id(第一次查询时游标id可为空)
-     * @param timeSeconds 游标id查询的有效时间（单位：分钟）
+     * <p>通过 scrollId 继续查询下一批数据。
      *
-     * @return SearchResult对象
+     * @param scrollId 游标 ID（第一次查询时游标 ID 可为空）
+     * @param clz 文档类型
+     * @param timeSeconds 游标 ID 查询的有效时间（单位：秒）
+     * @param <T> 文档泛型类型
+     * @return SearchResult 对象
      */
     @Override
-    public <T> ISearchResult<T> scrollSearchByScrollId(String scrollId, Class<T> clz, Long timeSeconds) {
+    public <T> ISearchResult<T> scrollSearchByScrollId(final String scrollId,
+                                                        final Class<T> clz,
+                                                        final Long timeSeconds) {
         ScrollRequest scrollRequest = ScrollRequest.of(builder -> builder
             .scrollId(scrollId)
             .scroll(Time.of(timeBuilder -> timeBuilder.time(timeSeconds + "s")))
@@ -667,15 +774,15 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 清除滚动搜索的scroll上下文
+     * 清除滚动搜索的 scroll 上下文
      *
-     * @param scrollIds 需要清除的一个或多个scroll ID
-     *
-     * @return 如果清除操作成功则返回true，否则返回false
+     * @param scrollId 需要清除的第一个 scroll ID
+     * @param scrollIds 需要清除的其他 scroll ID（可变参数）
+     * @return 如果清除操作成功则返回 true，否则返回 false
      */
     @SneakyThrows
     @Override
-    public boolean clearScroll(String scrollId, String... scrollIds) {
+    public boolean clearScroll(final String scrollId, final String... scrollIds) {
         List<String> scrollIdList;
         if (ArrayUtil.isEmpty(scrollIds)) {
             scrollIdList = List.of(scrollId);
@@ -691,10 +798,16 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 根据唯一字段查询
+     * 根据唯一字段查询单条记录
+     *
+     * @param column 字段名
+     * @param value 字段值
+     * @param clz 文档类型
+     * @param <T> 文档泛型类型
+     * @return 查询结果，如果不存在则返回 null
      */
     @Override
-    public <T> T get(String column, Serializable value, Class<T> clz) {
+    public <T> T get(final String column, final Serializable value, final Class<T> clz) {
         BoolQuery.Builder boolQuery = boolQueryMustTermBuilder(column, value);
         SearchRequest.Builder searchRequestBuilder = new SearchRequest.Builder()
             .query(query -> query.bool(boolQuery.build()))
@@ -703,15 +816,15 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 通过id查询文档
+     * 通过 ID 查询文档
      *
-     * @param id  主键
+     * @param id 主键
      * @param clz 文档类型
-     *
-     * @return 查询文档
+     * @param <T> 文档泛型类型
+     * @return 查询到的文档，如果不存在则返回 null
      */
     @Override
-    public <T> T getById(Serializable id, Class<T> clz) {
+    public <T> T getById(final Serializable id, final Class<T> clz) {
         String indexName = getIndexName(clz);
         GetRequest getRequest = GetRequest.of(builder -> builder.id(String.valueOf(id)).index(indexName));
         final GetResponse<JSONObject> response = executeByLog(
@@ -722,17 +835,18 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * mGet方法，批量构建 get 请求
-     * <p>
-     * co.elastic.clients.elasticsearch.core.MGetRequest.Builder 作为入参
+     * 批量通过 ID 查询文档
      *
-     * @param ids 查询条件，索引名优先使用@Document中的
+     * <p>使用 mGet 方法批量构建 get 请求。
+     * 使用 co.elastic.clients.elasticsearch.core.MGetRequest.Builder 作为入参。
+     *
+     * @param ids ID 集合，索引名优先使用 @Document 中的
      * @param clz 文档类型
-     *
+     * @param <T> 文档泛型类型
      * @return 查询结果列表
      */
     @Override
-    public <T> List<T> listByIds(Collection<? extends Serializable> ids, Class<T> clz) {
+    public <T> List<T> listByIds(final Collection<? extends Serializable> ids, final Class<T> clz) {
         String indexName = getIndexName(clz);
         List<String> idList = ids.stream().map(String::valueOf).toList();
         MgetRequest mgetRequest = MgetRequest.of(builder -> builder.ids(idList).index(indexName));
@@ -747,10 +861,16 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 根据唯一字段查询
+     * 根据字段查询文档列表
+     *
+     * @param column 字段名
+     * @param value 字段值
+     * @param clz 文档类型
+     * @param <T> 文档泛型类型
+     * @return 查询结果列表
      */
     @Override
-    public <T> List<T> listByColumn(String column, Serializable value, Class<T> clz) {
+    public <T> List<T> listByColumn(final String column, final Serializable value, final Class<T> clz) {
         BoolQuery.Builder boolQuery = boolQueryMustTermBuilder(column, value);
         SearchRequest.Builder searchRequestBuilder = new SearchRequest.Builder()
             .query(query -> query.bool(boolQuery.build()))
@@ -759,10 +879,18 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 根据唯一字段查询
+     * 根据字段批量查询文档列表
+     *
+     * @param column 字段名
+     * @param values 字段值集合
+     * @param clz 文档类型
+     * @param <T> 文档泛型类型
+     * @return 查询结果列表
      */
     @Override
-    public <T> List<T> listByColumn(String column, Collection<? extends Serializable> values, Class<T> clz) {
+    public <T> List<T> listByColumn(final String column,
+                                     final Collection<? extends Serializable> values,
+                                     final Class<T> clz) {
         if (CollUtil.isEmpty(values)) {
             return Collections.emptyList();
         }
@@ -779,14 +907,13 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * put 文档
+     * 插入单个文档
      *
-     * @param document 文档对象
-     *                 类需要被 {@link Entity} 标记
-     *                 字段需要被 {@link Column} 标记出主键
+     * @param document 文档对象，类需要被 {@link Entity} 标记，字段需要被 {@link Column} 标记出主键
+     * @return 操作结果
      */
     @Override
-    public String insert(IEntity<String> document) {
+    public String insert(final IEntity<String> document) {
         final Class<?> aClass = document.getClass();
         final String indexName = getIndexName(aClass);
         final List<DocumentData> documentDataList = convertDocumentData(aClass, document);
@@ -804,14 +931,13 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 批量 put 文档
+     * 批量插入文档
      *
-     * @param documents 文档
-     *
-     * @return 插入成功数量
+     * @param documents 文档集合
+     * @return 如果全部插入成功则返回 true，否则返回 false
      */
     @Override
-    public boolean insert(Collection<IEntity<String>> documents) {
+    public boolean insert(final Collection<IEntity<String>> documents) {
         if (CollUtil.isEmpty(documents)) {
             return true;
         }
@@ -837,15 +963,14 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 按条件删除索引数据
+     * 按 ID 批量删除文档
      *
-     * @param ids           需要删除的id
-     * @param documentClass 类需要被 {@link Entity} 标记
-     *
-     * @return 删除条数
+     * @param ids 需要删除的 ID 集合
+     * @param documentClass 文档类，需要被 {@link Entity} 标记
+     * @return 如果全部删除成功则返回 true，否则返回 false
      */
     @Override
-    public boolean deleteById(Collection<String> ids, Class<? extends IEntity<String>> documentClass) {
+    public boolean deleteById(final Collection<String> ids, final Class<? extends IEntity<String>> documentClass) {
         final String indexName = getIndexName(documentClass);
         BulkRequest bulkRequest = BulkRequest.of(builder -> {
             for (String id : ids) {
@@ -864,7 +989,13 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         return !response.errors();
     }
 
-    private HttpHost createHttpHost(URI uri) {
+    /**
+     * 创建 HTTP 主机实例
+     *
+     * @param uri URI 对象
+     * @return HttpHost 实例
+     */
+    private HttpHost createHttpHost(final URI uri) {
         if (!StringUtils.hasLength(uri.getUserInfo())) {
             return HttpHost.create(uri.toString());
         }
@@ -876,7 +1007,14 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         }
     }
 
-    private BoolQuery.Builder boolQueryMustTermBuilder(String column, Serializable value) {
+    /**
+     * 构建 bool 查询的 must term 条件
+     *
+     * @param column 字段名
+     * @param value 字段值
+     * @return BoolQuery.Builder 实例
+     */
+    private BoolQuery.Builder boolQueryMustTermBuilder(final String column, final Serializable value) {
         BoolQuery.Builder boolQuery = new BoolQuery.Builder();
         TermQuery.Builder builder = new TermQuery.Builder().field(column);
         switch (value) {
@@ -896,24 +1034,26 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 精确去重脚本，占用的空间和查询条件过滤后的数据集成正比，适合中大型数据量
+     * 构建精确去重脚本聚合
      *
-     * @param fieldName 需要去重的字段
+     * <p>占用的空间和查询条件过滤后的数据集成正比，适合中大型数据量。
      *
-     * @return ScriptedMetricAggregation,使用此不需要lambda表达式
+     * @param fieldName 需要去重的字段名
+     * @return ScriptedMetricAggregation 函数，使用此不需要 lambda 表达式
      */
-    public static Function<Aggregation.Builder, ObjectBuilder<Aggregation>> buildScriptedMetricAggregation(String fieldName) {
+    public static Function<Aggregation.Builder, ObjectBuilder<Aggregation>> buildScriptedMetricAggregation(final String fieldName) {
         return builder -> builder.scriptedMetric(scriptedMetricAggregation(fieldName));
     }
 
     /**
-     * 精确去重脚本，占用的空间和查询条件过滤后的数据集成正比，适合中大型数据量
+     * 创建精确去重脚本聚合
      *
-     * @param fieldName 需要去重的字段
+     * <p>占用的空间和查询条件过滤后的数据集成正比，适合中大型数据量。
      *
-     * @return ScriptedMetricAggregation
+     * @param fieldName 需要去重的字段名
+     * @return ScriptedMetricAggregation 实例
      */
-    public static ScriptedMetricAggregation scriptedMetricAggregation(String fieldName) {
+    public static ScriptedMetricAggregation scriptedMetricAggregation(final String fieldName) {
         ScriptedMetricAggregation.Builder builder = new ScriptedMetricAggregation.Builder();
         //初始化HashSet
         String initScript = "state.distinct = new HashSet();";
@@ -926,21 +1066,27 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
     }
 
     /**
-     * 精确去重脚本，占用的空间和查询条件过滤后的数据集成正比
+     * 构建精确去重脚本聚合（带聚合条件）
      *
-     * @return ScriptedMetricAggregation,使用此不需要lambda表达式
+     * <p>占用的空间和查询条件过滤后的数据集成正比。
+     *
+     * @param aggregationCondition 聚合条件
+     * @return ScriptedMetricAggregation 函数，使用此不需要 lambda 表达式
      */
     public static Function<Aggregation.Builder, ObjectBuilder<Aggregation>> buildScriptedMetricAggregation(
-        AggregationCondition aggregationCondition) {
+        final AggregationCondition aggregationCondition) {
         return builder -> builder.scriptedMetric(scriptedMetricAggregation(aggregationCondition));
     }
 
     /**
-     * 精确去重脚本，占用的空间和查询条件过滤后的数据集成正比
+     * 创建精确去重脚本聚合（带聚合条件）
      *
-     * @return ScriptedMetricAggregation
+     * <p>占用的空间和查询条件过滤后的数据集成正比。
+     *
+     * @param aggregationCondition 聚合条件
+     * @return ScriptedMetricAggregation 实例
      */
-    public static ScriptedMetricAggregation scriptedMetricAggregation(AggregationCondition aggregationCondition) {
+    public static ScriptedMetricAggregation scriptedMetricAggregation(final AggregationCondition aggregationCondition) {
         String fieldName = aggregationCondition.getFieldName();
         SortOrder sortOrder = aggregationCondition.getSortOrder();
         int limit = aggregationCondition.getLimit();
@@ -967,7 +1113,21 @@ public class ElasticsearchTemplateImpl extends BaseElasticsearchTemplate {
         return scriptedMetricAggregation(builder, initScript, mapScript, combineScript, reduceScript);
     }
 
-    private static ScriptedMetricAggregation scriptedMetricAggregation(ScriptedMetricAggregation.Builder builder, String initScript, String mapScript, String combineScript, String reduceScript) {
+    /**
+     * 创建脚本化度量聚合
+     *
+     * @param builder 脚本化度量聚合构建器
+     * @param initScript 初始化脚本
+     * @param mapScript 映射脚本
+     * @param combineScript 合并脚本
+     * @param reduceScript 归约脚本
+     * @return ScriptedMetricAggregation 实例
+     */
+    private static ScriptedMetricAggregation scriptedMetricAggregation(final ScriptedMetricAggregation.Builder builder,
+                                                                        final String initScript,
+                                                                        final String mapScript,
+                                                                        final String combineScript,
+                                                                        final String reduceScript) {
         builder.initScript(s -> s.inline(in -> in.source(initScript).lang(ElasticsearchScriptConstants.PAINLESS)))
             .mapScript(s -> s.inline(in -> in.source(mapScript).lang(ElasticsearchScriptConstants.PAINLESS)))
             .combineScript(s -> s.inline(in -> in.source(combineScript).lang(ElasticsearchScriptConstants.PAINLESS)))

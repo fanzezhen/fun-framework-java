@@ -15,7 +15,6 @@ import java.util.List;
 
 /**
  * Elasticsearch 操作模板接口
- *
  */
 public interface IElasticsearchTemplate extends ITemplate<String> {
     String ELASTICSEARCH_MARK = "（elasticsearch）";

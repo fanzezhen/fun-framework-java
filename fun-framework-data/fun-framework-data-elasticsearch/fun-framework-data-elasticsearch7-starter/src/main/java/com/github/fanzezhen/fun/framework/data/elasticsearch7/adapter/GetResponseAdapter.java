@@ -15,12 +15,23 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
+ * Get 响应适配器
+ *
+ * <p>将 Elasticsearch 的 GetResponse 响应适配为统一的 IResponseAdapter 接口。
  */
 public class GetResponseAdapter implements IResponseAdapter {
 
+    /**
+     * 命中数据适配器
+     */
     private final IHitsAdapter hitsAdapter;
 
-    public GetResponseAdapter(GetResponse<JSONObject> getResponse) {
+    /**
+     * 构造函数
+     *
+     * @param getResponse Get 响应对象
+     */
+    public GetResponseAdapter(final GetResponse<JSONObject> getResponse) {
         this.hitsAdapter = Optional.ofNullable(getResponse)
                 .map(Collections::singletonList)
                 .map(Hits::new)
@@ -43,13 +54,27 @@ public class GetResponseAdapter implements IResponseAdapter {
         return hitsAdapter;
     }
 
+    /**
+     * 命中数据内部类
+     */
     static class Hits implements IHitsAdapter {
 
+        /**
+         * 命中列表
+         */
         private final List<? extends Hit> hitList;
 
+        /**
+         * 总命中数
+         */
         private final long total;
 
-        public Hits(Collection<GetResponse<JSONObject>> getResponses) {
+        /**
+         * 构造函数
+         *
+         * @param getResponses Get 响应集合
+         */
+        public Hits(final Collection<GetResponse<JSONObject>> getResponses) {
             this.hitList = Optional.ofNullable(getResponses)
                     .orElse(Collections.emptyList())
                     .stream()
@@ -77,15 +102,32 @@ public class GetResponseAdapter implements IResponseAdapter {
         }
     }
 
+    /**
+     * 命中数据项内部类
+     */
     static class Hit implements IHit {
 
+        /**
+         * Get 响应对象
+         */
         private final GetResponse<JSONObject> getResponse;
 
+        /**
+         * 源数据映射
+         */
         private final Map<String, Object> sourceAsMap;
 
+        /**
+         * 文档 ID
+         */
         private final String id;
 
-        public Hit(GetResponse<JSONObject> getResponse) {
+        /**
+         * 构造函数
+         *
+         * @param getResponse Get 响应对象
+         */
+        public Hit(final GetResponse<JSONObject> getResponse) {
             this.getResponse = getResponse;
             this.sourceAsMap = Optional.ofNullable(getResponse)
                     .map(GetResponse::source)

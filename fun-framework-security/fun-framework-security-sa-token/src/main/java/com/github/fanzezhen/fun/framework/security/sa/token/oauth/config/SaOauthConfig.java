@@ -1,93 +1,93 @@
 package com.github.fanzezhen.fun.framework.security.sa.token.oauth.config;
 
 
+import com.github.fanzezhen.fun.framework.core.model.constant.NormalTypeConstant;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.function.UnaryOperator;
 
 /**
- * Sa-Token Oauth 单点登录模块 配置类 Model
+ * Sa-Token OAuth2.0 单点登录模块配置类。
+ * <p>
+ * 提供 OAuth2.0 客户端和服务端的配置参数。
  */
 @Data
 public class SaOauthConfig implements Serializable {
 
     /**
-     * 毫秒单位
-     */
-    private static final int MILL_SECONDS = 1000;
-
-    /**
-     * 秒单位
-     */
-    private static final int SECONDS = 60;
-
-    /**
-     * 十分钟
+     * 十分钟（单位：分钟）。
      */
     private static final long TEN_MINUTES = 10L;
 
     /**
-     * 客户端ID
+     * 客户端ID。
      */
     private String clientId;
 
     /**
-     * 客户端secret
+     * 客户端密钥。
      */
     private String clientSecret;
 
     /**
-     * 配置 Server 端单点登录授权地址
+     * 授权类型。
+     * <p>
+     * 默认为 "authorization_code"（授权码模式）。
      */
     private String grantType = "authorization_code";
 
     /**
-     * tokenUrl
+     * Token 获取地址。
      */
     private String tokenUrl;
 
     /**
-     * userInfoUrl
+     * 用户信息获取地址。
      */
     private String userInfoUrl;
 
     /**
-     * authorizeUrl
+     * 授权地址。
      */
     private String authorizeUrl;
 
     /**
-     * logoutUrl
+     * 登出地址。
      */
     private String logoutUrl;
 
     /**
-     * redirectUri
+     * 重定向URI。
      */
     private String redirectUri;
 
     /**
-     * scope
+     * 授权范围。
      */
     private String scope;
 
     /**
-     * 解析规则路径
+     * JSON 解析规则路径。
      */
     private String jsonPath;
+
     /**
-     * 返回类型
+     * 响应类型。
      */
     private String responseType;
 
     /**
-     * 接口调用时的时间戳允许的差距（单位：ms），-1代表不校验差距 10分钟
+     * 接口调用时的时间戳允许的差距（单位：毫秒）。
+     * <p>
+     * -1 代表不校验差距，默认为 10 分钟。
      */
-    private long timestampDisparity = MILL_SECONDS * SECONDS * TEN_MINUTES;
+    private long timestampDisparity = NormalTypeConstant.INT_MILLIS_PER_SECOND * NormalTypeConstant.INT_ONE_MINUTE_SECONDS * TEN_MINUTES;
 
     /**
-     * Oauth-Client端：发送Http请求的处理函数
+     * OAuth2.0 Client端发送HTTP请求的处理函数。
+     * <p>
+     * 默认实现会抛出异常，使用时需要配置具体的HTTP请求实现。
      */
     private UnaryOperator<String> sendHttp = url -> {
         throw new SecurityException("请配置 Http 请求处理器");

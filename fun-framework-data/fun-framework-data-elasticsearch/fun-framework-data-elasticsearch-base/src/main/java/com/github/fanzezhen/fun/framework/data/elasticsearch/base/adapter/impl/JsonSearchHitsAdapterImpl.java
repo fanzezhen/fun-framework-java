@@ -13,17 +13,24 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * data层提供的解析es返回的命中文档
+ * 基于 JSON 的搜索命中记录适配器实现
+ * <p>
+ * 用于解析 Elasticsearch 返回的 JSON 格式命中文档集合
  */
 public class JsonSearchHitsAdapterImpl implements IHitsAdapter {
 
-    private final Optional<JSONObject> jsonOption;
+    private final JSONObject jsonObject;
 
     private final List<IHit> hits;
 
-    public JsonSearchHitsAdapterImpl(JSONObject jsonObject) {
-        this.jsonOption = Optional.ofNullable(jsonObject);
-        this.hits = jsonOption
+    /**
+     * 构造函数
+     *
+     * @param jsonObject Elasticsearch 响应中的 hits JSON 对象
+     */
+    public JsonSearchHitsAdapterImpl(final JSONObject jsonObject) {
+        this.jsonObject = jsonObject;
+        this.hits = Optional.ofNullable(jsonObject)
                 .map(e -> e.getJSONArray("hits"))
                 .map(array -> {
                     int size = array.size();
@@ -37,7 +44,7 @@ public class JsonSearchHitsAdapterImpl implements IHitsAdapter {
 
     @Override
     public long getTotal() {
-        return jsonOption
+        return Optional.ofNullable(jsonObject)
                 .map(e -> e.getJSONObject("total"))
                 .map(e -> e.getLong("value"))
                 .orElse(0L);
@@ -56,50 +63,67 @@ public class JsonSearchHitsAdapterImpl implements IHitsAdapter {
         return hits;
     }
 
+    /**
+     * 命中记录实现类
+     * <p>
+     * 封装单条 Elasticsearch 命中记录的 JSON 数据
+     */
     static class HitImpl implements IHit {
 
-        private final Optional<JSONObject> jsonOption;
+        private final JSONObject jsonObject;
 
-        HitImpl(JSONObject jsonObject) {
-            this.jsonOption = Optional.ofNullable(jsonObject);
+        /**
+         * 构造函数
+         *
+         * @param jsonObject 命中记录的 JSON 对象
+         */
+        HitImpl(final JSONObject jsonObject) {
+            this.jsonObject = jsonObject;
         }
 
         /**
-         * es id
+         * 获取文档 ID
+         *
+         * @return Elasticsearch 文档 ID
          */
         @Override
         public String getId() {
-            return jsonOption.map(e -> e.getString("_id"))
+            return Optional.ofNullable(jsonObject).map(e -> e.getString("_id"))
                     .orElse(null);
         }
 
         /**
-         * 得分
+         * 获取文档得分
+         *
+         * @return 搜索得分
          */
         @Override
         public Double getScore() {
-            return jsonOption.map(e -> e.getDouble("_score"))
+            return Optional.ofNullable(jsonObject).map(e -> e.getDouble("_score"))
                     .orElse(0D);
         }
 
         /**
-         * Source内容
+         * 获取源数据字段值
          *
-         * @param key
+         * @param key 字段键
+         * @return 字段值
          */
         @Override
-        public Object getSourceValue(String key) {
-            return jsonOption.map(e -> e.getJSONObject("_source"))
+        public Object getSourceValue(final String key) {
+            return Optional.ofNullable(jsonObject).map(e -> e.getJSONObject("_source"))
                     .map(e -> e.get(key))
                     .orElse(null);
         }
 
         /**
-         * 高亮字段
+         * 获取高亮字段映射
+         *
+         * @return 高亮字段映射，键为字段名，值为高亮片段列表
          */
         @Override
         public Map<String, List<String>> getHighlight() {
-            return jsonOption.map(e -> e.getJSONObject("highlight")).map(e -> {
+            return Optional.ofNullable(jsonObject).map(e -> e.getJSONObject("highlight")).map(e -> {
                 Map<String, List<String>> map = HashMap.newHashMap(e.size() * 2);
                 for (Map.Entry<String, Object> entry : e.entrySet()) {
                     String key = entry.getKey();
@@ -118,11 +142,13 @@ public class JsonSearchHitsAdapterImpl implements IHitsAdapter {
         }
 
         /**
-         * 序列化行数据
+         * 将行数据序列化为字符串
+         *
+         * @return 序列化后的行数据字符串
          */
         @Override
         public String dataToString() {
-            return JSON.toJSONString(jsonOption.orElse(null));
+            return JSON.toJSONString(jsonObject);
         }
     }
 }

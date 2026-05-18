@@ -8,7 +8,10 @@ import lombok.experimental.Accessors;
 import org.apache.ibatis.mapping.SqlCommandType;
 
 /**
- * 痕迹表
+ * 数据追踪业务对象
+ * <p>
+ * 用于 Service 层和 Controller 层之间传递追踪主记录数据。
+ * 对应数据库表：fun_trace
  *
  * @since 3.4.3.1
  */
@@ -19,34 +22,35 @@ import org.apache.ibatis.mapping.SqlCommandType;
 public class TraceBO extends BaseBO<String> {
 
     /**
-     * 名称
+     * 业务对象名称
      */
     protected String name;
 
     /**
-     * 标识
+     * 追踪标识（通常为表名）
      */
     protected String code;
 
     /**
-     * 值
+     * 业务对象标识值
      */
     protected String value;
 
     /**
-     * 操作类型
+     * SQL 操作类型
      */
     protected SqlCommandType type;
 
     /**
-     * 上下文痕迹ID
+     * 上下文追踪ID
      */
     protected String traceId;
 
     /**
-     * 业务表ID
+     * 业务主键ID
      */
     protected String businessId;
+
     /**
      * 创建人
      */

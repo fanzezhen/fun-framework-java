@@ -1,5 +1,6 @@
 package com.github.fanzezhen.fun.framework.api.count;
 
+import com.github.fanzezhen.fun.framework.core.model.constant.NormalTypeConstant;
 import com.github.fanzezhen.fun.framework.core.model.exception.ServiceException;
 import com.github.fanzezhen.fun.framework.core.model.common.YApiModel;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 接口统计 接口
+ * 接口统计控制器.
  *
  * @since 3.4.3.3
  */
@@ -32,12 +33,19 @@ import java.util.Map;
 @RequestMapping("/web-count")
 @ConditionalOnProperty(name = "fun.api.count.web.enabled", havingValue = "true", matchIfMissing = false)
 public class FunApiCountController {
+    /**
+     * API统计服务.
+     */
     @Resource
     private FunApiCountService webCountService;
 
 
     /**
-     * 查询
+     * 查询所有API统计数据.
+     * <p>
+     * 返回格式：{URL → {字段名 → 访问次数}}
+     *
+     * @return API统计数据Map
      */
     @GetMapping("/map")
     public Map<String, LinkedHashMap<String, Integer>> mapResult() {
@@ -45,15 +53,33 @@ public class FunApiCountController {
     }
 
     /**
-     * 根据YApi接口数据导出excel，报告为YApi中每个接口的访问次数和返回值各字段的空值率
+     * 根据YApi接口数据导出Excel统计报告.
+     * <p>
+     * 报告内容包括：
+     * <ul>
+     *   <li>每个接口的访问次数</li>
+     *   <li>返回值各字段的空值率</li>
+     *   <li>无效接口标识</li>
+     * </ul>
+     *
+     * @param yApiModelList YApi接口数据列表
+     * @param response      HTTP响应对象，用于下载文件
+     * @throws IOException 文件处理异常
      */
     @PostMapping("/export/excel-by-y-api")
-    public void exportExcel(@RequestBody List<YApiModel> yApiModelList, HttpServletResponse response) throws IOException {
+    public void exportExcel(@RequestBody final List<YApiModel> yApiModelList, final HttpServletResponse response) throws IOException {
         File file = webCountService.exportExcel(yApiModelList);
         response(response, file);
     }
 
-    public static void response(HttpServletResponse response, File file) {
+    /**
+     * 将文件写入HTTP响应流，触发浏览器下载.
+     *
+     * @param response HTTP响应对象
+     * @param file     要下载的文件
+     * @throws ServiceException 流写入失败时抛出
+     */
+    public static void response(final HttpServletResponse response, final File file) {
         // 清空输出流
         response.reset();
         // 设置强制下载不打开
@@ -61,7 +87,7 @@ public class FunApiCountController {
         // 设置文件名
         response.addHeader("Content-Disposition", "attachment;fileName=" +
             new String(file.getName().getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[NormalTypeConstant.INT_1024];
         try (FileInputStream fis = new FileInputStream(file);
              BufferedInputStream bis = new BufferedInputStream(fis)) {
             // 获取response输出流

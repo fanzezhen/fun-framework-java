@@ -24,20 +24,20 @@ import org.springframework.stereotype.Component;
 import jakarta.servlet.http.HttpServletRequest;
 
 import jakarta.annotation.Resource;
+import java.time.Duration;
 import java.util.Arrays;
 
 /**
- * 防重复提交切面
+ * 防重复提交切面.
  * <p>
- * 配合 @NoRepeat 注解使用，通过缓存实现幂等性校验，防止短时间内重复提交。
- * 使用 CacheService.setIfAbsent 实现分布式场景下的原子性检查。
+ * 配合 @NoRepeat 注解使用，通过缓存实现幂等性校验，防止短时间内重复提交.
+ * 使用 CacheService.setIfAbsent 实现分布式场景下的原子性检查.
  * <p>
  * <b>执行时机：</b>方法执行前（@Before），校验失败时抛出ServiceException
  * <p>
  * <b>使用场景：</b>表单提交、支付接口、积分扣减等需要防重复的操作
  * <p>
  * <b>依赖条件：</b>容器中必须存在CacheService实现（如Redis缓存）
- *
  */
 @Slf4j
 @Aspect
@@ -58,14 +58,23 @@ public class NoRepeatedAop {
     private CacheService cacheService;
 
     /**
-     * 要处理的方法，包名+类名+方法名
+     * 切点定义.
+     * <p>
+     * 匹配所有标注了 @NoRepeat 注解的方法.
      */
     @Pointcut("@annotation(com.github.fanzezhen.fun.framework.core.verify.repeat.NoRepeat)")
     public void cut() {
     }
 
+    /**
+     * 前置通知.
+     * <p>
+     * 在目标方法执行前进行重复提交校验，校验失败抛出 ServiceException.
+     *
+     * @param joinPoint 连接点信息
+     */
     @Before("cut()")
-    public void doBefore(JoinPoint joinPoint) {
+    public void doBefore(final JoinPoint joinPoint) {
         String key;
         NoRepeat noRepeat;
         try {
@@ -74,8 +83,9 @@ public class NoRepeatedAop {
                 return;
             }
             key = getKey(joinPoint, noRepeat);
-            Boolean absent = cacheService.setIfAbsent(key, DateUtil.now(), noRepeat.timeout(), noRepeat.timeUnit());
-            if (!Boolean.TRUE.equals(absent)){
+            Duration timeout = Duration.of(noRepeat.timeout(), noRepeat.timeUnit().toChronoUnit());
+            Boolean absent = cacheService.setIfAbsent(key, DateUtil.now(), timeout);
+            if (!Boolean.TRUE.equals(absent)) {
                 throw new ServiceException("请勿重复提交");
             }
         } catch (Exception exception) {
@@ -83,7 +93,16 @@ public class NoRepeatedAop {
         }
     }
 
-    private String getKey(JoinPoint joinPoint, NoRepeat noRepeat) {
+    /**
+     * 生成缓存键.
+     * <p>
+     * 键的组成：环境/应用名/NoRepeat/类名.方法名/参数键/请求头JSON/自定义参数JSON.
+     *
+     * @param joinPoint 连接点信息
+     * @param noRepeat  注解实例
+     * @return 缓存键
+     */
+    private String getKey(final JoinPoint joinPoint, final NoRepeat noRepeat) {
         Object[] args = joinPoint.getArgs();
         JSONObject param = new JSONObject();
         String[] headerArgs = noRepeat.headerArgs();
@@ -93,20 +112,44 @@ public class NoRepeatedAop {
         String headerJsonStr = ContextHolder.getHeaderJsonStr(noRepeat.headerArgs());
         String paramKey = noRepeat.key();
         if (CharSequenceUtil.isEmpty(paramKey)) {
-            paramKey = JSON.toJSONString(Arrays.stream(args).filter(arg -> !(arg instanceof HttpServletRequest)).toList());
+            paramKey = JSON.toJSONString(Arrays.stream(args)
+                    .filter(arg -> !(arg instanceof HttpServletRequest))
+                    .toList());
         }
-        String key = env + StrPool.SLASH + springApplicationName + StrPool.SLASH + "NoRepeat" + StrPool.SLASH + joinPoint.getTarget().getClass().getName() + StrPool.DOT + joinPoint.getSignature().getName() + StrPool.SLASH + paramKey + StrPool.SLASH + headerJsonStr + StrPool.SLASH + param.toJSONString();
+        String key = env + StrPool.SLASH + springApplicationName + StrPool.SLASH +
+                "NoRepeat" + StrPool.SLASH +
+                joinPoint.getTarget().getClass().getName() + StrPool.DOT +
+                joinPoint.getSignature().getName() + StrPool.SLASH + paramKey + StrPool.SLASH +
+                headerJsonStr + StrPool.SLASH + param.toJSONString();
         log.info("key={}", key);
         return key;
     }
 
-    private static void loadParamArgs(JSONObject param, String[] paramArgs, Object[] args) {
+    /**
+     * 加载方法参数到 JSON 对象.
+     *
+     * @param param     目标JSON对象
+     * @param paramArgs 参数字段路径数组
+     * @param args      方法实参数组
+     */
+    private static void loadParamArgs(final JSONObject param, final String[] paramArgs, final Object[] args) {
         if (ArrayUtil.isNotEmpty(paramArgs) && ArrayUtil.isNotEmpty(args)) {
-            for (String validArg : paramArgs) loadParamArgs(param, validArg, args);
+            for (String validArg : paramArgs) {
+                loadParamArgs(param, validArg, args);
+            }
         }
     }
 
-    private static void loadParamArgs(JSONObject param, String validArg, Object[] args) {
+    /**
+     * 加载单个参数字段到 JSON 对象.
+     * <p>
+     * 支持通过点号访问嵌套字段，如 "0.user.id" 表示第一个参数的 user 字段的 id 属性.
+     *
+     * @param param    目标JSON对象
+     * @param validArg 参数字段路径（如 "0.id"）
+     * @param args     方法实参数组
+     */
+    private static void loadParamArgs(final JSONObject param, final String validArg, final Object[] args) {
         if (CharSequenceUtil.isBlank(validArg)) {
             return;
         }
@@ -128,7 +171,13 @@ public class NoRepeatedAop {
         }
     }
 
-    private static void loadHeaderArgs(JSONObject param, String[] headerArgs) {
+    /**
+     * 加载请求头参数到 JSON 对象.
+     *
+     * @param param      目标JSON对象
+     * @param headerArgs 请求头键名数组
+     */
+    private static void loadHeaderArgs(final JSONObject param, final String[] headerArgs) {
         if (ArrayUtil.isNotEmpty(headerArgs)) {
             for (String headerKey : headerArgs) {
                 if (CharSequenceUtil.isBlank(headerKey)) {

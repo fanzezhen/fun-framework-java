@@ -1,6 +1,6 @@
 package com.github.fanzezhen.fun.framework.core.springboot.thread;
 
-import com.github.fanzezhen.fun.framework.core.thread.decorator.ThreadPoolTaskDecorator;
+import com.github.fanzezhen.fun.framework.core.thread.decorator.ThreadDecorator;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -304,7 +304,7 @@ class ThreadPoolTaskExecutorRepositoryTest {
         // 添加多个装饰器，模拟实际场景
         for (int i = 0; i < 5; i++) {
             final int decoratorId = i;
-            ThreadPoolTaskExecutorRepository.addDecorator(new ThreadPoolTaskDecorator() {
+            ThreadPoolTaskExecutorRepository.addDecorator(new ThreadDecorator() {
                 @Override
                 public String getName() {
                     return "test-decorator-" + decoratorId;
@@ -325,8 +325,8 @@ class ThreadPoolTaskExecutorRepositoryTest {
         // 等待所有异步销毁任务完成（addDecorator 会异步销毁线程池）
         // 使用轮询检查，避免 Thread.sleep 和 TimeUnit.sleep
         long deadline = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(10);
-        while (!ThreadPoolTaskExecutorRepository.getPoolNames().isEmpty()
-                && System.currentTimeMillis() < deadline) {
+        while (!ThreadPoolTaskExecutorRepository.getPoolNames().isEmpty() &&
+                System.currentTimeMillis() < deadline) {
             // 使用 LockSupport.parkNanos 替代 sleep，符合 SonarQube 规范
             java.util.concurrent.locks.LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(100));
         }

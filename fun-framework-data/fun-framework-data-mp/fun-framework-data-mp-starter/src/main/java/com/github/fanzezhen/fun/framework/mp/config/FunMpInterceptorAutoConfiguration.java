@@ -16,7 +16,16 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * MP配置
+ * MyBatis-Plus 拦截器自动配置类
+ * <p>
+ * 负责自动注册用户定义的 {@link InnerInterceptor} 到 {@link MybatisPlusInterceptor} 中。
+ * 启动时会检查是否配置了 {@link PaginationInnerInterceptor}，如果未配置会输出警告信息。
+ * <p>
+ * 注意事项：
+ * <ul>
+ *   <li>必须提供 {@link PaginationInnerInterceptor} Bean，否则分页功能不可用</li>
+ *   <li>自动去重，相同的拦截器实例不会重复添加</li>
+ * </ul>
  *
  * @since 3.4.3.1
  */
@@ -24,14 +33,31 @@ import java.util.Objects;
 @Configuration
 @ConditionalOnBean({MybatisPlusInterceptor.class})
 public class FunMpInterceptorAutoConfiguration {
+    /**
+     * MyBatis-Plus 拦截器
+     */
     @Resource
     public MybatisPlusInterceptor mybatisPlusInterceptor;
+
+    /**
+     * 用户定义的内部拦截器列表
+     */
     public final List<InnerInterceptor> innerInterceptors;
 
-    public FunMpInterceptorAutoConfiguration(@Autowired(required = false) List<InnerInterceptor> innerInterceptors) {
+    /**
+     * 构造函数
+     *
+     * @param innerInterceptors 用户定义的内部拦截器列表（可选）
+     */
+    public FunMpInterceptorAutoConfiguration(@Autowired(required = false) final List<InnerInterceptor> innerInterceptors) {
         this.innerInterceptors = innerInterceptors;
     }
 
+    /**
+     * 初始化拦截器
+     * <p>
+     * 自动注册用户定义的内部拦截器，并检查是否配置了分页拦截器。
+     */
     @PostConstruct
     private void init() {
         if (mybatisPlusInterceptor != null && CollUtil.isNotEmpty(innerInterceptors)) {

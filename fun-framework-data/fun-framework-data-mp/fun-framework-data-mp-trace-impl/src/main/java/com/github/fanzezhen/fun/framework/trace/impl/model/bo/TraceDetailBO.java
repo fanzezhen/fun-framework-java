@@ -7,7 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * 痕迹明细表
+ * 数据追踪明细业务对象
+ * <p>
+ * 用于 Service 层和 Controller 层之间传递追踪明细数据。
+ * 对应数据库表：fun_trace_detail
  *
  * @since 3.4.3.1
  */
@@ -18,22 +21,22 @@ import lombok.experimental.Accessors;
 public class TraceDetailBO extends BaseBO<String> {
 
     /**
-     * 业务表ID
+     * 业务主键ID
      */
     private String businessId;
 
     /**
-     * 痕迹表ID
+     * 追踪主表ID
      */
     private String traceId;
 
     /**
-     * 名称
+     * 字段显示名称
      */
     private String name;
 
     /**
-     * 标识
+     * 字段标识（数据库列名）
      */
     private String code;
 

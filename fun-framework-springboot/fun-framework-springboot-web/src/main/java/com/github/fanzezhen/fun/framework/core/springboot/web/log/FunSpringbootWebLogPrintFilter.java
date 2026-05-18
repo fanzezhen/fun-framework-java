@@ -13,7 +13,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
- * 打印日志
+ * Web层日志打印过滤器.
+ * <p>
+ * 使用AOP切面拦截Controller层方法，自动打印请求和响应日志。
+ * 支持通过配置禁用日志打印功能。
  *
  * @since 3.1.7
  */
@@ -25,21 +28,42 @@ import org.springframework.stereotype.Component;
 @Order(Short.MIN_VALUE + 1)
 public class FunSpringbootWebLogPrintFilter extends AbstractFunLogPrintFilter {
 
-    public FunSpringbootWebLogPrintFilter(FunLogHelper funLogHelper) {
+    /**
+     * 构造函数.
+     *
+     * @param funLogHelper 日志助手
+     */
+    public FunSpringbootWebLogPrintFilter(final FunLogHelper funLogHelper) {
         super(funLogHelper);
     }
 
+    /**
+     * 定义切点，拦截RestController和Controller注解的类.
+     */
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController) " +
         "|| @within(org.springframework.stereotype.Controller)")
     public void webExecutePointcut() {
     }
 
+    /**
+     * 环绕通知，打印方法执行日志.
+     *
+     * @param joinPoint 连接点
+     *
+     * @return 方法执行结果
+     *
+     * @throws Throwable 方法执行异常
+     */
     @Around("webExecutePointcut()")
-    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-        if (funLogHelper.isDisabled(FunSpringbootWebLogPrintFilter.class.getName())) {
+    public Object around(final ProceedingJoinPoint joinPoint) throws Throwable {
+        if (getFunLogHelper().isDisabled(FunSpringbootWebLogPrintFilter.class.getName())) {
             return joinPoint.proceed(joinPoint.getArgs());
         }
-        return funLogHelper.executeByLog(FunSpringbootWebLogPrintFilter.class.getName(), joinPoint::proceed, joinPoint.getArgs());
+        return getFunLogHelper().executeByLog(
+            FunSpringbootWebLogPrintFilter.class.getName(),
+            joinPoint::proceed,
+            joinPoint.getArgs()
+        );
     }
 
 }

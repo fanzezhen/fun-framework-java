@@ -9,14 +9,26 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import jakarta.annotation.Resource;
 
 /**
- * 接口注册
+ * Web MVC注册配置类.
+ * <p>
+ * 提供自定义的RequestMappingHandlerMapping实现，
+ * 支持根据配置选择性注册接口。
+ * 仅在配置了fun.core.web.register.flag时生效。
  */
 @Component
 @ConditionalOnExpression("${fun.core.web.register.flag:null} != null")
 public class FunWebMvcRegistrations implements WebMvcRegistrations {
+    /**
+     * Web配置属性.
+     */
     @Resource
     private FunSpringbootWebProperties funSpringbootWebProperties;
 
+    /**
+     * 获取自定义的RequestMappingHandlerMapping.
+     *
+     * @return 自定义的RequestMappingHandlerMapping实例
+     */
     @Override
     public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
         return new FunRequestMappingHandlerMapping(funSpringbootWebProperties.getRegister());

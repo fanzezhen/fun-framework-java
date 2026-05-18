@@ -36,7 +36,7 @@ import jakarta.annotation.Resource;
  *   <li>通过TraceRuleBO缓存表级追踪规则，避免重复查询</li>
  * </ul>
  *
- * @since 3.4.3.1
+ * @since 3.1.8
  */
 @Slf4j
 @Component
@@ -52,7 +52,7 @@ public class TraceInterceptor implements Interceptor {
     @Resource
     private ThreadPoolTaskExecutor funTraceThreadPoolTaskExecutor;
     @Setter
-    private IFunTraceService funTraceService;
+    private IFunTraceService<?, ?, ?> funTraceService;
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {

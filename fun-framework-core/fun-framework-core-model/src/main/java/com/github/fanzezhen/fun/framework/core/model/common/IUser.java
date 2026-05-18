@@ -1,55 +1,78 @@
 package com.github.fanzezhen.fun.framework.core.model.common;
 
 /**
- * 用户
+ * 用户接口
+ * <p>
+ * 定义用户的基本信息和账户状态，包括登录标识、用户名、账户有效性等。
+ * </p>
+ *
+ * @param <K> 登录标识类型
  */
 public interface IUser<K> {
 
     /**
-     * 登录标识，建议返回id或username
+     * 获取登录标识
+     * <p>
+     * 建议返回用户ID或用户名作为登录唯一标识
+     * </p>
+     *
+     * @return 登录标识
      */
     K getLoginCode();
 
     /**
-     * Returns the username used to authenticate the user. Cannot return
-     * <code>null</code>.
-     * @return the username (never <code>null</code>)
+     * 获取用户名
+     * <p>
+     * 返回用于认证用户身份的用户名，不能返回 null
+     * </p>
+     *
+     * @return 用户名（永不为 null）
      */
     String getUsername();
 
     /**
-     * Indicates whether the user's account has expired. An expired account cannot be
-     * authenticated.
-     * @return <code>true</code> if the user's account is valid (ie non-expired),
-     * <code>false</code> if no longer valid (ie expired)
+     * 判断账户是否未过期
+     * <p>
+     * 过期的账户无法通过认证
+     * </p>
+     *
+     * @return true 表示账户有效（未过期），false 表示账户已过期
      */
     default boolean isAccountNonExpired() {
         return true;
     }
 
     /**
-     * Indicates whether the user is locked or unlocked. A locked user cannot be
-     * authenticated.
-     * @return <code>true</code> if the user is not locked, <code>false</code> otherwise
+     * 判断账户是否未锁定
+     * <p>
+     * 锁定的账户无法通过认证
+     * </p>
+     *
+     * @return true 表示账户未锁定，false 表示账户已锁定
      */
     default boolean isAccountNonLocked() {
         return true;
     }
 
     /**
-     * Indicates whether the user's credentials (password) has expired. Expired
-     * credentials prevent authentication.
-     * @return <code>true</code> if the user's credentials are valid (ie non-expired),
-     * <code>false</code> if no longer valid (ie expired)
+     * 判断凭证（密码）是否未过期
+     * <p>
+     * 过期的凭证无法通过认证
+     * </p>
+     *
+     * @return true 表示凭证有效（未过期），false 表示凭证已过期
      */
     default boolean isCredentialsNonExpired() {
         return true;
     }
 
     /**
-     * Indicates whether the user is enabled or disabled. A disabled user cannot be
-     * authenticated.
-     * @return <code>true</code> if the user is enabled, <code>false</code> otherwise
+     * 判断用户是否已启用
+     * <p>
+     * 禁用的用户无法通过认证
+     * </p>
+     *
+     * @return true 表示用户已启用，false 表示用户已禁用
      */
     default boolean isEnabled() {
         return true;

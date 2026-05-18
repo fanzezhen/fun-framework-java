@@ -22,22 +22,32 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * 支持 @Bucket 注解 的字段解析器
+ * 桶字段注解支持反序列化器
+ * <p>
+ * 用于反序列化被 {@link BucketField} 注解标记的字段，将聚合桶数据映射到 Java 对象
  */
 public class BucketFieldAnnotationSupportFieldDeserializer extends AbstractAggregationFieldDeserializer<List<BucketAdapter>> {
 
-    public BucketFieldAnnotationSupportFieldDeserializer(BaseAggregationResultDeserializer baseAggregationResultResolver) {
+    /**
+     * 构造函数
+     *
+     * @param baseAggregationResultResolver 基础聚合结果反序列化器
+     */
+    public BucketFieldAnnotationSupportFieldDeserializer(final BaseAggregationResultDeserializer baseAggregationResultResolver) {
         super(baseAggregationResultResolver);
     }
 
     /**
-     * 解析field在聚合中的值
+     * 反序列化桶字段值
+     * <p>
+     * 将桶适配器列表中的数据映射到目标字段，支持单个桶或桶列表
      *
-     * @param targetField 目标对象的属性
-     * @param adapters    聚合适配器
+     * @param targetField 目标对象的属性字段
+     * @param adapters    桶适配器列表
+     * @return 反序列化后的字段值
      */
     @Override
-    public Object deserialize(Field targetField, List<BucketAdapter> adapters) {
+    public Object deserialize(final Field targetField, List<BucketAdapter> adapters) {
         // 获取类型，如果是List则获取泛型
         Class<?> targetFieldClass = targetField.getType();
         if (CollUtil.isEmpty(adapters)) {
@@ -60,9 +70,15 @@ public class BucketFieldAnnotationSupportFieldDeserializer extends AbstractAggre
     }
 
     /**
-     * 遍历 bucketAdapters 将每一个 bucket 属性赋值到 Class 对象中，转化为 Class list
+     * 解析桶适配器列表
+     * <p>
+     * 遍历桶适配器列表，将每个桶的属性赋值到目标类对象中，转换为对象列表
+     *
+     * @param adapters 桶适配器列表
+     * @param hitClass 目标类型
+     * @return 对象列表
      */
-    private List<Object> resolve(List<BucketAdapter> adapters, Class<?> hitClass) {
+    private List<Object> resolve(final List<BucketAdapter> adapters, final Class<?> hitClass) {
         if (hitClass.isAssignableFrom(JSONObject.class)){
             return new JSONArray().fluentAddAll(adapters.stream().map(BucketAdapter::getBucketJson).toList());
         }
@@ -83,12 +99,14 @@ public class BucketFieldAnnotationSupportFieldDeserializer extends AbstractAggre
     }
 
     /**
-     * 解析字段
+     * 解析桶中的单个字段
      *
-     * @param bucketAdapter bucket适配器
-     * @param field         字段
+     * @param bucketAdapter 桶适配器
+     * @param field         字段对象
+     * @param hitClass      目标类型
+     * @return 字段值
      */
-    private Object resolveField(BucketAdapter bucketAdapter, Field field, Class<?> hitClass) {
+    private Object resolveField(final BucketAdapter bucketAdapter, final Field field, final Class<?> hitClass) {
         final BucketField bucketField = field.getAnnotation(BucketField.class);
         final String fieldName = field.getName();
         Class<?> clazz = field.getType();
@@ -117,9 +135,13 @@ public class BucketFieldAnnotationSupportFieldDeserializer extends AbstractAggre
     }
 
     /**
-     * 解析嵌套聚合
+     * 解析嵌套聚合字段
+     *
+     * @param aggregation 聚合适配器
+     * @param field       字段对象
+     * @return 反序列化后的聚合字段值
      */
-    private Object resolveAggregationField(IAggregationAdapter aggregation, Field field) {
+    private Object resolveAggregationField(final IAggregationAdapter aggregation, final Field field) {
         if (Objects.isNull(aggregation)) {
             return ObjUtil.empty(field.getType());
         }
@@ -128,9 +150,14 @@ public class BucketFieldAnnotationSupportFieldDeserializer extends AbstractAggre
     }
 
     /**
-     * 解析普通字段
+     * 解析桶中的简单字段
+     *
+     * @param bucketAdapter 桶适配器
+     * @param bucketName    桶字段名
+     * @param clazz         目标类型
+     * @return 字段值
      */
-    private Object resolveSimpleField(BucketAdapter bucketAdapter, String bucketName, Class<?> clazz) {
+    private Object resolveSimpleField(final BucketAdapter bucketAdapter, String bucketName, final Class<?> clazz) {
         // 驼峰命名转换为下划线命名方式，例如：userName->user_name
         bucketName = CharSequenceUtil.toUnderlineCase(bucketName);
         return bucketAdapter.get(bucketName, clazz);

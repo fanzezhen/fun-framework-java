@@ -20,17 +20,28 @@ import java.util.Map;
  * <p>
  * 提供对象类型转换、字段值解析、Java原生类型判断等功能。
  * 支持List/Map泛型解析和JSON字符串反序列化。
- *
  */
 @Slf4j
 public class ObjUtil {
+    /**
+     * 工具类不允许实例化
+     */
     private ObjUtil() {
     }
 
     /**
-     * 返回对应类型的空值
+     * 获取指定类型的空值
      * <p>
-     * 如果为List，则返回空数组，如果为map，则返回空map，如果为对象，则返回null
+     * 根据类型返回相应的空值：
+     * - List：空列表
+     * - Map：空Map
+     * - String：空字符串
+     * - 其他：null
+     * </p>
+     *
+     * @param tClass 目标类型
+     * @param <T>    类型参数
+     * @return 对应类型的空值
      */
     @SuppressWarnings("unchecked")
     public static <T> T empty(Class<T> tClass) {

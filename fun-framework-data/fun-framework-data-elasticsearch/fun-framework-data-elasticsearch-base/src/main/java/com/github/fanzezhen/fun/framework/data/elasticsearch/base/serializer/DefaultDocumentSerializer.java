@@ -13,31 +13,39 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
- * 支持 字段序列化器 的 文档序列化器
+ * 默认文档序列化器
+ * <p>
+ * 支持基于字段反射的文档序列化，将 Java 对象转换为 Elasticsearch 文档数据
  */
 
 @Order
 public class DefaultDocumentSerializer implements IDocumentSerializer {
 
     /**
-     * 是否可以解析
+     * 判断是否支持序列化指定类型的文档
+     * <p>
+     * 默认支持所有类型
      *
      * @param document 文档对象
-     * @param vClass   序列化的java泛型
+     * @param vClass   文档的 Java 类型
+     * @return 始终返回 true
      */
     @Override
-    public boolean isSupport(Object document, Class<?> vClass) {
+    public boolean isSupport(final Object document, final Class<?> vClass) {
         return true;
     }
 
     /**
-     * 序列化
+     * 序列化文档对象
+     * <p>
+     * 通过反射获取对象字段，将主键字段作为文档 ID，其他字段作为文档源数据
      *
      * @param document 文档对象
-     * @param vClass   序列化的java泛型
+     * @param vClass   文档的 Java 类型
+     * @return 文档数据对象
      */
     @Override
-    public DocumentData serialize(Object document, Class<?> vClass) {
+    public DocumentData serialize(final Object document, final Class<?> vClass) {
         String esId = null;
         final Field[] fields = ReflectUtil.getFields(vClass);
         JSONObject source = new JSONObject();

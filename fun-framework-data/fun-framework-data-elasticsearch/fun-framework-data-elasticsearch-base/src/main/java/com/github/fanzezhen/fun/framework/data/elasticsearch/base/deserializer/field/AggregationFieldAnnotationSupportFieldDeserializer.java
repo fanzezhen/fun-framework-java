@@ -18,22 +18,32 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * 支持 @Aggregation 注解 的字段解析器
+ * 聚合字段注解支持反序列化器
+ * <p>
+ * 用于反序列化被 {@link AggregationField} 注解标记的字段，支持桶和命中记录等聚合数据的映射
  */
 public class AggregationFieldAnnotationSupportFieldDeserializer extends AbstractAggregationFieldDeserializer<IAggregationAdapter> {
 
-    public AggregationFieldAnnotationSupportFieldDeserializer(BaseAggregationResultDeserializer baseAggregationResultResolver) {
+    /**
+     * 构造函数
+     *
+     * @param baseAggregationResultResolver 基础聚合结果反序列化器
+     */
+    public AggregationFieldAnnotationSupportFieldDeserializer(final BaseAggregationResultDeserializer baseAggregationResultResolver) {
         super(baseAggregationResultResolver);
     }
 
     /**
-     * 解析field在聚合中的值
+     * 反序列化聚合字段值
+     * <p>
+     * 根据字段注解配置，处理嵌套聚合、桶、命中记录等不同类型的聚合数据
      *
-     * @param targetField 目标对象的属性
+     * @param targetField 目标对象的属性字段
      * @param adapter     聚合适配器
+     * @return 反序列化后的字段值
      */
     @Override
-    public Object deserialize(Field targetField, IAggregationAdapter adapter) {
+    public Object deserialize(final Field targetField, IAggregationAdapter adapter) {
         if (Objects.isNull(adapter)) {
             return ObjUtil.empty(targetField.getType());
         }
@@ -58,7 +68,14 @@ public class AggregationFieldAnnotationSupportFieldDeserializer extends Abstract
         return value;
     }
 
-    private String getAggregationKey(Field targetField, AggregationField aggregationField) {
+    /**
+     * 获取聚合字段键
+     *
+     * @param targetField      目标字段
+     * @param aggregationField 聚合字段注解
+     * @return 聚合键
+     */
+    private String getAggregationKey(final Field targetField, final AggregationField aggregationField) {
         String aggregationKey;
         if (Objects.isNull(aggregationField)) {
             // 驼峰命名转换为下划线命名方式，例如：userName->user_name
@@ -73,7 +90,14 @@ public class AggregationFieldAnnotationSupportFieldDeserializer extends Abstract
         return aggregationKey;
     }
 
-    private Object resolveHits(Field targetField, IAggregationAdapter adapter) {
+    /**
+     * 解析命中记录字段
+     *
+     * @param targetField 目标字段
+     * @param adapter     聚合适配器
+     * @return 反序列化后的命中记录
+     */
+    private Object resolveHits(final Field targetField, final IAggregationAdapter adapter) {
         final IHitsAdapter hits = adapter.getHits();
         if (Objects.isNull(hits) || CollUtil.isEmpty(hits.getHitList())) {
             return ObjUtil.empty(targetField.getType());
@@ -94,7 +118,14 @@ public class AggregationFieldAnnotationSupportFieldDeserializer extends Abstract
         }
     }
 
-    private Object resolveBuckets(Field targetField, IAggregationAdapter adapter) {
+    /**
+     * 解析桶字段
+     *
+     * @param targetField 目标字段
+     * @param adapter     聚合适配器
+     * @return 反序列化后的桶列表
+     */
+    private Object resolveBuckets(final Field targetField, final IAggregationAdapter adapter) {
         final List<BucketAdapter> bucketAdapters = adapter.getBuckets();
         return this.baseAggregationResultResolver.getBucketFieldAnnotationSupportFieldResolverInstance().deserialize(targetField, bucketAdapters);
     }

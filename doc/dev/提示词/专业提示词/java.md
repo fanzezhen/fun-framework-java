@@ -1,6 +1,72 @@
 # Java后端补充规范
 与全局提示词配合使用
 
+## 代码格式规范
+
+### 枚举类格式规范
+
+**枚举常量的标点符号**：
+- 枚举常量之间使用**逗号**分隔
+- 最后一个枚举常量后使用**逗号 + 分号**（独立成行）
+- 即使只有一个枚举常量，也要保留逗号和分号，便于未来扩展
+
+**正确示例**：
+```java
+public enum FunContextExceptionEnum implements IExceptionCode<FunContextExceptionEnum> {
+    /**
+     * 请求头中缺失参数异常.
+     */
+    CONTEXT_HEADER_MISSING(100200, "请求头中缺失参数 %s"),
+    ;
+
+    private final Integer code;
+    private final String text;
+
+    FunContextExceptionEnum(int code, String text) {
+        this.code = code;
+        this.text = text;
+    }
+}
+
+// 多个枚举常量的示例
+public enum StatusEnum {
+    ACTIVE(1, "激活"),
+    INACTIVE(0, "未激活"),
+    DELETED(-1, "已删除"),
+    ;
+
+    private final Integer code;
+    private final String name;
+
+    StatusEnum(Integer code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+}
+```
+
+**错误示例**（禁止）：
+```java
+// 错误1 - 最后一个常量直接用分号，没有逗号
+public enum StatusEnum {
+    ACTIVE(1, "激活");  // ❌ 错误
+
+    private final Integer code;
+}
+
+// 错误2 - 逗号和分号在同一行
+public enum StatusEnum {
+    ACTIVE(1, "激活"),;  // ❌ 错误，分号应该独立成行
+
+    private final Integer code;
+}
+```
+
+**原因说明**：
+1. **扩展性**：保留逗号使得添加新枚举常量时，只需添加新行，无需修改现有行
+2. **Git diff 友好**：添加新常量时，Git 只显示新增行，不会因为修改标点符号而显示旧行的修改
+3. **Java 规范**：这是 Java 枚举类的标准写法，与 Effective Java 推荐一致
+
 ## 测试驱动开发(TDD)实践
 
 遵循"先测试,后实现"的开发原则
@@ -113,6 +179,67 @@ H2 内存数据库配置（src/test/resources/application.properties）：
 - 本质：过度追求函数式风格、嵌套map/filter降低可读性、并行stream误用
 - 哲学："可读性优于炫技"、惰性求值是核心优势
 - 方案：简单遍历用for-each、复杂聚合用Stream、大数据集才parallel()
+
+## 常量管理规范
+
+### 通用常量使用规范
+
+**所有非业务相关的通用常量必须使用 `com.github.fanzezhen.fun.framework.core.model.constant` 包下的常量类**
+
+#### 常量分类
+
+1. **时间相关常量** → `NormalTypeConstant`
+   - `INT_MILLIS_PER_SECOND` - 秒转毫秒倍数 (1000)
+   - `INT_ONE_MINUTE_SECONDS` - 一分钟秒数 (60)
+   - `INT_ONE_HOUR_SECONDS` - 一小时秒数 (3600)
+   - `INT_ONE_HOUR_MILLIS` - 一小时毫秒数
+   - `INT_TWELVE_HOURS_MILLIS` - 12小时毫秒数
+   - `LONG_ONE_HOUR_MILLIS` - 一小时毫秒数（long类型）
+
+2. **数值常量** → `NormalTypeConstant`
+   - `INT_1024` - 标准缓冲区大小（1KB）
+
+3. **字符串常量** → `NormalTypeConstant`
+   - `STR_RECORDS` - 记录列表字段名 ("records")
+   - `STR_UNDERLINE_COUNT` - 计数字段后缀 ("_count")
+
+4. **数据源常量** → `FunFrameworkCoreDataConstant`
+   - `DEFAULT_DATASOURCE_NAME` - 默认数据源名称
+
+#### 使用原则
+
+**禁止行为**:
+- ❌ 在业务代码中定义 `1000`、`60`、`3600` 等魔法数字
+- ❌ 重复定义相同含义的常量（如多个类都定义 `MILLIS_PER_SECOND`）
+- ❌ 在 Service/Controller 中定义通用常量
+
+**推荐行为**:
+- ✅ 优先检查 `NormalTypeConstant` 是否已有所需常量
+- ✅ 如需新增通用常量，统一添加到 `NormalTypeConstant` 并提交 PR
+- ✅ 业务特定常量（如业务状态码）定义在业务模块的常量类中
+
+#### 示例
+
+```java
+// ❌ 错误示例：定义重复常量
+public class UserService {
+    private static final int MILLIS_PER_SECOND = 1000;
+    private static final int ONE_HOUR_SECONDS = 3600;
+    
+    public void expire(int seconds) {
+        cache.expire(key, seconds * MILLIS_PER_SECOND);
+    }
+}
+
+// ✅ 正确示例：使用统一常量
+import com.github.fanzezhen.fun.framework.core.model.constant.NormalTypeConstant;
+
+public class UserService {
+    public void expire(int seconds) {
+        cache.expire(key, seconds * NormalTypeConstant.INT_MILLIS_PER_SECOND);
+    }
+}
+```
 
 ## Maven 构建优化
 

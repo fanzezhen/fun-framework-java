@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * 代理配置属性
+ * 代理配置属性。
  * <p>
  * 配置前缀：fun.proxy
  * <p>
@@ -27,50 +27,84 @@ import java.util.regex.Pattern;
 @ConfigurationProperties(prefix = "fun.proxy")
 public class ProxyProperties {
     /**
-     * 启用代理
+     * 启用代理。
      */
     private Boolean enabled;
     /**
-     * 非接口请求时使用的默认代理地址
+     * 非接口请求时使用的默认代理地址。
      */
     private String api;
     /**
-     * 外网地址映射列表
+     * 外网地址映射列表。
      */
     private List<Address> addressList;
 
+    /**
+     * 地址映射配置类。
+     * <p>
+     * 用于配置源地址到目标地址的映射关系，
+     * 支持HTTP/HTTPS协议自动匹配。
+     */
     @Data
     public static class Address {
         /**
-         * 源地址
+         * 源地址（内网地址或旧地址）。
+         * <p>
+         * 示例：{@code "internal.cdn.com"} 或
+         * {@code "http://old.example.com"}
          */
         private String origin;
         /**
-         * 新地址
+         * 目标地址（外网地址或新地址）。
+         * <p>
+         * 示例：{@code "cdn.example.com"} 或
+         * {@code "http://new.example.com"}
          */
         private String target;
         /**
-         * 模板
+         * 正则匹配模板，用于匹配源地址的URL模式。
          */
         private Pattern[] patterns;
 
-        static String suffix = "([\\w/.-]*)/([\\da-zA-Z.]+)";
+        /**
+         * URL后缀正则表达式模式。
+         */
+        private static final String SUFFIX =
+                "([\\w/.-]*)/([\\da-zA-Z.]+)";
 
-        public void setOrigin(String origin) {
-            this.origin = origin;
-            if (origin != null) {
-                if (CharSequenceUtil.startWithIgnoreCase(origin, "http")) {
-                    this.patterns = new Pattern[]{Pattern.compile("(?i)" + Pattern.quote(origin) + suffix)}; // (?i) 表示忽略大小写
+        /**
+         * 设置源地址，并自动生成匹配模式。
+         *
+         * @param originAddress 源地址
+         */
+        public void setOrigin(final String originAddress) {
+            this.origin = originAddress;
+            if (originAddress != null) {
+                if (CharSequenceUtil.startWithIgnoreCase(
+                        originAddress, "http")) {
+                    this.patterns = new Pattern[]{
+                            Pattern.compile("(?i)"
+                                    + Pattern.quote(originAddress)
+                                    + SUFFIX)};
                 } else {
                     this.patterns = new Pattern[]{
-                            Pattern.compile("(?i)" + Pattern.quote("http://" + origin) + suffix),
-                            Pattern.compile("(?i)" + Pattern.quote("https://" + origin) + suffix)
+                            Pattern.compile("(?i)"
+                                    + Pattern.quote("http://"
+                                    + originAddress) + SUFFIX),
+                            Pattern.compile("(?i)"
+                                    + Pattern.quote("https://"
+                                    + originAddress) + SUFFIX)
                     };
                 }
             }
         }
     }
 
+    /**
+     * 判断代理功能是否启用
+     *
+     * @return true表示已启用，false表示未启用
+     */
     public boolean isEnabled() {
         return Boolean.TRUE.equals(enabled);
     }

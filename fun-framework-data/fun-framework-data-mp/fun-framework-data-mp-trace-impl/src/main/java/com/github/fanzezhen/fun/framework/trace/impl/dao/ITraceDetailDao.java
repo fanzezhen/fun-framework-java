@@ -11,7 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
 /**
  * 痕迹明细表 Mapper 接口
  *
- * @createTime 2025-01-13 17:12:18
  * @since 3.4.3.1
  */
 @Mapper

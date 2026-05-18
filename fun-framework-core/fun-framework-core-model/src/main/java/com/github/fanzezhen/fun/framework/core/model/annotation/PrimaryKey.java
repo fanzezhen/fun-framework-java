@@ -7,7 +7,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 主键列
+ * 主键注解
+ * <p>
+ * 用于标记实体字段为主键列
+ * </p>
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)

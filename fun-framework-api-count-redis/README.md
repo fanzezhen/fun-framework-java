@@ -10,14 +10,32 @@ fun-framework-api-count-redis
 ## 1. 添加依赖
 
 ```xml
-
 <dependency>
   <groupId>com.github.fanzezhen</groupId>
   <artifactId>fun-framework-api-count-redis</artifactId>
 </dependency>
 ```
 
-## 2. 自定义返回值的包装类
+## 2. 配置参数（可选）
+
+在 `application.yml` 或 `application.properties` 中配置：
+
+```yaml
+fun:
+  api:
+    count:
+      thread-pool:
+        max-size: 10  # API统计线程池最大线程数，默认10
+```
+
+或使用 properties 格式：
+
+```properties
+# API统计线程池最大线程数，默认10
+fun.api.count.thread-pool.max-size=10
+```
+
+## 3. 自定义返回值的包装类
 
 参考[FunApiCountResultResolveImpl.java](src%2Ftest%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fapi%2Fcount%2FFunApiCountResultResolveImpl.java)
 

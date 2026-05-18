@@ -40,11 +40,18 @@ public class ProxyMybatisInterceptor implements Interceptor {
     @Resource
     private ProxyHelper proxyHelper;
 
+    /**
+     * 拦截查询方法，对查询结果进行代理处理
+     *
+     * @param invocation 调用信息
+     * @return 处理后的查询结果
+     * @throws Throwable 执行异常
+     */
     @Override
-    public Object intercept(Invocation invocation) throws Throwable {
+    public Object intercept(final Invocation invocation) throws Throwable {
         Object result = invocation.proceed();
         return proxyHelper.decorateByAnnotation(result);
     }
-    
+
 }
 

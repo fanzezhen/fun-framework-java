@@ -15,33 +15,44 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 接口注册
- *
+ * 自定义请求映射处理器.
+ * <p>
+ * 支持根据配置选择性注册或排除指定路径的接口。
+ * 通过配置flag和paths参数实现接口的动态注册控制。
  */
 @Slf4j
 public class FunRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
+    /**
+     * 接口注册配置.
+     */
     private final FunSpringbootWebProperties.Register registerProperties;
 
-    public FunRequestMappingHandlerMapping(FunSpringbootWebProperties.Register registerProperties) {
+    /**
+     * 构造函数.
+     *
+     * @param registerProperties 接口注册配置
+     */
+    public FunRequestMappingHandlerMapping(final FunSpringbootWebProperties.Register registerProperties) {
         this.registerProperties = registerProperties;
     }
 
     /**
-     * {@inheritDoc}
-     * <p><strong>Note:</strong> To create the {@link RequestMappingInfo},
-     * please use {@link #getBuilderConfiguration()} and set the options on
+     * 注册处理器方法，支持根据配置选择性注册.
+     * <p>
+     * <strong>注意:</strong> 创建 {@link RequestMappingInfo} 时，
+     * 请使用 {@link #getBuilderConfiguration()} 并在
      * {@link RequestMappingInfo.Builder#options(RequestMappingInfo.BuilderConfiguration)}
-     * to match how this {@code HandlerMapping} is configured. This
-     * is important for example to ensure use of
-     * {@link PathPattern} or
-     * {@link PathMatcher} based matching.
+     * 上设置选项以匹配此 {@code HandlerMapping} 的配置。
+     * 这很重要，例如确保使用基于 {@link PathPattern} 或 {@link PathMatcher} 的匹配。
      *
-     * @param handler the bean name of the handler or the handler instance
-     * @param method  the method to register
-     * @param mapping the mapping conditions associated with the handler method
+     * @param handler 处理器的bean名称或处理器实例
+     * @param method  要注册的方法
+     * @param mapping 与处理器方法关联的映射条件
      */
     @Override
-    protected void registerHandlerMethod(@NonNull Object handler, @NonNull Method method, RequestMappingInfo mapping) {
+    protected void registerHandlerMethod(@NonNull final Object handler,
+                                         @NonNull final Method method,
+                                         final RequestMappingInfo mapping) {
         Set<String> directPaths = new HashSet<>();
         // Spring Framework 7.0+ 使用 PathPatternsRequestCondition 替代 PatternsRequestCondition
         PathPatternsRequestCondition pathPatternsCondition = mapping.getPathPatternsCondition();

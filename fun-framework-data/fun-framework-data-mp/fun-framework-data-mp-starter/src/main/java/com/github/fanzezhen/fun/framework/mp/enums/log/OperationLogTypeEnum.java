@@ -10,7 +10,6 @@ import java.util.Objects;
 
 /**
  * 登录日志类型枚举
- *
  */
 public enum OperationLogTypeEnum {
     /**

@@ -23,20 +23,35 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ * 搜索命中数据适配器
+ *
+ * <p>将 Elasticsearch 的 SearchHits 适配为统一的 IHitsAdapter 接口。
  */
 public class SearchHitsAdapter implements IHitsAdapter {
 
+    /**
+     * 命中列表
+     */
     private final List<IHit> hits;
 
+    /**
+     * 总命中数
+     */
     private final long total;
 
+    /**
+     * 最大评分
+     */
     private final double maxScore;
 
-    public SearchHitsAdapter(SearchHits searchHits) {
+    /**
+     * 构造函数
+     *
+     * @param searchHits 搜索命中数据
+     */
+    public SearchHitsAdapter(final SearchHits searchHits) {
         this.hits = Optional.ofNullable(searchHits)
-                .map(SearchHits::getHits)
-                .map(Arrays::stream)
-                .orElse(Stream.empty())
+            .map(SearchHits::getHits).stream().flatMap(Arrays::stream)
                 .map(HitAdapter::new)
                 .collect(Collectors.toList());
 
@@ -66,19 +81,42 @@ public class SearchHitsAdapter implements IHitsAdapter {
         return hits;
     }
 
+    /**
+     * 命中数据适配器内部类
+     */
     static class HitAdapter implements IHit {
 
+        /**
+         * Elasticsearch SearchHit 对象
+         */
         private final SearchHit searchHit;
 
+        /**
+         * 源数据映射
+         */
         private final Map<String, Object> sourceAsMap;
 
+        /**
+         * 文档 ID
+         */
         private final String id;
 
+        /**
+         * 评分
+         */
         private final double score;
 
+        /**
+         * 高亮字段
+         */
         private Map<String, List<String>> highlight;
 
-        public HitAdapter(SearchHit searchHit) {
+        /**
+         * 构造函数
+         *
+         * @param searchHit 搜索命中数据
+         */
+        public HitAdapter(final SearchHit searchHit) {
             this.searchHit = searchHit;
             this.sourceAsMap = Optional.ofNullable(searchHit.getSourceAsMap()).orElse(Collections.emptyMap());
 

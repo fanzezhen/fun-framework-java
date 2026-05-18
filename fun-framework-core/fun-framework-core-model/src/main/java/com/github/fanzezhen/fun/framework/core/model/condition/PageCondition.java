@@ -7,7 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- *
+ * 分页条件
+ * <p>
+ * 实现 IPage 接口，提供分页查询的当前页和每页显示条数。
+ * </p>
  */
 @Data
 @NoArgsConstructor

@@ -7,14 +7,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 数字工具类
+ * <p>
+ * 提供数字与中文数字的相互转换、百分数格式化等功能。
+ * </p>
  */
 public class NumberUtil {
+    /**
+     * 工具类不允许实例化
+     */
     private NumberUtil() {
     }
 
+    /**
+     * 中文"一十"常量
+     */
     static final String CHINESE_TEN = "一十";
+
+    /**
+     * 中文"一十零"常量
+     */
     static final String CHINESE_TEN_ZERO = "一十零";
 
+    /**
+     * 数字字符串转中文数字
+     * <p>
+     * 支持整数转换为中文大写数字，如 "123" -> "一百二十三"
+     * </p>
+     *
+     * @param string 数字字符串
+     * @return 中文数字字符串
+     */
     public static String numToChinese(String string) {
         String[] s1 = {"零", "一", "二", "三", "四", "五", "六", "七", "八", "九"};
         String[] s2 = {"十", "百", "千", "万", "十", "百", "千", "亿", "十", "百", "千"};
@@ -36,6 +59,15 @@ public class NumberUtil {
         return result.toString();
     }
 
+    /**
+     * 中文数字转整数
+     * <p>
+     * 支持中文数字（如"一百二十三"）转换为阿拉伯数字
+     * </p>
+     *
+     * @param chineseNumber 中文数字字符串
+     * @return 整数值，如果输入为空则返回 null
+     */
     @SuppressWarnings("unused")
     public static Integer chineseNumberToInteger(String chineseNumber) {
         if (CharSequenceUtil.isEmpty(chineseNumber)) {
@@ -87,7 +119,13 @@ public class NumberUtil {
     }
 
     /**
-     * 转百分数
+     * 小数字符串转百分数格式
+     * <p>
+     * 将小数（如"0.123"）转换为百分数格式（如"12.3%"）
+     * </p>
+     *
+     * @param numStr 小数字符串
+     * @return 百分数字符串，如果输入为 null 则返回 null
      */
     public static String toPercent(String numStr) {
         if (numStr == null) {

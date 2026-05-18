@@ -6,28 +6,70 @@ import com.github.fanzezhen.fun.framework.data.elasticsearch.base.model.BaseSear
 import lombok.ToString;
 
 /**
- * 封装ES查询结果
+ * 搜索结果实现类
  *
+ * <p>封装 Elasticsearch 查询结果，提供统一的访问接口。
+ *
+ * @param <T> 文档泛型类型
  */
 @ToString
 public class SearchResultImpl<T> extends BaseSearchResult<T, SearchResponse<?>> {
 
+    /**
+     * 总命中数
+     */
     private final Long totalHits;
 
+    /**
+     * 总耗时
+     */
     private final Long totalTime;
+
+    /**
+     * 游标 ID
+     */
     private final String scrollId;
 
+    /**
+     * 响应适配器
+     */
     private final IResponseAdapter responseAdapter;
 
-    public SearchResultImpl(Class<T> tClass, IResponseAdapter responseAdapter, Long totalHits) {
+    /**
+     * 构造函数
+     *
+     * @param tClass 文档类型
+     * @param responseAdapter 响应适配器
+     * @param totalHits 总命中数
+     */
+    public SearchResultImpl(final Class<T> tClass, final IResponseAdapter responseAdapter, final Long totalHits) {
         this(tClass, responseAdapter, totalHits, null);
     }
 
-    public SearchResultImpl(Class<T> tClass, IResponseAdapter responseAdapter, Long totalHits, Long totalTime) {
+    /**
+     * 构造函数
+     *
+     * @param tClass 文档类型
+     * @param responseAdapter 响应适配器
+     * @param totalHits 总命中数
+     * @param totalTime 总耗时
+     */
+    public SearchResultImpl(final Class<T> tClass, final IResponseAdapter responseAdapter,
+                            final Long totalHits, final Long totalTime) {
         this(tClass, responseAdapter, totalHits, totalTime, null);
     }
 
-    public SearchResultImpl(Class<T> tClass, IResponseAdapter responseAdapter, Long totalHits, Long totalTime, String scrollId) {
+    /**
+     * 构造函数
+     *
+     * @param tClass 文档类型
+     * @param responseAdapter 响应适配器
+     * @param totalHits 总命中数
+     * @param totalTime 总耗时
+     * @param scrollId 游标 ID
+     */
+    public SearchResultImpl(final Class<T> tClass, final IResponseAdapter responseAdapter,
+                            final Long totalHits, final Long totalTime, final String scrollId) {
         super(tClass);
         this.totalHits = totalHits;
         this.totalTime = totalTime;

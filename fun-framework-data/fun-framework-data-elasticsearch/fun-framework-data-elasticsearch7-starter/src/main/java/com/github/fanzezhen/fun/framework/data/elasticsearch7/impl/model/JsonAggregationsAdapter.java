@@ -25,15 +25,34 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * JSON 聚合适配器
+ *
+ * <p>将 JSON 格式的聚合结果适配为统一的 IAggregationsAdapter 接口。
+ */
 public class JsonAggregationsAdapter implements IAggregationsAdapter {
 
+    /**
+     * 聚合 JSON 对象
+     */
     private final JSONObject aggregationsJson;
 
-    public JsonAggregationsAdapter(Map<String, Object> aggregationsJson) {
+    /**
+     * 构造函数
+     *
+     * @param aggregationsJson 聚合 JSON 映射
+     */
+    public JsonAggregationsAdapter(final Map<String, Object> aggregationsJson) {
         this.aggregationsJson = Optional.ofNullable(aggregationsJson).map(JSONObject::new).orElse(new JSONObject());
     }
 
-    public IAggregationAdapter getAggregation(String name) {
+    /**
+     * 获取指定名称的聚合适配器
+     *
+     * @param name 聚合名称
+     * @return 聚合适配器，如果不存在则返回 null
+     */
+    public IAggregationAdapter getAggregation(final String name) {
         if (MapUtil.isEmpty(aggregationsJson)) {
             return null;
         }
@@ -54,15 +73,32 @@ public class JsonAggregationsAdapter implements IAggregationsAdapter {
         return null;
     }
 
+    /**
+     * 搜索聚合适配器内部类
+     */
     static class SearchAggregationAdapter extends JsonAggregationsAdapter implements IAggregationAdapter {
 
+        /**
+         * 聚合 JSON 对象
+         */
         private final JSONObject aggregationJson;
 
+        /**
+         * 命中数据适配器
+         */
         private final IHitsAdapter hitsAdapter;
 
+        /**
+         * 桶列表
+         */
         private final List<BucketAdapter> bucketList;
 
-        public SearchAggregationAdapter(JSONObject aggregationJson) {
+        /**
+         * 构造函数
+         *
+         * @param aggregationJson 聚合 JSON 对象
+         */
+        public SearchAggregationAdapter(final JSONObject aggregationJson) {
             super(aggregationJson);
             this.aggregationJson = aggregationJson;
             this.hitsAdapter = initHitsAdapter(aggregationJson);
@@ -99,7 +135,13 @@ public class JsonAggregationsAdapter implements IAggregationsAdapter {
             return aggregationJson.getObject(aggregationField.getKey(), tClass);
         }
 
-        private IHitsAdapter initHitsAdapter(JSONObject aggregationJson) {
+        /**
+         * 初始化命中数据适配器
+         *
+         * @param aggregationJson 聚合 JSON 对象
+         * @return 命中数据适配器
+         */
+        private IHitsAdapter initHitsAdapter(final JSONObject aggregationJson) {
             final JSONObject hitsJson = aggregationJson.getJSONObject("hits");
             if (Objects.isNull(hitsJson)) {
                 return null;
@@ -129,15 +171,22 @@ public class JsonAggregationsAdapter implements IAggregationsAdapter {
             return new SearchHitsAdapter(searchHits);
         }
 
-        private List<BucketAdapter> initBucketList(JSONObject aggregationJson) {
+        /**
+         * 初始化桶列表
+         *
+         * @param aggregationJson 聚合 JSON 对象
+         * @return 桶适配器列表
+         */
+        private List<BucketAdapter> initBucketList(final JSONObject aggregationJson) {
             JSONArray bucketsJson = aggregationJson.getJSONArray("buckets");
             if (bucketsJson == null) {
                 try {
                     bucketsJson = aggregationJson.getJSONArray("value");
                 } catch (Exception ignored) {
+                    // 忽略异常
                 }
             }
-            if (Objects.isNull(bucketsJson)) {
+            if (bucketsJson == null || bucketsJson.isEmpty()) {
                 return Collections.emptyList();
             }
 
@@ -152,10 +201,22 @@ public class JsonAggregationsAdapter implements IAggregationsAdapter {
     }
 
 
+    /**
+     * 搜索桶适配器内部类
+     */
     static class SearchBucketAdapter extends JsonAggregationsAdapter implements BucketAdapter {
+
+        /**
+         * 桶 JSON 对象
+         */
         private final JSONObject bucketJson;
 
-        public SearchBucketAdapter(JSONObject bucketJson) {
+        /**
+         * 构造函数
+         *
+         * @param bucketJson 桶 JSON 对象
+         */
+        public SearchBucketAdapter(final JSONObject bucketJson) {
             super(bucketJson);
             this.bucketJson = bucketJson;
         }
@@ -185,8 +246,17 @@ public class JsonAggregationsAdapter implements IAggregationsAdapter {
             return bucketJson.getDoubleValue(aggregationField.getKey());
         }
 
+        /**
+         * 获取指定键的值
+         *
+         * @param key 键名
+         * @param tClass 目标类型
+         * @param <T> 目标泛型类型
+         * @return 转换后的值
+         */
         @Override
-        public <T> T get(String key, Class<T> tClass) {
+        @SuppressWarnings("unchecked")
+        public <T> T get(final String key, final Class<T> tClass) {
             if (Map.class.isAssignableFrom(tClass)) {
                 final JSONObject jsonObject = bucketJson.getJSONObject(key);
                 if (Objects.isNull(jsonObject)) {

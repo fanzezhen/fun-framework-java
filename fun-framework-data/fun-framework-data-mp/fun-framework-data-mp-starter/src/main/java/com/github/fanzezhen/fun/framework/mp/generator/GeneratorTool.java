@@ -10,17 +10,36 @@ import java.io.File;
 import java.util.Collections;
 
 /**
+ * 代码生成器工具类
+ * <p>
+ * 提供基于 MyBatis-Plus Generator 的代码生成功能，支持从数据库表生成 Entity、Mapper、Service、Controller 等代码。
+ * <p>
+ * 使用示例：
+ * <pre>{@code
+ * GeneratorBean bean = new GeneratorBean();
+ * bean.setDbUrl("jdbc:mysql://localhost:3306/demo");
+ * bean.setDbUsername("root");
+ * bean.setDbPassword("password");
+ * bean.setTableNameList(Arrays.asList("user", "role"));
+ * GeneratorTool.generator(bean);
+ * }</pre>
  */
-public class GeneratorTool {
+public final class GeneratorTool {
+    /**
+     * 私有构造函数，防止实例化
+     */
     private GeneratorTool() {
     }
 
     /**
+     * 执行代码生成
      * <p>
-     * 读取控制台内容
-     * </p>
+     * 根据 {@link GeneratorBean} 配置从数据库表生成代码。
+     * 如果配置中未指定数据库连接信息，将从控制台读取。
+     *
+     * @param generatorBean 生成器配置对象
      */
-    public static void generator(GeneratorBean generatorBean) {
+    public static void generator(final GeneratorBean generatorBean) {
         String dbUrl = CharSequenceUtil.isBlank(generatorBean.getDbUrl()) ? generatorBean.scanner("数据库链接（如：jdbc:mysql://localhost:3306/demo）") : generatorBean.getDbUrl();
         String dbUsername = CharSequenceUtil.isBlank(generatorBean.getDbUsername()) ? generatorBean.scanner("数据库用户名称") : generatorBean.getDbUsername();
         String dbPassword = CharSequenceUtil.isBlank(generatorBean.getDbPassword()) ? generatorBean.scanner("数据库用户密码") : generatorBean.getDbPassword();

@@ -64,7 +64,8 @@ public class FunApiCountService {
                 if (key.startsWith("\"") && key.endsWith("\"")) {
                     key = key.substring(1, key.length() - 1);
                 }
-                Set<ZSetOperations.TypedTuple<String>> tupleSet = redisTemplate.opsForZSet().rangeByScoreWithScores(key, -1, Integer.MAX_VALUE);
+                Set<ZSetOperations.TypedTuple<String>> tupleSet = redisTemplate.opsForZSet()
+                    .rangeByScoreWithScores(key, -1, Integer.MAX_VALUE);
                 LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
                 tupleSet.stream()
                     .filter(tuple -> tuple != null && tuple.getScore() != null)
@@ -95,14 +96,17 @@ public class FunApiCountService {
                         .fluentPut("是否接口无效", map == null)
                         .fluentPut("无效字段", null);
                     if (map != null) {
-                        row.fluentPut("无效字段", map.entrySet().stream().filter(entry -> entry.getValue() <= 0)
-                            .map(Map.Entry::getKey).collect(Collectors.joining(StrPool.COMMA)));
+                        row.fluentPut("无效字段", map.entrySet().stream()
+                            .filter(entry -> entry.getValue() <= 0)
+                            .map(Map.Entry::getKey)
+                            .collect(Collectors.joining(StrPool.COMMA)));
                     }
                     list.add(row);
                 }
             }
         }
-        File tempFile = File.createTempFile("接口统计", ".xlsx", FileUtil.mkdir(System.getProperty("java.io.tmpdir") + "接口统计"));
+        File tempFile = File.createTempFile("接口统计", ".xlsx",
+            FileUtil.mkdir(System.getProperty("java.io.tmpdir") + "接口统计"));
         ExcelUtil.getWriter(true).write(list).flush(tempFile);
         return tempFile;
     }

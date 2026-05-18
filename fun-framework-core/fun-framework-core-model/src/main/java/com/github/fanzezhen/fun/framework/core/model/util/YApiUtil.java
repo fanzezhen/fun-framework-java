@@ -10,18 +10,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * YApi工具类
+ * YApi 工具类
+ * <p>
+ * 提供 YApi 接口文档数据的导出功能，支持将接口数据导出为 Excel 文件。
+ * </p>
  */
 public class YApiUtil {
+    /**
+     * 工具类不允许实例化
+     */
     private YApiUtil() {
     }
 
     /**
-     * YApi接口数据导出为Excel文件
+     * 将 YApi 接口数据导出为 Excel 文件
      * <p>
-     * 注意：返回的临时文件位于系统临时目录（如 /tmp 或 C:\Users\xxx\AppData\Local\Temp），
+     * <b>注意：</b>返回的临时文件位于系统临时目录（如 /tmp 或 C:\Users\xxx\AppData\Local\Temp），
      * 调用方负责使用后删除文件，避免磁盘空间泄漏。
      * 建议在 finally 块或 try-with-resources 中调用 {@code file.delete()}。
+     * </p>
+     *
+     * @param modelList YApi 模型列表
+     * @return Excel 临时文件
+     * @throws IOException 如果创建或写入文件失败
      */
     public static File jsonToExcel(List<YApiModel> modelList) throws IOException {
         List<JSONObject> rowList = new ArrayList<>();

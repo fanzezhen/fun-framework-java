@@ -16,7 +16,6 @@ import java.util.regex.Matcher;
  * 从提供的变量Map中替换为实际值。
  * <p>
  * <b>使用场景：</b>配置文件模板解析、SQL动态参数替换、日志模板格式化等
- *
  */
 @Slf4j
 public class StrTemplateUtil {
@@ -80,7 +79,9 @@ public class StrTemplateUtil {
         }
         return varMap != null ? varMap : MapUtil.empty();
     }
-    
+    /**
+     * 工具类不允许实例化
+     */
     private StrTemplateUtil() {
     }
 }

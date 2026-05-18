@@ -12,22 +12,44 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
+ * 命中数据持有者
  *
+ * <p>封装 Elasticsearch 的 Hit 对象，提供统一的访问接口。
  */
 @Data
 public class HitHolder implements IHit {
 
+    /**
+     * Elasticsearch Hit 对象
+     */
     private final Hit<?> hit;
 
+    /**
+     * 源数据映射
+     */
     private final JSONObject sourceAsMap;
 
+    /**
+     * 文档 ID
+     */
     private final String id;
 
+    /**
+     * 评分
+     */
     private final Double score;
 
+    /**
+     * 高亮字段
+     */
     private Map<String, List<String>> highlight;
 
-    public HitHolder(Hit<?> hit) {
+    /**
+     * 构造函数
+     *
+     * @param hit Elasticsearch Hit 对象
+     */
+    public HitHolder(final Hit<?> hit) {
         this.hit = hit;
         Object source = hit.source();
         if (source instanceof Map<?, ?> map) {

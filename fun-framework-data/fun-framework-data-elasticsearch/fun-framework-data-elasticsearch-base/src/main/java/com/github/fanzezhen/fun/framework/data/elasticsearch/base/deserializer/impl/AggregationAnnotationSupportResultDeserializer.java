@@ -16,23 +16,50 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * 支持 @Aggregation 注解 的结果解析器
+ * 聚合注解支持结果反序列化器
+ * <p>
+ * 用于反序列化被 {@link Aggregation} 注解标记的类，将单个聚合结果映射到 Java 对象
  */
 @Order(Short.MIN_VALUE + 101)
 @Component
 public class AggregationAnnotationSupportResultDeserializer extends BaseAggregationResultDeserializer {
 
-    public AggregationAnnotationSupportResultDeserializer(SupportFieldDeserializerResultDeserializer supportFieldResolveResultResolver) {
+    /**
+     * 构造函数
+     *
+     * @param supportFieldResolveResultResolver 支持字段反序列化的结果反序列化器
+     */
+    public AggregationAnnotationSupportResultDeserializer(final SupportFieldDeserializerResultDeserializer supportFieldResolveResultResolver) {
         super(supportFieldResolveResultResolver);
     }
 
+    /**
+     * 判断是否支持反序列化为指定类型
+     * <p>
+     * 支持被 {@link Aggregation} 注解标记的类
+     *
+     * @param response 响应适配器
+     * @param vClass   目标 Java 类型
+     * @param <V>      泛型类型
+     * @return 如果类被标记则返回 true，否则返回 false
+     */
     @Override
-    public <V> boolean isSupport(IResponseAdapter response, Class<V> vClass) {
+    public <V> boolean isSupport(final IResponseAdapter response, final Class<V> vClass) {
         return Objects.nonNull(AnnotationUtils.findAnnotation(vClass, Aggregation.class));
     }
 
+    /**
+     * 将响应适配器中的聚合数据反序列化为对象列表
+     * <p>
+     * 根据注解配置获取指定的聚合，并将其数据映射到 Java 对象的各个字段
+     *
+     * @param response 响应适配器
+     * @param vClass   目标 Java 类型
+     * @param <V>      泛型类型
+     * @return 包含单个对象的列表
+     */
     @Override
-    public <V> List<V> deserialize(IResponseAdapter response, Class<V> vClass) {
+    public <V> List<V> deserialize(final IResponseAdapter response, final Class<V> vClass) {
         final V instance = ReflectUtil.newInstance(vClass);
         final Field[] fields = ReflectUtil.getFields(vClass);
         final IAggregationsAdapter aggregationsAdapter = response.getAggregationsAdapter();
@@ -56,7 +83,16 @@ public class AggregationAnnotationSupportResultDeserializer extends BaseAggregat
         return Collections.singletonList(instance);
     }
 
-    private <V> String getAggregationName(Class<V> vClass) {
+    /**
+     * 获取聚合名称
+     * <p>
+     * 从 {@link Aggregation} 注解中获取聚合名称
+     *
+     * @param vClass 目标类型
+     * @param <V>    泛型类型
+     * @return 聚合名称，如果注解不存在则返回 null
+     */
+    private <V> String getAggregationName(final Class<V> vClass) {
         final Aggregation aggregation = AnnotationUtils.findAnnotation(vClass, Aggregation.class);
         if (Objects.nonNull(aggregation)) {
             return aggregation.value();

@@ -28,7 +28,6 @@ import java.util.List;
  * </ul>
  * <p>
  * <b>使用示例：</b>实现类定义mode枚举（如"username"、"sms"），在isSupport中判断
- *
  */
 @SuppressWarnings({"unchecked", "unused"})
 public interface ILoginHandle<
@@ -38,27 +37,48 @@ public interface ILoginHandle<
     R extends ILoginResult<K, U>
     > extends InitializingBean {
 
+    /**
+     * 登录处理器全局列表。
+     * <p>
+     * 所有实现类在初始化时会自动注册到此列表中。
+     */
     List<ILoginHandle<?, ?, ?, ?>> LOGIN_HANDLE_LIST = new ArrayList<>();
 
     /**
-     * 是否支持指定的登录方式
+     * 判断是否支持指定的登录方式。
+     *
+     * @param mode 登录模式（如 "username"、"sms"、"oauth" 等）
+     * @return true 表示支持，false 表示不支持
      */
     boolean isSupport(Object mode);
 
     /**
-     * 验证登录用户
+     * 验证登录用户身份。
+     *
+     * @param parameter 登录参数
+     * @return 验证通过的用户对象，如果验证失败则返回 null
      */
     U verify(P parameter);
 
     /**
-     * 制作登录结果
+     * 制作登录结果对象。
+     *
+     * @param user      用户对象
+     * @param tokenInfo Token 信息
+     * @return 登录结果对象
      */
     R makeLoginResult(U user, SaTokenInfo tokenInfo);
 
     /**
-     * 登录
+     * 执行登录操作。
+     * <p>
+     * 默认实现：验证用户 → 调用 Sa-Token 登录 → 制作登录结果。
+     *
+     * @param parameter 登录参数
+     * @return 登录结果
+     * @throws ServiceException 如果用户验证失败
      */
-    default R doLogin(P parameter) {
+    default R doLogin(final P parameter) {
         U user = verify(parameter);
         if (user == null) {
             throw new ServiceException(SecurityExceptionEnum.LOGIN_FAILED_USER_VERIFY_ERROR);
@@ -69,7 +89,11 @@ public interface ILoginHandle<
     }
 
     /**
-     * 退出登录
+     * 执行退出登录操作。
+     * <p>
+     * 默认实现：调用 Sa-Token 注销当前登录。
+     *
+     * @return 注销结果，默认返回 null
      */
     default Object doLogout() {
         StpUtil.logout();
@@ -77,14 +101,24 @@ public interface ILoginHandle<
     }
 
     /**
-     * 注册到工厂
+     * Spring Bean 初始化后的回调方法。
+     * <p>
+     * 自动将当前处理器注册到全局列表中。
      */
     @Override
     default void afterPropertiesSet() {
         LOGIN_HANDLE_LIST.add(this);
     }
 
-    static <T extends ILoginHandle<?, ?, ?, ?>> T getLoginHandle(Object mode) {
+    /**
+     * 根据登录模式获取对应的登录处理器。
+     *
+     * @param <T>  登录处理器类型
+     * @param mode 登录模式
+     * @return 匹配的登录处理器
+     * @throws ServiceException 如果没有找到支持该模式的处理器
+     */
+    static <T extends ILoginHandle<?, ?, ?, ?>> T getLoginHandle(final Object mode) {
         for (ILoginHandle<?, ?, ?, ?> loginHandle : LOGIN_HANDLE_LIST) {
             if (loginHandle.isSupport(mode)) {
                 return (T) loginHandle;

@@ -1,132 +1,22 @@
 [
   {
-    "_index" : "zh_med_bidding_risk_list_v20260422",
-    "_type" : "_doc",
-    "_id" : "15bf7a61b40d9e600d9051d598651f84",
-    "_score" : 3.5298119,
-    "_source" : {
-      "eid" : "5173f3a6-fb8a-4faf-aa33-2f7dad813bc4",
-      "name" : "青海清亮商贸有限公司"
+    "_index": "",
+    "_type": "_doc",
+    "_id": "",
+    "_score": 3.7680109,
+    "_source": {
+      "eid": "531f406f1343115ee5dd573372dc50f5",
+      "name": "广州合和医药有限公司"
     }
   },
   {
-    "_index" : "zh_med_bidding_risk_list_v20260422",
-    "_type" : "_doc",
-    "_id" : "2907c0ce039fe7469891fe0a9a07bc2a",
-    "_score" : 3.5298119,
-    "_source" : {
-      "eid" : "5173f3a6-fb8a-4faf-aa33-2f7dad813bc4",
-      "name" : "青海清亮商贸有限公司"
-    }
-  },
-  {
-    "_index" : "zh_med_bidding_risk_list_v20260422",
-    "_type" : "_doc",
-    "_id" : "475a391cfd95c7af7ac382543f712da1",
-    "_score" : 3.5298119,
-    "_source" : {
-      "eid" : "c8705389-51c4-49c4-8bd9-f54e4a900fc0",
-      "name" : "北京金斯尔医疗用品有限责任公司"
-    }
-  },
-  {
-    "_index" : "zh_med_bidding_risk_list_v20260422",
-    "_type" : "_doc",
-    "_id" : "50f7d875eae7a4bb9d9a574915956aea",
-    "_score" : 3.5298119,
-    "_source" : {
-      "eid" : "c8705389-51c4-49c4-8bd9-f54e4a900fc0",
-      "name" : "北京金斯尔医疗用品有限责任公司"
-    }
-  },
-  {
-    "_index" : "zh_med_bidding_risk_list_v20260422",
-    "_type" : "_doc",
-    "_id" : "8320f4e7fba520a1cf1d6a839ef00b3e",
-    "_score" : 3.5298119,
-    "_source" : {
-      "eid" : "b0d61a37-4cd8-4fe0-b587-00f67b040b86",
-      "name" : "青海戈尔医疗器械有限公司"
-    }
-  },
-  {
-    "_index" : "zh_med_bidding_risk_list_v20260422",
-    "_type" : "_doc",
-    "_id" : "a7be088ed031b441391d537bd1446448",
-    "_score" : 3.5298119,
-    "_source" : {
-      "eid" : "b0d61a37-4cd8-4fe0-b587-00f67b040b86",
-      "name" : "青海戈尔医疗器械有限公司"
-    }
-  },
-  {
-    "_index" : "zh_med_bidding_risk_list_v20260422",
-    "_type" : "_doc",
-    "_id" : "acbff2e716be3bd6620e37931cc72a7a",
-    "_score" : 3.5298119,
-    "_source" : {
-      "eid" : "ed456c7c-bc8d-493b-bd23-e35297625f7a",
-      "name" : "青海省富康医药集团有限责任公司"
-    }
-  },
-  {
-    "_index" : "zh_med_bidding_risk_list_v20260422",
-    "_type" : "_doc",
-    "_id" : "ed3b4d5e846c88b1529dd771b2ec2a3e",
-    "_score" : 3.5298119,
-    "_source" : {
-      "eid" : "ed456c7c-bc8d-493b-bd23-e35297625f7a",
-      "name" : "青海省富康医药集团有限责任公司"
-    }
-  },
-  {
-    "_index" : "zh_med_bidding_risk_list_v20260422",
-    "_type" : "_doc",
-    "_id" : "419a7f29b48620a1c4be805db5cf76ea",
-    "_score" : 3.5298119,
-    "_source" : {
-      "eid" : "559e5836-2144-43db-8686-981f2c870075",
-      "name" : "杭州赛晨生物科技有限公司"
-    }
-  },
-  {
-    "_index" : "zh_med_bidding_risk_list_v20260422",
-    "_type" : "_doc",
-    "_id" : "2eac562599719a2a8fb1d6c6951d83db",
-    "_score" : 3.5298119,
-    "_source" : {
-      "eid" : "5173f3a6-fb8a-4faf-aa33-2f7dad813bc4",
-      "name" : "青海清亮商贸有限公司"
-    }
-  },
-  {
-    "_index" : "zh_med_bidding_risk_list_v20260422",
-    "_type" : "_doc",
-    "_id" : "5e54f6dc12c24445e44d1d3aa750fb3c",
-    "_score" : 3.5298119,
-    "_source" : {
-      "eid" : "b0d61a37-4cd8-4fe0-b587-00f67b040b86",
-      "name" : "青海戈尔医疗器械有限公司"
-    }
-  },
-  {
-    "_index" : "zh_med_bidding_risk_list_v20260422",
-    "_type" : "_doc",
-    "_id" : "ab471ad378e2485dd0656449afef162f",
-    "_score" : 3.5298119,
-    "_source" : {
-      "eid" : "c8705389-51c4-49c4-8bd9-f54e4a900fc0",
-      "name" : "北京金斯尔医疗用品有限责任公司"
-    }
-  },
-  {
-    "_index" : "zh_med_bidding_risk_list_v20260422",
-    "_type" : "_doc",
-    "_id" : "b15ce1be39cacc6fbe269e30e806dca3",
-    "_score" : 3.5298119,
-    "_source" : {
-      "eid" : "ed456c7c-bc8d-493b-bd23-e35297625f7a",
-      "name" : "青海省富康医药集团有限责任公司"
+    "_index": "",
+    "_type": "_doc",
+    "_id": "",
+    "_score": 3.7680109,
+    "_source": {
+      "eid": "f891239cefdc50b7dab87b41168ae9dd",
+      "name": "成都天台山制药股份有限公司"
     }
   }
 ]

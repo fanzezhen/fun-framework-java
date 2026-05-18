@@ -7,22 +7,39 @@ import com.github.fanzezhen.fun.framework.core.model.exception.enums.IExceptionC
 import lombok.Getter;
 
 /**
- * 异常枚举
+ * 线程池模块异常枚举，定义线程执行相关的异常码和消息.
  *
  * @since 3
  */
 @Getter
 public enum FunCoreThreadExceptionEnum implements IExceptionCode<FunCoreThreadExceptionEnum> {
 
-    ASYNC_ERROR_THREAD_TERMINATE_ABNORMALLY(100401, "异步错误，线程终止异常：%s");
+    /**
+     * 异步任务执行异常.
+     */
+    ASYNC_ERROR_THREAD_TERMINATE_ABNORMALLY(100401,
+            "异步错误，线程终止异常：%s");
 
-    FunCoreThreadExceptionEnum(int code, String text) {
-        this.code = code;
-        this.text = text;
+    /**
+     * 构造函数.
+     *
+     * @param codeValue 异常码
+     * @param textValue 异常消息模板
+     */
+    FunCoreThreadExceptionEnum(final int codeValue, final String textValue) {
+        this.code = codeValue;
+        this.text = textValue;
     }
 
+    /**
+     * 异常码.
+     */
     @JsonValue
     @JSONField(serializeFeatures = JSONWriter.Feature.WriteEnumUsingToString)
     private final Integer code;
+
+    /**
+     * 异常消息模板.
+     */
     private final String text;
 }

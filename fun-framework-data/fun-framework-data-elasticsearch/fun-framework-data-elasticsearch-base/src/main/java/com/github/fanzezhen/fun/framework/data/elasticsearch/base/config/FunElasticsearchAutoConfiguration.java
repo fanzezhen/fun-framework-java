@@ -13,37 +13,66 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Elasticsearch 自动配置类
+ * <p>
+ * 负责自动配置 Elasticsearch 相关的 Bean 和组件，启用 Elasticsearch 配置属性绑定。
+ * 该配置类会扫描 Elasticsearch 包下的所有组件，并初始化反序列化器列表。
+ * </p>
  */
 @Configuration
 @EnableConfigurationProperties(FunElasticsearchProperties.class)
 @ComponentScan("com.github.fanzezhen.fun.framework.data.elasticsearch")
 public class FunElasticsearchAutoConfiguration {
-    
+
     @Resource
     private FunElasticsearchProperties funElasticsearchProperties;
+
     @Resource
     private List<IElasticsearchResultDeserializer> elasticsearchResultDeserializerList;
+
     @Resource
     private List<IResponseDeserializer> elasticsearchResponseDeserializerList;
+
+    /**
+     * 静态结果反序列化器列表
+     */
     @Getter
-    static List<IElasticsearchResultDeserializer> staticResultDeserializerList = Collections.emptyList();
+    private static List<IElasticsearchResultDeserializer> staticResultDeserializerList = Collections.emptyList();
+
+    /**
+     * 静态响应反序列化器列表
+     */
     @Getter
-    static List<IResponseDeserializer> staticResponseDeserializerList = Collections.emptyList();
-    
+    private static List<IResponseDeserializer> staticResponseDeserializerList = Collections.emptyList();
+
+    /**
+     * 初始化方法，在 Bean 创建后执行
+     * <p>
+     * 将注入的反序列化器列表设置到静态变量中，以便在其他地方使用。
+     * </p>
+     */
     @PostConstruct
-    public void init(){
+    public void init() {
         setStaticResultDeserializerList(elasticsearchResultDeserializerList);
         setStaticResponseDeserializerList(elasticsearchResponseDeserializerList);
-        for (FunElasticsearchProperties.Config config : funElasticsearchProperties.getConfigs()) {
-            // 注入bean
-        }
+        // 预留：未来可在此处理配置中的多个数据源配置
     }
 
-    static void setStaticResultDeserializerList(List<IElasticsearchResultDeserializer> resultDeserializerList) {
+    /**
+     * 设置静态结果反序列化器列表
+     *
+     * @param resultDeserializerList 结果反序列化器列表
+     */
+    static void setStaticResultDeserializerList(final List<IElasticsearchResultDeserializer> resultDeserializerList) {
         staticResultDeserializerList = resultDeserializerList;
     }
 
-    static void setStaticResponseDeserializerList(List<IResponseDeserializer> staticResponseDeserializerList) {
-        FunElasticsearchAutoConfiguration.staticResponseDeserializerList = staticResponseDeserializerList;
+    /**
+     * 设置静态响应反序列化器列表
+     *
+     * @param responseDeserializerList 响应反序列化器列表
+     */
+    static void setStaticResponseDeserializerList(final List<IResponseDeserializer> responseDeserializerList) {
+        FunElasticsearchAutoConfiguration.staticResponseDeserializerList = responseDeserializerList;
     }
 }

@@ -5,11 +5,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 日志模块自动配置类
+ * 日志模块的自动配置类.
  * <p>
- * 加载日志辅助工具（FunLogHelper）和相关组件，
- * 支持结构化日志记录、敏感信息脱敏、日志上下文传递等功能。
- *
+ * 加载日志辅助工具（FunLogHelper）和相关组件。
+ * 支持结构化日志记录、敏感数据脱敏和日志上下文传播。
  */
 @Configuration
 @EnableConfigurationProperties(FunLogProperties.class)

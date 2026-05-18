@@ -23,11 +23,33 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 /**
- * jackson 配置
+ * Jackson 序列化配置类
+ * <p>
+ * 配置 ObjectMapper 的序列化和反序列化行为，主要功能包括：
+ * <ul>
+ *   <li>LocalDateTime、LocalDate、LocalTime 序列化为时间戳</li>
+ *   <li>支持多种日期时间格式的反序列化</li>
+ *   <li>忽略未知属性和无效子类型</li>
+ * </ul>
+ * </p>
  */
 @Configuration
 public class FunJacksonConfig {
 
+    /**
+     * 配置 Jackson ObjectMapper 实例
+     * <p>
+     * 配置包括：
+     * <ul>
+     *   <li>LocalDateTime/LocalDate 序列化为毫秒时间戳</li>
+     *   <li>LocalTime 序列化为 HH:mm:ss 格式</li>
+     *   <li>支持时间戳、ISO-8601、中文日期等多种格式的反序列化</li>
+     *   <li>忽略未知属性和无效子类型</li>
+     * </ul>
+     * </p>
+     *
+     * @return 配置好的 ObjectMapper 实例
+     */
     @Bean
     @ConditionalOnMissingBean
     ObjectMapper objectMapper() {

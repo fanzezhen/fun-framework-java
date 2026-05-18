@@ -21,6 +21,11 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+/**
+ * Sa-Token 自动配置类。
+ * <p>
+ * 配置 Sa-Token 全局过滤器，实现登录验证、权限校验等功能。
+ */
 @Configuration
 @ServletComponentScan
 @AutoConfigureAfter(FunSpringSecurityProperties.class)
@@ -33,11 +38,16 @@ public class FunSaTokenConfiguration {
     private FunSecurityFacade funPermissionFacade;
 
     /**
-     * 注册 Sa-Token 全局过滤器
+     * 注册 Sa-Token 全局过滤器。
+     * <p>
+     * 配置登录验证、权限校验规则和异常处理。
+     *
+     * @param funSpringSecurityProperties 安全配置属性
+     * @return Sa-Token 过滤器
      */
     @Bean
     @ConditionalOnMissingBean(SaFilter.class)
-    public SaServletFilter defaultSaServletFilter(FunSpringSecurityProperties funSpringSecurityProperties) {
+    public SaServletFilter defaultSaServletFilter(final FunSpringSecurityProperties funSpringSecurityProperties) {
         return new SaServletFilter()
             // 拦截地址
             .addInclude("/**").addExclude("/favicon.ico", "/actuator/**")
@@ -53,14 +63,16 @@ public class FunSaTokenConfiguration {
                     });
                 // 遍历校验规则，依次鉴权
                 List<String> needManageUriList = funPermissionFacade.needManageUriList(StpUtil.getLoginDeviceType());
-                needManageUriList.forEach(uri -> SaRouter.match(uri, () -> StpUtil.checkPermission(SaHolder.getRequest().getRequestPath())));
+                needManageUriList.forEach(uri ->
+                    SaRouter.match(uri, () -> StpUtil.checkPermission(SaHolder.getRequest().getRequestPath())));
             }).setError(e -> {
                 SaHolder.getResponse().setHeader("Content-Type", "application/json;charset=UTF-8");
                 if (e instanceof ServiceException serviceException) {
                     return JSON.toJSONString(ActionResult.failed(serviceException));
                 }
+                final int forbiddenCode = 403;
                 if (e instanceof NotPermissionException) {
-                    return JSON.toJSONString(ActionResult.failed(new ErrorInfo(403, "权限不足")));
+                    return JSON.toJSONString(ActionResult.failed(new ErrorInfo(forbiddenCode, "权限不足")));
                 }
                 return JSON.toJSONString(ActionResult.failed("权限验证失败"));
             });

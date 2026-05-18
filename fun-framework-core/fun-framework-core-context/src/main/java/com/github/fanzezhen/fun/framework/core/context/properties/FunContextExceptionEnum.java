@@ -4,26 +4,42 @@ import com.github.fanzezhen.fun.framework.core.model.exception.enums.IExceptionC
 import lombok.Getter;
 
 /**
- * 异常枚举
+ * 上下文异常枚举类.
+ * <p>
+ * 定义上下文模块相关的异常码和异常消息。
  *
  * @since 3
  */
 @Getter
 public enum FunContextExceptionEnum implements IExceptionCode<FunContextExceptionEnum> {
 
-    // 定义了一个枚举常量，表示请求头中缺失参数的异常，错误码为100200，消息格式为"请求头中缺失参数 %s"
+    /**
+     * 请求头中缺失参数异常.
+     * <p>
+     * 错误码：100200，消息格式："请求头中缺失参数 %s"
+     */
     CONTEXT_HEADER_MISSING(100200, "请求头中缺失参数 %s"),
     ;
 
-    // 构造方法，用于初始化枚举常量的code和message属性
-    FunContextExceptionEnum(int code, String text) {
-        this.code = code;
-        this.text = text;
-    }
-
-    // 定义了code属性，表示错误码
+    /**
+     * 错误码.
+     */
     private final Integer code;
-    // 定义了message属性，表示错误消息，并使用@Getter注解生成getter方法
+    /**
+     * 错误消息.
+     */
     private final String text;
+
+    /**
+     * 构造方法.
+     *
+     * @param exceptionCode 错误码
+     * @param exceptionText 错误消息
+     */
+    FunContextExceptionEnum(final int exceptionCode,
+                            final String exceptionText) {
+        this.code = exceptionCode;
+        this.text = exceptionText;
+    }
 
 }

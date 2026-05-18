@@ -14,16 +14,29 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Optional;
 
 /**
+ * 响应体适配器
  *
+ * <p>将 Elasticsearch 的 ResponseBody 响应适配为统一的 IResponseAdapter 接口。
  */
 @Slf4j
 public class BodyResponseAdapter implements IResponseAdapter {
 
+    /**
+     * 聚合适配器
+     */
     private final IAggregationsAdapter aggregations;
 
+    /**
+     * 命中数据适配器
+     */
     private final IHitsAdapter hits;
 
-        public BodyResponseAdapter(ResponseBody<?> searchResponse) {
+    /**
+     * 构造函数
+     *
+     * @param searchResponse 搜索响应体
+     */
+    public BodyResponseAdapter(final ResponseBody<?> searchResponse) {
         this.aggregations = Optional.ofNullable(searchResponse)
             .map(ResponseBody::toString)
             .map(jsonStr -> {

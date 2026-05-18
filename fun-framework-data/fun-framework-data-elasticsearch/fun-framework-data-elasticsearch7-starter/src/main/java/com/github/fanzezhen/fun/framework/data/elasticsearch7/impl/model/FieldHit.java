@@ -11,16 +11,35 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
+ * 字段命中数据
  *
+ * <p>包含字段数据和源数据的命中记录。
  */
 public class FieldHit implements IHit {
 
+    /**
+     * 源数据映射
+     */
     private final Map<String, Object> sourceAsMap;
+
+    /**
+     * 字段数据映射
+     */
     private final Map<String, JsonData> fields;
 
+    /**
+     * 文档 ID
+     */
     private final String id;
 
-    public FieldHit(String id, Map<String, JsonData> fields, JSONObject source) {
+    /**
+     * 构造函数
+     *
+     * @param id 文档 ID
+     * @param fields 字段数据映射
+     * @param source 源数据
+     */
+    public FieldHit(final String id, final Map<String, JsonData> fields, final JSONObject source) {
         this.id = id;
         this.fields = fields;
         this.sourceAsMap = source;

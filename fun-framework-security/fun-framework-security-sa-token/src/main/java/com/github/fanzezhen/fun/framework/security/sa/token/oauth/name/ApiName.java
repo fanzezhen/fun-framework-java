@@ -1,38 +1,39 @@
 package com.github.fanzezhen.fun.framework.security.sa.token.oauth.name;
 
 /**
- * Oauth 模块所有 API 路由名称定义
+ *  模块所有 API 路由名称定义。
+ * <p>
+ * 提供  协议中各个端点的路由配置。
  */
 public class ApiName {
 
     /**
-     * SSO-Server端：授权地址
+     *  Server端授权地址。
      */
     private String authorizeUrl = "/oauth/authorize";
 
     /**
-     * SSO-Server端：RestAPI 登录接口
+     *  Server端登出接口。
      */
     private String oauthLogoutUrl = "/oauth/logout";
 
     /**
-     * SSO-Server端：校验ticket 获取账号id
+     *  Server端 Token 获取地址。
      */
     private String tokenUrl = "/oauth/token";
 
     /**
-     * SSO-Server端：获取userinfo
+     *  Server端用户信息获取地址。
      */
     private String userInfoUrl = "/oauth/user/getuserInfo";
 
     /**
-     * 批量修改path，新增固定前缀
+     * 批量修改路径，新增固定前缀。
      *
-     * @param prefix 示例值：/sso-user、/sso-admin
-     *
+     * @param prefix 前缀，例如：/sso-user、/sso-admin
      * @return 对象自身
      */
-    public ApiName addPrefix(String prefix) {
+    public ApiName addPrefix(final String prefix) {
         this.authorizeUrl = prefix + this.authorizeUrl;
         this.oauthLogoutUrl = prefix + this.oauthLogoutUrl;
         this.tokenUrl = prefix + this.tokenUrl;
@@ -41,13 +42,12 @@ public class ApiName {
     }
 
     /**
-     * 批量修改path，替换掉 /sso 固定前缀
+     * 批量修改路径，替换掉 /oauth 固定前缀。
      *
-     * @param prefix 示例值：/sso-user、/sso-admin
-     *
+     * @param prefix 前缀，例如：/oauth-user、/oauth-admin
      * @return 对象自身
      */
-    public ApiName replacePrefix(String prefix) {
+    public ApiName replacePrefix(final String prefix) {
         String oldPrefix = "/oauth";
         this.authorizeUrl = this.authorizeUrl.replaceFirst(oldPrefix, prefix);
         this.oauthLogoutUrl = this.oauthLogoutUrl.replaceFirst(oldPrefix, prefix);
@@ -58,12 +58,14 @@ public class ApiName {
 
 
     /**
-     * toString
+     * 返回对象的字符串表示形式。
+     *
+     * @return 包含所有API路由的字符串
      */
     @Override
     public String toString() {
-        return "ApiName [oauthAuthorizeUrl=" + authorizeUrl + ", ssoOauthLogoutUrl=" + oauthLogoutUrl + ", ssoTokenUrl=" + tokenUrl
-                + ", ssoUserInfoUrl=" + userInfoUrl + "]";
+        return "ApiName [oauthAuthorizeUrl=" + authorizeUrl + ", ssoOauthLogoutUrl=" + oauthLogoutUrl +
+            ", ssoTokenUrl=" + tokenUrl + ", ssoUserInfoUrl=" + userInfoUrl + "]";
     }
 
 }

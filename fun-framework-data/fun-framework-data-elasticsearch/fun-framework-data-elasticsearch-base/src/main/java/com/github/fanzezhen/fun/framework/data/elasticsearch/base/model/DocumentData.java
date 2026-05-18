@@ -8,7 +8,8 @@ import lombok.ToString;
 
 /**
  * 文档数据对象
- *
+ * <p>
+ * 封装 Elasticsearch 文档的 ID 和源数据
  */
 @ToString
 @AllArgsConstructor
@@ -16,8 +17,14 @@ import lombok.ToString;
 @Getter
 public class DocumentData {
 
+    /**
+     * 文档 ID
+     */
     private String id;
 
+    /**
+     * 文档源数据
+     */
     private JSONObject source;
 
 }

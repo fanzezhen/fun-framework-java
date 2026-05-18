@@ -3,73 +3,75 @@ package com.github.fanzezhen.fun.framework.security.sa.token.sso.name;
 import lombok.Data;
 
 /**
- * SSO 模块所有参数名称定义
+ * SSO 模块所有参数名称定义。
+ * <p>
+ * 定义 SSO 协议中使用的各个参数名称。
  */
 @Data
 public class ParamName {
 
     /**
-     * redirect参数名称
+     * 重定向地址参数名称。
      */
     private String redirect = "redirect";
 
     /**
-     * ticket参数名称
+     * Ticket 参数名称。
      */
     private String ticket = "token";
 
     /**
-     * back参数名称
+     * 回调地址参数名称。
      */
     private String back = "back";
 
     /**
-     * mode参数名称
+     * 模式参数名称。
      */
     private String mode = "mode";
 
     /**
-     * loginId参数名称
+     * 登录ID参数名称。
      */
     private String loginId = "loginId";
 
     /**
-     * client参数名称
+     * 客户端标识参数名称。
      */
     private String client = "platform_id";
 
     /**
-     * secretKey参数名称
+     * 密钥参数名称。
      */
     private String secretKey = "secretKey";
 
     /**
-     * Client端单点注销时-回调URL 参数名称
+     * Client端单点注销回调URL参数名称。
      */
     private String ssoLogoutCall = "ssoLogoutCall";
 
     /**
-     * name
+     * 用户名参数名称。
      */
     private String name = "name";
 
     /**
-     * pwd
+     * 密码参数名称。
      */
     private String pwd = "pwd";
 
     /**
-     * 时间戳
+     * 时间戳参数名称。
      */
     private String timestamp = "timestamp";
 
     /**
-     * nonce
+     * 随机字符串参数名称。
      */
     private String nonce = "nonce";
 
     /**
-     * 签名
+     * 签名参数名称。
      */
     private String sign = "sign";
 

@@ -4,10 +4,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * MapperFacadeUtil 自动配置
+ * Fun Framework Springboot AI 模块自动配置.
  * <p>
- * 在 Spring 容器初始化完成后，自动将 MapperFacade 实例注入到 MapperFacadeUtil 工具类中，
- * 使其能够在任何地方通过静态方法调用进行对象映射。
+ * 自动扫描并注册 AI 模块相关的 Spring Bean，包括日志打印过滤器等组件。
  * </p>
  *
  * @since 4.0.5

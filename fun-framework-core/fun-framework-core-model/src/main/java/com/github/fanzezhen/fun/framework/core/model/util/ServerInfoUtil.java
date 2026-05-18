@@ -13,16 +13,18 @@ import java.util.List;
  * 提供服务器资源使用情况的查询功能，包括内存使用率和磁盘使用率。
  * <p>
  * <b>注意：</b>磁盘扫描方法仅支持Windows系统（A-Z盘符遍历）
- *
  */
 public class ServerInfoUtil {
+    /**
+     * 工具类不允许实例化
+     */
     private ServerInfoUtil() {
     }
 
     /**
-     * 获取内存使用率
+     * 获取内存使用率信息
      *
-     * @return MemoryMsg
+     * @return 内存使用率字符串，格式如 "内存已使用:75%"
      */
     public static String getMemoryMsg() {
         OperatingSystemMXBean operatingSystem = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
@@ -35,9 +37,12 @@ public class ServerInfoUtil {
     }
 
     /**
-     * 获取文件系统使用率
+     * 获取磁盘使用率信息列表
+     * <p>
+     * <b>注意：</b>仅支持Windows系统（通过A-Z盘符遍历）
+     * </p>
      *
-     * @return List<String>
+     * @return 磁盘使用率字符串列表，格式如 "C:盘  已使用 60%"
      */
     public static List<String> getDiskMsgList() {
         char firstLetter = 'A';

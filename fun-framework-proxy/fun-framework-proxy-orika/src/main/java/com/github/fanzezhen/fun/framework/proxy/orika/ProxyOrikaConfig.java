@@ -14,7 +14,9 @@ import jakarta.annotation.Resource;
 import java.util.Map;
 
 /**
- * orika字段解析器配置
+ * Orika 代理配置类
+ * <p>
+ * 自动配置 Orika 的代理过滤器和转换器，实现对象映射时的自动URL转换
  *
  * @since 3.4.3.5
  */
@@ -31,6 +33,9 @@ public class ProxyOrikaConfig {
     @Autowired(required = false)
     private Map<String, CustomMapper<?, ?>> mapperMap;
 
+    /**
+     * 初始化 Orika 代理组件
+     */
     @PostConstruct
     public void init() {
         if (proxyOrikaFilter != null) {

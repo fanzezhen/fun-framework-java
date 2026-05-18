@@ -10,8 +10,12 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 公共业务常规模型类
+ * 通用业务对象基类
+ * <p>
+ * 继承 BaseBO,额外提供更新时间和更新人ID字段,适用于需要记录完整生命周期的业务对象
+ * </p>
  *
+ * @param <P> 主键类型
  */
 @Getter
 @Setter
@@ -30,6 +34,11 @@ public abstract class BaseGenericBO<P extends Serializable> extends BaseBO<P> {
      */
     protected P updateUserId;
 
+    /**
+     * 从另一个 BaseGenericBO 对象初始化当前对象的所有字段
+     *
+     * @param dto 源对象
+     */
     public void init(BaseGenericBO<P> dto) {
         super.init(dto);
         this.updateTime = dto.getUpdateTime();

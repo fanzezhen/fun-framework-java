@@ -1,17 +1,28 @@
 package com.github.fanzezhen.fun.framework.core.model.util;
 
 /**
- * Desc:
+ * 排序工具类
+ * <p>
+ * 提供常用的排序算法实现，如冒泡排序、快速排序等。
+ * </p>
  */
 public class SortUtil {
+    /**
+     * 工具类不允许实例化
+     */
     private SortUtil() {
     }
 
     /**
-     * 冒泡排序
-     * 稳定性：稳定
-     * 时间复杂度：O(n²)，最优O(n)（已排序）
-     * 空间复杂度：O(1)
+     * 冒泡排序（升序）
+     * <p>
+     * <b>稳定性：</b>稳定
+     * <br><b>时间复杂度：</b>O(n²)，最优O(n)（已排序）
+     * <br><b>空间复杂度：</b>O(1)
+     * </p>
+     *
+     * @param arr 待排序数组
+     * @return 排序后的数组（原地排序）
      */
     public static int[] bubbleSort(int[] arr) {
         if (arr == null || arr.length <= 1) {
@@ -37,15 +48,19 @@ public class SortUtil {
     }
 
     /**
-     * 快速排序：
-     * 快速排序算法能够快速排序列表或查询。它基于分割交换排序的原则，这种类型的算法占用空间较小，它将待排序列表分为三个主要部分：
-     * 小于Pivot的元素
-     * 枢轴元素Pivot（选定的比较值）
-     * 大于Pivot的元素
-     * 时间复杂度：平均O(n log n)，最坏O(n²)（已排序或逆序）
-     * 空间复杂度：o(log n)
-     * 稳定性：不稳定（在排序之前有两个数相等，但是在排序结束之后，它们两个有可能改变顺序，这就是说明该排序算法具有不稳定性。）
-     * 优点：排序速度最快
+     * 快速排序（升序）
+     * <p>
+     * 基于分治思想的高效排序算法，通过选择基准元素将数组分为三部分：
+     * - 小于基准的元素
+     * - 基准元素
+     * - 大于基准的元素
+     * </p>
+     * <p>
+     * <b>时间复杂度：</b>平均O(n log n)，最坏O(n²)（已排序或逆序）
+     * <br><b>空间复杂度：</b>O(log n)（递归栈）
+     * <br><b>稳定性：</b>不稳定
+     * <br><b>优点：</b>平均情况下排序速度最快
+     * </p>
      *
      * @param arr 待排序数组
      */
@@ -56,6 +71,13 @@ public class SortUtil {
         quicksort(arr, 0, arr.length - 1);
     }
 
+    /**
+     * 快速排序递归实现
+     *
+     * @param arr   待排序数组
+     * @param left  左边界索引
+     * @param right 右边界索引
+     */
     public static void quicksort(int[] arr, int left, int right) {
         if (left >= right) {
             return;

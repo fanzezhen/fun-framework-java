@@ -27,18 +27,17 @@ public class ProxyOrikaConverter extends CustomConverter<String, String> {
     protected ProxyHelper proxyHelper;
 
     /**
-     * Perform the conversion of <code>source</code> into a new instance of
-     * <code>destinationType</code>.
+     * 执行字符串到字符串的转换，自动进行URL代理处理
      *
-     * @param source          the source object to be converted
-     * @param destinationType the destination type to produce
-     * @param mappingContext  since converters now have access to <code>MapperFacade</code>,
-     *                        they have to pass mapping context
-     *
-     * @return a new instance of <code>destinationType</code>
+     * @param source          源字符串对象
+     * @param destinationType 目标类型
+     * @param mappingContext  映射上下文
+     * @return 转换后的字符串（已进行URL代理处理）
      */
     @Override
-    public String convert(String source, Type<? extends String> destinationType, MappingContext mappingContext) {
+    public String convert(final String source,
+                          final Type<? extends String> destinationType,
+                          final MappingContext mappingContext) {
         return enabled ? proxyHelper.decorateStr(source) : source;
     }
 }

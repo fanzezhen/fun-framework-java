@@ -16,8 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * MapperFacadeUtil 单元测试
- *
- * @since 4.0.5
  */
 class MapperFacadeUtilTest {
 

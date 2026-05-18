@@ -16,12 +16,23 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * MultiGet 响应适配器
+ *
+ * <p>将 Elasticsearch 的 MgetResponse 响应适配为统一的 IResponseAdapter 接口。
  */
 public class MultiGetResponseAdapter implements IResponseAdapter {
 
+    /**
+     * 命中数据适配器
+     */
     private final IHitsAdapter hits;
 
-    public MultiGetResponseAdapter(MgetResponse<JSONObject> response) {
+    /**
+     * 构造函数
+     *
+     * @param response MultiGet 响应对象
+     */
+    public MultiGetResponseAdapter(final MgetResponse<JSONObject> response) {
         if (Objects.isNull(response)) {
             this.hits = null;
         } else {

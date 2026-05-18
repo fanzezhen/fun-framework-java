@@ -21,7 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 打印日志
+ * 记录 HTTP 请求和响应的抽象基础过滤器.
+ * <p>
+ * 在处理之前记录请求详细信息（URL、标头、参数），在处理之后记录响应详细信息（标头、耗时）。
  *
  * @since 3.1.7
  */
@@ -31,21 +33,67 @@ import java.util.Map;
 @SuppressWarnings("unused")
 @Order(Short.MIN_VALUE + 1)
 public abstract class AbstractFunLogPrintFilter implements Filter {
-    private static final LevelLogger debugLogger = log::debug;
-    private static final LevelLogger infoLogger = log::info;
-    private static final LevelLogger warnLogger = log::warn;
-    private static final LevelLogger errorLogger = log::error;
-    private static final LevelLogger traceLogger = log::trace;
+    /**
+     * DEBUG 级别日志记录器.
+     */
+    private static final LevelLogger DEBUG_LOGGER = log::debug;
+    /**
+     * INFO 级别日志记录器.
+     */
+    private static final LevelLogger INFO_LOGGER = log::info;
+    /**
+     * WARN 级别日志记录器.
+     */
+    private static final LevelLogger WARN_LOGGER = log::warn;
+    /**
+     * ERROR 级别日志记录器.
+     */
+    private static final LevelLogger ERROR_LOGGER = log::error;
+    /**
+     * TRACE 级别日志记录器.
+     */
+    private static final LevelLogger TRACE_LOGGER = log::trace;
+    /**
+     * 请求开始时间的 MDC 键.
+     */
     private static final String REQUEST_START_TIME_KEY = "REQUEST_START_TIME_KEY";
 
+    /**
+     * 日志辅助实例.
+     */
     protected FunLogHelper funLogHelper;
 
-    protected AbstractFunLogPrintFilter(FunLogHelper funLogHelper) {
-        this.funLogHelper = funLogHelper;
+    /**
+     * 使用提供的日志辅助构造过滤器.
+     *
+     * @param logHelper 日志辅助实例
+     */
+    protected AbstractFunLogPrintFilter(final FunLogHelper logHelper) {
+        this.funLogHelper = logHelper;
     }
 
+    /**
+     * 获取 fun 日志辅助.
+     *
+     * @return fun 日志辅助
+     */
+    protected FunLogHelper getFunLogHelper() {
+        return funLogHelper;
+    }
+
+    /**
+     * 过滤 HTTP 请求，在处理前后记录详细信息.
+     *
+     * @param servletRequest servlet 请求
+     * @param servletResponse servlet 响应
+     * @param filterChain 过滤器链
+     * @throws IOException 如果发生 I/O 错误
+     * @throws ServletException 如果发生 servlet 错误
+     */
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(final ServletRequest servletRequest,
+                         final ServletResponse servletResponse,
+                         final FilterChain filterChain) throws IOException, ServletException {
         if (servletRequest instanceof HttpServletRequest httpServletRequest) {
             preHandle(httpServletRequest, (HttpServletResponse) servletResponse, null);
             filterChain.doFilter(httpServletRequest, servletResponse);
@@ -55,7 +103,14 @@ public abstract class AbstractFunLogPrintFilter implements Filter {
         }
     }
 
-    public void preHandle( HttpServletRequest request,  HttpServletResponse response, Object handler) {
+    /**
+     * 在处理之前记录请求详细信息.
+     *
+     * @param request HTTP 请求
+     * @param response HTTP 响应
+     * @param handler 处理器对象（可能为 null）
+     */
+    public void preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) {
         LevelLogger levelLogger = funLogHelper.getOrGenerateLevelLogger(AbstractFunLogPrintFilter.class.getName());
         if (!LevelLogger.EMPTY.equals(levelLogger)) {
             MDC.put(REQUEST_START_TIME_KEY, String.valueOf(System.currentTimeMillis()));
@@ -75,12 +130,20 @@ public abstract class AbstractFunLogPrintFilter implements Filter {
         }
     }
 
-    public void postHandle( HttpServletRequest request,  HttpServletResponse response, Object handler) {
+    /**
+     * 在处理之后记录响应详细信息.
+     *
+     * @param request HTTP 请求
+     * @param response HTTP 响应
+     * @param handler 处理器对象（可能为 null）
+     */
+    public void postHandle(final HttpServletRequest request,
+                           final HttpServletResponse response,
+                           final Object handler) {
         LevelLogger levelLogger = funLogHelper.getOrGenerateLevelLogger(AbstractFunLogPrintFilter.class.getName());
         if (!LevelLogger.EMPTY.equals(levelLogger)) {
-            // 打印响应体  
-            String contentType = response.getContentType();
-            levelLogger.log("请求返回Type：{}", contentType);
+            // 打印响应体
+            levelLogger.log("请求返回Type：{}", response.getContentType());
             JSONObject headers = new JSONObject();
             for (String headerName : response.getHeaderNames()) {
                 String headerValue = response.getHeader(headerName);
@@ -92,6 +155,7 @@ public abstract class AbstractFunLogPrintFilter implements Filter {
                 long used = System.currentTimeMillis() - Long.parseLong(startedTime);
                 levelLogger.log("请求总耗时：  {}毫秒", used);
             } catch (Exception ignored) {
+                // Ignore exception when calculating elapsed time
             }
             levelLogger.log("==================================调用结束=======================================");
         }

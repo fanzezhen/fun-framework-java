@@ -13,82 +13,111 @@ import java.util.Set;
  * 配置前缀：fun.security
  * <p>
  * 提供接口白名单、登录页配置、微服务路由规则、CAS/OAuth单点登录等功能的配置支持。
- *
  */
 @Data
 @ConfigurationProperties(prefix = "fun.security")
 public class FunSpringSecurityProperties {
     /**
-     * 忽略验证的接口集合
+     * 忽略验证的接口集合。
+     * <p>
+     * 配置在此集合中的URI将不进行权限验证，直接放行。
      */
     private Set<String> ignoreUris = Collections.emptySet();
+
     /**
-     * 登录
+     * 登录页面地址。
      */
     private String loginPage = "/login";
+
     /**
-     * 微服务：路由标识
+     * 微服务路由标识。
+     * <p>
+     * 用于标识负载均衡路由，默认为 "lb"。
      */
     private String routeFlag = "lb";
+
     /**
-     * 微服务：路由请求路径前缀匹配
+     * 微服务路由请求路径前缀。
+     * <p>
+     * 例如：/lb/
      */
     private String routePrefix = StrPool.SLASH + routeFlag + StrPool.SLASH;
+
     /**
-     * 微服务：路由服务名标识
+     * 微服务路由服务名标识的占位符键名。
+     * <p>
+     * 用于从路径模板中提取服务名称。
      */
     private String routeServiceCodeKey = "service-code";
+
     /**
-     * 微服务：路由请求路径匹配模板
+     * 微服务路由请求路径匹配模板。
+     * <p>
+     * 例如：/lb/{service-code}/**
      */
     private String routePattern = routePrefix + "{" + routeServiceCodeKey + "}/**";
+
     /**
-     * 微服务：路由注册中心转发接口
+     * 微服务路由注册中心转发地址前缀。
+     * <p>
+     * 例如：lb://
      */
     private String routeUri = routeFlag + StrPool.COLON + StrPool.SLASH;
+
     /**
-     * cas单点登录配置
+     * CAS 单点登录配置。
      */
     private Cas cas = new Cas();
+
     /**
-     * Oauth单点登录配置
+     * OAuth2.0 单点登录配置。
      */
     private Oauth oauth = new Oauth();
 
     /**
-     * cas单点登录配置
+     * CAS 单点登录配置。
      */
     @Data
     public static class Cas {
         /**
-         * CasAuthenticationProvider 的 标识
+         * CasAuthenticationProvider 的唯一标识。
          */
         private String authenticationProviderKey = "fun-cas-authentication-provider";
+
         /**
-         * 客户端应用（Service）的回调地址
+         * 客户端应用（Service）的回调地址。
+         * <p>
+         * CAS Server 验证成功后将重定向到此地址。
          */
         private String serviceUrl;
+
         /**
-         * CAS服务器的地址，用来验证票据（ticket）等
+         * CAS 服务器的地址前缀。
+         * <p>
+         * 用于验证票据（ticket）和进行其他 CAS 操作。
          */
         private String serverUrlPrefix;
     }
 
     /**
-     * Oauth单点登录配置
+     * OAuth2.0 单点登录配置。
      */
     @Data
     public static class Oauth {
         /**
-         * 客户端应用（Service）的回调地址
+         * 客户端应用（Service）的回调地址。
+         * <p>
+         * OAuth2.0 授权服务器验证成功后将重定向到此地址。
          */
         private String serviceUrl;
     }
 
     /**
-     * 忽略验证的接口数组
+     * 获取忽略验证的接口数组。
+     *
+     * @return 接口URI数组
      */
     public String[] getIgnoreUriArr() {
-        return ignoreUris.toArray(new String[]{});
+        return ignoreUris.toArray(new String[0]);
     }
 }
