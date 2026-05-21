@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Spring 线程池任务执行器仓库
@@ -118,7 +117,7 @@ public class ThreadPoolTaskExecutorRepository {
      * @param name 线程名称前缀
      * @return 线程工厂实例
      */
-    private static ThreadFactory getDefaultThreadFactory(String name) {
+    public static ThreadFactory getDefaultThreadFactory(String name) {
         DefaultManagedAwareThreadFactory threadFactory = new DefaultManagedAwareThreadFactory();
         threadFactory.setThreadGroupName(name);
         threadFactory.setThreadNamePrefix(name);
