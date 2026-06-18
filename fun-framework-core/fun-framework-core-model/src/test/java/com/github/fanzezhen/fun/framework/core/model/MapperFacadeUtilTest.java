@@ -48,13 +48,6 @@ class MapperFacadeUtilTest {
         private Integer age;
     }
 
-    @BeforeEach
-    void setUp() {
-        // 初始化 MapperFacade
-        MapperFacade mapperFacade = new DefaultMapperFactory.Builder().build().getMapperFacade();
-        MapperFacadeUtil.setMapperFacade(mapperFacade);
-    }
-
     @Test
     void testMap_NullSource() {
         // 测试空对象转换

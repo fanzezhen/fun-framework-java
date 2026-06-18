@@ -25,4 +25,8 @@ Spring Security 安全组件集成
 
 ## 二、配置安全配置类
 
-继承 WebSecurityConfigurerAdapter 并配置安全规则
+声明 `UserDetailsService` 后，框架自动装配 `FunSpringSecurityConfig`，
+通过 `SecurityFilterChain` Bean 配置安全规则（Spring Security 6+ 推荐方式，
+已弃用的 `WebSecurityConfigurerAdapter` 不再使用）。
+
+如需自定义，可提供自己的 `SecurityFilterChain` Bean 覆盖默认配置。

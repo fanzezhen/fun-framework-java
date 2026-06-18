@@ -170,10 +170,10 @@ public interface IFunTraceService<P extends Serializable, A extends IGenericEnti
                 parameterBaseEntity,
                 columnFieldMap,
                 traceMap);
-        } else if (parameter instanceof MapperMethod.ParamMap) {
-            Object arg0 = ((MapperMethod.ParamMap<?>) parameter).get("arg0");
-            if (arg0 instanceof List) {
-                for (Object argItem : (List<?>) arg0) {
+        } else if (parameter instanceof MapperMethod.ParamMap<?> paramMap) {
+            Object arg0 = paramMap.get("arg0");
+            if (arg0 instanceof List<?> argList) {
+                for (Object argItem : argList) {
                     if (argItem instanceof BaseEntity argItemBaseEntity) {
                         buildTrace(
                             tableName,

@@ -61,6 +61,26 @@ docker-compose up -d
 
 完整的使用示例请参考: [Demo 项目](https://github.com/fanzezhen/demo)
 
+### ⚠️ JDK 21 单元测试配置（必读）
+
+JDK 21 强封装下，Orika（`MapperFacadeUtil`）通过反射访问 JDK 内部类会被拒绝，导致映射相关单测抛 `InaccessibleObjectException`。业务项目使用本脚手架时，需保证 IDE 与 Maven 两处都带上 `--add-opens`：
+
+1. **IDE 运行配置**：添加 `.run/Application.run.xml`，在 VM options 中带上：
+
+   ```
+   --add-opens=java.base/java.lang=ALL-UNNAMED
+   --add-opens=java.base/java.util=ALL-UNNAMED
+   --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+   ```
+
+2. **Maven 单元测试**：脚手架父 POM 已为 surefire 配置默认 `argLine`。若业务项目自定义 `argLine` 覆盖了默认值，须把以下三行一并带上，否则映射相关单测报 `InaccessibleObjectException`：
+
+   ```
+   --add-opens=java.base/java.lang=ALL-UNNAMED
+   --add-opens=java.base/java.util=ALL-UNNAMED
+   --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+   ```
+
 ---
 
 ## 📁 项目结构
@@ -125,14 +145,14 @@ fun-framework-java
 - ✅ 移除 `PageDto` (旧)，统一使用 `PageDTO` (新)
 
 **文档更新**:
-- 📖 新增[后端脚手架提示词文档](doc/dev/提示词/专业提示词/后端脚手架.md)，为 AI Agent 提供框架使用规范
+- 📖 新增[Java 脚手架提示词文档](doc/dev/提示词/专业提示词/java脚手架.md)，为 AI Agent 提供框架使用规范
 - 📖 更新分层设计规范，明确各层对象使用规则
 
 ---
 
 ## 📦 模块详解
 
-详见各模块 README.md 或[脚手架文档](doc/dev/提示词/专业提示词/后端脚手架.md)
+详见各模块 README.md 或[脚手架文档](doc/dev/提示词/专业提示词/java脚手架.md)
 
 ### 核心模块 (fun-framework-core-*)
 

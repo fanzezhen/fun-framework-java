@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 痕迹表
@@ -27,11 +27,11 @@ public class TracePageCondition extends PageDTO<TraceEntity> implements Serializ
     /**
      * 开始时间
      */
-    private Date beginTime;
+    private LocalDateTime beginTime;
     /**
      * 结束时间
      */
-    private Date endTime;
+    private LocalDateTime endTime;
     /**
      * 人员
      */

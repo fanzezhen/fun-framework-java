@@ -407,7 +407,7 @@ public class TestMybatisPlusConfig {
 
 ## 📚 相关文档
 
-- [脚手架能力索引](../../../../doc/dev/提示词/专业提示词/后端脚手架.md) - 查看框架所有可用模块
+- [脚手架能力索引](../../../../doc/dev/提示词/专业提示词/java脚手架.md) - 查看框架所有可用模块
 - [MyBatis-Plus 官方文档](https://baomidou.com/) - MyBatis-Plus 详细使用指南
 - [分层对象规范](../../../../doc/dev/提示词/专业提示词/后端.md) - 了解 DTO/BO/Entity 使用规范
 

@@ -94,11 +94,11 @@ public class FunDefaultJwtServiceImpl implements JwtService {
         Long timeOutSeconds = funCoreVerifyProperties.getJwt().getTimeOutSeconds();
         if (timeOutSeconds != null) {
             Object timeMillis = jwt.getPayload("timeMillis");
-            if (!(timeMillis instanceof Long)) {
+            if (!(timeMillis instanceof Long timeMillisValue)) {
                 log.warn("token校验失败，时间戳类型无效: {}", timeMillis);
                 return false;
             }
-            long aliveTimeMillis = System.currentTimeMillis() - (long) timeMillis;
+            long aliveTimeMillis = System.currentTimeMillis() - timeMillisValue;
             if (aliveTimeMillis > timeOutSeconds * NormalTypeConstant.INT_MILLIS_PER_SECOND) {
                 log.warn("token校验失败，已过期: 存活时间 {} ms > 最大允许 {} ms", aliveTimeMillis, timeOutSeconds * NormalTypeConstant.INT_MILLIS_PER_SECOND);
                 return false;

@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 痕迹表
@@ -26,11 +26,11 @@ public class TracePageRequest extends PageDTO<TraceEntity> {
     /**
      * 开始时间
      */
-    private Date beginTime;
+    private LocalDateTime beginTime;
     /**
      * 结束时间
      */
-    private Date endTime;
+    private LocalDateTime endTime;
     /**
      * 人员
      */

@@ -58,16 +58,12 @@ public class JsonAggregationsAdapter implements IAggregationsAdapter {
         }
         boolean isAny = CharSequenceUtil.isEmpty(name);
         for (Map.Entry<String, Object> entry : aggregationsJson.entrySet()) {
-            if (!(entry.getValue() instanceof JSONObject)) {
-                continue;
-            }
             final String key = entry.getKey();
             final int aggregationNameSplitIndex = key.indexOf("#");
-            if (-1 == aggregationNameSplitIndex) {
-                continue;
-            }
-            if (key.substring(aggregationNameSplitIndex + 1).equals(name) || isAny) {
-                return new SearchAggregationAdapter((JSONObject) entry.getValue());
+            if (entry.getValue() instanceof JSONObject aggregationJson
+                && aggregationNameSplitIndex != -1
+                && (isAny || key.substring(aggregationNameSplitIndex + 1).equals(name))) {
+                return new SearchAggregationAdapter(aggregationJson);
             }
         }
         return null;

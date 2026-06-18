@@ -152,11 +152,10 @@ public @interface EnumsOf {
          * @return true表示存在匹配的枚举值
          */
         private boolean checkByEnumName(final Object requestParam) {
-            if (!(requestParam instanceof String)) {
+            if (!(requestParam instanceof String str)) {
                 return false;
             }
 
-            String str = (String) requestParam;
             return Arrays.stream(enumClass.getEnumConstants())
                 .anyMatch(e -> e.name().equalsIgnoreCase(str));
         }

@@ -3,7 +3,6 @@
 *.iml
 *.uconf.properties
 *.logback.xml
-.mvn
 # Eclipse project files
 .classpath
 .settings
@@ -44,3 +43,5 @@ CHANGELOG*
 andy
 *.temp
 .svn
+.agentdocs
+

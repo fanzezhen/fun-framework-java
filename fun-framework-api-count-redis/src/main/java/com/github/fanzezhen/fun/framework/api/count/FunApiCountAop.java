@@ -228,8 +228,8 @@ public class FunApiCountAop {
                 if (ArrayUtil.isArray(data)) {
                     data = Arrays.stream((Object[]) data).toList();
                 }
-                if (data instanceof Collection) {
-                    model = ((Collection<?>) data).stream().filter(Objects::nonNull).findAny().orElse(null);
+                if (data instanceof Collection<?> dataCollection) {
+                    model = dataCollection.stream().filter(Objects::nonNull).findAny().orElse(null);
                 } else {
                     data = CollUtil.newArrayList(data);
                 }
@@ -293,7 +293,7 @@ public class FunApiCountAop {
     private boolean isFieldValueEmpty(final Object fieldValue) {
         return fieldValue == null ||
            CharSequenceUtil.isBlank(fieldValue.toString()) ||
-           ((fieldValue instanceof Collection) && CollUtil.isEmpty((Collection<?>) fieldValue)) ||
+           ((fieldValue instanceof Collection<?> fieldCollection) && CollUtil.isEmpty(fieldCollection)) ||
            ArrayUtil.isEmpty(fieldValue);
     }
 }

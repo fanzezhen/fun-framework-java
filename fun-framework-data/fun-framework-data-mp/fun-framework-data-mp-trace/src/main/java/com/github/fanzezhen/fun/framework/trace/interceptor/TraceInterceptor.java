@@ -65,10 +65,10 @@ public class TraceInterceptor implements Interceptor {
                 try {
                     Object parameter = invocation.getArgs()[1];
                     Statement statement = MybatisUtil.getStatement(mappedStatement, parameter);
-                    if (!(statement instanceof Insert)) {
+                    if (!(statement instanceof Insert insert)) {
                         return result;
                     }
-                    String tableName = ((Insert) statement).getTable().getName();
+                    String tableName = insert.getTable().getName();
                     TraceRuleBO traceRuleBO = funTraceService.getTraceRule(tableName);
                     if (traceRuleBO == null) {
                         return result;

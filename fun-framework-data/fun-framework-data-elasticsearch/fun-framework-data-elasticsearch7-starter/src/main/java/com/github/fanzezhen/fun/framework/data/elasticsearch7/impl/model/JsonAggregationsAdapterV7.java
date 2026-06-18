@@ -39,12 +39,9 @@ public class JsonAggregationsAdapterV7 extends JsonAggregationsAdapter {
     public IAggregationAdapter getAggregation(final String name) {
         boolean isAny = CharSequenceUtil.isEmpty(name);
         for (Map.Entry<String, Object> entry : aggregationsJson.entrySet()) {
-            if (!(entry.getValue() instanceof JSONObject)) {
-                continue;
-            }
-            final String key = entry.getKey();
-            if (key.equals(name) || isAny){
-                return new SearchAggregationAdapter((JSONObject) entry.getValue());
+            if (entry.getValue() instanceof JSONObject aggregationJson
+                    && (isAny || entry.getKey().equals(name))) {
+                return new SearchAggregationAdapter(aggregationJson);
             }
         }
         return null;

@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 痕迹明细表
@@ -59,7 +59,7 @@ public class TraceDetailResponse {
     /**
      * 最后更新时间
      */
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /**
      * 最后更新人ID
@@ -69,7 +69,7 @@ public class TraceDetailResponse {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 创建人ID

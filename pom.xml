@@ -10,19 +10,19 @@
   <version>${revision}</version>
 
   <properties>
-    <org.springframework.ai.version>2.0.0-M6</org.springframework.ai.version>
-    <org.springframework.boot.version>4.1.0-RC1</org.springframework.boot.version>
+    <org.springframework.ai.version>2.0.0</org.springframework.ai.version>
+    <org.springframework.boot.version>4.1.0</org.springframework.boot.version>
     <org.springframework.cloud.version>2025.1.1</org.springframework.cloud.version>
     <org.springframework.cloud.spring-cloud-starter-gateway.version>4.3.3</org.springframework.cloud.spring-cloud-starter-gateway.version>
     <revision>${org.springframework.boot.version}</revision>
     <app.server>-tomcat</app.server>
     <cn.dev33.version>1.45.0</cn.dev33.version>
     <cn.hutool.version>5.8.44</cn.hutool.version>
-    <com.alibaba.version>1.2.27</com.alibaba.version>
+    <com.alibaba.version>1.2.28</com.alibaba.version>
     <com.alibaba.cloud.version>2025.1.0.0</com.alibaba.cloud.version>
     <com.alibaba.csp.version>1.8.9</com.alibaba.csp.version>
-    <com.alibaba.druid.version>1.2.24</com.alibaba.druid.version>
-    <com.alibaba.fastjson2.version>2.0.60</com.alibaba.fastjson2.version>
+    <com.alibaba.druid.version>1.2.28</com.alibaba.druid.version>
+    <com.alibaba.fastjson2.version>2.0.61</com.alibaba.fastjson2.version>
     <com.baomidou.version>3.5.16</com.baomidou.version>
     <com.google.code.gson.version>2.13.2</com.google.code.gson.version>
     <com.github.gavlyukovskiy.version>2.0.0</com.github.gavlyukovskiy.version>
@@ -861,6 +861,16 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
           <version>${plugin.maven-jar-plugin.version}</version>
+          <configuration>
+            <archive>
+              <!-- Orika 在 Java 9+ 需反射 java.base 内部成员（CloneableConverter 对 Object.clone() 调 setAccessible）。
+                   通过 MANIFEST 的 Add-Opens 主属性，使可执行 jar 在 `java -jar` 启动时自动开放对应模块，
+                   避免 InaccessibleObjectException。多个包以空格分隔，作用域为该 jar 所在的 unnamed module。 -->
+              <manifestEntries>
+                <Add-Opens>java.base/java.lang java.base/java.util java.base/java.lang.reflect</Add-Opens>
+              </manifestEntries>
+            </archive>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -1041,6 +1051,16 @@
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
           <version>${org.springframework.boot.version}</version>
+          <configuration>
+            <!-- Orika 在 Java 9+ 需反射 java.base 内部成员，`mvn spring-boot:run` 会 fork 新 JVM，
+                 此处为该 JVM 补充 add-opens 参数，避免 InaccessibleObjectException。
+                 注意：仅作用于 spring-boot:run；`java -jar` 由 MANIFEST 的 Add-Opens 覆盖。 -->
+            <jvmArguments>
+              --add-opens java.base/java.lang=ALL-UNNAMED
+              --add-opens java.base/java.util=ALL-UNNAMED
+              --add-opens java.base/java.lang.reflect=ALL-UNNAMED
+            </jvmArguments>
+          </configuration>
           <executions>
             <execution>
               <id>repackage</id>
@@ -1058,7 +1078,10 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${plugin.maven-surefire-plugin.version}</version>
           <configuration>
-            <argLine>-Dfile.encoding=UTF-8 -Dconsole.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8</argLine>
+              <!-- Orika（MapperFacadeUtil）在 JDK9+ 强封装下需反射访问 java.base 内部类，
+                 作为核心能力的默认配置统一在此提供，子模块无需重复补充 add-opens。
+                 注意：子模块若自定义 argLine 会完全覆盖此默认值，须把 add-opens 一并带上。 -->
+            <argLine>-Dfile.encoding=UTF-8 -Dconsole.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED</argLine>
             <!-- 仅在有失败的测试时输出详细摘要，跳过的测试不单独报告 -->
             <printSummary>false</printSummary>
             <reportFormat>plain</reportFormat>

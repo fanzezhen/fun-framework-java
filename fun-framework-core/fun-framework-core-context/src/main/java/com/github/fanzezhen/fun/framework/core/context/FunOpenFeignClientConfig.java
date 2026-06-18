@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -32,15 +31,12 @@ public class FunOpenFeignClientConfig {
     public RequestInterceptor systemContextInterceptor() {
         return requestTemplate -> {
             List<Pair<String, String>> pairs = ContextHolder.toHeaders();
-            Pair<String, String> pair;
             if (CollUtil.isNotEmpty(pairs)) {
-                for (Iterator<Pair<String, String>> var3 = pairs.iterator();
-                     var3.hasNext();
-                     requestTemplate.header(pair.getKey(), pair.getValue())) {
-                    pair = var3.next();
+                for (Pair<String, String> pair : pairs) {
                     if (log.isDebugEnabled()) {
                         log.debug("add header:{},value:{} to feign request", pair.getKey(), pair.getValue());
                     }
+                    requestTemplate.header(pair.getKey(), pair.getValue());
                 }
             }
         };

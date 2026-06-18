@@ -34,17 +34,4 @@
     </dependency>
   </dependencies>
 
-  <build>
-    <plugins>
-      <!-- Orika 在 Java 9+ 环境下需要开放 java.base 模块的反射访问权限 -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <argLine>-Dfile.encoding=UTF-8 --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED</argLine>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-
 </project>
