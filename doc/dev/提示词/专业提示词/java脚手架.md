@@ -28,7 +28,7 @@
 - `PageUtil`：DAO 层 `IPage` ↔ `PageDTO` 转换
   - `toPageResult(IPage)` → `PageDTO`
   - `toPage(PageCondition)` → MyBatis `Page`
-- `MapperFacadeUtil`：基于 Orika 的对象映射
+- `MapperFacadeUtil`：可插拔引擎（默认 MethodHandle，可切 Orika）的对象映射
   - `map(source, TargetClass)`
   - `page(pageDTO, SourceClass, TargetClass)`
 - `StrTemplateUtil`：字符串模板（`${var}` 和 `$var`）
@@ -47,29 +47,30 @@
 - 非 MyBatis Entity → `IGenericEntity<P>`
 
 注意：
-- Spring Boot 项目添加 `fun-framework-core-springboot-base`/`web`/`ai` 任一依赖即自动装配 `MapperFacade`
-- 非 Spring Boot 需手动初始化：`MapperFacadeUtil.setMapperFacade(new DefaultMapperFactory.Builder().build().getMapperFacade())`
+- `MapperFacadeUtil` 委托可插拔映射引擎 `FunObjectMapper`，配置项 `fun.mapper.engine` 选引擎：
+  - `method-handle`（默认）：纯 JDK MethodHandle 引擎，走 public getter/setter，无需 `--add-opens`
+  - `orika`：包装 Orika `MapperFacade`（需 classpath 提供 orika-core）
+- Spring Boot 项目添加 `fun-framework-core-springboot`/`web`/`ai` 任一依赖即自动装配默认引擎；子项目注册自定义 `FunObjectMapper` bean 可覆盖
+- 非 Spring Boot 无需初始化，`MapperFacadeUtil` 首次调用即用 MethodHandle 引擎兜底
+- 用法不变：`MapperFacadeUtil.map/mapAsList/page`
 - BO/DTO 的 tenantId 类型为泛型 P；MyBatis Entity 的 tenantId 类型固定（Integer/Long/String）
 
-### 1.1.1 JDK21 强封装：必带 `--add-opens`（重要）
+### 1.1.1 JDK21 强封装：`--add-opens` 仅 orika 引擎需要
 
-JDK21 强封装下，Orika（`MapperFacadeUtil`）反射访问 JDK 内部类会被拒，否则映射相关单测/运行报 `InaccessibleObjectException`。**业务项目使用本脚手架时必须补充以下配置**：
+默认 MethodHandle 引擎走 public getter/setter，不访问 JDK 内部类，**无需 `--add-opens`**。
 
-1. **IDEA 运行配置** `.run/Application.run.xml`：在 VM options 加：
+仅当显式设置 `fun.mapper.engine=orika` 时，Orika 反射访问 JDK 内部类会被 JDK21 强封装拒绝（报 `InaccessibleObjectException`），此时业务项目须补充：
+
+1. **IDEA 运行配置** `.run/Application.run.xml` VM options：
    ```
    --add-opens=java.base/java.lang=ALL-UNNAMED
    --add-opens=java.base/java.util=ALL-UNNAMED
    --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
    ```
 
-2. **surefire 单测** `argLine`：加上这三行：
-   ```
-   --add-opens=java.base/java.lang=ALL-UNNAMED
-   --add-opens=java.base/java.util=ALL-UNNAMED
-   --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
-   ```
+2. **surefire 单测** `argLine`：加上同样三行。
 
-注意：业务项目若自定义 `argLine` 覆盖了脚手架默认值，须把这三行一并带上，否则映射相关单测报 `InaccessibleObjectException`。
+注意：业务项目若自定义 `argLine` 覆盖了脚手架默认值，且用 orika 引擎，须把这三行一并带上。
 
 ### 分层对象使用规范（重要）
 
@@ -333,6 +334,8 @@ public class UserEntity extends BaseEntity {
 ### 3.3 Elasticsearch（fun-framework-data-elasticsearch）
 - ES 工具、索引管理、全文检索
 - 聚合：`CountBucket`、`SumBucket`、滚动搜索
+- 多数据源：`fun.data.elasticsearch.configs[]`，`default-datasource` 指定默认
+- `uris` 两种等价写法：逗号分隔标量 `uris: http://h1:9200,http://h2:9200` 或 YAML 列表；均走 Spring 原生绑定，逐项去空白
 
 ---
 
@@ -346,7 +349,7 @@ public class UserEntity extends BaseEntity {
 ## 5. 工具
 
 - `fun-framework-jasypt`：配置文件加密
-- `fun-framework-proxy`：代理增强（proxy-core/fastjson/mybatis/orika）
+- `fun-framework-proxy`：代理增强（proxy-core/fastjson/mybatis/orika/method-handle）
 - `fun-framework-sentinel`：限流、熔断、热点参数
 - `fun-framework-spring-doc`：SpringDoc 接口文档
 - `fun-framework-api-count-redis`：API 调用统计

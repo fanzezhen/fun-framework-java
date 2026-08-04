@@ -4,7 +4,7 @@ Spring Boot 基础自动配置组件
 
 ## 功能
 
-- **MapperFacade 自动注入** - 将 Orika MapperFacade 自动注入到 `MapperFacadeUtil`
+- **映射引擎装配** - 可插拔 `FunObjectMapper` 引擎（默认 MethodHandle，可切 Orika）注入到 `MapperFacadeUtil`
 - **线程池管理** - 提供 `ThreadPoolTaskExecutorRepository` 用于管理 Spring 线程池，自动集成上下文传递
 - **Jackson 配置** - 提供 `FunJacksonConfig` 统一 JSON 序列化配置
 - **零配置启动** - 添加依赖后自动生效
@@ -27,7 +27,7 @@ Spring Boot 基础自动配置组件
     <artifactId>fun-framework-core-springboot</artifactId>
 </dependency>
 
-<!-- 对象映射需额外引入 Orika（可选） -->
+<!-- 默认 MethodHandle 引擎无需额外依赖；仅切换 fun.mapper.engine=orika 时引入 -->
 <dependency>
     <groupId>ma.glasnost.orika</groupId>
     <artifactId>orika-core</artifactId>
@@ -43,10 +43,15 @@ Spring Boot 基础自动配置组件
 ### 自动配置原理
 
 通过 `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` 自动加载：
-- `FunCoreSpringbootStarterAutoConfiguration` - 检测并注入容器中的 `MapperFacade` Bean 到 `MapperFacadeUtil`，配置 `FunJacksonConfig` 用于 JSON 序列化
+- `FunCoreSpringbootAutoConfiguration` - 组件扫描，并 `@Import` 映射引擎装配
+- `FunMapperAutoConfiguration` - 按 `fun.mapper.engine` 装配 `FunObjectMapper` 引擎并注入 `MapperFacadeUtil`
 - `FunCoreThreadAutoConfiguration` - 自动配置线程池管理
 
-**兼容性说明**: 同时保留 `META-INF/spring.factories` 配置文件以兼容 Spring Boot 2.x
+### 引擎选择
+
+- `fun.mapper.engine=method-handle`（默认）：纯 JDK MethodHandle 引擎，无需 `--add-opens`
+- `fun.mapper.engine=orika`：包装 Orika `MapperFacade`（需 classpath 提供 orika-core）
+- 子项目注册自定义 `FunObjectMapper` bean 即覆盖框架默认引擎
 
 ## 使用示例
 
@@ -65,26 +70,22 @@ List<UserDTO> list = MapperFacadeUtil.mapAsList(entityList, UserDTO.class);
 PageDTO<UserDTO> page = MapperFacadeUtil.page(entityPage, UserEntity.class, UserDTO.class);
 ```
 
-### 自定义 MapperFacade 配置
+### 自定义映射引擎
+
+注册自定义 `FunObjectMapper` bean 即可覆盖框架默认引擎：
 
 ```java
 @Configuration
-public class OrikaConfig {
+public class MyMapperConfig {
     @Bean
-    public MapperFacade mapperFacade() {
-        DefaultMapperFactory factory = new DefaultMapperFactory.Builder()
-                .mapNulls(false)
-                .build();
-        
-        factory.classMap(UserEntity.class, UserDTO.class)
-                .field("userName", "name")
-                .byDefault()
-                .register();
-        
-        return factory.getMapperFacade();
+    public FunObjectMapper myObjectMapper() {
+        // 返回自定义实现，或包装带特殊规则的引擎
+        return new MethodHandleObjectMapper();
     }
 }
 ```
+
+若使用 Orika 引擎（`fun.mapper.engine=orika`）并需自定义 `classMap` 规则，仍可注册 `MapperFacade` bean，框架会自动包装它。
 
 ### ThreadPoolTaskExecutorRepository 线程池管理
 
@@ -135,14 +136,15 @@ ThreadPoolTaskExecutorRepository.
 
 ### 非 Spring 环境
 
-`MapperFacadeUtil` 支持非 Spring 环境，使用内置默认 MapperFacade
+`MapperFacadeUtil` 支持非 Spring 环境，首次调用即用内置 MethodHandle 引擎兜底，无需初始化
 
 ## 配置说明
 
 - **自动配置类**: 
-  - `FunCoreSpringbootStarterAutoConfiguration` - 基础配置和工具
+  - `FunCoreSpringbootAutoConfiguration` - 组件扫描，`@Import` 映射引擎装配
+  - `FunMapperAutoConfiguration` - 映射引擎装配
   - `FunCoreThreadAutoConfiguration` - 线程池管理
-- **依赖**: `fun-framework-core-model` (必需), `fun-framework-core-thread` (必需), `orika-core` (可选)
+- **依赖**: `fun-framework-core-model` (必需), `fun-framework-core-thread` (必需), `orika-core` (仅 orika 引擎需要)
 - **测试**: `mvn test -pl fun-framework-core/fun-framework-core-springboot`
 
 ## 扩展模块
@@ -153,7 +155,9 @@ ThreadPoolTaskExecutorRepository.
 
 ## Java 9+ 兼容性
 
-Orika 在 Java 9+ 需要开放反射权限，生产环境需添加 JVM 参数：
+默认 MethodHandle 引擎走 public getter/setter，Java 9+ 无需任何额外 JVM 参数。
+
+仅当切换 `fun.mapper.engine=orika` 时，Orika 反射需开放权限，生产环境添加：
 
 ```bash
 java --add-opens java.base/java.lang=ALL-UNNAMED \
@@ -164,9 +168,8 @@ java --add-opens java.base/java.lang=ALL-UNNAMED \
 
 ## 注意事项
 
-- MapperFacade 注入在 `@PostConstruct` 阶段，应用启动完成后才可用
-- Orika 依赖可选 (`optional=true`)，不使用对象映射可不引入
-- 线程安全由 Orika 保证
+- 映射引擎注入在容器装配完成后即可用
+- 默认 MethodHandle 引擎零依赖；Orika 引擎依赖可选 (`optional=true`)，按需引入
 - 使用 `ThreadPoolTaskExecutorRepository` 创建的线程池会自动配置 `ThreadPoolTaskDecorator`，支持上下文传递
 - 建议配合 `fun-framework-core-context` 使用，实现完整的上下文管理
 
@@ -177,4 +180,5 @@ java --add-opens java.base/java.lang=ALL-UNNAMED \
 - [fun-framework-core-context](../fun-framework-core-context/README.md) - 上下文管理
 - [fun-framework-springboot-web](../../../fun-framework-springboot/fun-framework-springboot-web/README.md) - Web 应用功能
 - [fun-framework-springboot-ai](../../../fun-framework-springboot/fun-framework-springboot-ai/README.md) - AI 功能扩展
-- [fun-framework-proxy-orika](../../fun-framework-proxy/fun-framework-proxy-orika/README.md) - Orika 代理
+- [fun-framework-proxy-orika](../../fun-framework-proxy/fun-framework-proxy-orika/README.md) - Orika 引擎代理
+- [fun-framework-proxy-method-handle](../../fun-framework-proxy/fun-framework-proxy-method-handle/README.md) - MethodHandle 引擎代理

@@ -20,7 +20,7 @@
       <groupId>com.alibaba.fastjson2</groupId>
       <artifactId>fastjson2</artifactId>
     </dependency>
-    <!-- 对象映射工具：可选依赖，仅在使用 MapperFacadeUtil 时需要 -->
+    <!-- Orika 引擎适配器（OrikaObjectMapper）的可选依赖：选用 orika 引擎时由使用方提供 -->
     <dependency>
       <groupId>ma.glasnost.orika</groupId>
       <artifactId>orika-core</artifactId>

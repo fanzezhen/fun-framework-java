@@ -9,9 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import ma.glasnost.orika.MapperFacade;
-import ma.glasnost.orika.metadata.Type;
-import ma.glasnost.orika.metadata.TypeFactory;
 
 import java.util.Collections;
 import java.util.List;
@@ -137,29 +134,6 @@ public class PageDTO<T> implements IPage, IHolder {
         }
 
         return result;
-    }
-
-    /**
-     * 使用对象映射器转换分页数据（用于与 Orika MapperFacade 集成）
-     * <p>
-     * 此方法设计用于与 Orika MapperFacade 集成，通过提供源类型和目标类型信息进行批量对象转换。
-     * sourceClass 参数用于类型推断和编译时类型安全，但在运行时不参与实际转换。
-     * </p>
-     *
-     * @param sourceClass  源类型（用于类型推断）
-     * @param targetClass  目标类型
-     * @param mapperFacade 对象映射器（如 Orika MapperFacade）
-     * @param <R>          目标类型
-     *
-     * @return 转换后的分页结果
-     */
-    @SuppressWarnings("all")
-    @JsonIgnore
-    @JSONField(serialize = false)
-    public <R> PageDTO<R> convert(Class<T> sourceClass, Class<R> targetClass, MapperFacade mapperFacade) {
-        Type<PageDTO> from = TypeFactory.valueOf(PageDTO.class, sourceClass);
-        Type<PageDTO> to = TypeFactory.valueOf(PageDTO.class, targetClass);
-        return mapperFacade.map(this, from, to);
     }
 
     @Override

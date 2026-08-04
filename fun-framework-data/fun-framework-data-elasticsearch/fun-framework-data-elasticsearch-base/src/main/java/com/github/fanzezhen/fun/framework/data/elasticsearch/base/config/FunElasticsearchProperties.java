@@ -1,11 +1,7 @@
 package com.github.fanzezhen.fun.framework.data.elasticsearch.base.config;
 
-import cn.hutool.core.text.CharSequenceUtil;
-import cn.hutool.core.text.StrPool;
-import com.alibaba.fastjson2.JSON;
 import com.github.fanzezhen.fun.framework.core.model.constant.FunFrameworkCoreDataConstant;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.Duration;
@@ -27,13 +23,17 @@ import java.util.List;
  *       default-datasource: default
  *       configs:
  *         - name: default
- *           uris: http://localhost:9200
+ *           uris: http://h1:9200,http://h2:9200
  *           username: elastic
  *           password: password
+ *         - name: secondary
+ *           uris:
+ *             - http://h3:9200
+ *             - http://h4:9200
  * </pre>
+ * <p>{@code uris} 的标量与列表两种写法等价，详见 {@link Config#getUris()} 字段说明。</p>
  */
 @Data
-@Slf4j
 @ConfigurationProperties(prefix = "fun.data.elasticsearch")
 public class FunElasticsearchProperties {
 
@@ -72,10 +72,19 @@ public class FunElasticsearchProperties {
         private String indexPrefix;
 
         /**
-         * Elasticsearch 连接地址列表
+         * Elasticsearch 连接地址列表，默认 http://localhost:9200
          * <p>
-         * 默认值为 http://localhost:9200
-         * </p>
+         * 支持两种等价写法，均由 Spring Boot 原生绑定完成，逐项自动去除首尾空白：
+         * <pre>
+         * uris: http://h1:9200,http://h2:9200   # 标量，逗号分隔
+         * uris:                                 # YAML 列表
+         *   - http://h1:9200
+         *   - http://h2:9200
+         * </pre>
+         * 约束：禁止为该字段手写 {@code setUris(Object)} 之类的宽参重载。Lombok 遇到同名同参数个数的方法
+         * 就不再生成 {@code setUris(List<String>)}，而 Spring Boot 的 JavaBeanBinder 以 setter 参数类型
+         * 判定属性类型，会把本属性当成 {@code Object}：列表写法不再走集合聚合绑定，setter 永不触发，
+         * 字段静默保留默认值，运行时连本地 ES 且无任何报错。
          */
         private List<String> uris = Collections.singletonList("http://localhost:9200");
 
@@ -118,28 +127,6 @@ public class FunElasticsearchProperties {
          * 单次查询窗口大小限制
          */
         private Integer windowSize;
-
-        /**
-         * 设置连接地址列表
-         * <p>
-         * 支持两种格式：
-         * <ul>
-         *   <li>List<String> 类型的地址列表</li>
-         *   <li>逗号分隔的字符串，如 "http://host1:9200,http://host2:9200"</li>
-         * </ul>
-         * </p>
-         *
-         * @param uris 连接地址，可以是 List 或逗号分隔的字符串
-         */
-        @SuppressWarnings("unchecked")
-        public void setUris(final Object uris) {
-            if (uris instanceof List) {
-                this.uris = (List<String>) uris;
-            } else if (uris instanceof String urisStr) {
-                this.uris = CharSequenceUtil.split(urisStr, StrPool.COMMA);
-            }
-            log.info("uris set as {}", JSON.toJSONString(this.uris));
-        }
 
         /**
          * 获取窗口大小，如果未配置则返回默认值

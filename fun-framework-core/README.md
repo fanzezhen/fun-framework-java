@@ -13,7 +13,7 @@ Fun Framework 核心组件库
 | [fun-framework-core-context](fun-framework-core-context) | 上下文组件（请求头提取、ThreadLocal上下文管理） | 10*** |
 | [fun-framework-core-log](fun-framework-core-log) | 日志组件（traceId生成、Web请求日志） | 10*** |
 | [fun-framework-core-model](fun-framework-core-model) | 模型组件（BO/DTO/Entity基类、工具类、统一响应） | 10*** |
-| [fun-framework-core-springboot](fun-framework-core-springboot) | Spring Boot自动配置（MapperFacade注入、线程池管理） | 10*** |
+| [fun-framework-core-springboot](fun-framework-core-springboot) | Spring Boot自动配置（映射引擎装配、线程池管理） | 10*** |
 | [fun-framework-core-thread](fun-framework-core-thread) | 线程组件（线程池仓库、异步工具、上下文装饰器） | 10*** |
 | [fun-framework-core-verify](fun-framework-core-verify) | 校验组件（数据校验工具） | 10*** |
 | [fun-framework-core-web](fun-framework-core-web) | Web组件（Servlet工具类） | 10*** |
@@ -186,12 +186,11 @@ fun:
 - 使用 `ThreadPoolTaskExecutorRepository` 创建线程池
 - `fun-framework-core-context` 已正确配置
 
-### 2. MapperFacade 注入失败？
+### 2. 对象映射引擎切换？
 
-检查：
-- 是否引入了 `orika-core` 依赖
-- Spring Boot 应用启动时是否扫描到了自动配置类
-- Java 9+ 需要添加 JVM 参数开放反射权限
+- 默认使用 MethodHandle 引擎（纯 JDK，零配置，无需 `--add-opens`）
+- 设置 `fun.mapper.engine=orika` 切换 Orika 引擎（需引入 `orika-core`，Java 9+ 须加 `--add-opens`）
+- 子项目注册自定义 `FunObjectMapper` bean 可覆盖框架默认引擎
 
 ### 3. 工具类找不到？
 

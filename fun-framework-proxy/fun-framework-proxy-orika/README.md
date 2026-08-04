@@ -58,12 +58,8 @@ List<UserBO> boList = MapperFacadeUtil.mapAsList(entityList, UserBO.class);
 ### 1.3 分页对象转换
 
 ```java
-// 方式一：使用 MapperFacadeUtil 工具类
 PageResult<UserEntity> entityPage = userDao.selectPage(page, queryWrapper);
 PageResult<UserBO> boPage = MapperFacadeUtil.page(entityPage, UserEntity.class, UserBO.class);
-
-// 方式二：使用 PageResult 的 convert 方法
-PageResult<UserBO> boPage = entityPage.convert(UserEntity.class, UserBO.class, mapperFacade);
 ```
 
 ### 1.4 空值处理

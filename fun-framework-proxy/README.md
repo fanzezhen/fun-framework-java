@@ -25,6 +25,12 @@
     <artifactId>fun-framework-proxy-orika</artifactId>
     <version>${revision}</version>
   </dependency>
+  <!-- 默认 MethodHandle 映射引擎的代理（与 orika 二选一，按所用引擎） -->
+  <dependency>
+    <groupId>com.github.fanzezhen</groupId>
+    <artifactId>fun-framework-proxy-method-handle</artifactId>
+    <version>${revision}</version>
+  </dependency>
 </dependencies>
 ```
 
@@ -123,6 +129,25 @@ fun:
 ```
 
 #### 3.3.2 在需要使用orika复制的字段上标注注解：@ProxyField
+
+```java
+
+@Data
+@Accessors(chain = true)
+@NoArgsConstructor
+public class TestBO extends BaseBO {
+
+    /**
+     * 链接
+     */
+    @ProxyField
+    private String url;
+}
+```
+
+### 3.4 method-handle（默认映射引擎）
+
+使用默认 MethodHandle 引擎（`fun.mapper.engine` 缺省或 `method-handle`）时，改用 `fun-framework-proxy-method-handle`，无需 `--add-opens`。只需 `fun.proxy.enabled=true` 并在字段标注 `@ProxyField`：
 
 ```java
 

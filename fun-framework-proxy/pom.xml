@@ -17,6 +17,7 @@
     <module>fun-framework-proxy-mybatis</module>
       <module>fun-framework-proxy-fastjson</module>
     <module>fun-framework-proxy-orika</module>
+    <module>fun-framework-proxy-method-handle</module>
   </modules>
 
   <dependencies>

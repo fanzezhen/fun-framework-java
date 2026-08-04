@@ -5,9 +5,6 @@ import com.github.fanzezhen.fun.framework.core.model.util.MapperFacadeUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ma.glasnost.orika.MapperFacade;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

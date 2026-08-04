@@ -12,7 +12,7 @@
   <artifactId>fun-framework-core-springboot</artifactId>
   <packaging>jar</packaging>
   <name>${project.artifactId}</name>
-  <description>Fun Framework 核心 Spring Boot 集成模块，提供对象映射(Orika)、线程池管理及 Spring Boot 自动配置支持</description>
+  <description>Fun Framework 核心 Spring Boot 集成模块，提供可插拔对象映射引擎(MethodHandle/Orika)、线程池管理及 Spring Boot 自动配置支持</description>
 
   <dependencies>
     <dependency>
@@ -23,10 +23,12 @@
       <groupId>com.github.fanzezhen</groupId>
       <artifactId>fun-framework-core-thread</artifactId>
     </dependency>
-    <!-- 对象映射工具：MapperFacadeUtil 所需依赖 -->
+    <!-- Orika 引擎装配的可选依赖：默认 MethodHandle 引擎无需 orika；
+         选用 fun.mapper.engine=orika 时由使用方提供 orika-core -->
     <dependency>
       <groupId>ma.glasnost.orika</groupId>
       <artifactId>orika-core</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>jakarta.annotation</groupId>
@@ -39,6 +41,12 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-autoconfigure</artifactId>
+    </dependency>
+    <!-- Test -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

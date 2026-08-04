@@ -67,3 +67,23 @@ fun.data.elasticsearch.configs[0].uris=
 fun.data.elasticsearch.configs[0].username=elastic
 fun.data.elasticsearch.configs[0].password=
 ```
+
+### uris 的两种写法
+
+多节点集群的 `uris` 支持两种等价写法，均由 Spring Boot 原生绑定完成，逐项自动去除首尾空白：
+
+```yaml
+fun:
+  data:
+    elasticsearch:
+      default-datasource: primary
+      configs:
+        - name: primary
+          uris: http://h1:9200,http://h2:9200   # 标量，逗号分隔
+        - name: secondary
+          uris:                                 # YAML 列表
+            - http://h3:9200
+            - http://h4:9200
+```
+
+扩展该配置类时，禁止为 `uris` 手写 `setUris(Object)` 之类的宽参重载。Lombok 遇到同名同参数个数的方法就不再生成 `setUris(List<String>)`，而 Spring Boot 的 JavaBeanBinder 以 setter 参数类型判定属性类型，会把该属性当成 `Object`：列表写法不再走集合聚合绑定，setter 永不触发，字段静默保留默认值 `http://localhost:9200`，运行时连本地 ES 且无任何报错。

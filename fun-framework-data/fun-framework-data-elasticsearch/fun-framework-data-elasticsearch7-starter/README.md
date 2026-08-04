@@ -31,4 +31,6 @@ fun.data.elasticsearch.configs[0].username=elastic
 fun.data.elasticsearch.configs[0].password=
 ```
 
+多节点集群的 `uris` 支持逗号分隔标量与 YAML 列表两种等价写法，详见 `fun-framework-data-elasticsearch-base` 的 README。
+
 配置完成后即可自动注入 ElasticsearchTemplate 等 Bean
