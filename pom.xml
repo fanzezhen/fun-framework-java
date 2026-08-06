@@ -47,6 +47,10 @@
     <org.bouncycastle.bcprov-jdk18on.version>1.83</org.bouncycastle.bcprov-jdk18on.version>
     <org.freemarker.version>2.3.34</org.freemarker.version>
     <org.hibernate.validator.version>9.1.0.Final</org.hibernate.validator.version>
+    <org.neo4j.driver.version>6.2.1</org.neo4j.driver.version>
+    <!-- 仅测试域：进程内 Neo4j 服务，用于图模块集成测试。Neo4j 内核为 GPL-3.0-or-later，
+         test scope 不进分发产物 -->
+    <org.neo4j.harness.version>2026.07.0</org.neo4j.harness.version>
     <org.redisson.version>4.1.0</org.redisson.version>
     <org.springdoc.version>3.0.1</org.springdoc.version>
     <org.ssssssss.version>2.2.2</org.ssssssss.version>
@@ -154,6 +158,16 @@
       <dependency>
         <groupId>com.github.fanzezhen</groupId>
         <artifactId>fun-framework-data-elasticsearch7-starter</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-data-graph-base</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.fanzezhen</groupId>
+        <artifactId>fun-framework-data-graph-neo4j-starter</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
@@ -559,6 +573,17 @@
         <groupId>org.hibernate.validator</groupId>
         <artifactId>hibernate-validator</artifactId>
         <version>${org.hibernate.validator.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.neo4j.driver</groupId>
+        <artifactId>neo4j-java-driver</artifactId>
+        <version>${org.neo4j.driver.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.neo4j.test</groupId>
+        <artifactId>neo4j-harness</artifactId>
+        <version>${org.neo4j.harness.version}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.redisson</groupId>

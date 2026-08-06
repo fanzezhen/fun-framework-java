@@ -34,6 +34,18 @@ public @interface Column {
     boolean isPrimaryKey() default false;
 
     /**
+     * 是否参与写入
+     * <p>
+     * 置为 false 时该列只读：查询结果会映射到该字段，但写入语句不带该列。
+     * 适用于由存储侧计算得出的派生列（如图数据库的节点度数、数据库的计算列）。
+     * </p>
+     *
+     * @return true 表示参与写入，默认为 true
+     * @since 4.1.1
+     */
+    boolean writable() default true;
+
+    /**
      * 反序列化自定义解析器
      * <p>
      * 指定该列的自定义反序列化处理器类型，该类型必须包含无参构造器

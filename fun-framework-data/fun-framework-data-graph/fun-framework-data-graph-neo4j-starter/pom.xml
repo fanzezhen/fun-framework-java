@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.github.fanzezhen</groupId>
+    <artifactId>fun-framework-data-graph</artifactId>
+    <version>${revision}</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>fun-framework-data-graph-neo4j-starter</artifactId>
+  <packaging>jar</packaging>
+  <name>${project.artifactId}</name>
+  <description>Neo4j 图数据库 Starter，基于 neo4j-java-driver 实现图操作模板</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.github.fanzezhen</groupId>
+      <artifactId>fun-framework-data-graph-base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.neo4j.driver</groupId>
+      <artifactId>neo4j-java-driver</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- 进程内 Neo4j 服务，供集成测试验证 Cypher 与结果归一化在真实图库上成立。
+         Neo4j 内核为 GPL-3.0-or-later，仅 test scope，不随本模块产物分发 -->
+    <dependency>
+      <groupId>org.neo4j.test</groupId>
+      <artifactId>neo4j-harness</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <!-- 前半段与父 POM 默认值一致（子模块自定义 argLine 会完全覆盖父值，须一并带上）；
+               后两项为 Neo4j 内核在 JDK 21+ 的运行要求 -->
+          <argLine>-Dfile.encoding=UTF-8 -Dconsole.encoding=UTF-8 -Dstdout.encoding=UTF-8
+            -Dstderr.encoding=UTF-8 --add-opens java.base/java.lang=ALL-UNNAMED
+            --add-opens java.base/java.util=ALL-UNNAMED
+            --add-opens java.base/java.lang.reflect=ALL-UNNAMED
+            --add-opens java.base/java.nio=ALL-UNNAMED
+            --add-modules jdk.incubator.vector</argLine>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

@@ -128,14 +128,18 @@ public PageDTO<DTO> page(XxxPageRequest request) {
 - [ ] 未手动定义基础字段
 - [ ] 泛型 P 与 Entity 主键一致
 
-### 1.2 异常（fun-framework-core-exception）
+### 1.2 异常（fun-framework-core-model）
+
+无独立异常模块，异常体系在 `core-model`，全局处理器在 `fun-framework-springboot-web`。
 
 - `ServiceException`：业务异常（`com.github.fanzezhen.fun.framework.core.model.exception`）
-- `GlobalExceptionHandler`：全局处理器
+- `IExceptionCode` / `ICodeTextEnum`：异常码枚举契约；各模块自建 `Fun*ExceptionEnum` 实现
+- `DefaultExceptionHandler`：全局处理器（在 `springboot-web`，`@RestControllerAdvice`）
 - 业务校验失败直接抛 `ServiceException`，框架自动返回标准错误格式
 
 ### 1.3 缓存（fun-framework-core-cache / cache-redis）
-- 缓存注解、Redis 工具类、分布式锁
+- `core-cache` 定义 `CacheService` / `LockService` 接口，`cache-redis` 提供 Redis 实现
+  （`FunRedisCacheServiceImpl` / `FunRedisLockServiceImpl`）
 - 场景：热点缓存、分布式锁、会话管理
 
 ### 1.4 线程（fun-framework-core-thread）
@@ -188,6 +192,14 @@ String traceId = ContextHolder.getTraceId();
 - 包路径 `com.github.fanzezhen.fun.framework.core.data.util.*` → `com.github.fanzezhen.fun.framework.core.model.util.*`
 - 仅需更新 import
 
+数据访问通用抽象（在 `core-model`，各存储模块共用，禁止重复实现）：
+- `ITemplate<P>`：`get`/`getById`/`listByIds`/`listByColumn`/`insert`/`deleteById`
+- `BaseMultiDatasourceTemplate<T, C>` + `IDatasourceConfig`：多数据源索引、按 `@Entity(datasource)` 路由、默认回退、子模板惰性创建（需启动即创建则在子类构造器末尾调 `initAllTemplates()`）
+- `IdentifierUtil`：表名/列名/图标签这类无法参数化的标识符白名单校验（`quote` / `requireLegal`），不合法抛异常不转义
+- `@Column`：`name` 列名、`isPrimaryKey` 主键、`writable=false` 只读列、`deserializeResolver` 自定义反序列化
+
+注意：`core-model` 刻意不依赖 Spring（仅 fastjson2/orika/lombok/hutool）。在其中取注解用 hutool `AnnotationUtil`，勿引入 `org.springframework.core.annotation.AnnotationUtils`。
+
 ### 1.7 日志（fun-framework-core-log）
 
 - `FunLogTraceIdFilter`：自动生成 TraceId
@@ -204,7 +216,7 @@ String traceId = ContextHolder.getTraceId();
 
 注意：JWT 认证（`FunJwtHandlerInterceptor`、`JwtService` 等）在 `fun-framework-springboot-web` 的 `core.springboot.web.jwt.*`。
 
-### 1.10 Spring Boot 基础（fun-framework-core-springboot）
+### 1.9 Spring Boot 基础（fun-framework-core-springboot）
 
 非 Web 应用使用。
 
@@ -337,6 +349,21 @@ public class UserEntity extends BaseEntity {
 - 多数据源：`fun.data.elasticsearch.configs[]`，`default-datasource` 指定默认
 - `uris` 两种等价写法：逗号分隔标量 `uris: http://h1:9200,http://h2:9200` 或 YAML 列表；均走 Spring 原生绑定，逐项去空白
 
+### 3.4 图数据库（fun-framework-data-graph）
+- `-base` 抽象层零驱动依赖，`-neo4j-starter` 为 Neo4j 实现；引 starter 即带入 base
+- 模板 `BaseMultiDatasourceGraphTemplate`（接口 `IGraphTemplate extends ITemplate<String>`）
+- 主键即图库内部标识 `elementId`（String）；driver 6.x 的 `id()` 已弃用，框架不用
+- 图专属注解：`@GraphNode`、`@GraphRelationship`、`@GraphId`（图库内部标识）、`@GraphLabels`、`@GraphType`、`@StartNode`、`@EndNode`
+- 属性名与业务主键复用 core-model 的 `@Column`：`name` 属性名、`isPrimaryKey` 业务主键、`writable=false` 只读不写入；不另立图专属注解
+- 查询：`queryList`/`queryOne`/`queryObject`（首行首列）/`queryRecordList`（中间表示）/`queryNative`（原生，慎用）
+- 写入：`insert`（新增并回填 elementId）、`merge`（按业务主键 MERGE，需 `@GraphId(business = true)`）、`deleteById`
+- 多数据源：`fun.data.graph.configs[]`，按 `@Entity(datasource)` 路由；模板惰性创建
+- 实体扫描：`fun.data.graph.entity-packages`，未配置取启动类所在包（不复用 JPA 的 `@EntityScan`）
+- 注入防护：标签/关系类型/属性名过 `IdentifierUtil` 白名单校验（无法参数化），值一律参数绑定；自行拼 Cypher 须同样遵循
+- 异常码：图特有 123**（12300 执行失败、12301 功能不支持、12302 缺图注解）；通用数据异常用 `FunCoreDataExceptionEnum`
+- 扩展点：`IGraphMapper`（映射引擎）、`BaseMultiDatasourceGraphTemplate`（模板）、`BaseGraphTemplate`（接新图库，实现 3 个驱动原语）
+- 测试：图库集成测试用 `neo4j-harness`（进程内 Neo4j，走真实 Bolt，无需 Docker），用法与注意事项见 `java.md`「测试图数据库」
+
 ---
 
 ## 4. 安全（fun-framework-security）
@@ -373,23 +400,47 @@ public class UserEntity extends BaseEntity {
 
 ## 快速查询表
 
-| 需求 | 模块 | 关键类/方法 |
-|-----|------|-----------|
-| 分页-Controller | core-model | `PageRequest` / `PageDTO<DTO>` |
-| 分页-Service | core-model | `PageCondition` / `PageDTO<DTO>` |
-| 分页-DAO | data-mp | `PageCondition` / `PageDTO<Entity>` / `PageUtil` |
-| 基础对象 | core-model | `BaseDTO<P>` / `BaseBO<P>` / `BaseTenant*` |
-| Entity 基类 | data-mp | `increment/uuid/snowflake.BaseEntity` |
-| 对象映射 | core-model | `MapperFacadeUtil.map/page` |
-| 统一返回 | core-web | `ResponseBodyWrapper`（自动） |
-| 业务异常 | core-exception | `ServiceException` |
-| 缓存/分布式锁 | cache-redis | `@Cacheable` / `RedisUtil` / `RedisLock` |
-| 异步任务 | core-thread | `@Async` |
-| 当前用户 | core-context | `ContextHolder` |
-| 防并发/防重提交 | core-verify | `@NoConcurrent` / `@NoRepeat` |
-| 认证/权限 | security-sa-token | `StpUtil` / `@SaCheckPermission` |
-| 接口文档 | spring-doc | `@Operation` / `@Schema` |
-| ES 操作 | data-elasticsearch7 | `ElasticsearchTemplate` |
+按模块归组，组内按使用频度排列；模块按依赖层次排列（核心 → 数据 → Web/安全 → 工具）。
+
+### 核心模块
+
+| 模块 | 需求 | 关键类/方法 |
+|------|-----|-----------|
+| core-model | 分页-Controller | `PageRequest` / `PageDTO<DTO>` |
+| core-model | 分页-Service | `PageCondition` / `PageDTO<DTO>` |
+| core-model | 基础对象 | `BaseDTO<P>` / `BaseBO<P>` / `BaseTenant*` |
+| core-model | 对象映射 | `MapperFacadeUtil.map/page` |
+| core-model | 业务异常 | `ServiceException` / `FunCoreDataExceptionEnum` |
+| core-model | 多数据源路由 | `BaseMultiDatasourceTemplate` / `IDatasourceConfig` / `@Entity(datasource)` |
+| core-model | 标识符防注入 | `IdentifierUtil.quote/requireLegal` |
+| core-cache | 缓存 | `CacheService`（实现见 cache-redis）/ `@Cacheable` |
+| core-cache | 分布式锁 | `LockService`（实现见 cache-redis） |
+| core-context | 当前用户 | `ContextHolder` |
+| core-thread | 异步任务 | `@Async` |
+| core-verify | 防并发/防重提交 | `@NoConcurrent` / `@NoRepeat` |
+
+### 数据访问模块
+
+| 模块 | 需求 | 关键类/方法 |
+|------|-----|-----------|
+| data-mp | 分页-DAO | `PageCondition` / `PageDTO<Entity>` / `PageUtil` |
+| data-mp | Entity 基类 | `increment/uuid/snowflake.BaseEntity` |
+| data-elasticsearch7 | ES 操作 | `BaseMultiDatasourceElasticsearchTemplate` / `IElasticsearchTemplate` |
+| data-graph-neo4j-starter | 图数据库操作 | `BaseMultiDatasourceGraphTemplate` / `IGraphTemplate` |
+
+### Web 与安全模块
+
+| 模块 | 需求 | 关键类/方法 |
+|------|-----|-----------|
+| springboot-web | 统一返回 | `ResponseBodyWrapper`（自动） |
+| security-sa-token | 认证/权限 | `StpUtil` / `@SaCheckPermission` |
+
+### 工具模块
+
+| 模块 | 需求 | 关键类/方法 |
+|------|-----|-----------|
+| cache-redis | 缓存/锁的 Redis 实现 | `FunRedisCacheServiceImpl` / `FunRedisLockServiceImpl` |
+| spring-doc | 接口文档 | `@Operation` / `@Schema` |
 
 ---
 

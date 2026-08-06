@@ -25,7 +25,7 @@ Fun Framework Java 是一个持续迭代的开源企业级 Java 后端组件库�
 - 🔧 **开箱即用**: 统一返回、分页、对象映射、异常处理等 20+ 组件
 - 🔐 **安全认证**: Spring Security、Sa-Token 多框架支持
 - 📊 **可观测性**: 日志追踪、操作审计、流量监控
-- 🌐 **云原生**: Nacos、Sentinel、Redis、Elasticsearch 集成
+- 🌐 **云原生**: Nacos、Sentinel、Redis、Elasticsearch、Neo4j 集成
 - 📦 **模块化**: 按需引入，灵活组合
 
 ### 🎯 适用场景
@@ -112,7 +112,8 @@ fun-framework-java
 │   └── fun-framework-core-all          # 核心模块全家桶
 ├── fun-framework-data              # 数据访问层
 │   ├── fun-framework-data-mp           # MyBatis Plus 增强
-│   └── fun-framework-data-elasticsearch # Elasticsearch 支持
+│   ├── fun-framework-data-elasticsearch # Elasticsearch 支持
+│   └── fun-framework-data-graph        # 图数据库支持（抽象层 + Neo4j）
 ├── fun-framework-security          # 安全模块
 │   ├── fun-framework-security-base     # 安全基础
 │   ├── fun-framework-security-sa-token # Sa-Token 集成
@@ -177,6 +178,8 @@ fun-framework-java
 | [fun-framework-data-mp-trace-impl](fun-framework-data/fun-framework-data-mp/fun-framework-data-mp-trace-impl)                       | 操作日志追踪实现             | 1212*     | [📖](fun-framework-data/fun-framework-data-mp/fun-framework-data-mp-trace-impl/README.md)              |
 | [fun-framework-data-elasticsearch-base](fun-framework-data/fun-framework-data-elasticsearch/fun-framework-data-elasticsearch-base)   | Elasticsearch 抽象基础    | 122**    | [📖](fun-framework-data/fun-framework-data-elasticsearch/fun-framework-data-elasticsearch-base/README.md) |
 | [fun-framework-data-elasticsearch7-starter](fun-framework-data/fun-framework-data-elasticsearch/fun-framework-data-elasticsearch7-starter) | Elasticsearch 7 Starter | 122**    | [📖](fun-framework-data/fun-framework-data-elasticsearch/fun-framework-data-elasticsearch7-starter/README.md) |
+| [fun-framework-data-graph-base](fun-framework-data/fun-framework-data-graph/fun-framework-data-graph-base)                           | 图数据库抽象基础             | 123**    | [📖](fun-framework-data/fun-framework-data-graph/fun-framework-data-graph-base/README.md)              |
+| [fun-framework-data-graph-neo4j-starter](fun-framework-data/fun-framework-data-graph/fun-framework-data-graph-neo4j-starter)         | Neo4j Starter          | 123**    | [📖](fun-framework-data/fun-framework-data-graph/fun-framework-data-graph-neo4j-starter/README.md)     |
 
 ### 安全模块 (fun-framework-security-*)
 

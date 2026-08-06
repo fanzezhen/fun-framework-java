@@ -78,6 +78,31 @@ DDL 用标准 SQL，避免 MySQL 特定语法：
 
 如需真实 MySQL 脚本：`schema-mysql.sql`（生产）+ `schema-h2.sql`（测试）。
 
+### 测试图数据库（neo4j-harness）
+
+关系库用 H2，图库用 `org.neo4j.test:neo4j-harness`（进程内 Neo4j，走真实 Bolt，无需 Docker）：
+
+```xml
+<dependency>
+    <groupId>org.neo4j.test</groupId>
+    <artifactId>neo4j-harness</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+```java
+neo4j = Neo4jBuilders.newInProcessBuilder().withDisabledServer().build();
+// neo4j.boltURI() 即真实 Bolt 地址，驱动直连
+```
+
+注意事项：
+
+- 与 H2 不同，它启动完整 Neo4j 内核（数据落临时目录，非纯内存），启动秒级 —— 整类共用一个实例（`@BeforeAll`），每个用例前清库（`MATCH (n) DETACH DELETE n`）保证隔离
+- Neo4j 内核为 **GPL-3.0-or-later**，仅可用 `test` scope，不得进入分发产物
+- Neo4j 2026.x 在 JDK 21+ 需额外 JVM 参数，子模块自定义 surefire `argLine` 会完全覆盖父 POM 默认值，须把父值一并带上再追加：
+  `--add-opens java.base/java.nio=ALL-UNNAMED --add-modules jdk.incubator.vector`
+- 定位为集成测试：验证语句能否被真实图库执行、驱动返回值能否正确归一化；纯逻辑仍用桩测
+
 ```xml
 <plugin>
     <groupId>org.jacoco</groupId>

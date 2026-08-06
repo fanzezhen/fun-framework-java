@@ -15,6 +15,7 @@
 
   <modules>
     <module>fun-framework-data-elasticsearch</module>
+    <module>fun-framework-data-graph</module>
     <module>fun-framework-data-mp</module>
   </modules>
 

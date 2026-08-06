@@ -51,16 +51,46 @@
 - `StrFileUtil` - 文件字符串处理工具
 - `YApiUtil` - YApi 文档工具
 
+### 安全工具
+- `IdentifierUtil` - 数据标识符白名单校验与引用包裹
+
+表名、列名、图标签、关系类型这类标识符无法通过参数绑定，只能拼接进语句文本，是注入的主要入口。
+拼接前用本工具校验，不合法直接抛业务异常而非转义：
+
+    // 校验并用反引号包裹，不合法抛 ServiceException
+    String quoted = IdentifierUtil.quote(tableName, IdentifierUtil.CATEGORY_TABLE);
+
+    // 仅校验
+    IdentifierUtil.requireLegal(columnName, IdentifierUtil.CATEGORY_COLUMN);
+
+## 数据访问抽象
+
+- `ITemplate<P>` - 数据访问模板接口，定义 `get` / `getById` / `listByIds` / `listByColumn` / `insert` / `deleteById` 通用语义
+- `IDatasourceConfig` - 数据源配置契约，只要求配置对象能给出名称
+- `BaseMultiDatasourceTemplate<T, C>` - 多数据源模板抽象基类
+
+`BaseMultiDatasourceTemplate` 承载与具体存储无关的多数据源能力：按名称索引配置、
+按实体上的 `@Entity(datasource)` 路由、默认数据源回退、子模板创建与缓存。
+Elasticsearch、图数据库等多数据源模板可共用，无需各自重复实现路由逻辑。
+
+子模板默认惰性创建（首次使用才创建），需要启动即创建的实现可在自身构造器末尾调用
+`initAllTemplates()`。之所以不在基类构造期创建：子类的 `createTemplate` 通常要用到子类字段，
+而 Java 的初始化顺序是父类构造器先于子类字段赋值，构造期回调子类方法会读到未初始化的字段。
+
 ## 注解
 
-- `@Entity` - 实体标注
-- `@Column` - 列标注
+- `@Entity` - 实体标注（含 `datasource` 用于多数据源路由）
+- `@Column` - 列标注（`name` 列名、`isPrimaryKey` 主键、`writable` 是否参与写入、`deserializeResolver` 自定义反序列化）
 - `@PrimaryKey` - 主键标注
+
+`@Column(writable = false)` 表示该列只读：查询结果会映射到该字段，但写入语句不带该列，
+适用于由存储侧计算得出的派生列。
 
 ## 常量与枚举
 
 - `FunFrameworkCoreDataConstant` - 核心数据常量
-- `FunCoreDataExceptionEnum` - 核心数据异常枚举
+- `RegexConstant` - 正则表达式常量
+- `FunCoreDataExceptionEnum` - 核心数据异常枚举（多数据源模板、标识符校验、主键缺失、结果解析）
 
 # 快速开始
 
