@@ -424,6 +424,19 @@ public final class ContextHolder {
     }
 
     /**
+     * 清除租户ID.
+     * <p>
+     * 只移除租户键，不影响 traceId、userId 等同上下文中的其他数据。
+     * 供请求入口的租户拦截器在 finally 中调用——拦截器无法调用 {@link #clean()}，
+     * 那会连带清掉外层过滤器写入的上下文。
+     *
+     * @since 4.1.1
+     */
+    public static void clearTenantId() {
+        clear(properties.getKey().getTenantIdWithPrefix());
+    }
+
+    /**
      * 获取当前登录用户的区域和语言.
      * <p>
      * 如果没有设置，返回简体中文(zh_CN)

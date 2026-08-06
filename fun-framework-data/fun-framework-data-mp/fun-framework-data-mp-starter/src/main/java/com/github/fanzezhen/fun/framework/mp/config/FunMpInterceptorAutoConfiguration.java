@@ -5,12 +5,11 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Resource;
 
 import java.util.List;
 import java.util.Objects;
@@ -31,13 +30,15 @@ import java.util.Objects;
  */
 @Slf4j
 @Configuration
-@ConditionalOnBean({MybatisPlusInterceptor.class})
 public class FunMpInterceptorAutoConfiguration {
     /**
-     * MyBatis-Plus 拦截器
+     * MyBatis-Plus 拦截器，容器中不存在时为 {@code null}
+     * <p>
+     * 用 {@link ObjectProvider} 而非 {@code @ConditionalOnBean(MybatisPlusInterceptor.class)}：
+     * 本类由组件扫描注册，条件注解在扫描期求值，那时 {@link FunMpAutoConfiguration} 的
+     * {@code @Bean} 定义可能尚未注册，导致本类被静默跳过、拦截器收编不发生。
      */
-    @Resource
-    public MybatisPlusInterceptor mybatisPlusInterceptor;
+    public final MybatisPlusInterceptor mybatisPlusInterceptor;
 
     /**
      * 用户定义的内部拦截器列表
@@ -47,9 +48,13 @@ public class FunMpInterceptorAutoConfiguration {
     /**
      * 构造函数
      *
-     * @param innerInterceptors 用户定义的内部拦截器列表（可选）
+     * @param mybatisPlusInterceptorProvider MyBatis-Plus 拦截器提供者
+     * @param innerInterceptors              用户定义的内部拦截器列表（可选）
      */
-    public FunMpInterceptorAutoConfiguration(@Autowired(required = false) final List<InnerInterceptor> innerInterceptors) {
+    public FunMpInterceptorAutoConfiguration(
+            final ObjectProvider<MybatisPlusInterceptor> mybatisPlusInterceptorProvider,
+            @Autowired(required = false) final List<InnerInterceptor> innerInterceptors) {
+        this.mybatisPlusInterceptor = mybatisPlusInterceptorProvider.getIfAvailable();
         this.innerInterceptors = innerInterceptors;
     }
 

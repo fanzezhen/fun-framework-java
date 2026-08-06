@@ -19,6 +19,12 @@ web过滤器，用于自动提取WEB请求头数据放入[ContextHolder](src%2Fm
 - 自动在异步任务中保留父线程的上下文信息（如用户ID、租户ID、traceId等）
 - 与 `fun-framework-core-thread` 的线程池装饰器无缝集成
 
+**取值类型**：所有 `get*` 均返回 `String`（按请求头语义承载），需要数值请自行转换。
+
+**单键清理**：`clearTenantId()` 只移除租户键，不影响 traceId、userId 等。请求入口的租户拦截器
+应用它而非 `clean()`——后者会连带清掉外层过滤器写入的上下文。租户号被
+`fun-framework-data-mp-starter` 的租户隔离能力直接读取，两侧共用同一份上下文。
+
 ## 注解+AOP 实现上下文校验
 
 - [FunContextAop.java](src%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fcore%2Fcontext%2Faop%2FFunContextAop.java)

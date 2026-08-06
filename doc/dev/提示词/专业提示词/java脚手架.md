@@ -179,10 +179,14 @@ ThreadPoolTaskExecutorRepository.addDecorator(new CustomDecorator());
 - `@ContextHeader`：注解 + AOP 校验
 
 ```java
-Long userId = ContextHolder.getUserId();
-Long tenantId = ContextHolder.getTenantId();
+String userId = ContextHolder.getUserId();
+String tenantId = ContextHolder.getTenantId();
 String traceId = ContextHolder.getTraceId();
+ContextHolder.setTenantId("1001");
+ContextHolder.clearTenantId();   // 只清租户键，不动 traceId 等
 ```
+
+取值一律为 `String`（上下文按请求头语义承载），需要数值自行转换。
 
 注意：v2.x 升级为 `TransmittableThreadLocal`，需引入 `com.alibaba:transmittable-thread-local`。
 
@@ -327,7 +331,34 @@ public class MybatisPlusConfig {
 | 多租户 | `*.tenant.BaseTenantEntity` | 同主键 |
 | 自定义 | `*.BaseGenericEntity<P>` | 泛型 P |
 
-`BaseEntity` 自动填充字段：`id`、`createTime`、`createUserId`、（多租户）`tenantId`。
+`BaseEntity` 自动填充字段：`id`、`createTime`、`createUserId`（由 `FunMetaObjectHandler` 填充）。
+`tenantId` 不由 `MetaObjectHandler` 填充，而是开启多租户后由 SQL 拦截器在 insert 时补列（见 2.x 多租户）。
+
+#### 多租户隔离
+
+开关 `fun.mp.tenant.enabled=true`（默认关）即生效，无需自行实现 `TenantLineHandler`。
+
+```yaml
+fun:
+  mp:
+    tenant:
+      enabled: true
+      value-type: long          # 租户列为 Integer/Long 配 long；String 列用默认 string
+      missing-strategy: default # default 回退 default-tenant-id / reject 抛异常
+      default-tenant-id: 0
+      ignore-tenant-tables: [sys_tenant_permission]  # 有租户列但需跨租户访问的例外表
+```
+
+隔离范围三级判定（命中即返回）：`@IgnoreTenant` 逃生口 → `ignore-tenant-tables` → 表是否含租户列
+（主判据，启动后首次查询时扫库得出）。**全局表 / 字典表无需配进例外清单**，无租户列自动放行。
+扫描不可用时退化为「除例外表外全表隔离」并告警，不放行全部表。
+
+- 租户号走 `ContextHolder.getTenantId()`，网关透传 `fun-tenant-id` 请求头即自动生效
+- 从登录态取租户号：继承 `AbstractTenantContextInterceptor`，实现 `resolveTenantId(request)`；
+  覆写 `getDefaultTenantId()` 返回 null 可关闭兜底，把处置权交回 `missing-strategy`
+- 跨租户：`@IgnoreTenant` 标在方法或类上（区别于 MP 自带 `@InterceptorIgnore` 只作用于 mapper）。
+  跨租户**写入**须显式 `setTenantId(目标租户)`，否则该列落库为 null
+- 错误码：`12100` 上下文缺失且策略 reject、`12101` `value-type=long` 但租户号非数值
 
 时间字段统一用 `java.time.LocalDateTime`（禁止 `java.util.Date`/`Calendar`）；Entity、Condition、Request、Response、BO/DTO 全链路保持一致，避免查询条件与实体字段类型不匹配。
 
@@ -425,6 +456,9 @@ public class UserEntity extends BaseEntity {
 |------|-----|-----------|
 | data-mp | 分页-DAO | `PageCondition` / `PageDTO<Entity>` / `PageUtil` |
 | data-mp | Entity 基类 | `increment/uuid/snowflake.BaseEntity` |
+| data-mp | 多租户隔离 | `fun.mp.tenant.enabled=true` + `*.tenant.BaseTenantEntity` |
+| data-mp | 跨租户操作 | `@IgnoreTenant`（方法/类级） |
+| data-mp | 租户号注入入口 | `AbstractTenantContextInterceptor` |
 | data-elasticsearch7 | ES 操作 | `BaseMultiDatasourceElasticsearchTemplate` / `IElasticsearchTemplate` |
 | data-graph-neo4j-starter | 图数据库操作 | `BaseMultiDatasourceGraphTemplate` / `IGraphTemplate` |
 

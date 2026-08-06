@@ -1,6 +1,6 @@
-fun-framework-data-mp
+fun-framework-data-mp-starter
 ------------------------------------------
-错误码格式 120**
+错误码格式 121**
 Mybatis-plus配置模块
 
 # 快速开始
@@ -116,15 +116,28 @@ public class Application {
 ## 📝 完整配置示例
 
 完整的配置示例（包含所有可选拦截器）请参考：  
-[MybatisPlusConfigExample.java](src/test/java/com/github/fanzezhen/fun/framework/mp/example/MybatisPlusConfigExample.java)
+[MybatisPlusExampleConfig.java](src/test/java/com/github/fanzezhen/fun/framework/mp/example/MybatisPlusExampleConfig.java)
 
 ---
 
 ## [base.entity](src%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fmp%2Fbase%2Fentity)：基础实体类
-1. [BaseEntity](src%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fmp%2Fbase%2Fentity%2FBaseEntity.java)：基础实体模型，包含 主键、创建时间、创建人 字段
-2. [BaseGenericEntity](src%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fmp%2Fbase%2Fentity%2FBaseGenericEntity.java)：常规实体模型，继承自[BaseEntity](src%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fmp%2Fbase%2Fentity%2FBaseEntity.java)，新增 删除标识、更新时间、更新人 字段
-3. [BaseTenantEntity](src%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fmp%2Fbase%2Fentity%2Ftenant%2FBaseTenantEntity.java)：租户基础实体模型，继承自[BaseEntity](src%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fmp%2Fbase%2Fentity%2FBaseEntity.java)，新增 租户id 字段
-4. [BaseTenantGenericEntity](src%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fmp%2Fbase%2Fentity%2Ftenant%2FBaseTenantGenericEntity.java)：租户常规实体模型，继承自[BaseTenantEntity](src%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fmp%2Fbase%2Fentity%2Ftenant%2FBaseTenantEntity.java)，新增 删除标识、更新时间、更新人 字段
+按主键策略分三套，路径为 `base/entity/{increment,snowflake,uuid}/`，主键类型依次为 Integer、Long、String。
+下表以 `snowflake` 为例：
+
+1. [BaseEntity](src/main/java/com/github/fanzezhen/fun/framework/mp/base/entity/snowflake/BaseEntity.java)：基础实体模型，包含 主键、创建时间、创建人 字段
+2. [BaseGenericEntity](src/main/java/com/github/fanzezhen/fun/framework/mp/base/entity/snowflake/BaseGenericEntity.java)：常规实体模型，继承自 `BaseEntity`，新增 删除标识、更新时间、更新人 字段
+3. [BaseTenantEntity](src/main/java/com/github/fanzezhen/fun/framework/mp/base/entity/snowflake/tenant/BaseTenantEntity.java)：租户基础实体模型，继承自 `BaseEntity`，新增 租户id 字段（类型同主键）
+4. [BaseTenantGenericEntity](src/main/java/com/github/fanzezhen/fun/framework/mp/base/entity/snowflake/tenant/BaseTenantGenericEntity.java)：租户常规实体模型，继承自 `BaseTenantEntity`，新增 删除标识、更新时间、更新人 字段
+5. `BaseGenericEntity<P>`：主键类型自定义时用泛型版
+## [tenant](src%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fmp%2Ftenant)：多租户数据隔离
+总开关 `fun.mp.tenant.enabled`，默认关闭。用法见 FAQ [多租户模式下如何配置](#4-多租户模式下如何配置)。
+
+1. `DefaultTenantLineHandler`：三级判定隔离范围（逃生口 → 例外表 → 租户列缓存）
+2. `TenantColumnCache`：扫描库表结构，登记含租户列的表，全局表自动放行
+3. `@IgnoreTenant` + `TenantIgnoreAspect`：方法级 / 类级跨租户逃生口
+4. `AbstractTenantContextInterceptor`：请求入口拦截器骨架，业务侧实现 `resolveTenantId` 即可
+5. 租户号由 `ContextHolder` 承载，网关透传 `fun-tenant-id` 请求头即自动生效
+
 ## [generator](src%2Fmain%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fmp%2Fgenerator)：代码生成器
 示例：[GeneratorTest.java](src%2Ftest%2Fjava%2Fcom%2Fgithub%2Ffanzezhen%2Ffun%2Fframework%2Fmp%2FGeneratorTest.java)
 
@@ -221,6 +234,8 @@ public class UserEntity extends BaseGenericEntity<Integer> {
 
 ### 4. 多租户模式下如何配置
 
+框架已内置整套租户隔离，无需自行实现 `TenantLineHandler`。
+
 **步骤 1**: 实体类继承多租户 BaseEntity
 
 ```java
@@ -233,65 +248,110 @@ public class OrderEntity extends BaseTenantEntity {
 }
 ```
 
-**步骤 2**: 配置多租户拦截器
+**步骤 2**: 开启开关
+
+```yaml
+fun:
+  mp:
+    tenant:
+      enabled: true          # 总开关，默认关闭
+      value-type: long       # 租户列为 Integer/Long 时配 long；String 列保持默认 string
+      missing-strategy: default  # 无租户上下文时：default 回退默认租户，reject 抛异常
+      default-tenant-id: 0
+      ignore-tenant-tables:  # 有租户列但仍需跨租户访问的例外表
+        - sys_tenant_permission
+```
+
+**步骤 3**: 请求入口注入租户号
+
+租户号由 `ContextHolder` 承载。若网关已透传 `fun-tenant-id` 请求头，`FunContextFilter` 会自动写入，
+无需额外代码。需要从登录态取租户号时，继承 `AbstractTenantContextInterceptor`：
 
 ```java
-import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.LongValue;
-
-@Configuration
-public class MybatisPlusConfig {
-
-    @Bean
-    public InnerInterceptor paginationInnerInterceptor() {
-        return new PaginationInnerInterceptor(DbType.MYSQL);
+public class MyTenantInterceptor extends AbstractTenantContextInterceptor {
+    public MyTenantInterceptor(FunMpProperties properties) {
+        super(properties);
     }
 
-    @Bean
-    public InnerInterceptor tenantLineInnerInterceptor() {
-        TenantLineInnerInterceptor interceptor = new TenantLineInnerInterceptor();
-        interceptor.setTenantLineHandler(new TenantLineHandler() {
-            @Override
-            public Expression getTenantId() {
-                // 从上下文获取当前租户 ID（需自行实现 TenantContextHolder）
-                Long tenantId = TenantContextHolder.getTenantId();
-                return new LongValue(tenantId);
-            }
+    @Override
+    protected String resolveTenantId(HttpServletRequest request) {
+        // 从自己的登录态取，返回 null 则兜底为 default-tenant-id
+        return LoginHelper.isLogin() ? LoginHelper.getTenantId() : null;
+    }
+}
 
-            @Override
-            public String getTenantIdColumn() {
-                return "tenant_id"; // 租户字段名
-            }
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+    @Resource
+    private FunMpProperties funMpProperties;
 
-            @Override
-            public boolean ignoreTable(String tableName) {
-                // 忽略不需要租户隔离的表（如系统配置表）
-                return Arrays.asList("sys_config", "sys_dict").contains(tableName);
-            }
-        });
-        return interceptor;
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new MyTenantInterceptor(funMpProperties))
+                // 登录接口需跨租户按账号查用户，排除掉并在其 service 上加 @IgnoreTenant
+                .excludePathPatterns("/auth/login");
     }
 }
 ```
 
+#### 隔离范围如何判定
+
+按优先级三级判定，命中即返回：
+
+| 优先级 | 判据 | 效果 |
+|-------|------|------|
+| 1 | `@IgnoreTenant` 逃生口 | 整块跳过租户条件 |
+| 2 | `ignore-tenant-tables` 例外表 | 该表放行（大小写不敏感） |
+| 3 | 表是否含租户列（主判据） | 含则隔离，不含则放行 |
+
+第 3 级靠启动后首次查询时扫描库表结构得出，故**全局配置表、字典表无需手工配进例外清单**。
+扫描不可用时（`column-scan-enabled=false`、无唯一 `DataSource`、扫描异常、库中无任何租户列）
+退化为「除例外表外全表隔离」并输出告警——宁可 SQL 报错，也不放行全部表造成跨租户泄漏。
+
+#### 跨租户操作
+
+```java
+@IgnoreTenant  // 也可标在类上，使类内所有方法跨租户
+public UserEntity getByAccount(String account) {
+    return userMapper.selectOne(Wrappers.<UserEntity>lambdaQuery().eq(UserEntity::getAccount, account));
+}
+```
+
+与 MyBatis-Plus 自带 `@InterceptorIgnore(tenantLine = "true")` 的分工：后者只作用于 mapper 接口与
+其方法，`@IgnoreTenant` 作用于任意 Spring bean 方法，适合「某个 service 流程整体跨租户」。
+
+> ⚠️ 跨租户**写入**时租户列不会自动补值，须显式 `setTenantId(目标租户)`，否则该列落库为 null。
+
+#### 完整配置项
+
+| 配置项 | 默认值 | 说明 |
+|-------|-------|------|
+| `fun.mp.tenant.enabled` | `false` | 总开关 |
+| `fun.mp.tenant.column` | `tenant_id` | 租户列名，同时作用于条件拼接与列扫描 |
+| `fun.mp.tenant.value-type` | `string` | `string` / `long`，决定拼 `'1001'` 还是 `1001` |
+| `fun.mp.tenant.missing-strategy` | `default` | `default` 回退默认租户 / `reject` 抛异常 |
+| `fun.mp.tenant.default-tenant-id` | `0` | 默认租户，承载平台级与历史无租户数据 |
+| `fun.mp.tenant.ignore-tenant-tables` | 空 | 有租户列但需跨租户访问的例外表 |
+| `fun.mp.tenant.aspect-enabled` | `true` | `@IgnoreTenant` 切面开关 |
+| `fun.mp.tenant.column-scan-enabled` | `true` | 租户列结构扫描开关 |
+
+> 租户列为数值类型时务必配 `value-type: long`。用字符串字面量比数值列会触发隐式类型转换，导致索引失效。
+
 ---
 
-### 5. 启动时报错: ConditionalOnBean(InnerInterceptor.class) 不满足
+### 5. 拦截器（分页 / 租户）配置了却不生效
 
-**症状**:
-```
-CONDITIONS EVALUATION REPORT:
-...
-Negative matches:
-   FunMpInterceptorAutoConfiguration:
-      Did not match: @ConditionalOnBean (types: InnerInterceptor) did not find any beans
-```
+**症状**: 分页返回全量数据，或多租户已开启但 SQL 里没有租户条件；同一份配置有时又正常。
 
-**原因**: 未提供任何 `InnerInterceptor` Bean 配置
+**原因**: `FunMpInterceptorAutoConfiguration` 曾用 `@ConditionalOnBean` 控制装配。该注解在组件扫描期
+求值，那时同批次的 `MybatisPlusInterceptor` Bean 定义尚未注册，配置类会被静默跳过，
+内部拦截器的收编随之不发生——表现为「时灵时不灵」。
 
-**解决方案**: 添加至少一个拦截器配置（通常是分页插件），参考 [必需配置](#2-⚠️-必需配置重要) 章节
+**解决方案**: 已修复（改为 `ObjectProvider` 注入，配置类恒装配）。升级到含该修复的版本即可。
+自查方式：注入 `MybatisPlusInterceptor` 后打印 `getInterceptors()`，应能看到自己注册的拦截器。
+
+> 若确实未提供任何 `InnerInterceptor` Bean，启动日志会有醒目告警，参考
+> [必需配置](#2-⚠️-必需配置重要) 章节添加分页插件。
 
 ---
 

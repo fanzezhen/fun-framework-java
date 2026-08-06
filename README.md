@@ -134,6 +134,13 @@ fun-framework-java
 
 ## 🎉 最近更新
 
+**多租户隔离**:
+- 🔥 **开箱可用的租户隔离**: `fun.mp.tenant.enabled=true` 即生效，不再需要自行实现 `TenantLineHandler`
+- ✅ **三级判定隔离范围**: `@IgnoreTenant` 逃生口 → 例外表清单 → 租户列结构扫描（主判据），全局表自动放行
+- ✅ **上下文缺失可控**: `missing-strategy` 支持回退默认租户或 fail fast
+- ✅ **请求入口骨架**: 继承 `AbstractTenantContextInterceptor` 实现 `resolveTenantId` 即可接入任意认证方案
+- 🐛 **修复拦截器收编时灵时不灵**: `FunMpInterceptorAutoConfiguration` 的 `@ConditionalOnBean` 在组件扫描期求值会被静默跳过，导致分页 / 租户拦截器不生效
+
 **核心重构**:
 - 🔥 **分层模型重构**: 新增 `PageRequest`/`PageCondition`/`PageDTO`，实现完整的分层解耦
 - 🔥 **分页工具类**: 新增 `PageUtil` 用于 MyBatis `IPage` ↔ 框架 `PageDTO` 转换
@@ -173,7 +180,7 @@ fun-framework-java
 
 | 模块名                                                                                                                                  | 描述                   | 错误码      | 文档                                                                                                     |
 |--------------------------------------------------------------------------------------------------------------------------------------|----------------------|----------|--------------------------------------------------------------------------------------------------------|
-| [fun-framework-data-mp-starter](fun-framework-data/fun-framework-data-mp/fun-framework-data-mp-starter)                             | MyBatis Plus 增强 Starter | 120**   | [📖](fun-framework-data/fun-framework-data-mp/fun-framework-data-mp-starter/README.md)                 |
+| [fun-framework-data-mp-starter](fun-framework-data/fun-framework-data-mp/fun-framework-data-mp-starter)                             | MyBatis Plus 增强 Starter（含多租户隔离） | 1210*   | [📖](fun-framework-data/fun-framework-data-mp/fun-framework-data-mp-starter/README.md)                 |
 | [fun-framework-data-mp-trace](fun-framework-data/fun-framework-data-mp/fun-framework-data-mp-trace)                                 | 数据库操作日志追踪            | 1211*     | [📖](fun-framework-data/fun-framework-data-mp/fun-framework-data-mp-trace/README.md)                   |
 | [fun-framework-data-mp-trace-impl](fun-framework-data/fun-framework-data-mp/fun-framework-data-mp-trace-impl)                       | 操作日志追踪实现             | 1212*     | [📖](fun-framework-data/fun-framework-data-mp/fun-framework-data-mp-trace-impl/README.md)              |
 | [fun-framework-data-elasticsearch-base](fun-framework-data/fun-framework-data-elasticsearch/fun-framework-data-elasticsearch-base)   | Elasticsearch 抽象基础    | 122**    | [📖](fun-framework-data/fun-framework-data-elasticsearch/fun-framework-data-elasticsearch-base/README.md) |

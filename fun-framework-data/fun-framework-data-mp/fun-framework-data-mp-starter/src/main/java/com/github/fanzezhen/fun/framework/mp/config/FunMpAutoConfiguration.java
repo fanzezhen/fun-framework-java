@@ -34,6 +34,10 @@ public class FunMpAutoConfiguration {
      * <p>
      * 如果容器中不存在 MybatisPlusInterceptor，则创建默认实例。
      * 使用者可以通过配置自定义的 MybatisPlusInterceptor Bean 来覆盖默认配置。
+     * <p>
+     * 内部拦截器（分页、租户等）由 {@link FunMpInterceptorAutoConfiguration} 按 {@code @Order}
+     * 收编进本实例，此处刻意不声明为入参——用户的 {@code InnerInterceptor} 若依赖
+     * {@code SqlSessionFactory}，声明入参会与「SqlSessionFactory 依赖本拦截器」构成循环依赖。
      *
      * @return MyBatis-Plus 拦截器实例
      */
